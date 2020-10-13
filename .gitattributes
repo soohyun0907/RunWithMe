@@ -1,0 +1,1 @@
+*.{zip,jar,7z,mp4} filter=lfs diff=lfs merge=lfs -text
