@@ -86,6 +86,10 @@ const routes = [
         path: "records",
         component: () => import("./views/app/runnings/records")
       },
+      {
+        path: "kakaoRecords",
+        component: () => import("./views/app/runnings/kakaoRecords")
+      },
     ]
   },
 
