@@ -1,0 +1,108 @@
+// BOOTSTRAP ALERT
+.alert {
+    // background: $background;
+    border-radius: 10px;
+    .close:focus {
+        outline: 0;
+    }
+}
+
+.alert-card {
+    border: none;
+    box-shadow: 0 4px 15px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .1), inset 0 2px 0 0 $gray-400;
+    &.alert-success {
+        box-shadow: 0 4px 15px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .1), inset 0 2px 0 0 $success;
+    }
+    &.alert-warning {
+        box-shadow: 0 4px 15px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .1), inset 0 2px 0 0 $warning;
+    }
+    &.alert-info {
+        box-shadow: 0 4px 15px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .1), inset 0 2px 0 0 $info;
+    }
+    &.alert-danger {
+        box-shadow: 0 4px 15px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .1), inset 0 2px 0 0 $danger;
+    }
+    &.alert-dark {
+        box-shadow: 0 4px 15px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .1), inset 0 2px 0 0 $gray-600;
+    }
+}
+
+// NGX TOASTR
+// .toast-container {
+//     .toast {
+//         border-radius: 10px;
+//         color: $foreground;
+//     }
+//     .toast-close-button {
+//         position: absolute;
+//         color: $gray-400;
+//         top: -1px;
+//         right: 8px;
+//     }
+//     .toast-progress {
+//         height: 2px;
+//         opacity: 1;
+//     }
+//     .toast-success {
+//         background-color: $background;
+//         box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 $success;
+//         background-image: url('../../images/checkmark.svg');
+//         .toast-progress {
+//             background: $success;
+//         }
+//         &:hover {
+//             box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 $success;
+//         }
+//     }
+//     .toast-warning {
+//         background-color: $background;
+//         box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 $warning;
+//         background-image: url('../../images/danger.svg');
+//         .toast-progress {
+//             background: $warning;
+//         }
+//         &:hover {
+//             box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 $warning;
+//         }
+//     }
+//     .toast-info {
+//         background-color: $background;
+//         box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 $info;
+//         background-image: url('../../images/info.svg');
+//         .toast-progress {
+//             background: $info;
+//         }
+//         &:hover {
+//             box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 $info;
+//         }
+//     }
+//     .toast-error {
+//         background-color: $background;
+//         box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 $danger;
+//         background-image: url('../../images/close.svg');
+//         .toast-progress {
+//             background: $danger;
+//         }
+//         &:hover {
+//             box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 $danger;
+//         }
+//     }
+// }
+// .toast-top-right {
+//     right: 30px;
+// }
+.swal2-container {
+    .swal2-modal {
+        font-family: $font-family-base;
+    }
+    .swal2-spacer {
+        margin: 1.5rem 0;
+    }
+    .swal2-styled:not(.swal2-cancel) {
+        background: $primary !important;
+        outline: none;
+        &:focus {
+            box-shadow: 0 0 0 0.2rem rgba($primary, .5)
+        }
+    }
+}

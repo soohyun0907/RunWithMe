@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <style>
+      .loading_wrap {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #FFF;
+        display: block;
+        position: absolute;
+      }
+
+      .loader_logo {
+        height: 80px;
+        width: 80px;
+        position: absolute;
+        left: calc(50% - 50px);
+        top: 38%;
+      }
+
+      .loader_logo img {
+        height: 100%;
+        width: 100%;
+      }
+
+      .loading {
+
+        border: 3px solid rgba(102, 51, 153, 0.45);
+        position: absolute;
+        left: calc(50% - 35px);
+        top: 50%;
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        border-top-color: #663399;
+        animation: loader 1s ease-in-out infinite;
+        -webkit-animation: loader 1s ease-in-out infinite;
+      }
+
+      @keyframes loader {
+        to {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+      @-webkit-keyframes loader {
+        to {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+    </style>
+
+    <title>gull-vuejs Admin dashboard Template</title>
+
+
+  </head>
+
+  <body class="text-left">
+    <noscript>
+      <strong>
+        We're sorry but gull-vue doesn't work properly without JavaScript
+        enabled. Please enable it to continue.</strong>
+    </noscript>
+
+
+    <!-- built files will be auto injected -->
+    <div class="loading_wrap" id="loading_wrap">
+      <div class="loader_logo">
+        <img src="<%= BASE_URL %>img/logo.png" class="" alt="logo">
+      </div>
+
+      <div class="loading"></div>
+    </div>
+
+    <div id="app"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY"></script>
+
+  </body>
+
+</html>

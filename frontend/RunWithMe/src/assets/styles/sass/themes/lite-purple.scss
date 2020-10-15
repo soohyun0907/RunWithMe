@@ -1,0 +1,100 @@
+@import "../variables";
+@import "colors";
+
+$blue: map-get($solid-colors, "blue") !default;
+$indigo: map-get($solid-colors, "indigo") !default;
+$purple: map-get($solid-colors, "purple") !default;
+$pink: map-get($solid-colors, "pink") !default;
+$red: map-get($solid-colors, "red") !default;
+$orange: map-get($solid-colors, "orange") !default;
+$yellow: map-get($solid-colors, "yellow") !default;
+$green: map-get($solid-colors, "green") !default;
+$teal: map-get($solid-colors, "teal") !default;
+$cyan: map-get($solid-colors, "cyan") !default;
+$primary-base: $purple;
+$white: #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #eee !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #bbb !default;
+$gray-600: lighten(desaturate($primary-base, 40), 4%) !default;
+$gray-700: darken(desaturate($primary-base, 40), 0%) !default;
+$gray-800: darken(desaturate($primary-base, 40), 8%) !default;
+$gray-900: darken(desaturate($primary-base, 40), 12%) !default;
+$black: darken($primary-base, 60%) !default;
+$primary: $primary-base !default;
+$secondary: $gray-800 !default;
+$success: $green !default;
+$info: $blue !default;
+$warning: $yellow !default;
+$danger: $red !default;
+$light: $gray-500 !default;
+$dark: $gray-900 !default;
+$background: $white !default;
+$foreground: $gray-900 !default;
+$heading: darken($foreground, 8%);
+// blue dark
+// $dark-forground: #171355;
+// $dark-forground: #141b40;
+
+// dark version
+
+$dark-bg: #10163a;
+$dark-forground: #1c233f;
+// $dark-bg: #1d185d;
+
+$dark-heading: #c2c6dc;
+// $dark-forground: #262c49;
+// $dark-bg: #141b2d;
+// $dark-forground: #1f2940;
+// $dark-forground: #1b2040;
+// $dark-forground: #111635;
+// $dark-bg: #0e132e;
+// $dark-forground: #1a1f35;
+// $heading: darken($foreground, 8%);
+// $dark-heading: #bcc0db;
+$colors: (
+  purple: $purple,
+  pink: $pink,
+  red: $red,
+  orange: $orange,
+  yellow: $yellow,
+  green: $green,
+  teal: $teal,
+  cyan: $cyan,
+  white: $white,
+  gray: $gray-600,
+  gray-dark: $gray-800
+) !default;
+$theme-colors: (
+  primary: $primary,
+  secondary: $secondary,
+  success: $success,
+  info: $info,
+  warning: $warning,
+  danger: $danger,
+  light: $light,
+  gray-100: $gray-100,
+  gray-200: $gray-200,
+  gray-300: $gray-300,
+  gray-400: $gray-400,
+  gray-500: $gray-500,
+  gray-600: $gray-600,
+  gray-700: $gray-700,
+  gray-800: $gray-800,
+  gray-900: $gray-900,
+  dark: $dark
+) !default;
+@import "~bootstrap-vue/dist/bootstrap-vue.css";
+@import "~vue-form-wizard/dist/vue-form-wizard.min.css";
+@import "~vue-good-table/dist/vue-good-table.css";
+@import "~vue-slider-component/theme/default.css";
+@import "~nprogress/nprogress.css";
+@import "../../../fonts/iconsmind/iconsmind.css";
+@import "../../vendor/bootstrap/bootstrap.scss";
+// @import "~bootstrap/scss/bootstrap.scss";
+@import "../bootstrap-rtl.scss";
+
+@import "../globals/globals.scss";
+@import "dark/dark";
