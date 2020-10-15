@@ -74,6 +74,12 @@
               <span class="item-name">Records</span>
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/runnings/kakaoRecords">
+              <i class="nav-icon i-Checked-User"></i>
+              <span class="item-name">KakaoRecords</span>
+            </router-link>
+          </li>
         </ul>
         <!-- runnings end -->
         <ul
