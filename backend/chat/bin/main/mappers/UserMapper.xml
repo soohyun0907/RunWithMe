@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chat.mapper.UserMapper">
+
+	<insert id="createUser" parameterType="User"
+	useGeneratedKeys="true" keyProperty="id" keyColumn="User.id">
+		insert into
+		user(nickname)
+		values(#{nickname})
+	</insert>
+	
+	<select id="signin" resultType="int" parameterType="User">
+		select count(*)
+		from user
+		where id=#{id} and nickname=#{nickname}
+	</select>
+	
+</mapper>
