@@ -84,7 +84,7 @@ const routes = [
     children: [
       {
         path: "records",
-        component: () => import("./views/app/runnings/records")
+        component: () => import("./views/app/runnings/kakaomap_sh")
       },
     ]
   },
