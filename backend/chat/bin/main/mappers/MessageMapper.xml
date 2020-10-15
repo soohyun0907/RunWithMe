@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chat.mapper.MessageMapper">
+
+	<insert id="insertMessage" parameterType="Message">
+		insert into
+		message(content, chatroom_id, sender_id)
+		values(#{content},#{chatroomId}, #{senderId})
+	</insert>
+	
+	<select id="getMessagesByChatroomId" resultType="Message">
+	select t1.id as id, #{roomId} as chatroomId, t1.content as content, t1.sender_id as senderId, t2.nickname as senderNickname
+	from (
+	select 
+		id, content, sender_id
+		from message
+		inner join(select `id` from message where chatroom_id=#{roomId} order by id
+		desc limit #{idx}, 10) as q
+		using (`id`)
+		where chatroom_id=#{roomId}) as t1 
+	inner join user as t2
+    on t1.sender_id = t2.id;
+	</select>
+	
+</mapper>
