@@ -1,0 +1,9 @@
+{
+  "dashboard": "পানেল",
+  "dashboardItems": {
+    "versionOne": "সংস্করণ এক",
+    "versionTwo": "দ্বিতীয় সংস্করণ",
+    "versionThree": "সংস্করণ তিন",
+    "versionFour": "সংস্করণ চার"
+  }
+}

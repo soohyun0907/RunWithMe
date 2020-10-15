@@ -1,0 +1,263 @@
+html [type="button"],
+.btn[type="button"] {
+    -webkit-appearance: none !important;
+}
+
+.btn {
+    &.rounded,
+    &.btn-rounded {
+        border-radius: 40px !important;
+    }
+    &.btn-xl {
+        padding: .75rem 2rem;
+        font-size: 1.18rem;
+    }
+    padding: .5rem 1.25rem;
+    &:focus {
+        box-shadow: none;
+    }
+}
+
+.btn-secondary,
+.btn-raised-secondary {
+    color: $foreground !important;
+    background-color: $background !important;
+}
+
+.btn-icon {
+    [class^="i-"],
+    .icon {
+        vertical-align: middle;
+        margin: 0 2px;
+        -webkit-font-smoothing: subpixel-antialiased;
+    }
+    &.rounded-circle {
+        width: 44px;
+        height: 44px;
+        padding: 0;
+    }
+}
+
+.btn-icon-text {
+    [class^="i-"],
+    .icon {
+        vertical-align: middle;
+        margin: 0 2px;
+        -webkit-font-smoothing: subpixel-antialiased;
+    }
+}
+
+.btn-outline-email {
+    background: rgba($gray-200, 0.6);
+}
+
+.btn-spinner {
+    width: 1em;
+    height: 1em;
+    background: transparent;
+    border-radius: 50%;
+    margin: 0 16px 0 0;
+    border: 2px solid transparent;
+}
+
+.btn-checkbox {
+    .checkbox {
+        display: inline;
+    }
+}
+
+.btn.btn-outline-light.btn-svg {
+    border-color: $gray-700;
+    &.active,
+    &:hover {
+        background: $primary;
+        border-color: $primary;
+        svg {
+            fill: #ffffff;
+        }
+    }
+    &:focus {
+        box-shadow: none !important;
+    }
+}
+
+.btn-raised {
+    color: #fff;
+}
+
+@each $name,
+$value in $theme-colors {
+    .btn-#{$name},
+    .btn-outline-#{$name} {
+        border-color: $value;
+        .btn-spinner {
+            animation: btn-glow-#{$name} 1s ease infinite;
+        }
+        &:hover {
+            background: $value;
+            box-shadow: 0 8px 25px -8px $value;
+            border-color: $value;
+        }
+        &:focus {
+            box-shadow: none;
+            box-shadow: 0 8px 25px -8px $value;
+        }
+    }
+    .btn-raised.btn-raised-#{$name} {
+        background: $value;
+        box-shadow: 0 4px 6px rgba($value, .11), 0 1px 3px rgba($value, .08);
+    }
+    @keyframes btn-glow-#{$name} {
+        0% {
+            box-shadow: 0 0 0 0.4em darken($value, 10%), 0 0 0 0.1em darken($value, 10%);
+            transform: rotate(360deg);
+        }
+        50% {
+            border-top-color: #ffffff;
+        }
+        100% {
+            box-shadow: 0 0 0 0.4em darken($value, 10%), 0 0 0 3.6em transparent;
+        }
+    }
+}
+
+// extra button
+// .ul-btn-raised--v2{
+//   transition: 0.3s ease-in;
+// }
+// .ul-btn-raised--v2:hover{
+//   transform: translateY(-2px);
+//   -webkit-box-shadow: -1px 9px 11px -4px rgba(0,0,0,0.1);
+//   -moz-box-shadow: -1px 9px 11px -4px rgba(0,0,0,0.1);
+//   box-shadow: -1px 9px 11px -4px rgba(0,0,0,0.1);
+// }
+// .card-title--margin{
+//   margin-bottom: 12px;
+// }
+// .ul-btn__icon{
+//   font-size: 0.875rem;
+// }
+// .ul-btn__icon span:last-child{
+//   margin-left: 5px;
+// }
+//social button
+.btn-facebook {
+    color: $white;
+    background-color: $facebook;
+    border-color: $facebook;
+}
+
+.btn-facebook:hover {
+    background-color: $facebook;
+    border-color: $facebook;
+}
+
+.btn-google {
+    color: $white;
+    background-color: $google;
+    border-color: $google;
+}
+
+.btn-twitter {
+    color: $white;
+    background-color: $twitter;
+    border-color: $twitter;
+}
+
+.btn-instagram {
+    color: $white;
+    background-color: $instagram;
+    border-color: $instagram;
+}
+
+.btn-linkedin {
+    color: $white;
+    background-color: $linkedin;
+    border-color: $linkedin;
+}
+
+.btn-dribble {
+    color: $white;
+    background-color: $dribble;
+    border-color: $dribble;
+}
+
+.btn-youtube {
+    color: $white;
+    background-color: $youtube;
+    border-color: $youtube;
+}
+
+// Social outline
+.btn-outline-facebook {
+    color: $facebook !important;
+    border-color: $facebook;
+    background: rgba($gray-200, 0.6);
+    &:hover {
+        background: darken($facebook, 5%);
+        border-color: darken($facebook, 5%);
+        color: $white !important;
+    }
+}
+
+.btn-outline-google {
+    color: $google !important;
+    border-color: $google;
+    background: rgba($gray-200, 0.6);
+    &:hover {
+        background: darken($google, 5%);
+        border-color: darken($google, 5%);
+        color: $white !important;
+    }
+}
+
+.btn-outline-twitter {
+    color: $twitter !important;
+    border-color: $twitter;
+    background: rgba($gray-200, 0.6);
+    &:hover {
+        background: darken($twitter, 5%);
+        border-color: darken($twitter, 5%);
+    }
+}
+
+// end social
+// .ul-bottom__line{
+//   padding-bottom: 18px;
+//   border-bottom: 1px solid $gray-400;
+// }
+// .ul-bottom__line:last-child{
+//   border-bottom: none;
+// }
+// .round{
+//   border-radius: 50%;
+// }
+// Ripple Effect
+.ripple {
+    position: relative;
+    overflow: hidden;
+    transform: translate3d(0, 0, 0);
+}
+
+.ripple:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform .5s, opacity 1s;
+}
+
+.ripple:active:after {
+    transform: scale(0, 0);
+    opacity: .3;
+    transition: 0s;
+}

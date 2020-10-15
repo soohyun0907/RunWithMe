@@ -1,0 +1,63 @@
+@each $gcolor_name, $gcolor in $gradient-colors {
+  $start-color: map-get($gcolor, start-color);
+  $end-color: map-get($gcolor, end-color);
+
+  .sidebar-#{$gcolor_name} {
+    .sidebar-left {
+      @include directional-gradient(-154deg, $start-color, $end-color);
+    }
+  }
+  .#{$gcolor_name} {
+    @include directional-gradient(-154deg, $start-color, $end-color);
+  }
+  .btn.#{$gcolor_name} {
+    &:active,
+    &.active {
+      @include directional-gradient(-90deg, $start-color, $end-color);
+    }
+  }
+}
+
+@each $color_name, $color in $solid-colors {
+    .sidebar-#{$color_name} {
+        .sidebar-left {
+            background: $color;
+        }
+    }
+    .#{$color_name} {
+        background: $color;
+    }
+}
+
+// 
+$full-map: gen-color-full-opacity-map($colors);
+/*
+$full-map: (
+  blue: (
+    100: #f31312,
+    .....,
+    900: #f32332
+  ),
+  red: (
+    100: #f31312,
+    .....,
+    900: #f32332
+  )
+)
+*/
+
+@each $colorName, $map in $full-map {
+  @each $name, $value in $map {
+    .#{$colorName}-#{$name} {
+      background-color: $value;
+    }
+    .text-#{$colorName}-#{$name} {
+        @if (lightness( $value ) > 40) {
+          color: black;
+        }
+        @else {
+          color: white;
+        }
+    }
+  }
+}

@@ -1,0 +1,79 @@
+.ul-cursor--pointer{
+    cursor: pointer;
+}
+.ul-border__bottom{
+    border-bottom: 1px solid $indigo;
+   
+}
+
+.ul-card__v-space
+{
+    border-radius: 0;
+    box-shadow: 0;
+    margin: 30px 0;
+}
+.ul-card__border-radius
+{
+    border-radius: 0;
+    box-shadow: none;
+}
+
+
+
+.header-elements-inline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.ul-card__list--icon-font i{
+    font-weight: 700;
+    margin: 0 2px;
+}
+
+// icon-size
+.accordion .ul-collapse__icon--size a::before{
+    font-family: 'iconsmind';
+    font-size: 18px;
+    font-weight: 700;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+// end icon size
+
+// left icon
+
+.accordion .ul-collapse__left-icon a.collapsed:before{
+    font-family: 'iconsmind';
+    content: "\f083";
+    margin: 0 8px;
+}
+.accordion .ul-collapse__left-icon a:before{
+    font-family: 'iconsmind';
+    content: "\f072";
+    margin: 0 8px;
+}
+
+
+// end-left-icon
+// right-icon
+.accordion .ul-collapse__right-icon a.collapsed:before{
+    font-family: 'iconsmind';
+    content: "\f083";
+    margin: 0 8px;
+    float: right;
+    position: absolute;
+    right: 15px;
+    
+}
+.accordion .ul-collapse__right-icon a:before{
+    font-family: 'iconsmind';
+    content: "\f072";
+    margin: 0 8px;
+    float: right;
+    position: absolute;
+    right: 15px;
+}
+
+// end right-icon
