@@ -110,9 +110,30 @@
     - ex ) roomID : dd8e4018-1ca8-4fb1-bd57-fd3de4c47a61
 - 채팅방 입장
   - Chrome에서 Simplewebsocket 실행 -> URL 연결 -> 채팅방 입장을 위한 Json을 구성하여 Websocket으로 발송
+    
     - 이때 해당 roomID의 채팅방에 session 리스트에 클라이언트의 Websocket session을 저장
-  - Send 클릭 -> 메시지가 Web Socket Server로 전달, 
-
+  
+  - Send 클릭 -> 메시지가 Web Socket Server로 전달
+  
+  - ```json
+    // 채팅방 입장
+    {
+      "type":"ENTER",
+      "roomId":"dd8e4018-1ca8-4fb1-bd57-fd3de4c47a61",
+      "sender":"TAEK",
+      "message":""
+    }
+    // 메시지 발송
+    {
+       "type":"TALK",
+       "roomId":"dd8e4018-1ca8-4fb1-bd57-fd3de4c47a61",
+       "sender":"TAEK",
+       "message":"안녕하세요"
+    }
+    ```
+  
+    
+  
 - 채팅 메시지 발송
 
 
