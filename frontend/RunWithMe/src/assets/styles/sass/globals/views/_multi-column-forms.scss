@@ -1,0 +1,67 @@
+
+label.ul-form__label {
+    font-size: 13px;
+    font-weight: 400;
+    margin-bottom: 5px;
+    text-align: right;
+    padding: 7px 0 ;
+}
+small.ul-form__text
+{
+   margin-top: 10px;
+   color: $gray-500;
+   font-weight: 400;
+}
+
+
+
+
+.input-right-icon{
+    position: relative;
+    
+
+}
+span.span-left-input-icon
+{
+    position: absolute;
+    top: 9px;
+    left: 10px;
+}
+
+span.span-right-input-icon {
+    position: absolute;
+    top: 9px;
+    
+    /* left: 0; */
+    right: 10px;
+}
+// font-icon
+i.ul-form__icon {
+    color:$gray-600;
+    font-size: 15px;
+    font-weight: 600;
+}
+.ul-form__radio-inline {
+    display: flex;
+}
+span.ul-form__radio-font {
+    font-size: 14px;
+    font-weight: 500;
+}
+.footer-delete-right{
+    float: right;
+}
+.ul-card__margin-25{
+    margin:25px 0;
+}
+
+// If the browser window is max-width:x or smaller, the background color will be this -->
+@media only screen and (max-width: 991px) 
+{
+    label.ul-form--margin{
+        text-align: left;
+        margin-left: 20px;
+       
+    }
+}
+

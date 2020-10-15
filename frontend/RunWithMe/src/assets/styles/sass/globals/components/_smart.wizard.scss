@@ -1,0 +1,21 @@
+.vue-form-wizard .wizard-icon-circle {
+  outline: none !important;
+}
+
+@media (max-width: 764px) {
+  .vue-form-wizard .wizard-card-footer {
+    padding: 0 20px;
+    text-align: center;
+  }
+  .vue-form-wizard .wizard-card-footer .wizard-footer-left {
+    float: none;
+    margin-bottom: 15px;
+  }
+  .vue-form-wizard .wizard-card-footer .wizard-footer-right {
+    float: none;
+  }
+  .vue-form-wizard .wizard-nav-pills a,
+  .vue-form-wizard .wizard-nav-pills li {
+    margin-top: 15px;
+  }
+}

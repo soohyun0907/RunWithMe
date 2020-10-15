@@ -1,0 +1,149 @@
+h1, h2, h3, h4, h5, h6, .card-title, .text-title {
+  color: $heading;
+}
+
+@for $i from 10 through 78 {
+  .text-#{$i} {
+    font-size: #{$i}px;
+  }
+}
+@for $i from 300 through 900 {
+  .font-weight-#{$i} {
+    font-weight: $i;
+  }
+}
+
+.text-small {
+  font-size: .75rem;
+}
+.p-readable {
+    max-width: 650px;
+}
+
+// second typography
+
+.section-info{
+  font-size: 14px;
+  color: $gray-500;
+}   
+
+.heading{
+  color: darken(desaturate($primary-base, 40), 5);
+  font-weight: 700;
+}
+.br{
+  margin: 10px 0;
+}
+.text-mute{
+  color:$gray-500; ;
+}
+
+.display-content{
+  margin:20px 0;
+}
+.display-1 {
+  font-size: 6rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+.display-2 {
+  font-size: 5.5rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+.display-3 {
+  font-size: 4.5rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+.lead {
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+
+
+//font-bold
+.t-font-bold{
+  font-weight: 500 !important;
+}
+.t-font-bolder{
+  font-weight: 600 !important;
+}
+.t-font-boldest{
+  font-weight: 700 !important;
+}
+.t-font-u{
+  text-transform: uppercase;
+}
+
+
+
+.blockquote {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+.blockquote-footer {
+  display: block;
+  font-size: 80%;
+  color: $gray-500;
+}
+
+a.typo_link{
+ position: relative;
+ 
+}
+a.typo_link:hover{
+  color:$indigo;
+}
+a.typo_link:hover:after{
+  
+ width: 100%; 
+}
+
+a.typo_link:after {
+  display: block;
+  position: absolute;
+  content: "";
+  width: 0%;
+  height: 1px;
+  left: 0;
+  bottom: -4px;
+  transition: width 0.3s ease;
+}
+@each $name, $value in $theme-colors {
+  a.typo_link.text-#{$name}:after {
+      background-color: $value;
+  }
+}
+
+
+
+// divider
+.divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.divider>span:first-child{
+  width: 100%;
+  height: 1px;
+  background: $gray-200;
+  display: inline-block;
+  flex: 1;
+}
+.divider>span:last-child{
+  width: 100%;
+  height: 1px;
+  background: $gray-200;
+  display: inline-block;
+  flex: 1;
+}
+.divider>span:not(:first-child):not(:last-child) {
+  padding: 0 2rem;
+}
+// end-divider
+
+.cursor-pointer{
+   cursor: pointer!important;
+}

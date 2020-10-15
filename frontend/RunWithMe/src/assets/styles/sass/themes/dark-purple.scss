@@ -1,0 +1,83 @@
+@import "../variables";
+@import "colors";
+
+$blue: #263db5 !default;
+$indigo: #6610f2 !default;
+$purple: #663399 !default;
+$pink: #e83e8c !default;
+$red: #880a1f !default;
+$orange: #e97d23 !default;
+$yellow: #ffc107 !default;
+$green: #4caf50 !default;
+$teal: #20c997 !default;
+$cyan: #9c27b0 !default;
+$grey-r: #6c7293 !default;
+$grey-l: #a7abc3 !default;
+$grey-light: #f7f8fa !default;
+$primary-base: $purple;
+$white: darken(desaturate($primary-base, 40), 25) !default;
+$gray-100: darken(desaturate($primary-base, 40), 20) !default;
+$gray-200: darken(desaturate($primary-base, 40), 15) !default;
+$gray-300: darken(desaturate($primary-base, 40), 10) !default;
+$gray-400: darken(desaturate($primary-base, 40), 5) !default;
+$gray-500: darken(desaturate($primary-base, 40), 0) !default;
+$gray-600: lighten(desaturate($primary-base, 40), 40) !default;
+$gray-700: lighten(desaturate($primary-base, 40), 45) !default;
+$gray-800: lighten(desaturate($primary-base, 40), 50) !default;
+$gray-900: lighten(desaturate($primary-base, 40), 55) !default;
+$black: lighten($primary-base, 60%) !default;
+$primary: $primary-base !default;
+$secondary: $gray-800 !default;
+$success: $green !default;
+$info: $blue !default;
+$warning: $yellow !default;
+$danger: $red !default;
+$light: $gray-500 !default;
+$dark: $gray-900 !default;
+$background: $white !default;
+$foreground: $gray-900 !default;
+$heading: #fff;
+// dark version
+$dark-bg: #10163a;
+$dark-forground: #1c233f;
+$dark-heading: #c2c6dc;
+$colors: (
+  blue: $blue,
+  indigo: $indigo,
+  purple: $purple,
+  pink: $pink,
+  red: $red,
+  orange: $orange,
+  yellow: $yellow,
+  green: $green,
+  teal: $teal,
+  cyan: $cyan,
+  white: $white,
+  gray: $gray-600,
+  gray-dark: $gray-800
+) !default;
+$theme-colors: (
+  primary: $primary,
+  secondary: $secondary,
+  success: $success,
+  info: $info,
+  warning: $warning,
+  danger: $danger,
+  light: $light,
+  gray-100: $gray-100,
+  gray-200: $gray-200,
+  gray-300: $gray-300,
+  gray-400: $gray-400,
+  dark: $dark
+) !default;
+@import "~bootstrap-vue/dist/bootstrap-vue.css";
+@import "~vue-form-wizard/dist/vue-form-wizard.min.css";
+@import "~vue-good-table/dist/vue-good-table.css";
+@import "~vue-slider-component/theme/default.css";
+@import "~nprogress/nprogress.css";
+@import "../../../fonts/iconsmind/iconsmind.css";
+@import "../../vendor/bootstrap/bootstrap.scss";
+// @import "~bootstrap/scss/bootstrap.scss";
+@import "../bootstrap-rtl.scss";
+@import "../globals/globals.scss";
+@import "dark/dark";

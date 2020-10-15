@@ -1,0 +1,113 @@
+.ul-widget-app__row-comments {
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.ul-widget-app__row-comments:hover {
+  background-color: $gray-200;
+}
+.ul-widget-app__row-comments:hover .ul-widget-app__icons a i {
+  opacity: 1;
+  visibility: visible;
+}
+.ul-widget-app__icons a i:hover {
+  color: $purple;
+}
+
+.ul-widget-app__roundbg-icon {
+  border-radius: 50% !important;
+  line-height: 40px;
+  height: 40px;
+
+  min-width: 40px;
+  text-align: center;
+  padding: 0px !important;
+}
+
+.ul-widget-app__comment {
+  width: calc(100% - 86px);
+}
+.ul-widget-app__profile-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ul-widget-app__icons {
+  flex-grow: 1;
+}
+.ul-widget-app__icons {
+  font-size: 17px;
+}
+.ul-widget-app__icons a i {
+  margin: 0 3px;
+  font-weight: 600;
+  opacity: 0;
+  visibility: hidden;
+  vertical-align: middle;
+}
+.ul-widget-app__recent-messages {
+  height: calc(100vh - 350px);
+  overflow-y: scroll;
+  cursor: pointer;
+}
+.ul-widget-app__skill-margin span {
+  margin: 0 5px;
+}
+.ul-widget-app__profile-footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.ul-widget-app__profile-footer-font a span {
+  vertical-align: middle;
+}
+.ul-widget-app__profile-footer-font a i {
+  vertical-align: middle;
+}
+.ul-widget-app__browser-list-1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.notification_widget {
+  .ul-widget-app__browser-list-1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  .ul-widget-app__browser-list-1:hover {
+    background: #eee;
+  }
+}
+.ul-widget-app__browser-list-1 span {
+  flex-grow: 1;
+}
+.ul-widget-app__browser-list-1 span:last-child {
+  flex-grow: 0;
+}
+
+span.ul-widget-app__find-font {
+  position: absolute;
+  /* left: 0; */
+  top: 4px;
+  right: 10px;
+  color: $purple;
+  bottom: 0;
+  font-size: 20px;
+}
+.ul-widget-app__small-title {
+  display: grid;
+}
+.user-profile.ul-widget-app__profile--position {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  margin: 0 auto;
+  right: 0;
+  transform: translateY(-50%);
+}
+.timeline--align {
+  bottom: 8px;
+}
