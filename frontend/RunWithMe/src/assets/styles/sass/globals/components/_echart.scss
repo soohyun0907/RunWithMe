@@ -1,0 +1,12 @@
+.echarts {
+  width: 100% !important;
+  height: 100% !important;
+}
+.apexcharts-legend.center.position-bottom {
+  bottom: -2px !important;
+}
+@media (max-width: 767px) {
+  .apexcharts-toolbar {
+    display: none !important;
+  }
+}

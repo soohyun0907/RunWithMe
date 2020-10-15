@@ -1,0 +1,425 @@
+.dark-theme {
+  background: $dark-bg;
+  .sidebar-left,
+  .sidebar-left-secondary,
+  .main-header,
+  .card {
+    background: $dark-bg;
+    color: $dark-heading !important;
+  }
+  .border-bottom {
+    border-bottom: 1px solid $dark-forground !important;
+  }
+
+  .main-content-wrap {
+    background-color: $dark-forground;
+    color: $dark-heading !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .card-title,
+  .text-title {
+    color: $dark-heading;
+  }
+  .card-title {
+    color: $dark-heading !important;
+  }
+  a {
+    // background: $dark-bg;
+    color: $dark-heading !important;
+  }
+  input,
+  textarea {
+    background: $dark-forground !important;
+    border-color: $dark-bg;
+  }
+
+  .app-footer {
+    background: $dark-bg;
+
+    .footer-bottom {
+      .logo {
+      }
+    }
+  }
+
+  //   sidebar
+
+  .navigation-left {
+    .nav-item {
+      color: $dark-heading !important;
+
+      border-bottom: 1px solid $dark-forground !important;
+
+      .nav-item-hold {
+        color: $dark-heading !important;
+
+        a {
+          color: $dark-heading !important;
+        }
+      }
+    }
+  }
+
+  .sidebar-left-secondary {
+    .childNav {
+      li.nav-item {
+        display: block;
+        a {
+          color: $dark-heading;
+
+          &:hover {
+            background: $dark-forground;
+          }
+          &.open {
+            color: $primary;
+          }
+          &.router-link-active {
+            color: $primary;
+            .nav-icon {
+              color: $primary;
+            }
+          }
+
+          .nav-icon {
+            color: $dark-heading;
+          }
+          .item-name {
+          }
+          .dd-arrow {
+          }
+        }
+      }
+    }
+  }
+
+  //   search
+
+  .search-ui {
+    position: fixed;
+    background: $dark-forground;
+
+    input.search-input {
+      background: $dark-forground;
+      &::placeholder {
+        color: $dark-heading;
+      }
+    }
+  }
+  //   header search
+  .search-bar {
+    background: $dark-bg !important;
+    border: 1px solid $dark-forground !important;
+
+    input {
+      color: $dark-heading !important;
+      background: $dark-bg !important;
+    }
+    .search-icon {
+    }
+  }
+  //   utilites
+  .border-top {
+    border-top: 1px solid $dark-bg !important;
+  }
+  // tab
+  .tab-border {
+    border: 1px dashed $dark-forground !important;
+  }
+
+  //   table
+  table.vgt-table {
+    background: $dark-bg;
+  }
+  table.tableOne.vgt-table thead tr th {
+    background: $dark-bg;
+    border-color: $dark-forground;
+  }
+  //   list
+  .list-group-item {
+    background-color: $dark-bg;
+    border: 1px solid $dark-forground;
+  }
+  //   pagination
+
+  .page-link {
+    color: $dark-heading;
+    background-color: $dark-forground;
+    border: 1px solid $dark-bg;
+  }
+
+  //   header dropdoen
+  .dropdown-menu {
+    color: $dark-heading;
+
+    background-color: $dark-forground;
+
+    border: 1px solid $dark-forground;
+  }
+
+  // table
+  .table {
+    td {
+      border-top: 1px solid $dark-forground;
+    }
+    thead {
+      th {
+        border-bottom: 2px solid $dark-forground;
+      }
+    }
+    .thead-light {
+      th {
+        color: $dark-heading;
+        background-color: $dark-forground;
+        border-color: $dark-forground;
+      }
+    }
+  }
+
+  .apexcharts-xaxis-label {
+    fill: $dark-heading;
+  }
+  .apexcharts-yaxis-label {
+    fill: $dark-heading;
+  }
+
+  .apexcharts-tooltip.light {
+    border: 1px solid $dark-bg;
+    background: $dark-forground;
+  }
+
+  .apexcharts-tooltip.light .apexcharts-tooltip-title {
+    background: $dark-bg;
+    border-bottom: 1px solid $dark-bg;
+  }
+
+  .apexcharts-legend-text {
+    color: $dark-heading !important;
+  }
+
+  // input group
+  .input-group-text {
+    color: $dark-heading;
+    background-color: $dark-forground;
+    border: 1px solid $dark-forground;
+  }
+
+  .custom-select {
+    color: $dark-heading;
+    background-color: $dark-forground;
+    border: 1px solid $dark-forground;
+  }
+
+  .header-icon:hover {
+    background: $dark-forground !important;
+  }
+
+  // calender
+  .calendar-parent {
+    background-color: $dark-bg;
+  }
+  .cv-day,
+  .cv-event,
+  .cv-header-day,
+  .cv-header-days,
+  .cv-week,
+  .cv-weeks {
+    border-style: solid;
+    border-color: $dark-forground;
+  }
+  .theme-default {
+    .cv-day.outsideOfMonth,
+    .cv-day.past {
+      background-color: $dark-bg;
+    }
+    .cv-day.today {
+      background-color: $dark-forground;
+    }
+    .cv-header,
+    .cv-header-day {
+      background-color: $dark-forground;
+    }
+  }
+  .cv-header,
+  .cv-header button {
+    border-style: solid;
+    border-color: $dark-bg;
+    background: $dark-forground;
+  }
+
+  // vg-table
+  .vgt-global-search.vgt-clearfix {
+    background: $dark-bg;
+  }
+  table.tableOne tbody tr th.line-numbers {
+    background: $dark-bg;
+  }
+
+  div.vgt-wrap__footer.vgt-clearfix {
+    background: $dark-bg;
+  }
+
+  table.vgt-table td {
+    border-bottom: 1px solid $dark-forground;
+    color: $dark-heading;
+  }
+  table.tableOne tbody tr th.vgt-checkbox-col {
+    background: $dark-bg;
+  }
+
+  th.line-numbers {
+    border-bottom: 1px solid $dark-bg;
+  }
+
+  th.vgt-checkbox-col {
+    border-bottom: 1px solid $dark-bg;
+  }
+  .ul-widget__item {
+    border-bottom: 0.07rem dashed $dark-forground;
+  }
+
+  .order-table.vgt-table {
+    tbody tr:hover {
+      background: $dark-forground;
+      border-radius: 10px;
+    }
+  }
+
+  .page-item.disabled .page-link {
+    background-color: $dark-bg;
+    border-color: $dark-bg;
+  }
+  ul.gull-pagination li .page-link {
+    border-color: $dark-bg !important;
+    &:hover {
+      background: $dark-bg;
+    }
+  }
+
+  .layout-sidebar-compact {
+    .sidebar-left {
+      background: $dark-forground;
+      .navigation-left {
+      }
+    }
+
+    .sidebar-left-secondary {
+      .childNav {
+        li.nav-item {
+          a {
+            &.open {
+              color: $primary;
+              background: $dark-forground;
+              .nav-icon {
+                color: $primary;
+              }
+            }
+            .nav-icon {
+              color: $dark-heading;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // chat
+  .chat-sidebar-container {
+    height: calc(100vh - 140px);
+    min-height: unset;
+    .chat-topbar {
+      height: 52px;
+    }
+    .chat-content-wrap {
+      .chat-content {
+        .message {
+          background: $dark-forground;
+
+          &:before {
+            border-color: transparent transparent $dark-forground transparent;
+          }
+        }
+      }
+    }
+
+    .chat-sidebar-wrap {
+      .contacts-scrollable {
+        .contact {
+          position: relative;
+          cursor: pointer;
+          transition: 0.15s all ease-in;
+          &:hover {
+            background: $dark-forground;
+          }
+          &:before {
+            background: $dark-bg;
+            border-radius: 50%;
+          }
+          &.online {
+            &:before {
+              background: $success;
+            }
+          }
+        }
+      }
+    }
+  }
+  // Vertical sidebar Layout
+
+  .layout-sidebar-vertical {
+    .sidebar-panel {
+      box-shadow: 0 1px 15px $dark-forground, 0 1px 6px $dark-forground;
+      background: $dark-bg;
+    }
+    .main-content-wrap {
+      .main-header {
+        background: $dark-bg !important;
+      }
+    }
+  }
+  .layout-horizontal-bar {
+    .header-topnav {
+      background: $dark-bg;
+      box-shadow: 0 1px 15px transparent, 0 1px 6px transparent;
+      .topnav a {
+        color: $dark-heading !important;
+      }
+      .topnav ul ul {
+        background: $dark-bg;
+        color: $dark-heading;
+      }
+      .topnav ul li ul li:hover {
+        background: $dark-forground;
+      }
+    }
+  }
+  .main-header {
+    .show {
+      .header-icon {
+        background: $dark-forground;
+      }
+    }
+    .notification-dropdown {
+      color: $dark-heading;
+      .dropdown-item {
+        border-bottom: 1px solid $dark-bg;
+        color: $dark-heading;
+      }
+      .notification-icon {
+        background: $dark-bg !important;
+      }
+    }
+  }
+
+  .dropdown-item:focus,
+  .dropdown-item:hover {
+    color: $dark-heading;
+    text-decoration: none;
+    background-color: $dark-bg;
+  }
+}

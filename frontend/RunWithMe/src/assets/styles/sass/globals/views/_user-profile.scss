@@ -1,0 +1,118 @@
+.user-profile {
+  .header-cover {
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 300px;
+    &::after {
+      content: "";
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: -40px;
+    z-index: 9;
+  }
+  .profile-picture {
+    border-radius: 50%;
+    border: 4px solid $white;
+  }
+  .profile-nav {
+    justify-content: center;
+  }
+}
+
+.timeline {
+  position: relative;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  .timeline-item {
+    position: relative;
+    width: 50%;
+    display: inline-block;
+
+    &:nth-child(even) {
+      padding: 0 3rem 3rem 0;
+      .timeline-badge {
+        left: calc(100% - 24px);
+      }
+    }
+    &:nth-child(odd) {
+      float: right;
+      padding: 0 0 3rem 3rem;
+      margin-top: 6rem;
+      .timeline-badge {
+        right: calc(100% - 24px);
+      }
+    }
+    .timeline-badge {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+    }
+    .badge-icon {
+      display: inline-block;
+      text-align: center;
+      font-size: 22px;
+      border-radius: 50%;
+      height: 100%;
+      width: 100%;
+      line-height: 48px;
+    }
+    .badge-img {
+      display: inline-block;
+      border-radius: 50%;
+      height: 100%;
+      width: 100%;
+    }
+  }
+  .timeline-group {
+    position: relative;
+    z-index: 99;
+    padding: 0 0 2rem 0;
+  }
+  .timeline-line {
+    position: absolute;
+    content: "";
+    width: 1px;
+    height: 100%;
+    background: $gray-300;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+}
+@media (max-width: 767px) {
+  .user-profile {
+    .header-cover {
+      height: 200px;
+    }
+  }
+  .timeline {
+    .timeline-item {
+      width: 100%;
+      padding: 4rem 0 3rem !important;
+      &:nth-child(odd) {
+        margin-top: 1rem;
+      }
+      .timeline-badge {
+        left: 0 !important;
+        right: 0 !important;
+        top: -16px;
+        margin: auto;
+      }
+    }
+    .timeline-group {
+      padding: 0 0 3rem;
+    }
+  }
+}

@@ -1,0 +1,49 @@
+@import "colors";
+@import "sidebar-compact/layout-sidebar-compact";
+@import "sidebar-large/layout-sidebar-large";
+@import "horizontal-bar/layout-horizontal-bar";
+@import "footer";
+@import "vertical-sidebar/vertical-sidebar";
+// Common Layout Styles
+
+// Sidebar multilevel dropdown
+.sidebar-left-secondary {
+  .childNav {
+    li.nav-item {
+      &.open {
+        > a {
+          background: $gray-200;
+          > .dd-arrow {
+            transform: rotate(90deg);
+          }
+        }
+        > .submenu {
+          max-height: 1000px;
+        }
+      }
+      .submenu {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease-in;
+        > li {
+          a {
+            padding-left: 50px;
+          }
+        }
+      }
+    }
+  }
+}
+
+[dir="rtl"] {
+  .notification-dropdown .dropdown-item .notification-details {
+    text-align: right;
+  }
+  .main-header .user {
+    margin-left: 2rem;
+    margin-right: 0;
+  }
+}
