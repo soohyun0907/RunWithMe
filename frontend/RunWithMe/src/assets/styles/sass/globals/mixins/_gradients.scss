@@ -1,0 +1,31 @@
+@mixin directional-gradient($dir, $from, $to, $stop: 100%) {
+  /* fallback/image non-cover color */
+  background-color: $from;
+
+  /* Firefox 3.6+ */
+  background-image: -moz-linear-gradient($dir, $from 0%, $to $stop);
+
+  /* Safari 4+, Chrome 1+ */
+  background-image: -webkit-gradient(
+    linear,
+    $dir,
+    right top,
+    color-stop(0%, $from),
+    color-stop($stop, $to)
+  );
+
+  /* Safari 5.1+, Chrome 10+ */
+  background-image: -webkit-linear-gradient($dir, $from 0%, $to $stop);
+
+  /* Opera 11.10+ */
+  background-image: -o-linear-gradient($dir, $from 0%, $to $stop);
+
+  /* IE10+ */
+  background: -ms-linear-gradient($dir, $from 0%, $to $stop);
+
+  /* Standard */
+  background: linear-gradient($dir, $from 0%, $to $stop);
+
+  /* IE6-9 */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from', endColorstr='$to',GradientType=1 );
+}

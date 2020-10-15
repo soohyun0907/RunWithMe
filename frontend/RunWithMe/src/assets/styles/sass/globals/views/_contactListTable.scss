@@ -1,0 +1,54 @@
+.contact-close-mobile-icon {
+    display: none;
+  }
+  .ul-contact-list-body {
+    margin-top: -60px;
+    position: relative;
+  }
+  .ul-contact-left-side .card {
+    height: 100%;
+  }
+  .ul-contact-content-menu {
+  }
+  .ul-contact-left-side {
+    min-width: 230px;
+    width: 230px;
+    margin-right: 25px;
+  }
+  .ul-contact-content {
+    width: calc(100% - 220px);
+  }
+  @media only screen and (max-width: 1000px) {
+    .ul-contact-list-body {
+      margin-top: -60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-close-mobile-icon {
+      display: block;
+    }
+    .ul-contact-main-content {
+      height: 100vh;
+      /* overflow: hidden; */
+      overflow: scroll;
+    }
+    .ul-contact-left-side {
+      position: absolute;
+      z-index: 50;
+      left: 0px;
+  
+      transition: all 0.3s ease-in;
+      /* height: 100vh; */
+    }
+  
+    .contact-list-mobile {
+      left: -235px;
+    }
+    .card.ul-contact-vh {
+      height: 100vh;
+    }
+    .ul-contact-content {
+      width: calc(100% - 0px);
+      overflow-x: hidden;
+    }
+  }

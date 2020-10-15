@@ -1,0 +1,83 @@
+.ul-pricing__table-1 {
+    text-align: center;
+    border-right: 1px solid $gray-200;
+
+}
+
+.ul-pricing__image{
+    margin: 2rem 0;
+}
+.ul-pricing__image i{
+    font-size: 7rem;
+}
+.ul-pricing__text {
+    font-size: 1.2rem;
+}
+.ul-pricing__list {
+    margin-bottom: 2.1rem;
+}
+.ul-pricing__main-number {
+    margin: 20px 0;
+}
+.ul-pricing__list p {
+    padding: 0 2.1rem;
+    line-height: 2;
+    font-size: 1rem;
+}
+.ul-pricing__table-list {
+    width: 70%;
+    margin: 0 auto;
+    width: 70%;
+    margin: 0 auto;
+   
+    padding-bottom: 30px;
+}
+.ul-pricing__table-2{
+    text-align: center;
+   
+    border-right: 1px solid $gray-200;
+    padding-bottom: 15px;
+}
+.ul-pricing__month {
+    font-size: 18px;
+}
+
+.ul-pricing__table-2:hover{
+    transform: scale(1.1);
+    transition: 0.6s ease-in-out;
+    position: relative;
+    z-index: 2;
+    background-color: $gray-100;
+}
+.ul-pricing__header {
+    margin-bottom: 30px;
+    background-color: $gray-100;
+    border-bottom-left-radius: 210px;
+    border-bottom-right-radius: 210px;
+    padding-bottom: 12px;
+    
+}
+.ul-pricing__table-listing{}
+.ul-pricing__table-listing ul{
+    margin: 0;
+    padding:0; 
+    
+}
+.ul-pricing__table-listing ul li{
+    list-style: none;
+    padding: 10px 0;
+}
+
+@media only screen and (max-width: 1100px) {
+    .ul-pricing__main-number h3{
+       font-size: 3rem;
+    }
+}
+@media only screen and (max-width:991px)
+{
+    .ul-pricing__table-1 {
+        
+        border-right: none;
+    
+    }
+}
