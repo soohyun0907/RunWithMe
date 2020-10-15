@@ -1,0 +1,203 @@
+.badge {
+    font-weight: 600;
+}
+@each $name, $value in $theme-colors {
+    .badge-outline-#{$name} {
+        background: unset;
+        border: 1px solid $value;
+        color: $value;
+    }
+}
+.badge-top-container {
+    position: relative;
+    .badge {
+        position: absolute;
+        top: 2px;
+        right: 4px;
+        border-radius: 10px;
+    }
+}
+
+// begin::badge-pill
+@each $name, $value in $theme-colors {
+    .ul-badge-pill-#{$name} {
+        background: $value;
+        border-radius: 50%;
+        width: 25px;
+        height: 18px;
+        color: #fff;
+        line-height: 20px;
+        font-size: 0.8rem;
+    }
+}
+// end-of-badge-pill
+
+
+
+@each $name, $value in $theme-colors {
+    .badge-round-#{$name} {
+        background: $value;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        color: #fff;
+        line-height: 20px;
+        justify-content: center;
+
+        &.lg{
+            // large badge
+            width:40px;
+            height: 40px;
+            line-height: 30px;
+            font-size: 1.2rem;
+    
+        }
+        &.xl{
+            width:50px;
+            height: 50px;
+            line-height: 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        &.sm{
+            width: 18px;
+            height:18px;
+            line-height: 13px;
+            justify-content: center;
+            
+        }
+        &.pill{
+            width: 45px;
+            height:18px;
+            line-height: 13px;
+            border-radius:10px;
+        }
+    }
+   
+}
+
+@each $name, $value in $theme-colors {
+    .badge-dot-#{$name} {
+        height: 4px;
+        width: 4px;
+        background-color: $value;
+        border-radius: 50%;
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+
+// begin::outline
+@each $name, $value in $theme-colors {
+    .outline-round-#{$name} {
+        background: #fff;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        border: 1px solid $value;
+        color: $value;
+        line-height: 13px;
+        justify-content: center;
+    }
+}
+// end of outline 
+//ul badge square------------------------------//
+@each $name, $value in $theme-colors {
+    .badge-square-#{$name} {
+        background: $value;
+        border-radius: 20%;
+        width: 25px;
+        height: 25px;
+        color: #fff;
+        line-height: 20px;
+        text-align: center;
+
+        &.lg{
+            // large badge
+            width:40px;
+            height: 40px;
+            line-height: 30px;
+            font-size: 1.2rem;
+        }
+        &.xl{
+            width:50px;
+            height: 50px;
+            line-height: 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        
+    }
+    
+   
+}
+// end of ul-badge-square------------------//
+// not working this way
+// .ul-badge-round{
+
+//     &.lg {
+//         // large badge
+//         width:40px;
+//         height: 40px;
+
+//     }
+//     .md{
+//         // medium badge
+//         width:25px;
+//         height: 25px;
+//     }
+   
+// }
+// large
+
+
+//opacity round
+.badge-round {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    line-height: 30px;
+    font-size: 1.2rem;
+
+    
+}
+@each $name, $value in $theme-colors {
+    .badge-round.badge-round-opacity-#{$name} {
+        background: lighten($value, 40%);
+        color:$value;
+        
+    }
+}
+// end-opacity-round
+
+// begin square opacity
+
+.badge-square{
+    border-radius: 20%;
+    width: 40px;
+    height: 40px;
+    line-height: 30px;
+    font-size: 1.2rem;
+}
+@each $name, $value in $theme-colors {
+    .badge-square.badge-square-opacity-#{$name} {
+        background: lighten($value, 40%);
+        color:$value;
+        
+    }
+}
+.w-badge{
+    border-radius: 0;
+    padding: 4px;
+    color: #fff;
+}
+.r-badge{
+    padding: 4px;
+}
+
+// end square opacity
+
+
+
+
+

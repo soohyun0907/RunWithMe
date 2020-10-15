@@ -1,0 +1,52 @@
+.invoice-summary {
+  width: 220px;
+  text-align: right;
+  float: right;
+  &.invoice-summary-input {
+    width: 320px;
+    p,
+    h5 {
+      span {
+        // width: 180px;
+      }
+    }
+  }
+  p,
+  h5 {
+    display: flex;
+    justify-content: flex-end;
+    span {
+      width: 120px;
+      .small-input {
+        display: inline-block;
+        width: 3rem;
+        margin: 0 0.75rem;
+      }
+    }
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .main-content-wrap {
+    width: 100% !important;
+  }
+  #print-area,
+  #print-area * {
+    visibility: visible;
+  }
+  #print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
+
+[dir="rtl"] {
+  .invoice-summary {
+    text-align: left !important;
+  }
+}

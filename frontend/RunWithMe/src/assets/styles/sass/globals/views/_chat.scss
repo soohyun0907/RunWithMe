@@ -1,0 +1,100 @@
+.chat-sidebar-container {
+  height: calc(100vh - 140px);
+  min-height: unset;
+  .chat-topbar {
+    height: 52px;
+  }
+  .chat-content-wrap {
+    margin-left: 260px;
+    .chat-content {
+      padding: 1.5rem 1.5rem 0;
+      position: relative;
+      height: calc(100vh - 335px);
+      .message {
+        position: relative;
+        background: $gray-100;
+        border-radius: 10px;
+        padding: 1rem;
+        &:before {
+          position: absolute;
+          content: "";
+          top: 14px;
+          right: -5px;
+          background: transparent;
+          border-style: solid;
+          border-width: 0 10px 10px 0px;
+          border-color: transparent transparent $gray-100 transparent;
+          transform: rotate(-135deg);
+        }
+      }
+      .user {
+        .message {
+          &:before {
+            left: -5px;
+            right: auto;
+            transform: rotate(45deg);
+          }
+        }
+      }
+      .chat-input-area {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+    }
+    .spinner-glow {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(50% - 10px);
+    }
+  }
+  .chat-sidebar-wrap {
+    width: 260px;
+    margin-left: 0px;
+    .contacts-scrollable {
+      position: relative;
+      height: calc(100vh - 190px);
+      .contact {
+        position: relative;
+        cursor: pointer;
+        transition: 0.15s all ease-in;
+        &:hover {
+          background: $gray-100;
+        }
+        &:before {
+          position: absolute;
+          content: "";
+          width: 8px;
+          height: 8px;
+          top: calc(50% - 4px);
+          right: 30px;
+          background: $light;
+          border-radius: 50%;
+        }
+        &.online {
+          &:before {
+            background: $success;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 764px) {
+  .chat-sidebar-container {
+    height: calc(100vh - 140px);
+    min-height: unset;
+
+    .chat-content-wrap {
+      margin-left: 0px;
+    }
+    .chat-sidebar-wrap {
+      width: 260px;
+      margin-left: -260px;
+    }
+  }
+}

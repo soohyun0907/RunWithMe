@@ -1,0 +1,65 @@
+#task-manager {
+    li.nav-item.dropdown {
+        padding: 0 8px;
+    }
+    li.nav-item.dropdown {
+        margin: 11px 0;
+        text-align: left;
+    }
+    .dropdown-menu.show {
+        display: block;
+        margin: 21px 2px;
+    }
+    //end of filter-dropdown customization
+    .task-manager-button {
+        padding: 7px 15px;
+    }
+    
+    .active {
+        display: none;
+    }
+    .ul-task-manager__font-date {
+        font-size: 10px;
+    }
+    .ul-task-manager__paragraph {
+        width: 95%;
+        letter-spacing: 0px;
+    }
+    .ul-task-manager__media a {
+        color: $indigo;
+        font-weight: bold;
+    }
+    .ul-task-manager__fonts {
+        font-size: 32px;
+        position: relative;
+        top: 13px;
+        color: $gray-600;
+    }
+    
+    .ul-task-manager__media p {
+        margin-bottom: 0rem;
+        font-weight: 700;
+    }
+    .revision-font i {
+        margin-right: 15px;
+        font-size: 30px;
+        color:$indigo;
+    }
+    // filter dropdown customization
+    @media (max-width: 991px) {
+        .navbar-toggler {
+            float: left!important;
+        }
+        .filter-mobile {
+            width: 100%;
+            text-align: left;
+            margin-top: 5px;
+        }
+        li.nav-item.dropdown {
+            padding: 0px;
+        }
+        button.task-manager-button.navbar-toggler.text-white {
+            background: $purple;
+        }
+    }
+}
