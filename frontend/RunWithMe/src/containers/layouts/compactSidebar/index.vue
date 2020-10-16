@@ -2,19 +2,19 @@
   <div
     :class="[
       getCompactSideBarToggleProperties.isSideNavOpen ? 'sidenav-open' : '',
-      getcompactLeftSideBarBgColor,
+      getcompactLeftSideBarBgColor
     ]"
-    class="app-admin-wrap layout-sidebar-compact clearfix"
+    class="app-admin-wrap  layout-sidebar-compact   clearfix"
   >
     <compactSidebar></compactSidebar>
     <!-- end-leftsidebar -->
     <div class="main-content-wrap d-flex flex-column">
       <compactTopbar></compactTopbar>
-      <div class="container">
+       <div class="container">
         <transition name="page" mode="out-in">
           <router-view />
         </transition>
-      </div>
+        </div>
       <appFooter></appFooter>
     </div>
   </div>
@@ -28,7 +28,7 @@ export default {
   components: {
     compactTopbar,
     compactSidebar,
-    appFooter,
+    appFooter
   },
   data() {
     return {};
@@ -36,8 +36,8 @@ export default {
   computed: {
     ...mapGetters([
       "getCompactSideBarToggleProperties",
-      "getcompactLeftSideBarBgColor",
-    ]),
-  },
+      "getcompactLeftSideBarBgColor"
+    ])
+  }
 };
 </script>
