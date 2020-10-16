@@ -1,5 +1,5 @@
 <template>
-  <div class="app-admin-wrap layout-sidebar-large clearfix">
+  <div class="app-admin-wrap  layout-sidebar-large clearfix">
     <top-nav />
 
     <sidebar />
@@ -7,14 +7,14 @@
     <main>
       <div
         :class="{ 'sidenav-open': getSideBarToggleProperties.isSideNavOpen }"
-        class="main-content-wrap d-flex flex-column"
-      >
+        class="main-content-wrap  d-flex flex-column flex-grow-1">
         <div class="container">
-          <transition name="page" mode="out-in">
-            <router-view />
-          </transition>
+        <transition name="page" mode="out-in">
+          <router-view />
+        </transition>
         </div>
-        <!-- <appFooter /> -->
+        <div  class="flex-grow-1"></div>
+        <appFooter />
       </div>
     </main>
   </div>
@@ -30,15 +30,17 @@ export default {
   components: {
     Sidebar,
     TopNav,
-    appFooter,
+    appFooter
   },
   data() {
     return {};
   },
   computed: {
-    ...mapGetters(["getSideBarToggleProperties"]),
+    ...mapGetters(["getSideBarToggleProperties"])
   },
-  methods: {},
+  methods: {
+
+  }
 };
 </script>
 <style>
