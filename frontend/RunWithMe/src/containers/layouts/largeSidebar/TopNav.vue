@@ -12,12 +12,12 @@
 
     <div class="d-flex align-items-center">
       <!-- Mega menu -->
-      <div
+      <!-- <div
         :class="{ show: isMegaMenuOpen }"
         class="dropdown mega-menu d-none d-md-block"
         v-on-clickaway="closeMegaMenu"
-      >
-        <a
+      > -->
+        <!-- <a
           href="#"
           class="btn text-muted dropdown-toggle mr-3"
           id="dropdownMegaMenuButton"
@@ -26,8 +26,8 @@
           aria-expanded="false"
           @click="toggleMegaMenu"
           >Mega Menu</a
-        >
-        <div
+        > -->
+        <!-- <div
           class="dropdown-menu text-left"
           :class="{ show: isMegaMenuOpen }"
           aria-labelledby="dropdownMenuButton"
@@ -114,7 +114,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- / Mega menu -->
       <div class="search-bar" @click="toggleSearch">
         <input type="text" placeholder="Search" />
@@ -133,7 +133,7 @@
       <!-- <i class="i-Full-Screen header-icon d-none d-sm-inline-block" data-fullscreen></i> -->
       <!-- Grid menu Dropdown -->
 
-      <div class="dropdown">
+      <!-- <div class="dropdown">
         <b-dropdown
           id="dropdown"
           text="Dropdown Button"
@@ -161,7 +161,7 @@
             <a href="#"> <i class="i-Ambulance"></i> Support </a>
           </div>
         </b-dropdown>
-      </div>
+      </div> -->
       <!-- Notificaiton -->
       <div class="dropdown">
         <b-dropdown

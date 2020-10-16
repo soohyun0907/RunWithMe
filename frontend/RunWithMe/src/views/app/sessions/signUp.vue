@@ -1,16 +1,19 @@
 <template>
-  <div class="auth-layout-wrap" :style="{ backgroundImage: 'url(' + bgImage + ')' }">
+  <div
+    class="auth-layout-wrap"
+    :style="{ backgroundImage: 'url(' + bgImage + ')' }"
+  >
     <div class="auth-content">
       <div class="card o-hidden">
         <div class="row">
           <div
-            class="col-md-6 text-center"
+            class="col-md-6 text-center "
             style="background-size: cover"
             :style="{ backgroundImage: 'url(' + signInImage + ')' }"
           >
             <div class="pl-3 auth-right">
               <div class="auth-logo text-center mt-4">
-                <img :src="logo" alt />
+                <img :src="logo" alt="" />
               </div>
               <div class="flex-grow-1"></div>
               <div class="w-100 mb-30">
@@ -45,12 +48,17 @@
                     class="form-control form-control-rounded"
                     label="Name"
                     v-model.trim="$v.fName.$model"
-                  ></b-form-input>
+                  >
+                  </b-form-input>
 
-                  <b-alert show variant="danger" class="error col mt-1" v-if="!$v.fName.minLength">
-                    Name must have at least
-                    {{ $v.fName.$params.minLength.min }} letters.
-                  </b-alert>
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error col mt-1"
+                    v-if="!$v.fName.minLength"
+                    >Name must have at least
+                    {{ $v.fName.$params.minLength.min }} letters.</b-alert
+                  >
                 </b-form-group>
 
                 <b-form-group label="Email">
@@ -59,7 +67,8 @@
                     label="Name"
                     type="email"
                     v-model="email"
-                  ></b-form-input>
+                  >
+                  </b-form-input>
                 </b-form-group>
 
                 <b-form-group label="Password">
@@ -68,17 +77,17 @@
                     label="Name"
                     type="password"
                     v-model.trim="$v.password.$model"
-                  ></b-form-input>
+                  >
+                  </b-form-input>
 
                   <b-alert
                     show
                     variant="danger"
                     class="error col mt-1"
                     v-if="!$v.password.minLength"
+                    >Minimum
+                    {{ $v.password.$params.minLength.min }} charaters.</b-alert
                   >
-                    Minimum
-                    {{ $v.password.$params.minLength.min }} charaters.
-                  </b-alert>
                 </b-form-group>
 
                 <b-form-group label="Repeat Password">
@@ -87,14 +96,16 @@
                     label="Name"
                     type="password"
                     v-model.trim="$v.repeatPassword.$model"
-                  ></b-form-input>
+                  >
+                  </b-form-input>
 
                   <b-alert
                     show
                     variant="danger"
                     class="error col mt-1"
                     v-if="!$v.repeatPassword.sameAsPassword"
-                  >Passwords must be identical.</b-alert>
+                    >Passwords must be identical.</b-alert
+                  >
                 </b-form-group>
 
                 <b-button
@@ -103,13 +114,16 @@
                   variant="primary"
                   :disabled="submitStatus === 'PENDING' || $v.$invalid"
                   class="btn-rounded"
-                >Sign Up</b-button>
+                  >Sign Up</b-button
+                >
 
                 <p v-once class="typo__p" v-if="submitStatus === 'OK'">
                   {{ makeToastTwo("success") }}
                   {{ this.$router.push("/") }}
                 </p>
-                <p v-once class="typo__p" v-if="submitStatus === 'ERROR'">{{ makeToast("danger") }}</p>
+                <p v-once class="typo__p" v-if="submitStatus === 'ERROR'">
+                  {{ makeToast("danger") }}
+                </p>
                 <div v-once class="typo__p" v-if="submitStatus === 'PENDING'">
                   <div class="spinner sm spinner-primary mt-3"></div>
                 </div>
@@ -127,7 +141,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignUp",
+    title: "SignUp"
   },
 
   data() {
@@ -139,23 +153,23 @@ export default {
       signInImage: require("@/assets/images/photo-long-3.jpg"),
       password: "",
       repeatPassword: "",
-      submitStatus: null,
+      submitStatus: null
     };
   },
 
   validations: {
     fName: {
       required,
-      minLength: minLength(4),
+      minLength: minLength(4)
     },
 
     password: {
       required,
-      minLength: minLength(5),
+      minLength: minLength(5)
     },
     repeatPassword: {
-      sameAsPassword: sameAs("password"),
-    },
+      sameAsPassword: sameAs("password")
+    }
 
     // add input
     // peopleAdd: {
@@ -172,7 +186,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["loggedInUser", "loading", "error"]),
+    ...mapGetters(["loggedInUser", "loading", "error"])
   },
 
   methods: {
@@ -196,21 +210,21 @@ export default {
       this.$bvToast.toast("Please fill the form correctly.", {
         title: `Variant ${variant || "default"}`,
         variant: variant,
-        solid: true,
+        solid: true
       });
     },
     makeToastTwo(variant = null) {
       this.$bvToast.toast("Successfully Created Account", {
         title: `Variant ${variant || "default"}`,
         variant: variant,
-        solid: true,
+        solid: true
       });
     },
 
     inputSubmit() {
       console.log("submitted");
-    },
-  },
+    }
+  }
 };
 </script>
 <style>
