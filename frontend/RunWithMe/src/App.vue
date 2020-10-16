@@ -2,7 +2,7 @@
   <div>
     <router-view></router-view>
 
-    <!-- <customizer></customizer> -->
+    <customizer></customizer>
   </div>
 </template>
 
@@ -26,9 +26,9 @@ export default {
   metaInfo() {
     return {
       // if no subcomponents specify a metaInfo.title, this title will be used
-      title: "Run With Me",
+      title: "Gull",
       // all titles will be injected into this template
-      titleTemplate: "%s | Run With Me",
+      titleTemplate: "%s | Gull - Vuejs Admin Dashboard Template",
       bodyAttrs: {
         class: [this.themeName, "text-left"]
       },
