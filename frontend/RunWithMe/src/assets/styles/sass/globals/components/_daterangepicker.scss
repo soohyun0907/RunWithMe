@@ -1,0 +1,59 @@
+.daterangepicker {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  border: 0;
+  margin: 0;
+  // @include shadow-6dp();
+  &::after,&::before {
+    display: none;
+  }
+  th.month {
+    // color: $text-muted-color;
+  }
+  .calendar-table .next span,
+  .calendar-table .prev span {
+    // border-color: $border-color-black !important;
+    border-width: 0 1px 1px 0;
+  }
+  .drp-calendar {
+    padding-bottom: 19px !important;
+  }
+  .drp-calendar, .drp-buttons {
+    // border-color: $border-color !important;
+  }
+  .ranges li.active, td.active, td.active:hover {
+    background: $primary !important;
+    color: $white !important;
+  }
+  td.in-range {
+    background-color: $gray-200;
+    color: $body-color;
+  }
+  .ranges li:hover {
+    background-color: $gray-200;
+  }
+  @media only screen and (max-width: 682px) {
+    .ranges {
+      width: 100%;
+      ul {
+        width: 100%;
+      }
+    }
+    
+    .calendars-container{
+      display: flex !important;
+      flex-direction: column !important;
+      // height: 100vh !important;
+    }
+    .drp-calendar.right{
+      padding: 0px !important;
+      margin-top: 225px;
+    }
+    .daterangepicker.openscenter[data-v-fffebcea]{
+      
+    }
+    
+  }
+
+}
