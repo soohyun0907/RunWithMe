@@ -3,23 +3,35 @@
     <breadcumb :page="'KakaoMap'" :folder="'Pages'" />
 
     <div id="map"></div>
+
+    <!-- <section class="bottom-bar">
+      <div class="latLngLabel">{{lat}}, {{lng}}</div>
+      <button class="ui button green" @click="startLocationUpdates">
+        <i class="circle dot outline icon large"></i>
+          Start Location
+      </button>
+      <button class="ui button red" @click="stopLocationUpdates">
+        <i class="circle dot outline icon large"></i>
+          Stop Location
+      </button>
+    </section> -->
+
   </div>
 </template>
 <script>
 export default {
+  name: "kakaomap",
   data() {
     return {
-      kakaomap: null,
+      map: ""
     };
-  },
-  created() {
-
   },
   mounted() {
     window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
   },
   methods: {
     addScript(){
+      // console.log(this.kakaomap);
       const script = document.createElement('script');
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
@@ -27,8 +39,9 @@ export default {
             document.head.appendChild(script);
     },
     initMap() {
-      var container = document.getElementById('map');
-      var lat = 33.450701,
+      // console.log(this.kakaomap);
+      let container = document.getElementById('map');
+      let lat = 33.450701,
             lon = 126.570667;
 
       // HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
@@ -38,26 +51,30 @@ export default {
           lat = position.coords.latitude; // 위도
           lon = position.coords.longitude; // 경도
 
-          var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+          let locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
               message = '<div style="padding:5px;">여기에 계신가요?!</div>'; // 인포윈도우에 표시될 내용입니다
         
           console.log("geolocation " + lat, lon);
-          var options = {
+          let options = {
             center: new kakao.maps.LatLng(lat, lon),
             level: 3
           };
 
-          var kakaomap = new kakao.maps.Map(container, options);
+          this.map = new kakao.maps.Map(container, options);
+          // console.log(map);
+          // this.map = map;
+          console.log(this.map);
+
           // 마커와 인포윈도우를 표시합니다
-          var marker = new kakao.maps.Marker({  
-            map: kakaomap, 
+          let marker = new kakao.maps.Marker({  
+            map: map, 
             position: locPosition
           }); 
-          var iwContent = message, // 인포윈도우에 표시할 내용
+          let iwContent = message, // 인포윈도우에 표시할 내용
               iwRemoveable = true;
 
           // 인포윈도우를 생성합니다
-          var infowindow = new kakao.maps.InfoWindow({
+          let infowindow = new kakao.maps.InfoWindow({
               content : iwContent,
               removable : iwRemoveable
           });
@@ -76,14 +93,39 @@ export default {
       }
       
     },
+    startLocationUpdates() {
+      
+      var marker = new google.maps.Marker({
+        map: this.kakaomap
+      });
+
+      this.watchPositionId = navigator.geolocation.watchPosition(
+        position => {
+          this.lat = position.coords.latitude;
+          this.lng = position.coords.longitude;
+          console.log(position);
+          map.setCenter(new google.maps.LatLng(this.lat, this.lng)); 
+          marker.setPosition(new google.maps.LatLng(this.lat, this.lng));
+        },
+        error => {
+          console.log(error.message);
+        },
+        {timeout: 5000,
+          maximumAge: 0}
+      );
+            
+    },
+    stopLocationUpdates() {
+      navigator.geolocation.clearWatch(this.watchPositionId);
+    },
 
   }
 };
 </script>
-<style  scoped>
+<style scoped>
 #map {
-  width: 500px;
-  height: 510px;
+  width: 300px;
+  height: 310px;
   border: 1px solid red;
 }
 .app-footer {
