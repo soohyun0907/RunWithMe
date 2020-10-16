@@ -1,5 +1,8 @@
 <template>
-  <div class="auth-layout-wrap" :style="{ backgroundImage: 'url(' + bgImage + ')' }">
+  <div
+    class="auth-layout-wrap"
+    :style="{ backgroundImage: 'url(' + bgImage + ')' }"
+  >
     <div class="auth-content">
       <div class="card o-hidden">
         <div class="row">
@@ -21,19 +24,25 @@
                 </b-form-group>
 
                 <b-form-group label="Password" class="text-12">
-                  <b-form-input class="form-control-rounded" type="password" v-model="password"></b-form-input>
+                  <b-form-input
+                    class="form-control-rounded"
+                    type="password"
+                    v-model="password"
+                  ></b-form-input>
                 </b-form-group>
 
                 <!-- <b-button block to="/" variant="primary btn-rounded mt-2"
                   >Sign In</b-button
-                >-->
+                > -->
                 <b-button
                   type="submit"
                   tag="button"
                   class="btn-rounded btn-block mt-2"
                   variant="primary mt-2"
                   :disabled="loading"
-                >SignIn</b-button>
+                >
+                  SignIn
+                </b-button>
                 <div v-once class="typo__p" v-if="loading">
                   <div class="spinner sm spinner-primary mt-3"></div>
                 </div>
@@ -42,7 +51,8 @@
                   block
                   variant="primary mt-2"
                   class="btn-rounded"
-                >Create an account</b-button>
+                  >Create an account</b-button
+                >
               </b-form>
 
               <div class="mt-3 text-center">
@@ -85,26 +95,59 @@
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignIn",
+    title: "SignIn"
   },
   data() {
     return {
-      email: "",
-      password: "",
+      email: "ui-lib@gmail.com",
+      password: "123456",
+      // // password: "vue006",
+      userId: "",
       bgImage: require("@/assets/images/photo-wide-4.jpg"),
       logo: require("@/assets/images/logo.png"),
-      signInImage: require("@/assets/images/photo-long-3.jpg"),
+      signInImage: require("@/assets/images/photo-long-3.jpg")
     };
+  },
+  computed: {
+    validation() {
+      return this.userId.length > 4 && this.userId.length < 13;
+    },
+    ...mapGetters(["loggedInUser", "loading", "error"])
   },
 
   methods: {
+    ...mapActions(["login"]),
     formSubmit() {
-      console.log("email :" + this.email + "password :" + this.password);
+      this.login({ email: this.email, password: this.password });
     },
+    makeToast(variant = null, msg) {
+      this.$bvToast.toast(msg, {
+        title: ` ${variant || "default"}`,
+        variant: variant,
+        solid: true
+      });
+    }
   },
+  watch: {
+    loggedInUser(val) {
+      if (val && val.uid && val.uid.length > 0) {
+        this.makeToast("success", "Successfully Logged In");
+
+        setTimeout(() => {
+          this.$router.push("/");
+        }, 500);
+      }
+    },
+    error(val) {
+      if (val != null) {
+        this.makeToast("warning", val.message);
+      }
+    }
+  }
 };
 </script>
 

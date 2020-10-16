@@ -1,15 +1,7 @@
 <template>
   <div>
     <!-- <keep-alive> -->
-    <component is="large-sidebar"></component>
-    <!-- available layouts -->
-    <!-- 
-large-sidebar
-vertical-sidebar
-compact-sidebar
-
-
-    -->
+    <component :is="getThemeMode.layout"></component>
     <!-- </keep-alive> -->
   </div>
 </template>
@@ -23,8 +15,8 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["getThemeMode"]),
+    ...mapGetters(["getThemeMode"])
   },
-  methods: {},
+  methods: {}
 };
 </script>

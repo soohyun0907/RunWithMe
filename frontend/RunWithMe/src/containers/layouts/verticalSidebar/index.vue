@@ -6,14 +6,14 @@
         class="main-content-wrap mt-0 bg-off-white"
         :class="{
           'vertical-sidebar': getVerticalSidebar.isVerticalSidebar,
-          compact: getVerticalSidebar.isVerticalCompact,
+          compact: getVerticalSidebar.isVerticalCompact
         }"
       >
         <verticalTopbar />
         <div class="container">
-          <transition name="page" mode="out-in">
-            <router-view />
-          </transition>
+        <transition name="page" mode="out-in">
+          <router-view />
+        </transition>
         </div>
         <appFooter />
       </div>
@@ -30,14 +30,14 @@ export default {
   components: {
     verticalSidebar,
     verticalTopbar,
-    appFooter,
+    appFooter
   },
   computed: {
-    ...mapGetters(["getVerticalSidebar"]),
+    ...mapGetters(["getVerticalSidebar"])
   },
   data() {
     return {};
   },
-  methods: {},
+  methods: {}
 };
 </script>
