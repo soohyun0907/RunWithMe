@@ -80,8 +80,12 @@ const routes = [
   {
     path: "/app/runnings",
     component: () => import("./views/app/runnings"),
-    redirect: "/app/runnings/records",
+    redirect: "/app/runnings/index",
     children: [
+      {
+        path: "index",
+        component: () => import("./views/app/runnings/index")
+      },
       {
         path: "records",
         component: () => import("./views/app/runnings/records")

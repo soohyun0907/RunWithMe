@@ -15,8 +15,8 @@
         <ul class="navigation-left">
           <li
             @mouseenter="toggleSubMenu"
-            :class="{ active: selectedParentMenu == 'pages' }"
             class="nav-item"
+            :class="{ active: selectedParentMenu == 'pages' }"
             data-item="pages"
           >
             <a class="nav-item-hold" href="#">
@@ -51,6 +51,7 @@
             </a>
             <div class="triangle"></div>
           </li>
+          
         </ul>
       </div>
     </vue-perfect-scrollbar>
@@ -68,6 +69,12 @@
           data-parent="runnings"
           :class="{ 'd-block': selectedParentMenu == 'runnings' }"
         >
+        <li class="nav-item">
+            <router-link tag="a" class to="/app/runnings/index">
+              <i class="nav-icon i-Checked-User"></i>
+              <span class="item-name">Index</span>
+            </router-link>
+          </li>
           <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/records">
               <i class="nav-icon i-Checked-User"></i>
