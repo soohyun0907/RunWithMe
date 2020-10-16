@@ -1,6 +1,6 @@
 package kr.co.rwm.controller;
 
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,24 +11,43 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.rwm.entity.User;
+import kr.co.rwm.model.Response;
+import kr.co.rwm.model.ResponseMessage;
+import kr.co.rwm.model.RestException;
+import kr.co.rwm.model.StatusCode;
+import kr.co.rwm.service.JwtTokenProvider;
 import kr.co.rwm.service.UserService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
+	
+	private final JwtTokenProvider jwtTokenProvider;
 	
 	@Autowired
 	private UserService userService;
 	
-	@PostMapping("/join")
-	public ResponseEntity<String> join(@RequestBody Map<String, String> userInfo){
-		System.out.println("users/controller/회원가입");
+	@PostMapping("/login")
+	public ResponseEntity join(@RequestBody User user, HttpServletResponse response){
+		System.out.println("## 로그인");
 		
+		User member = userService.findByUserEmail(user.getUserEmail())
+				.orElseThrow(()->new RestException(ResponseMessage.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
 		
-		userService.join(userInfo);
+		if(!user.getPassword().equals(member.getPassword())) {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SIGNIN_FAIL),
+					HttpStatus.FORBIDDEN);
+		}
 		
+		String token = jwtTokenProvider.generateToken(member.getUsername());
 		
-		return new ResponseEntity<String>("success", HttpStatus.CREATED);
+		response.setHeader("AUTH", token);		
+		
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SIGNIN_SUCCESS, member),
+				HttpStatus.OK);
 	}
 	
 	@GetMapping("/test")

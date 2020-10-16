@@ -13,8 +13,8 @@ spring:
     secret: govlepel@$&
   datasource:
     url: jdbc:mysql://localhost:3306/third?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
-    username: root
-    password: root
+    username: ssafy
+    password: ssafy
   jpa:
     hibernate:
       ddl-auto: update # 운영시에는 validate 추천
