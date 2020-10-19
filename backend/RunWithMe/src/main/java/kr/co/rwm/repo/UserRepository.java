@@ -6,4 +6,6 @@ import kr.co.rwm.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 
+	User findByUid(Integer userId);
+
 }
