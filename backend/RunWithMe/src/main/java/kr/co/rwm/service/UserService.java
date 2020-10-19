@@ -1,4 +1,5 @@
 package kr.co.rwm.service;
+import java.util.Collections;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -29,5 +30,9 @@ public class UserService implements UserDetailsService {
 		return userRepository.findByUserEmail(userEmail);
 	}
 	
+	public void join(User user,String password) {
+		userRepository.save(User.builder().userEmail(user.getUserEmail()).userName(user.getUsername()).userPw(password)
+				.roles(Collections.singletonList("USER")).build());
+	}
 
 }

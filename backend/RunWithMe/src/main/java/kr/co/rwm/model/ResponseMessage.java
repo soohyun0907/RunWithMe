@@ -5,6 +5,10 @@ public class ResponseMessage {
     public static final String SIGNIN_SUCCESS = "로그인 성공";
     public static final String SIGNIN_FAIL = "로그인 실패";
     
+    public static final String ALREADY_USER_EMAIL = "중복된 이메일";
+    public static final String SIGNUP_SUCCESS = "회원가입 성공";
+    
+    
     
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
