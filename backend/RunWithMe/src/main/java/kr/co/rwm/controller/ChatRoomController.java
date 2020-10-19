@@ -23,7 +23,7 @@ public class ChatRoomController {
 
     @GetMapping("/room")
     public String rooms() {
-        return "/chat/room";
+        return "/chat/room2";
     }
 
     @GetMapping("/rooms")
