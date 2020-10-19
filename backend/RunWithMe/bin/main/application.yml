@@ -10,7 +10,7 @@ spring:
   freemarker:
     cache: false
   jwt:
-    secret: govlepel@$&
+    secret: runwithme
   datasource:
     url: jdbc:mysql://localhost:3306/third?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: ssafy
