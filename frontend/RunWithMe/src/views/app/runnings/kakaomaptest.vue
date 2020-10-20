@@ -10,27 +10,33 @@
     <div class="btn_container">
       <div v-if="!running">
         <section class="bottom-bar">
-          <div class="latLngLabel">{{ lat }}, {{ lng }}</div>
-          <button class="running button green" @click="startLocationUpdates">
-            <i class="i-Start-2"></i>
-            Start
-          </button>
+          <div v-if="!isPause">
+            <div class="latLngLabel">{{ lat }}, {{ lng }}</div>
+            <button class="running button green" @click="startLocationUpdates">
+              <i class="i-Start-2"></i>
+              Start
+            </button>
+          </div>
+          <div v-if="isPause">
+            <button class="running button yellow" @click="startLocationUpdates">
+              <i class="i-Start-2"></i>
+              Resume
+            </button>
+          </div>
         </section>
       </div>
       <div v-if="running">
         <section class="bottom-bar">
           <button class="running button red" @click="stopLocationUpdates">
             <i class="i-Stop-2"></i>
-            Stop
+            Pause
           </button>
-          <button class="running button yellow" @click="startLocationUpdates">
-            <i class="i-Start-2"></i>
-            Resume
-          </button>
-          <button class="running button blue" @click="endLocationUpdates">
-            <i class="i-Start-2"></i>
-            End Running
-          </button>
+          <div>
+            <button class="running button blue" @click="endLocationUpdates">
+              <i class="i-Start-2"></i>
+              End Running
+            </button>
+          </div>
         </section>
       </div>
     </div>
@@ -66,6 +72,7 @@ export default {
       stoppedDuration: 0,
       started: null,
       running: false,
+      isPause: false,
     };
   },
   mounted() {
@@ -101,6 +108,7 @@ export default {
 
       this.started = setInterval(this.clockRunning, 10);
       this.running = true;
+      this.isPause = false;
 
       //맵에 기록
       var map = this.map;
@@ -131,7 +139,7 @@ export default {
           distanceFilter: 1,
         }
       );
-      this.map = map
+      this.map = map;
     },
     endLocationUpdates() {
       this.running = false;
@@ -167,6 +175,7 @@ export default {
       return (zero + num).slice(-digit);
     },
     stopLocationUpdates() {
+      this.isPause = true;
       this.running = false;
       this.timeStopped = new Date();
       clearInterval(this.started);
