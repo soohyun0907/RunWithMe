@@ -1,15 +1,18 @@
 package kr.co.rwm.repo;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import kr.co.rwm.model.ChatRoom;
-
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
@@ -26,6 +29,7 @@ public class ChatRoomRepository {
     @Resource(name = "redisTemplate")
     private ValueOperations<String, String> valueOps;
 
+    @Autowired
     // 모든 채팅방 조회
     public List<ChatRoom> findAllRoom() {
         return hashOpsChatRoom.values(CHAT_ROOMS);
