@@ -1,4 +1,4 @@
-import {user, contacts, chatCollection,chatroom} from "../../data/groupchat";
+import { user, contacts, chatCollection, chatroom } from "../../data/groupchat";
 import http from "@/utils/http-common";
 
 const state = {
@@ -7,7 +7,7 @@ const state = {
   recentUsers: [],
   selectedUser: contacts[0],
   chats: chatCollection,
-  chatrooms: chatroom
+  chatrooms: []
 };
 
 const getters = {
@@ -20,9 +20,21 @@ const getters = {
 };
 
 const actions = {
-  changeSelectedUser({commit}, id) {
+  changeSelectedUser({ commit }, id) {
     commit("updateSelectedUser", id);
-  }
+  },
+
+  // changeGroupChat({commit}){
+  //   commit("selectAllGroupChat");
+  // },
+
+  // selectAllGroupChat: (state ) =>{
+  //   http.get("/chat/room")
+  //   .then((data)=>{
+  //     console.log(data);
+  //     state.chatrooms = data.data;
+  //   })
+  // }
 };
 
 const mutations = {
@@ -31,6 +43,11 @@ const mutations = {
     state.selectedUser = sUser[0];
     // console.log(state.selectedUser);
   },
+
+  selectAllGroupChat: (state,chatrooms) => {
+    state.chatrooms = chatrooms;
+  }
+
   // createChatRoom: (state) => {
   //   const chatRoom = state.chatrooms;
   //   state.

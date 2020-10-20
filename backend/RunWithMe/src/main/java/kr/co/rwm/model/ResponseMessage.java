@@ -8,6 +8,7 @@ public class ResponseMessage {
     public static final String ALREADY_USER_EMAIL = "중복된 이메일";
     public static final String SIGNUP_SUCCESS = "회원가입 성공";
     
+    public static final String GROUP_LIST_SUCCESS = "그룹 채팅 목록 조회";
     
     
     public static final String AUTHORIZED = "인증 성공";
