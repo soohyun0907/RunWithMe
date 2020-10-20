@@ -32,7 +32,8 @@ module.exports = {
     watchOptions: {
       poll: false,
       ignored: /node_modules/
-    }
+    },
+    disableHostCheck: true
   },
   chainWebpack: config => {
     config.module
