@@ -31,7 +31,7 @@ public class UserService implements UserDetailsService {
 	}
 	
 	public void join(User user,String password) {
-		userRepository.save(User.builder().userEmail(user.getUserEmail()).userName(user.getUsername()).userPw(password)
+		userRepository.save(User.builder().dongId(user.getDongId()).userEmail(user.getUserEmail()).userName(user.getUsername()).userPw(password)
 				.roles(Collections.singletonList("USER")).build());
 	}
 

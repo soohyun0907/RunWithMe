@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import kr.co.rwm.entity.Friend;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.service.FriendService;
 
@@ -28,7 +27,13 @@ public class FriendController {
 	
 	@GetMapping("/contacts/{uid}")
 	public List<User> contacts(@PathVariable int uid) {
-		return friendService.list(uid);
+		List<User> list = friendService.list(uid);
+		
+//		for (User user : list) {
+//			System.out.println(user.getUsername());
+//		}
+		
+		return list;
 	}
 	
 	@PostMapping("/friend")

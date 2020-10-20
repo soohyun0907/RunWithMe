@@ -8,5 +8,5 @@ import kr.co.rwm.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 	Optional<User> findByUserEmail(String userEmail);
-	User findByUid(Integer userId);
+	User findByUserId(Integer userId);
 }

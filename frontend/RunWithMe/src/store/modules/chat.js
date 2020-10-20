@@ -37,11 +37,16 @@ const mutations = {
         state.contactList = data.data;
       })
   },
-  createAndSelectChatroom : (state) => {
+  createAndSelectChatroom : (state, uid) => {
+  
     http
-      .post("/chat/room")
+      .post("/match/room", 
+      {
+          friendId : uid
+      })
       .then((data) =>{
         console.log(data);
+        state.selectedUser = data.data.name;
       })
   }
 };

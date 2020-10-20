@@ -26,7 +26,7 @@ public class FriendServiceImpl implements FriendService {
 		List<Friend> list =  friendRepository.findByUserId(uid);
 		List<User> contactsList = new ArrayList<User>();
 		for (Friend friend : list) {
-			System.out.println(friend.getFId());
+			//System.out.println(friend.getUser().getUsername());
 			contactsList.add(friend.getUser());
 		}
 		
@@ -37,10 +37,10 @@ public class FriendServiceImpl implements FriendService {
 	public void insert(Map<String, Integer> friendInfo) {
 		
 		Friend relation = Friend.builder()
-						.userId(friendInfo.get("uId"))
+						.userId(friendInfo.get("userId"))
 						.build();
 		
-		User user = userRepository.findByUid(friendInfo.get("userUid"));
+		User user = userRepository.findByUserId(friendInfo.get("userUid"));
 		relation.setUser(user);
 		friendRepository.save(relation);	 
 		//return friendRepository.findAll(); 
