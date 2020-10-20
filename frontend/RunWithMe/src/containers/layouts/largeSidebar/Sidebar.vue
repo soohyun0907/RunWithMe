@@ -435,6 +435,12 @@
             </router-link>
           </li>
           <li class="nav-item">
+            <router-link tag="a" class to="/app/apps/groupchat">
+              <i class="nav-icon i-Speach-Bubble-3"></i>
+              <span class="item-name">Group-Chat</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
             <router-link tag="a" class to="/app/apps/scrumboard">
               <i class="nav-icon i-Add-File"></i>
               <span class="item-name"
