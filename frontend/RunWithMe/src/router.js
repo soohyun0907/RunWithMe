@@ -401,6 +401,10 @@ const routes = [
             component: () => import("./views/app/runnings/kakaomaptest")
           },
           {
+            path: "kakaomapSH",
+            component: () => import("./views/app/runnings/kakaomap_sh")
+          },
+          {
             path: "profile",
             component: () => import("./views/app/runnings/profile")
           },
