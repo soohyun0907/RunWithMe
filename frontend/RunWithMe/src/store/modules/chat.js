@@ -1,4 +1,4 @@
-import {user, contacts, chatCollection} from "../../data/chat";
+import {user, contacts, chatCollection} from "../../data/groupchat";
 import http from "@/utils/http-common";
 
 const state = {
