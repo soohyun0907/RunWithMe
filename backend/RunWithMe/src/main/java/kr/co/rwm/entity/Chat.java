@@ -31,5 +31,6 @@ public class Chat {
 	@Column(name = "guest_id", nullable = false)
 	private Integer guestId;
 	
-	
+	@Column(name = "room_name", nullable = false)
+	private String roomName;
 }

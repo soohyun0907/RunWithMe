@@ -266,6 +266,10 @@ const routes = [
             component: () => import("./views/app/apps/chat")
           },
           {
+            path: "groupchat",
+            component: () => import("./views/app/apps/groupchat")
+          },
+          {
             path: "contact-details",
             component: () => import("./views/app/apps/contact-details")
           },
