@@ -3,8 +3,6 @@
     <breadcumb :page="'Group Chat'" :folder="'apps'" />
 
     <div class="card chat-sidebar-container sidebar-container">
-
-
       <div class="chat-sidebar-wrap sidebar" :class="{ 'ml-0': isMobile }">
         <div class="border-right">
           <div
@@ -29,7 +27,7 @@
           <!-- 그룹 채팅 목록 -->
           <vue-perfect-scrollbar
             :settings="{ suppressScrollX: true, wheelPropagation: false }"
-            class="contacts-scrollable perfect-scrollbar  rtl-ps-none ps scroll"
+            class="contacts-scrollable perfect-scrollbar rtl-ps-none ps scroll"
           >
             <div>
               <div
@@ -39,10 +37,10 @@
               </div>
               <div
                 class="p-3 d-flex border-bottom align-items-center contact"
-                v-for="chatroom in filterChatroom"
+                v-for="chatroom in this.getChatRoom"
                 :key="chatroom.roomID"
               >
-               <h6>{{chatroom.roomName}}</h6>
+                <h6>{{ chatroom.name }}</h6>
               </div>
               <!-- <div
                 class="p-3 d-flex border-bottom align-items-center contact"
@@ -50,15 +48,14 @@
                 :key="contact.name"
                 :class="contact.status"
               > -->
-             
-                <!-- <img
+
+              <!-- <img
                   :src="contact.avatar"
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
                 />
                 <h6 class="">{{ contact.name }}</h6> -->
               <!-- </div> -->
-
 
               <div
                 class="mt-3 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
@@ -68,16 +65,16 @@
 
               <div
                 class="p-3 d-flex border-bottom align-items-center contact"
-                v-for="chatroom2 in filterChatroom"
+                v-for="chatroom2 in this.getChatRoom"
                 :key="chatroom2.roomID"
               >
-               <h6>{{chatroom2.roomName}}</h6>
+                <h6>{{ chatroom2.name }}</h6>
               </div>
-                <!-- :class="contact.status"
+              <!-- :class="contact.status"
               > -->
-                <!-- @click="changeSelectedUser(contact.id)"
+              <!-- @click="changeSelectedUser(contact.id)"
               > -->
-                <!-- <img
+              <!-- <img
                   :src="contact.avatar"
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
@@ -85,8 +82,7 @@
             </div>
           </vue-perfect-scrollbar>
         </div>
-      </div> 
-
+      </div>
 
       <!-- 채팅사이드 바 -->
       <div class="chat-content-wrap sidebar-content">
@@ -218,30 +214,40 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import store from "@/store/modules/groupchat.js";
+import http from "@/utils/http-common";
 
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "GroupChat"
+    title: "GroupChat",
   },
   data() {
     return {
       recentContacts: [],
       search: "",
-      isMobile: false
+      isMobile: false,
+      chatrooms: [],
     };
   },
   methods: {
-    ...mapActions(["changeSelectedUser"]),
+    ...mapActions(["changeSelectedUser", "changeGroupChat"]),
     ...mapMutations(["selectUserLists", "createAndSelectChatroom"]),
     console() {
       console.log(this.test);
     },
 
-    choice: function(uid){
+    choice: function (uid) {
       console.log(this.createAndSelectChatroom());
-    }
-    
+    },
+    selectAllGroupChat() {
+      http.get("/chat/room").then((data) => {
+        console.log(data.data.data);
+        // this.chatrooms = data.data.data;
+        this.$store.commit("selectAllGroupChat",data.data.data);
+        console.log(store.state.chatrooms);
+      });
+    },
+
   },
 
   computed: {
@@ -250,7 +256,7 @@ export default {
       "getRecentUser",
       "getCurrentUser",
       "getSelectedUser",
-      "getChatRoom"
+      "getChatRoom",
     ]),
 
     filterContacts() {
@@ -259,15 +265,17 @@ export default {
       //   return contact.name.toLowerCase().match(this.search.toLowerCase());
       // });
     },
-
-    filterChatroom(){
-      return this.getChatRoom;
-    }
   },
 
-  created: function() {
-    console.log("TTTT");
-    console.log(this.getContactLists);
+  mounted: function () {
+    setTimeout(() => {
+      this.selectAllGroupChat();
+    }, 700);
+  },
+
+  created: function () {
+    // console.log(this.getChatRoom);
+    // this.getChatRoom = this.selectAllGroupChat();
     // this.getCurrentUser.forEach(currentUser => {
     //   currentUser.chatInfo.forEach(user => {
     //     this.getContactLists.filter(contact => {
@@ -278,13 +286,9 @@ export default {
     //   });
     // });
 
-  
-
     // DB에서 그룹채팅 목록 불러오기
     // this.selectUserLists();
-
-
-  }
+  },
 };
 </script>
 
