@@ -9,6 +9,7 @@
 
     <section class="bottom-bar">
         <div class="latLngLabel">{{lat}}, {{lng}}</div>
+        <div class="accumulatedDistanceLabel">{{accumulated_distance}}</div>
         <button class="ui button green" @click="startLocationUpdates">
             <i class="i-Start-2"></i>
             Start
@@ -32,12 +33,14 @@ export default {
   },
   data() {
       return {
-          lat:0,
-          lng:0,
+          lat: 0,
+          lng: 0,
           timestamp: 0,
           watchPositionId: null,
           map: null,
           previous: {lat:0, lng:0},
+          accumulated_distance: 0,
+          linePath: [],
       };
   },
   mounted() {
@@ -79,6 +82,9 @@ export default {
                   if(this.previous.lat==0){
                     this.previous.lat = this.lat;
                     this.previous.lng = this.lng;
+                    this.savePosition(position);
+
+                    this.linePath.push(new google.maps.LatLng(this.lat, this.lng));
                   }else{
                     var current = {
                       lat: this.lat,
@@ -86,10 +92,14 @@ export default {
                     };
                     var distance = this.computeDistance(this.previous, current);
                     console.log(distance);
-                    if(distance>0.1){
+                    var threshold = 0.01;
+                    if(distance > threshold){
                       this.previous.lat = this.lat;
                       this.previous.lng = this.lng;
-                      this.savePosition(position);
+                      this.accumulated_distance += distance;
+                      // this.savePosition(position);
+
+                      this.linePath.push(new google.maps.LatLng(this.lat, this.lng));
                     }
                   }
               },
@@ -105,16 +115,16 @@ export default {
       },
       stopLocationUpdates() {
           navigator.geolocation.clearWatch(this.watchPositionId);
-
-          var userId = 1;
-          axios.get(SERVER.URL+"gps/" + userId)
-          .then(res => {
-            console.log(res.data);
-            this.drawLines(res.data.data);
-            this.previous.lat=0;
-            this.previous.lng=0;
-          })
-          .catch(err => console.log(err.response));
+          this.drawLines(this.linePath);
+          // var userId = 1;
+          // axios.get(SERVER.URL+"gps/" + userId)
+          // .then(res => {
+          //   console.log(res.data);
+          //   this.drawLines(res.data.data);
+          //   this.previous.lat=0;
+          //   this.previous.lng=0;
+          // })
+          // .catch(err => console.log(err.response));
       },
       savePosition(position) {
           let data = {
@@ -143,14 +153,16 @@ export default {
         }
 
         const runningPath = new google.maps.Polyline({
-          path: runningPathCoordinates,
+          // path: runningPathCoordinates,
+          path: this.linePath,
           geodesic: true,
           strokeColor: "#ff0000",
           strokeOpacity: 1.0,
           strokeWeight: 2
         });
 
-        console.log(runningPath);
+        // console.log(runningPath);
+        console.log(this.linePath);
         runningPath.setMap(this.map);
         
       },
