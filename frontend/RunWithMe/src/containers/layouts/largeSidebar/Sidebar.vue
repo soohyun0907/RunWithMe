@@ -868,13 +868,18 @@
               <span class="item-name">Running</span>
             </router-link>
           </li>
-           <li class="nav-item">
+          <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/kakaomaptest">
               <i class="nav-icon i-Stopwatch"></i>
               <span class="item-name">KakaoMapTest</span>
             </router-link>
           </li>
-
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/runnings/kakaomapSH">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">KakaoMapSH</span>
+            </router-link>
+          </li>
           <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/icons">
               <i class="nav-icon i-Male"></i>
