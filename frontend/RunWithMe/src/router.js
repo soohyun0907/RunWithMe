@@ -11,6 +11,11 @@ Vue.use(Router);
 
 const routes = [
   {
+    path:"/:id",
+    name:'detailRunning',
+    component: () =>import("./views/app/runnings/detailRunning")
+  },
+  {
     path: "/",
     component: () => import("./views/app"), //webpackChunkName app
     beforeEnter: authenticate,
