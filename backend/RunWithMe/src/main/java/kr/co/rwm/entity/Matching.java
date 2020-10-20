@@ -19,7 +19,7 @@ import lombok.Setter;
 @Setter
 @Builder
 
-public class Chat {
+public class Matching {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "room_id")
@@ -30,6 +30,5 @@ public class Chat {
 	
 	@Column(name = "guest_id", nullable = false)
 	private Integer guestId;
-	
 	
 }

@@ -30,9 +30,6 @@
           >
             <div>
 
-
-
-
               <div
                 class="mt-4 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
               >
@@ -65,7 +62,7 @@
               <div
                 class="p-3 d-flex border-bottom align-items-center contact"
                 v-for="contact in filterContacts"
-                :key="contact.uid"
+                :key="contact.userId"
               >
                 <!-- :class="contact.status"
               > -->
@@ -76,7 +73,7 @@
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
                 /> -->
-                <h6 @click ="choice(contact.uid)" class="">{{ contact.userName }}</h6>
+                <h6 @click ="choice(contact.userId)" class="">{{ contact.userEmail }}</h6>
               </div>
             </div>
           </vue-perfect-scrollbar>
@@ -92,13 +89,13 @@
             <i class="icon-regular i-Right ml-0 mr-3"></i>
           </a>
           <div class="d-flex align-items-center">
-            <img
+            <!-- <img
               :src="getSelectedUser.avatar"
               alt=""
               class="avatar-sm rounded-circle mr-2"
-            />
+            /> -->
             <p class="m-0 text-title text-16 flex-grow-1">
-              {{ getSelectedUser.name }}
+              {{ getSelectedUser }}
             </p>
           </div>
         </div>
@@ -213,6 +210,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import store from "@/store/modules/chat.js";
+import { isMobile } from 'mobile-device-detect';
 
 export default {
   metaInfo: {
@@ -234,7 +232,8 @@ export default {
     },
 
     choice: function(uid){
-      console.log(this.createAndSelectChatroom());
+      console.log(this.createAndSelectChatroom(uid));
+      this.isMobile = false
     }
     
   },
