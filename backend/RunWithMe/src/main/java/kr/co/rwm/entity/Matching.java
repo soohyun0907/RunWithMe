@@ -20,10 +20,10 @@ import lombok.Setter;
 @Builder
 
 public class Matching {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "room_id")
-	private Integer roomId;
+	private String roomId;
 	
 	@Column(name = "master_id", nullable = false)
 	private Integer masterId;

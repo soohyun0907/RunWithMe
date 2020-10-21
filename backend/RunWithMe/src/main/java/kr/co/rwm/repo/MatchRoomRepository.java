@@ -31,6 +31,9 @@ public class MatchRoomRepository {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    MatchRepository matchRepository;
+    
     // 모든 채팅방 조회
     public List<ChatRoom> findAllRoom() {
         return hashOpsChatRoom.values(CHAT_ROOMS);
@@ -45,8 +48,16 @@ public class MatchRoomRepository {
     public ChatRoom createAndSelectChatroom(Integer friendId) {
     	
     	String friendName = userRepository.findByUserId(friendId).getUsername();
-        ChatRoom chatRoom = ChatRoom.create(friendName);
+    	ChatRoom chatRoom;
+    	if(!matchRepository.findByMasterIdAndGuestId(1, friendId).isPresent())
+    	{
+    		chatRoom = ChatRoom.create(friendName);    		
+    	}
+    		
         hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+        
+        
+        
         System.out.println("chat :"+ chatRoom.getName());
         return chatRoom;
     }

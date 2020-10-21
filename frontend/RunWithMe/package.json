@@ -22,6 +22,7 @@
     "font-awesome": "^4.7.0",
     "mobile-device-detect": "^0.4.3",
     "nprogress": "^0.2.0",
+    "sockjs-client": "^1.5.0",
     "v-calendar": "^1.0.8",
     "v2-datepicker": "^3.1.1",
     "vue": "^2.6.11",
@@ -53,7 +54,8 @@
     "vuejs-smart-table": "0.0.5",
     "vuelidate": "^0.7.5",
     "vuetable-2": "^1.7.5",
-    "vuex": "^3.5.1"
+    "vuex": "^3.5.1",
+    "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.4.6",
