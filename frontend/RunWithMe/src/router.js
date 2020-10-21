@@ -392,12 +392,20 @@ const routes = [
         redirect: "/app/runnings/profile",
         children: [
           {
+            path: "runningResult",
+            component: () => import("./views/app/runnings/runningResult")
+          },
+          {
             path: "running",
             component: () => import("./views/app/runnings/running")
           },
           {
             path: "kakaomaptest",
             component: () => import("./views/app/runnings/kakaomaptest")
+          },
+          {
+            path: "kakaomapSH",
+            component: () => import("./views/app/runnings/kakaomap_sh")
           },
           {
             path: "profile",
