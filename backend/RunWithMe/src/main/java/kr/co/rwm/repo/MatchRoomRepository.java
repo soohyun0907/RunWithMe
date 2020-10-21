@@ -1,7 +1,6 @@
 package kr.co.rwm.repo;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Resource;
@@ -29,7 +28,7 @@ public class MatchRoomRepository {
     @Resource(name = "redisTemplate")
     private ValueOperations<String, String> valueOps;
 
-    @Autowired
+    @Autowired 
     UserRepository userRepository;
     @Autowired
     MatchRepository matchRepository;
@@ -48,12 +47,12 @@ public class MatchRoomRepository {
     public ChatRoom createAndSelectChatroom(Integer friendId) {
     	
     	String friendName = userRepository.findByUserId(friendId).getUsername();
-    	ChatRoom chatRoom;
-    	if(!matchRepository.findByMasterIdAndGuestId(1, friendId).isPresent())
-    	{
-    		chatRoom = ChatRoom.create(friendName);    		
-    	}
-    		
+    	ChatRoom chatRoom = ChatRoom.create(friendName); 
+//    	if(!matchRepository.findByMasterIdAndGuestId(1, friendId).isPresent())
+//    	{
+//    		chatRoom    		
+//    	}
+//    		
         hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
         
         
