@@ -9,6 +9,7 @@ import GullKit from "./plugins/gull.kit";
 // es6Promise.polyfill();
 import store from "./store";
 import Breadcumb from "./components/breadcumb";
+import Breadcumbcustom from "./components/breadcumbcustom";
 import firebase from "firebase/app";
 import "firebase/auth";
 import {firebaseSettings} from "@/data/config";
@@ -23,6 +24,7 @@ import "font-awesome/css/font-awesome.min.css";
 Vue.component('VueFontawesome', require('vue-fontawesome-icon/VueFontawesome.vue').default);
 
 Vue.component("breadcumb", Breadcumb);
+Vue.component("breadcumbcustom", Breadcumbcustom);
 import InstantSearch from 'vue-instantsearch';
 // Vue.use(VueRouter);
  
