@@ -16,6 +16,7 @@
     "bootstrap-vue": "^2.15.0",
     "chart.js": "^2.9.3",
     "core-js": "^3.6.5",
+    "decode-google-map-polyline": "^1.0.1",
     "echarts": "^4.8.0",
     "es6-promise": "^4.2.8",
     "firebase": "^7.16.1",
