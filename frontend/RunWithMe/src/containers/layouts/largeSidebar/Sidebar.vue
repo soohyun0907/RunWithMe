@@ -874,6 +874,12 @@
               <span class="item-name">KakaoMapTest</span>
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/runnings/runningRecords">
+              <i class="nav-icon i-Files"></i>
+              <span class="item-name">RunningRecords</span>
+            </router-link>
+          </li>
 
           <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/icons">

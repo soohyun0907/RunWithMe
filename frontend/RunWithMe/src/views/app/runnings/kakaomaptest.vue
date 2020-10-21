@@ -4,6 +4,7 @@
       <breadcumb :page="'Record Running'" :folder="'Runnings'" />
       <h4>dy_test?</h4>
     </section>
+    {{this.$store.state.userInfo}}
 
     <section ref="map" class="map"></section>
 
@@ -11,14 +12,14 @@
       <div v-if="!running">
         <section class="bottom-bar">
           <div v-if="!isPause">
-            <div class="latLngLabel">{{ lat }}, {{ lng }}</div>
-            <button class="running button green" @click="startLocationUpdates">
+            <div class="latLngLabel">{{ cur_lat }}, {{ cur_lng }}</div>
+            <button class="running button green" @click="WatchingLocationUpdates">
               <i class="i-Start-2"></i>
               Start
             </button>
           </div>
           <div v-if="isPause">
-            <button class="running button yellow" @click="startLocationUpdates">
+            <button class="running button yellow" @click="WatchingLocationUpdates">
               <i class="i-Start-2"></i>
               Resume
             </button>
@@ -48,7 +49,7 @@
 <script>
 import SERVER from "@/api/api";
 import axios from "axios";
-
+import http from '@/utils/http-common'
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
@@ -56,11 +57,12 @@ export default {
   },
   data() {
     return {
-      lat: 0,
-      lng: 0,
+      cur_lat: 0,
+      cur_lng: 0,
       timestamp: 0,
       watchPositionId: null,
       map: null,
+      cur_marker:null,
       previous: [],
       runningPathCoordinates: [],
       gpsIdCnts: 0,
@@ -86,14 +88,14 @@ export default {
   methods: {
     initMap() {
       var map = new google.maps.Map(this.$refs["map"], {
-        zoom: 15,
+        zoom: 17,
         center: new google.maps.LatLng(37.331777, 127.129347),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       });
 
       this.map = map;
     },
-    startLocationUpdates() {
+    WatchingLocationUpdates() {
       //스톱워치 부분
       if (this.running) return;
 
@@ -111,22 +113,29 @@ export default {
       this.isPause = false;
 
       //맵에 기록
+      var runningMarkerSrc = require("../../../assets/images/running_marker.png")
+      var runningMarkerSize = new google.maps.Size(35,50)
+      var runningMarker = new google.maps.MarkerImage(runningMarkerSrc,null,null,null,runningMarkerSize)
       var map = this.map;
       var marker = new google.maps.Marker({
-        map: map,
-      });
+          position : new google.maps.LatLng(this.cur_lat, this.cur_lng),
+          title:"현재위치", 
+          icon:runningMarker,
+          map:map
+          // clickable:true //마커 클릭시 지도 동작x
+        });
 
       this.watchPositionId = navigator.geolocation.watchPosition(
         (position) => {
-          this.lat = position.coords.latitude;
-          this.lng = position.coords.longitude;
+          this.cur_lat = position.coords.latitude;
+          this.cur_lng = position.coords.longitude;
           console.log("watchpositionID");
           console.log(position);
-          map.setCenter(new google.maps.LatLng(this.lat, this.lng));
-          marker.setPosition(new google.maps.LatLng(this.lat, this.lng));
+          map.setCenter(new google.maps.LatLng(this.cur_lat, this.cur_lng));
+          marker.setPosition(new google.maps.LatLng(this.cur_lat, this.cur_lng));
 
           this.runningPathCoordinates.push(
-            new google.maps.LatLng(this.lat, this.lng)
+            new google.maps.LatLng(this.cur_lat, this.cur_lng)
           );
           this.savePosition(position);
         },
@@ -137,9 +146,11 @@ export default {
           timeout: 5000,
           maximumAge: 0,
           distanceFilter: 1,
+          enableHighAccuracy:true,
         }
       );
       this.map = map;
+      this.marker = marker;
     },
     endLocationUpdates() {
       this.running = false;
@@ -148,6 +159,8 @@ export default {
       this.timeBegan = null;
       this.timeStopped = null;
       this.clock = "00:00:00.000";
+      this.drawLines();
+      
     },
     clockRunning() {
       var currentTime = new Date();
@@ -157,6 +170,7 @@ export default {
       var sec = timeElapsed.getUTCSeconds();
       var ms = timeElapsed.getUTCMilliseconds();
 
+    console.log(timeElapsed)
       this.clock =
         this.zeroPrefix(hour, 2) +
         ":" +

@@ -1,31 +1,42 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import http from "@/utils/http-common";
 
 export default {
   state: {
-    loggedInUser:
-      localStorage.getItem("userInfo") != null
-        ? JSON.parse(localStorage.getItem("userInfo"))
-        : null,
     loading: false,
-    error: null
+    error: null,
+    isLogin:false,
+    authToken:"",
+    userInfo:{},
+
   },
   getters: {
-    loggedInUser: state => state.loggedInUser,
     loading: state => state.loading,
-    error: state => state.error
+    error: state => state.error,
+    userInfo: state => state.userInfo,
+    authToken: state => state.authToken,
+    isLogin:state =>state.isLogin,
   },
   mutations: {
-    setUser(state, data) {
-      state.loggedInUser = data;
+    mutateIsLogin(state, isLogin) {
+      state.isLogin = isLogin
+    },
+    mutateUserInfo(state, userInfo) {
+      state.userInfo = userInfo;
       state.loading = false;
       state.error = null;
     },
+    mutateAuthCode(state, authCode) {
+      state.authCode = authCode
+    },
     setLogout(state) {
-      state.loggedInUser = null;
+      state.userInfo = {};
       state.loading = false;
       state.error = null;
-      // this.$router.go("/");
+      state.authCode=""
+      state.isLogin=false;
+      // this.$router.push("/");
     },
     setLoading(state, data) {
       state.loading = data;
@@ -33,7 +44,7 @@ export default {
     },
     setError(state, data) {
       state.error = data;
-      state.loggedInUser = null;
+      state.userInfo = {};
       state.loading = false;
     },
     clearError(state) {
@@ -41,25 +52,31 @@ export default {
     }
   },
   actions: {
-    login({commit}, data) {
-      commit("clearError");
-      commit("setLoading", true);
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(data.email, data.password)
-        .then(user => {
-          const newUser = {uid: user.user.uid};
-          localStorage.setItem("userInfo", JSON.stringify(newUser));
-          commit("setUser", {uid: user.user.uid});
-          console.log("user");
+      login(context, { userEmail, userPw }) {
+        context.commit("clearError");
+        context.commit("setLoading", true);
+        console.log("login on")
+        http.post("/users/signin",{
+          userEmail:userEmail,
+          userPw:userPw        
+        }).then(res => {
+            context.commit('mutateIsLogin', true)
+            context.commit('mutateUserInfo', res.data.data)
+            context.commit('mutateAuthCode',res.headers.auth)
+            localStorage.setItem("userInfo",JSON.stringify(res.data.data))
+            console.log(res.data.data)
+            console.log(res.headers.auth)
         })
         .catch(function(error) {
           // Handle Errors here.
           // var errorCode = error.code;
           // var errorMessage = error.message;
           // console.log(error);
-          localStorage.removeItem("userInfo");
-          commit("setError", error);
+          
+          console.log(error)
+          context.commit('mutateUserInfo',{})
+          context.commit("setError", error);
+          localStorage.remove("userInfo")
           // ...
         });
     },
@@ -87,17 +104,9 @@ export default {
           console.log(error);
         });
     },
-    signOut({commit}) {
-      firebase
-        .auth()
-        .signOut()
-        .then(
-          () => {
-            localStorage.removeItem("userInfo");
-            commit("setLogout");
-          },
-          _error => {}
-        );
-    }
+    signOut(context) {
+      localStorage.removeItem("userInfo");
+      context.commit("setLogout");
+    },
   }
 };

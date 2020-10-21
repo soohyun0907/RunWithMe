@@ -1,18 +1,20 @@
-import {user, contacts, chatCollection} from "../../data/chat";
+import {user, contacts, chatCollection, chatroom} from "../../data/chat";
 
 const state = {
   currentUser: user,
   contactList: contacts,
   recentUsers: [],
   selectedUser: contacts[0],
-  chats: chatCollection
+  chats: chatCollection,
+  chatrooms : chatroom,
 };
 
 const getters = {
   getContactLists: state => state.contactList,
   getCurrentUser: state => state.currentUser,
   getRecentUser: state => state.recentUsers,
-  getSelectedUser: state => state.selectedUser
+  getSelectedUser: state => state.selectedUser,
+  getChatRooms: state => state.chatrooms,
 };
 
 const actions = {

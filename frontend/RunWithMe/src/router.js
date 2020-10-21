@@ -11,11 +11,6 @@ Vue.use(Router);
 
 const routes = [
   {
-    path:"/:id",
-    name:'detailRunning',
-    component: () =>import("./views/app/runnings/detailRunning")
-  },
-  {
     path: "/",
     component: () => import("./views/app"), //webpackChunkName app
     beforeEnter: authenticate,
@@ -399,6 +394,10 @@ const routes = [
           {
             path: "kakaomaptest",
             component: () => import("./views/app/runnings/kakaomaptest")
+          },
+          {
+            path: "runningRecords",
+            component: () => import("./views/app/runnings/runningRecords")
           },
           {
             path: "profile",
