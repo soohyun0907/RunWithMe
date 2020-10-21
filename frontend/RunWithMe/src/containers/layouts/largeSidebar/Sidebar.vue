@@ -863,6 +863,12 @@
             </router-link>
           </li>
           <li class="nav-item">
+            <router-link tag="a" class to="/app/runnings/runningResult">
+              <i class="nav-icon i-File-Chart"></i>
+              <span class="item-name">RunningResult</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/running">
               <i class="nav-icon i-Stopwatch"></i>
               <span class="item-name">Running</span>
