@@ -95,7 +95,7 @@
               class="avatar-sm rounded-circle mr-2"
             /> -->
             <p class="m-0 text-title text-16 flex-grow-1">
-              {{ getSelectedUser }}
+              {{ getSelectedUser  + "/" + roomDetail.roomId}}
             </p>
           </div>
         </div>
@@ -103,75 +103,78 @@
           :settings="{ suppressScrollX: true, wheelPropagation: false }"
           class="chat-content perfect-scrollbar rtl-ps-none ps scroll"
         >
-          <div>
-            <div class="d-flex mb-30">
-              <div class="message flex-grow-1">
-                <div class="d-flex">
-                  <p class="mb-1 text-title text-16 flex-grow-1">
-                    {{ getSelectedUser.name }}
-                  </p>
-                  <span class="text-small text-muted">25 min ago</span>
-                </div>
-                <p class="m-0">
-                  Do you ever find yourself falling into the “discount trap?
-                </p>
-              </div>
-              <img
-                :src="getSelectedUser.avatar"
-                alt=""
-                class="avatar-sm rounded-circle ml-3"
-              />
-            </div>
-
-            <div class="d-flex mb-30 user">
-              <img
-                src="@/assets/images/faces/1.jpg"
-                alt=""
-                class="avatar-sm rounded-circle mr-3"
-              />
-              <div class="message flex-grow-1">
-                <div class="d-flex">
-                  <p class="mb-1 text-title text-16 flex-grow-1">Jhon Doe</p>
-                  <span class="text-small text-muted">24 min ago</span>
-                </div>
-                <p class="m-0">Lorem ipsum dolor sit amet.</p>
-              </div>
-            </div>
-
-            <div class="d-flex mb-30">
-              <div class="message flex-grow-1">
-                <div class="d-flex">
-                  <p class="mb-1 text-title text-16 flex-grow-1">
-                    {{ getSelectedUser.name }}
-                  </p>
-                  <span class="text-small text-muted">25 min ago</span>
-                </div>
-                <p class="m-0">
-                  Do you ever find yourself falling into the “discount trap?
-                </p>
-              </div>
-              <img
-                :src="getSelectedUser.avatar"
-                alt=""
-                class="avatar-sm rounded-circle ml-3"
-              />
-            </div>
-
-            <div class="d-flex mb-30 user">
-              <img
-                src="@/assets/images/faces/1.jpg"
-                alt=""
-                class="avatar-sm rounded-circle mr-3"
-              />
-              <div class="message flex-grow-1">
-                <div class="d-flex">
-                  <p class="mb-1 text-title text-16 flex-grow-1">Jhon Doe</p>
-                  <span class="text-small text-muted">24 min ago</span>
-                </div>
-                <p class="m-0">Lorem ipsum dolor sit amet.</p>
-              </div>
-            </div>
+          <div v-for="m in updateMessages">
+                <h1> {{m}} </h1>
           </div>
+          <!-- <div>
+            <div class="d-flex mb-30">
+              <div class="message flex-grow-1">
+                <div class="d-flex">
+                  <p class="mb-1 text-title text-16 flex-grow-1">
+                    {{ getSelectedUser.name }}
+                  </p>
+                  <span class="text-small text-muted">25 min ago</span>
+                </div>
+                <p class="m-0">
+                  Do you ever find yourself falling into the “discount trap?
+                </p>
+              </div>
+              <img
+                :src="getSelectedUser.avatar"
+                alt=""
+                class="avatar-sm rounded-circle ml-3"
+              />
+            </div>
+
+            <div class="d-flex mb-30 user">
+              <img
+                src="@/assets/images/faces/1.jpg"
+                alt=""
+                class="avatar-sm rounded-circle mr-3"
+              />
+              <div class="message flex-grow-1">
+                <div class="d-flex">
+                  <p class="mb-1 text-title text-16 flex-grow-1">Jhon Doe</p>
+                  <span class="text-small text-muted">24 min ago</span>
+                </div>
+                <p class="m-0">Lorem ipsum dolor sit amet.</p>
+              </div>
+            </div>
+
+            <div class="d-flex mb-30">
+              <div class="message flex-grow-1">
+                <div class="d-flex">
+                  <p class="mb-1 text-title text-16 flex-grow-1">
+                    {{ getSelectedUser.name }}
+                  </p>
+                  <span class="text-small text-muted">25 min ago</span>
+                </div>
+                <p class="m-0">
+                  Do you ever find yourself falling into the “discount trap?
+                </p>
+              </div>
+              <img
+                :src="getSelectedUser.avatar"
+                alt=""
+                class="avatar-sm rounded-circle ml-3"
+              />
+            </div>
+
+            <div class="d-flex mb-30 user">
+              <img
+                src="@/assets/images/faces/1.jpg"
+                alt=""
+                class="avatar-sm rounded-circle mr-3"
+              />
+              <div class="message flex-grow-1">
+                <div class="d-flex">
+                  <p class="mb-1 text-title text-16 flex-grow-1">Jhon Doe</p>
+                  <span class="text-small text-muted">24 min ago</span>
+                </div>
+                <p class="m-0">Lorem ipsum dolor sit amet.</p>
+              </div>
+            </div>
+          </div> -->
         </vue-perfect-scrollbar>
 
         <div class="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
@@ -213,8 +216,11 @@ import store from "@/store/modules/chat.js";
 import { isMobile } from 'mobile-device-detect';
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
+var sock = new SockJS("http://localhost:8080/ws-stomp");
+var ws = Stomp.over(sock);
 
 export default {
+
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
     title: "Chat"
@@ -225,38 +231,25 @@ export default {
       search: "",
       isMobile: false,
       roomId: "",
-      roomName: ""
+      roomName: "",
+      message: '',
+      messages: ["test", "testtt"],
+      token: '',
+      userCount: 0,
     };
   },
   methods: {
-    ...mapActions(["changeSelectedUser"]),
-    ...mapMutations(["selectUserLists", "createAndSelectChatroom"]),
+    ...mapActions(["changeSelectedUser", "createAndSelectChatroomAction"]),
+    ...mapMutations(["selectUserLists"]),
     console() {
       console.log(this.test);
     },
 
     choice: function(uid){
-      console.log(this.createAndSelectChatroom(uid));
-      this.isMobile = false
+      this.createAndSelectChatroomAction(uid, sock, ws);
+      this.isMobile = false;
     },
-    
-    loadChatContent: function(rommId, roomName){
-        this.roomId = rommId;
-        this.roomName = roomName;
-        var _this = this;
-        axios.get('/chat/user').then(response => {
-            _this.token = response.data.token;
-            ws.connect({"token":_this.token}, function(frame) {
-              ws.subscribe("/sub/chat/room/"+_this.roomId, function(message) {
-                var recv = JSON.parse(message.body);
-                _this.recvMessage(recv);
-              });
-              }, function(error) {
-            alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
-            location.href="/chat/room";
-          });
-        });
-      }
+
   },
 
   computed: {
@@ -264,7 +257,10 @@ export default {
       "getContactLists",
       "getRecentUser",
       "getCurrentUser",
-      "getSelectedUser"
+      "getSelectedUser",
+      "getRoomInfo",
+      "getMessages"
+
     ]),
 
     filterContacts() {
@@ -272,7 +268,17 @@ export default {
       // return this.getContactLists.filter(contact => {
       //   return contact.name.toLowerCase().match(this.search.toLowerCase());
       // });
+    },
+
+    roomDetail(){
+      return this.getRoomInfo;
+    },
+
+    updateMessages(){
+      return this.getMessages;
     }
+
+
   },
 
   created: function() {
