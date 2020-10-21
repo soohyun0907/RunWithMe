@@ -7,7 +7,8 @@ const state = {
   recentUsers: [],
   selectedUser: contacts[0],
   chats: chatCollection,
-  chatrooms: []
+  chatrooms: [],
+  selectedChatroom:[]
 };
 
 const getters = {
@@ -46,7 +47,15 @@ const mutations = {
 
   selectAllGroupChat: (state,chatrooms) => {
     state.chatrooms = chatrooms;
-  }
+  },
+
+  selectOneGroupChat:(state,roomId) => {
+    http.get("/chat/room/"+roomId)
+    .then((data) => {
+      console.log(data);
+      state.selectedChatroom = data.data.name;
+    })
+  },
 
   // createChatRoom: (state) => {
   //   const chatRoom = state.chatrooms;
