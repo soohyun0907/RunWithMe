@@ -211,6 +211,8 @@
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import store from "@/store/modules/chat.js";
 import { isMobile } from 'mobile-device-detect';
+import Stomp from 'webstomp-client'
+import SockJS from 'sockjs-client'
 
 export default {
   metaInfo: {
@@ -221,7 +223,9 @@ export default {
     return {
       recentContacts: [],
       search: "",
-      isMobile: false
+      isMobile: false,
+      roomId: "",
+      roomName: ""
     };
   },
   methods: {
@@ -234,8 +238,25 @@ export default {
     choice: function(uid){
       console.log(this.createAndSelectChatroom(uid));
       this.isMobile = false
-    }
+    },
     
+    loadChatContent: function(rommId, roomName){
+        this.roomId = rommId;
+        this.roomName = roomName;
+        var _this = this;
+        axios.get('/chat/user').then(response => {
+            _this.token = response.data.token;
+            ws.connect({"token":_this.token}, function(frame) {
+              ws.subscribe("/sub/chat/room/"+_this.roomId, function(message) {
+                var recv = JSON.parse(message.body);
+                _this.recvMessage(recv);
+              });
+              }, function(error) {
+            alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
+            location.href="/chat/room";
+          });
+        });
+      }
   },
 
   computed: {
@@ -269,6 +290,8 @@ export default {
 
     // 친구목록 불러오기
     this.selectUserLists();
+
+
 
 
   }
