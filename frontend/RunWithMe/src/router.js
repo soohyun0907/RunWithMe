@@ -266,6 +266,10 @@ const routes = [
             component: () => import("./views/app/apps/chat")
           },
           {
+            path: "groupchat",
+            component: () => import("./views/app/apps/groupchat")
+          },
+          {
             path: "contact-details",
             component: () => import("./views/app/apps/contact-details")
           },
@@ -394,10 +398,6 @@ const routes = [
           {
             path: "kakaomaptest",
             component: () => import("./views/app/runnings/kakaomaptest")
-          },
-          {
-            path: "runningRecords",
-            component: () => import("./views/app/runnings/runningRecords")
           },
           {
             path: "profile",

@@ -55,11 +55,8 @@
     "vuelidate": "^0.7.5",
     "vuetable-2": "^1.7.5",
     "vuex": "^3.5.1",
-<<<<<<< HEAD
-    "vuex-persistedstate": "^4.0.0-beta.1"
-=======
+    "vuex-persistedstate": "^4.0.0-beta.1",
     "webstomp-client": "^1.2.6"
->>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.4.6",
