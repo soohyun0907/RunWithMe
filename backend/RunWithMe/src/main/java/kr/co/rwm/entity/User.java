@@ -36,6 +36,7 @@ public class User implements UserDetails{
 	@Column(name = "user_email", nullable = false)
 	private String userEmail;
 	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Column(name = "user_pw", nullable = false)
 	private String userPw;
 	
@@ -47,7 +48,6 @@ public class User implements UserDetails{
 
 	@ElementCollection
 	@Builder.Default
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private List<String> roles = new ArrayList<>();
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

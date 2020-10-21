@@ -38,9 +38,9 @@
               <div
                 class="p-3 d-flex border-bottom align-items-center contact"
                 v-for="chatroom in this.getChatRoom"
-                :key="chatroom.roomID"
+                :key="chatroom.roomId"
               >
-                <h6>{{ chatroom.name }}</h6>
+              <h6 @click ="choice(chatroom.roomId)" class="">{{ chatroom.name }}</h6>
               </div>
               <!-- <div
                 class="p-3 d-flex border-bottom align-items-center contact"
@@ -214,6 +214,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import store from "@/store/modules/groupchat.js";
+import { isMobile } from 'mobile-device-detect';
 import http from "@/utils/http-common";
 
 export default {
@@ -231,7 +232,7 @@ export default {
   },
   methods: {
     ...mapActions(["changeSelectedUser", "changeGroupChat"]),
-    ...mapMutations(["selectUserLists", "createAndSelectChatroom"]),
+    ...mapMutations(["selectUserLists", "createAndSelectChatroom","selectOneGroupChat"]),
     console() {
       console.log(this.test);
     },
@@ -246,6 +247,12 @@ export default {
         this.$store.commit("selectAllGroupChat",data.data.data);
         console.log(store.state.chatrooms);
       });
+    },
+
+    choice: function(roomId){
+      console.log(roomId);
+      console.log(this.selectOneGroupChat(roomId));
+      this.isMobile = false
     },
 
   },
