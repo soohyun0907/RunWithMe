@@ -266,6 +266,10 @@ const routes = [
             component: () => import("./views/app/apps/chat")
           },
           {
+            path: "groupchat",
+            component: () => import("./views/app/apps/groupchat")
+          },
+          {
             path: "contact-details",
             component: () => import("./views/app/apps/contact-details")
           },
@@ -381,43 +385,35 @@ const routes = [
           }
         ]
       },
-      // runnings
+      // pages
       {
-        path: "/app/runnings",
-        component: () => import("./views/app/runnings"),
-        redirect: "/app/runnings/profile",
+        path: "/app/pages",
+        component: () => import("./views/app/pages"),
+        redirect: "/app/pages/profile",
         children: [
           {
-            path: "running",
-            component: () => import("./views/app/runnings/running")
-          },
-          {
-            path: "kakaomaptest",
-            component: () => import("./views/app/runnings/kakaomaptest")
-          },
-          {
             path: "profile",
-            component: () => import("./views/app/runnings/profile")
+            component: () => import("./views/app/pages/profile")
           },
           {
             path: "error",
-            component: () => import("./views/app/runnings/notFound")
+            component: () => import("./views/app/pages/notFound")
           },
           {
             path: "icons",
-            component: () => import("./views/app/runnings/icons")
+            component: () => import("./views/app/pages/icons")
           },
           {
             path: "search-result",
-            component: () => import("./views/app/runnings/search-result")
+            component: () => import("./views/app/pages/search-result")
           },
           {
             path: "pricing-table",
-            component: () => import("./views/app/runnings/pricingTable")
+            component: () => import("./views/app/pages/pricingTable")
           },
           {
             path: "faq",
-            component: () => import("./views/app/runnings/faq")
+            component: () => import("./views/app/pages/faq")
           },
           
         ]
@@ -510,7 +506,7 @@ const routes = [
   },
   {
     path: "*",
-    component: () => import("./views/app/runnings/notFound")
+    component: () => import("./views/app/pages/notFound")
   }
 ];
 
