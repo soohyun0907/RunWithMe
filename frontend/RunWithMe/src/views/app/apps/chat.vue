@@ -3,6 +3,8 @@
     <breadcumb :page="'Chat'" :folder="'apps'" />
 
     <div class="card chat-sidebar-container sidebar-container">
+
+
       <div class="chat-sidebar-wrap sidebar" :class="{ 'ml-0': isMobile }">
         <div class="border-right">
           <div
@@ -27,7 +29,8 @@
             class="contacts-scrollable perfect-scrollbar  rtl-ps-none ps scroll"
           >
             <div>
-              <!-- <div
+
+              <div
                 class="mt-4 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
               >
                 Recent
@@ -44,7 +47,11 @@
                   class="avatar-sm rounded-circle mr-3"
                 />
                 <h6 class="">{{ contact.name }}</h6>
-              </div> -->
+              </div>
+
+
+
+
 
               <div
                 class="mt-3 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
@@ -55,21 +62,25 @@
               <div
                 class="p-3 d-flex border-bottom align-items-center contact"
                 v-for="contact in filterContacts"
-                :key="contact.id"
-                :class="contact.status"
-                @click="changeSelectedUser(contact.id)"
+                :key="contact.userId"
               >
-                <img
+                <!-- :class="contact.status"
+              > -->
+                <!-- @click="changeSelectedUser(contact.id)"
+              > -->
+                <!-- <img
                   :src="contact.avatar"
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
-                />
-                <h6 class="">{{ contact.name }}</h6>
+                /> -->
+                <h6 @click ="choice(contact.userId)" class="">{{ contact.userEmail }}</h6>
               </div>
             </div>
           </vue-perfect-scrollbar>
         </div>
-      </div>
+      </div> 
+      <!-- 채팅사이드 바 -->
+
       <div class="chat-content-wrap sidebar-content">
         <div
           class="d-flex pl-3 pr-3 pt-2 pb-2 o-hidden box-shadow-1 chat-topbar"
@@ -78,13 +89,13 @@
             <i class="icon-regular i-Right ml-0 mr-3"></i>
           </a>
           <div class="d-flex align-items-center">
-            <img
+            <!-- <img
               :src="getSelectedUser.avatar"
               alt=""
               class="avatar-sm rounded-circle mr-2"
-            />
+            /> -->
             <p class="m-0 text-title text-16 flex-grow-1">
-              {{ getSelectedUser.name }}
+              {{ getSelectedUser }}
             </p>
           </div>
         </div>
@@ -126,6 +137,7 @@
                 <p class="m-0">Lorem ipsum dolor sit amet.</p>
               </div>
             </div>
+
             <div class="d-flex mb-30">
               <div class="message flex-grow-1">
                 <div class="d-flex">
@@ -144,6 +156,7 @@
                 class="avatar-sm rounded-circle ml-3"
               />
             </div>
+
             <div class="d-flex mb-30 user">
               <img
                 src="@/assets/images/faces/1.jpg"
@@ -195,7 +208,11 @@
 
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
+import store from "@/store/modules/chat.js";
+import { isMobile } from 'mobile-device-detect';
+import Stomp from 'webstomp-client'
+import SockJS from 'sockjs-client'
 
 export default {
   metaInfo: {
@@ -206,14 +223,40 @@ export default {
     return {
       recentContacts: [],
       search: "",
-      isMobile: false
+      isMobile: false,
+      roomId: "",
+      roomName: ""
     };
   },
   methods: {
     ...mapActions(["changeSelectedUser"]),
+    ...mapMutations(["selectUserLists", "createAndSelectChatroom"]),
     console() {
       console.log(this.test);
-    }
+    },
+
+    choice: function(uid){
+      console.log(this.createAndSelectChatroom(uid));
+      this.isMobile = false
+    },
+    
+    loadChatContent: function(rommId, roomName){
+        this.roomId = rommId;
+        this.roomName = roomName;
+        var _this = this;
+        axios.get('/chat/user').then(response => {
+            _this.token = response.data.token;
+            ws.connect({"token":_this.token}, function(frame) {
+              ws.subscribe("/sub/chat/room/"+_this.roomId, function(message) {
+                var recv = JSON.parse(message.body);
+                _this.recvMessage(recv);
+              });
+              }, function(error) {
+            alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
+            location.href="/chat/room";
+          });
+        });
+      }
   },
 
   computed: {
@@ -225,27 +268,35 @@ export default {
     ]),
 
     filterContacts() {
-      return this.getContactLists.filter(contact => {
-        return contact.name.toLowerCase().match(this.search.toLowerCase());
-      });
+      return this.getContactLists;
+      // return this.getContactLists.filter(contact => {
+      //   return contact.name.toLowerCase().match(this.search.toLowerCase());
+      // });
     }
   },
 
   created: function() {
     console.log(this.getSelectedUser);
-    // this.getCurrentUser.forEach(currentUser => {
-    //   currentUser.chatInfo.forEach(user => {
-    //     this.getContactLists.filter(contact => {
-    //       if (user.contactId == contact.id) {
-    //         this.recentContacts.push(contact);
-    //       }
-    //     });
-    //   });
-    // });
+
+    this.getCurrentUser.forEach(currentUser => {
+      currentUser.chatInfo.forEach(user => {
+        this.getContactLists.filter(contact => {
+          if (user.contactId == contact.id) {
+            this.recentContacts.push(contact);
+          }
+        });
+      });
+    });
+
+    // 친구목록 불러오기
+    this.selectUserLists();
+
+
+
+
   }
 };
 </script>
 
 <style>
 </style>
-

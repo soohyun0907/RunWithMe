@@ -27,7 +27,7 @@
 
             <div class="triangle"></div>
           </li>
-          <!-- <li
+          <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
             :class="{ active: selectedParentMenu == 'ui-kits' }"
@@ -52,7 +52,7 @@
               <span class="nav-text">Extra kits</span>
             </a>
             <div class="triangle"></div>
-          </li> -->
+          </li>
           <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
@@ -66,7 +66,7 @@
             </a>
             <div class="triangle"></div>
           </li>
-          <!-- <li
+          <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
             :class="{ active: selectedParentMenu == 'charts' }"
@@ -78,8 +78,8 @@
               <span class="nav-text">Charts</span>
             </a>
             <div class="triangle"></div>
-          </li> -->
-          <!-- <li
+          </li>
+          <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
             :class="{ active: selectedParentMenu == 'widgets' }"
@@ -91,8 +91,8 @@
               <span class="nav-text">Widgets</span>
             </a>
             <div class="triangle"></div>
-          </li> -->
-          <!-- <li
+          </li>
+          <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
             :class="{ active: selectedParentMenu == 'forms' }"
@@ -104,8 +104,8 @@
               <span class="nav-text">Forms</span>
             </a>
             <div class="triangle"></div>
-          </li> -->
-          <!-- <li
+          </li>
+          <li
             class="nav-item"
             @mouseenter="toggleSubMenu"
             :class="{ active: selectedParentMenu == 'datatables' }"
@@ -117,7 +117,7 @@
               <span class="nav-text">Datatables</span>
             </a>
             <div class="triangle"></div>
-          </li> -->
+          </li>
           <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
@@ -133,18 +133,18 @@
           </li>
           <li
             @mouseenter="toggleSubMenu"
-            :class="{ active: selectedParentMenu == 'runnings' }"
+            :class="{ active: selectedParentMenu == 'pages' }"
             class="nav-item"
-            data-item="runnings"
+            data-item="pages"
             :data-submenu="true"
           >
             <a class="nav-item-hold" href="#">
               <i class="nav-icon i-Double-Tap"></i>
-              <span class="nav-text">Runnings</span>
+              <span class="nav-text">Pages</span>
             </a>
             <div class="triangle"></div>
           </li>
-          <!-- <li
+          <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
             data-item="doc"
@@ -160,7 +160,7 @@
               <span class="nav-text">Doc</span>
             </a>
             <div class="triangle"></div>
-          </li> -->
+          </li>
         </ul>
       </div>
     </vue-perfect-scrollbar>
@@ -432,6 +432,12 @@
             <router-link tag="a" class to="/app/apps/chat">
               <i class="nav-icon i-Speach-Bubble-3"></i>
               <span class="item-name">Chat</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/apps/groupchat">
+              <i class="nav-icon i-Speach-Bubble-3"></i>
+              <span class="item-name">Group-Chat</span>
             </router-link>
           </li>
           <li class="nav-item">
@@ -848,41 +854,29 @@
         <ul
           class="childNav d-none"
           data-parent="others"
-          :class="{ 'd-block': selectedParentMenu == 'runnings' }"
+          :class="{ 'd-block': selectedParentMenu == 'pages' }"
         >
           <li class="nav-item">
-            <router-link tag="a" class to="/app/runnings/error">
+            <router-link tag="a" class to="/app/pages/error">
               <i class="nav-icon i-Error-404-Window"></i>
               <span class="item-name">Not Found</span>
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link tag="a" class to="/app/runnings/profile">
+            <router-link tag="a" class to="/app/pages/profile">
               <i class="nav-icon i-Male"></i>
               <span class="item-name">User Profile</span>
             </router-link>
           </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/runnings/running">
-              <i class="nav-icon i-Stopwatch"></i>
-              <span class="item-name">Running</span>
-            </router-link>
-          </li>
-           <li class="nav-item">
-            <router-link tag="a" class to="/app/runnings/kakaomaptest">
-              <i class="nav-icon i-Stopwatch"></i>
-              <span class="item-name">KakaoMapTest</span>
-            </router-link>
-          </li>
 
           <li class="nav-item">
-            <router-link tag="a" class to="/app/runnings/icons">
+            <router-link tag="a" class to="/app/pages/icons">
               <i class="nav-icon i-Male"></i>
               <span class="item-name">icons</span>
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link tag="a" class to="/app/runnings/search-result">
+            <router-link tag="a" class to="/app/pages/search-result">
               <i class="nav-icon i-File-Search"></i>
               <span class="item-name">
                 Search Result
@@ -890,8 +884,8 @@
               </span>
             </router-link>
           </li>
-          <!-- <li class="nav-item">
-            <router-link tag="a" class to="/app/runnings/pricing-table">
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/pages/pricing-table">
               <i class="nav-icon i-Billing"></i>
               <span class="item-name">
                 Pricing Table
@@ -900,20 +894,20 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link tag="a" class to="/app/runnings/faq">
+            <router-link tag="a" class to="/app/pages/faq">
               <i class="nav-icon i-Billing"></i>
               <span class="item-name">
                 Faq
                 <span class="badge badge-pill badge-danger">New</span>
               </span>
             </router-link>
-          </li> -->
+          </li>
           <!-- <li class="nav-item">
             <a href="blank.html" class="open">
               <i class="nav-icon i-File-Horizontal"></i>
               <span class="item-name">Blank Page</span>
             </a>
-          </li> -->
+          </li>-->
         </ul>
       </div>
     </vue-perfect-scrollbar>
