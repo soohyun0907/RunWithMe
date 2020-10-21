@@ -3,6 +3,11 @@
     <breadcumb :page="'Chat'" :folder="'apps'" />
 
     <div class="card chat-sidebar-container sidebar-container">
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
       <div class="chat-sidebar-wrap sidebar" :class="{ 'ml-0': isMobile }">
         <div class="border-right">
           <div
@@ -27,7 +32,12 @@
             class="contacts-scrollable perfect-scrollbar  rtl-ps-none ps scroll"
           >
             <div>
+<<<<<<< HEAD
               <!-- <div
+=======
+
+              <div
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
                 class="mt-4 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
               >
                 Recent
@@ -44,7 +54,15 @@
                   class="avatar-sm rounded-circle mr-3"
                 />
                 <h6 class="">{{ contact.name }}</h6>
+<<<<<<< HEAD
               </div> -->
+=======
+              </div>
+
+
+
+
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
 
               <div
                 class="mt-3 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
@@ -55,6 +73,7 @@
               <div
                 class="p-3 d-flex border-bottom align-items-center contact"
                 v-for="contact in filterContacts"
+<<<<<<< HEAD
                 :key="contact.id"
                 :class="contact.status"
                 @click="changeSelectedUser(contact.id)"
@@ -65,11 +84,31 @@
                   class="avatar-sm rounded-circle mr-3"
                 />
                 <h6 class="">{{ contact.name }}</h6>
+=======
+                :key="contact.userId"
+              >
+                <!-- :class="contact.status"
+              > -->
+                <!-- @click="changeSelectedUser(contact.id)"
+              > -->
+                <!-- <img
+                  :src="contact.avatar"
+                  alt=""
+                  class="avatar-sm rounded-circle mr-3"
+                /> -->
+                <h6 @click ="choice(contact.userId)" class="">{{ contact.userEmail }}</h6>
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
               </div>
             </div>
           </vue-perfect-scrollbar>
         </div>
+<<<<<<< HEAD
       </div>
+=======
+      </div> 
+      <!-- 채팅사이드 바 -->
+
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
       <div class="chat-content-wrap sidebar-content">
         <div
           class="d-flex pl-3 pr-3 pt-2 pb-2 o-hidden box-shadow-1 chat-topbar"
@@ -78,6 +117,7 @@
             <i class="icon-regular i-Right ml-0 mr-3"></i>
           </a>
           <div class="d-flex align-items-center">
+<<<<<<< HEAD
             <img
               :src="getSelectedUser.avatar"
               alt=""
@@ -85,6 +125,15 @@
             />
             <p class="m-0 text-title text-16 flex-grow-1">
               {{ getSelectedUser.name }}
+=======
+            <!-- <img
+              :src="getSelectedUser.avatar"
+              alt=""
+              class="avatar-sm rounded-circle mr-2"
+            /> -->
+            <p class="m-0 text-title text-16 flex-grow-1">
+              {{ getSelectedUser }}
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
             </p>
           </div>
         </div>
@@ -126,6 +175,10 @@
                 <p class="m-0">Lorem ipsum dolor sit amet.</p>
               </div>
             </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
             <div class="d-flex mb-30">
               <div class="message flex-grow-1">
                 <div class="d-flex">
@@ -144,6 +197,10 @@
                 class="avatar-sm rounded-circle ml-3"
               />
             </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
             <div class="d-flex mb-30 user">
               <img
                 src="@/assets/images/faces/1.jpg"
@@ -195,7 +252,15 @@
 
 
 <script>
+<<<<<<< HEAD
 import { mapGetters, mapActions } from "vuex";
+=======
+import { mapGetters, mapActions, mapMutations } from "vuex";
+import store from "@/store/modules/chat.js";
+import { isMobile } from 'mobile-device-detect';
+import Stomp from 'webstomp-client'
+import SockJS from 'sockjs-client'
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
 
 export default {
   metaInfo: {
@@ -206,14 +271,50 @@ export default {
     return {
       recentContacts: [],
       search: "",
+<<<<<<< HEAD
       isMobile: false
+=======
+      isMobile: false,
+      roomId: "",
+      roomName: ""
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
     };
   },
   methods: {
     ...mapActions(["changeSelectedUser"]),
+<<<<<<< HEAD
     console() {
       console.log(this.test);
     }
+=======
+    ...mapMutations(["selectUserLists", "createAndSelectChatroom"]),
+    console() {
+      console.log(this.test);
+    },
+
+    choice: function(uid){
+      console.log(this.createAndSelectChatroom(uid));
+      this.isMobile = false
+    },
+    
+    loadChatContent: function(rommId, roomName){
+        this.roomId = rommId;
+        this.roomName = roomName;
+        var _this = this;
+        axios.get('/chat/user').then(response => {
+            _this.token = response.data.token;
+            ws.connect({"token":_this.token}, function(frame) {
+              ws.subscribe("/sub/chat/room/"+_this.roomId, function(message) {
+                var recv = JSON.parse(message.body);
+                _this.recvMessage(recv);
+              });
+              }, function(error) {
+            alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
+            location.href="/chat/room";
+          });
+        });
+      }
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
   },
 
   computed: {
@@ -225,14 +326,22 @@ export default {
     ]),
 
     filterContacts() {
+<<<<<<< HEAD
       return this.getContactLists.filter(contact => {
         return contact.name.toLowerCase().match(this.search.toLowerCase());
       });
+=======
+      return this.getContactLists;
+      // return this.getContactLists.filter(contact => {
+      //   return contact.name.toLowerCase().match(this.search.toLowerCase());
+      // });
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
     }
   },
 
   created: function() {
     console.log(this.getSelectedUser);
+<<<<<<< HEAD
     // this.getCurrentUser.forEach(currentUser => {
     //   currentUser.chatInfo.forEach(user => {
     //     this.getContactLists.filter(contact => {
@@ -242,6 +351,25 @@ export default {
     //     });
     //   });
     // });
+=======
+
+    this.getCurrentUser.forEach(currentUser => {
+      currentUser.chatInfo.forEach(user => {
+        this.getContactLists.filter(contact => {
+          if (user.contactId == contact.id) {
+            this.recentContacts.push(contact);
+          }
+        });
+      });
+    });
+
+    // 친구목록 불러오기
+    this.selectUserLists();
+
+
+
+
+>>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
   }
 };
 </script>
