@@ -31,7 +31,7 @@ public class Friend {
 	private Integer userId;
 	
 	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_uid")
+	@JoinColumn(name = "user_userId")
 	private User user;
 	
 }
