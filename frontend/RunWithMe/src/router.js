@@ -393,6 +393,10 @@ const routes = [
         redirect: "/app/runnings/profile",
         children: [
           {
+            path: "runningResult",
+            component: () => import("./views/app/runnings/runningResult")
+          },
+          {
             path: "running",
             component: () => import("./views/app/runnings/running")
           },
