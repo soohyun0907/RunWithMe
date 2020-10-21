@@ -99,7 +99,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignIn"
+    title: "SignIn",
   },
   data() {
     return {
@@ -108,7 +108,7 @@ export default {
       userId: "",
       bgImage: require("@/assets/images/photo-wide-4.jpg"),
       logo: require("@/assets/images/logo.png"),
-      signInImage: require("@/assets/images/photo-long-3.jpg")
+      signInImage: require("@/assets/images/photo-long-3.jpg"),
     };
   },
   computed: {
@@ -147,30 +147,7 @@ export default {
         this.makeToast("warning", val.message);
       }
     },
-    makeToast(variant = null, msg) {
-      this.$bvToast.toast(msg, {
-        title: ` ${variant || "default"}`,
-        variant: variant,
-        solid: true
-      });
-    }
   },
-  watch: {
-    loggedInUser(val) {
-      if (val && val.uid && val.uid.length > 0) {
-        this.makeToast("success", "Successfully Logged In");
-
-        setTimeout(() => {
-          this.$router.push("/");
-        }, 500);
-      }
-    },
-    error(val) {
-      if (val != null) {
-        this.makeToast("warning", val.message);
-      }
-    }
-  }
 };
 </script>
 

@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-import {user, contacts, chatCollection, chatroom} from "../../data/chat";
-=======
-import {user, contacts, chatCollection} from "../../data/groupchat";
+import {user, contacts, chatCollection, chatroom} from "../../data/groupchat";
 import http from "@/utils/http-common";
->>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
 
 const state = {
   currentUser: user,
@@ -19,11 +15,7 @@ const getters = {
   getCurrentUser: state => state.currentUser,
   getRecentUser: state => state.recentUsers,
   getSelectedUser: state => state.selectedUser,
-<<<<<<< HEAD
-  getChatRooms: state => state.chatrooms,
-=======
   getUserLists: state => state.getUserLists
->>>>>>> de3ad360b2b9310ac0dc09bd9b203bdf6cdc3abc
 };
 
 const actions = {
