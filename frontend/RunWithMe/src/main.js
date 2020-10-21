@@ -19,9 +19,6 @@ import DateRangePicker from 'vue2-daterange-picker'
 import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 //import material-icon scss
 import "font-awesome/css/font-awesome.min.css";
-//axios 통신
-import axios from 'axios'
-Vue.prototype.$http = axios;
  
 //defined as global component
 Vue.component('VueFontawesome', require('vue-fontawesome-icon/VueFontawesome.vue').default);
@@ -31,6 +28,11 @@ Vue.component("breadcumbcustom", Breadcumbcustom);
 import InstantSearch from 'vue-instantsearch';
 // Vue.use(VueRouter);
  
+
+var sessionOptions = {
+  persist: true
+};
+Vue.use(sessionOptions)
 
 
 Vue.use(InstantSearch);
