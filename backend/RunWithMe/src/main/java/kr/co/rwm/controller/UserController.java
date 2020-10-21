@@ -5,8 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@CrossOrigin(origins="*")
 public class UserController {
 	
 	private final PasswordEncoder passwordEncoder;
@@ -33,12 +34,12 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@PostMapping("/login")
-	public ResponseEntity join(@RequestBody User user, HttpServletResponse response){
+	@PostMapping("/signin")
+	public ResponseEntity signin(@RequestBody User user, HttpServletResponse response){
 		User member = userService.findByUserEmail(user.getUserEmail())
 				.orElseThrow(()->new RestException(ResponseMessage.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
 		
-		if(!user.getPassword().equals(member.getPassword())) {
+		if(!passwordEncoder.matches(user.getPassword(),member.getPassword())) {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SIGNIN_FAIL),
 					HttpStatus.FORBIDDEN);
 		}
@@ -58,7 +59,7 @@ public class UserController {
 		}
 
 //		NoOpPasswordEncoder
-		userService.join(user, "{noop}"+passwordEncoder.encode(user.getPassword()));
+		userService.join(user, passwordEncoder.encode(user.getPassword()));
 
 		return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SIGNUP_SUCCESS),
 				HttpStatus.CREATED);

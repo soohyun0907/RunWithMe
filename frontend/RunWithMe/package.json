@@ -18,7 +18,7 @@
     "core-js": "^3.6.5",
     "echarts": "^4.8.0",
     "es6-promise": "^4.2.8",
-    "firebase": "^7.16.1",
+    "firebase": "^7.24.0",
     "font-awesome": "^4.7.0",
     "mobile-device-detect": "^0.4.3",
     "nprogress": "^0.2.0",
