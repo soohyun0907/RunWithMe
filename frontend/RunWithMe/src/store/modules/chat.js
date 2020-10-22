@@ -63,7 +63,8 @@ const mutations = {
     http
       .post("/match/room", 
       {
-          friendId : uid
+          masterId : 1, // 사용자 정보에서 가져와야함 
+          guestId : uid
       })
       .then((data) =>{
         //console.log(data);
@@ -76,7 +77,7 @@ const mutations = {
         http
           .get('/chat/user').then(response => {
               console.log("들어는 오냐")
-              state.token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ0ZXN0MSIsImlhdCI6MTYwMzM4MDgyOCwiZXhwIjoxNjAzMzg0NDI4fQ.nzNCKuNkweGDWe76LF-R7yvb1E2xgMl4FzatennQZQU";
+              state.token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGVzIjpbIlVTRVIiXSwianRpIjoidGVzdDEiLCJpYXQiOjE2MDMzODQzNzEsImV4cCI6MTYwMzM4Nzk3MX0.v6oP7WXsO4SIhzaOdMPHk1Cla2LJbF8XTMh1uVlSTPs";
               console.log("token:" + state.token)
               state.sock = new SockJS("http://localhost:8080/ws-stomp")
               state.ws = Stomp.over(state.sock)
