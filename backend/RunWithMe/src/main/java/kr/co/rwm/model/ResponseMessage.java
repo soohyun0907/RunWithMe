@@ -10,6 +10,7 @@ public class ResponseMessage {
     
     public static final String GROUP_LIST_SUCCESS = "그룹 채팅 목록 조회";
     
+    public static final String RUNNING_GPS_SUCCESS = "현재 위치 목록 조회";
     
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
