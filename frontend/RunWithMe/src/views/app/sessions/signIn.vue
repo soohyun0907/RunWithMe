@@ -132,8 +132,8 @@ export default {
     },
   },
   watch: {
-    userInfo(val) {
-      if (this.$store.state.userInfo != {}) {
+    checkUserInfo(val) {
+      if (this.userInfo != {}) {
         this.makeToast("success", "Successfully Logged In");
       } else {
         this.makeToast("Success", "Successfully Logged out");
