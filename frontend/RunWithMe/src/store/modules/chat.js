@@ -38,8 +38,9 @@ const actions = {
     commit("createAndSelectChatroom", uid);
     // commit("test", state.roomInfo);
   },
-  sendMessages({commit}, type, msg){
-    commit("sendMessage", type, msg);
+  sendMessages({commit}, payload){
+    console.log("msg: " + payload.msg)
+    commit("sendMessage", payload);
   }
 };
 
@@ -74,7 +75,7 @@ const mutations = {
         http
           .get('/chat/user').then(response => {
               console.log("들어는 오냐")
-              state.token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ0ZXN0NCIsImlhdCI6MTYwMzM3MzQyMSwiZXhwIjoxNjAzMzc3MDIxfQ.ddRYakBwDcsyKy5qXTp5NckCkpOqy92tyyMCrrBMkr0";
+              state.token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ0ZXN0MSIsImlhdCI6MTYwMzM4MDgyOCwiZXhwIjoxNjAzMzg0NDI4fQ.nzNCKuNkweGDWe76LF-R7yvb1E2xgMl4FzatennQZQU";
               console.log("token:" + state.token)
               state.sock = new SockJS("http://localhost:8080/ws-stomp")
               state.ws = Stomp.over(state.sock)
@@ -99,11 +100,14 @@ const mutations = {
         });
       })
     },
-    sendMessage : function(state, type, msg){
+    sendMessage : (state, payload) => {
       // var ws = Stomp.over(state.sock)
+      console.log(payload.msg)
       console.log("======")
       console.log(state.ws)
-      state.ws.send("/pub/chat/message", {"token":state.token}, JSON.stringify({type:type, roomId:state.roomId, message:msg}));
+      var header = {"token":state.token};
+      var body = JSON.stringify({type:payload.type, roomId:state.roomId, message:payload.msg});
+      state.ws.send("/pub/chat/message", body, header );
       //this.message = '';
     }
 
