@@ -1,5 +1,8 @@
 import {user, contacts, chatCollection} from "../../data/groupchat";
 import http from "@/utils/http-common";
+import Stomp from 'webstomp-client'
+import SockJS from 'sockjs-client'
+
 
 const state = {
   currentUser: user,
@@ -8,10 +11,14 @@ const state = {
   selectedUser: contacts[0],
   chats: chatCollection,
   roomInfo : "",
-  messages : ["test", "test1"],
+  messages : [],
   roomId : "",
-  roomName : ""
+  roomName : "",
+  token : "",
+  sock : "",
+  ws: ""
 };
+
 
 const getters = {
   getContactLists: state => state.contactList,
@@ -27,9 +34,12 @@ const actions = {
   changeSelectedUser({commit}, id) {
     commit("updateSelectedUser", id);
   },
-  createAndSelectChatroomAction({commit}, uid, sock, ws){
-    commit("createAndSelectChatroom", uid, sock, ws);
+  createAndSelectChatroomAction({commit}, uid){
+    commit("createAndSelectChatroom", uid);
     // commit("test", state.roomInfo);
+  },
+  sendMessages({commit}, type, msg){
+    commit("sendMessage", type, msg);
   }
 };
 
@@ -61,16 +71,26 @@ const mutations = {
         // state.messages.unshift("add");
         state.roomId = data.data.roomId;
         state.roomName =  data.data.roomName;
-        var _this = this;
         http
           .get('/chat/user').then(response => {
               console.log("들어는 오냐")
-              _this.token = response.data.token;
-              console.log("token:" + _this.token)
-              ws.connect({"token":_this.token}, function(frame) {
-                  ws.subscribe("/sub/chat/room/"+_this.roomId, function(message) {
+              state.token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ0ZXN0NCIsImlhdCI6MTYwMzM3MzQyMSwiZXhwIjoxNjAzMzc3MDIxfQ.ddRYakBwDcsyKy5qXTp5NckCkpOqy92tyyMCrrBMkr0";
+              console.log("token:" + state.token)
+              state.sock = new SockJS("http://localhost:8080/ws-stomp")
+              state.ws = Stomp.over(state.sock)
+              console.log("before")
+              // var ws = Stomp.over(state.sock)
+              console.log(state.ws)
+              console.log("after")
+              state.ws.connect({"token":state.token}, function(frame) {
+                console.log("connect")
+                state.ws.subscribe("/sub/chat/room/"+state.roomId, function(message) {
+                  console.log("subscribe")
                       var recv = JSON.parse(message.body);
-                      _this.recvMessage(recv);
+                      console.log("sub")
+                      console.log(recv)
+                      //this.userCount = recv.userCount;
+                      state.messages.unshift({"type":recv.type,"sender":recv.sender,"message":recv.message})
                   });
               }, function(error) {
                   alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
@@ -78,7 +98,14 @@ const mutations = {
               });
         });
       })
-  }
+    },
+    sendMessage : function(state, type, msg){
+      // var ws = Stomp.over(state.sock)
+      console.log("======")
+      console.log(state.ws)
+      state.ws.send("/pub/chat/message", {"token":state.token}, JSON.stringify({type:type, roomId:state.roomId, message:msg}));
+      //this.message = '';
+    }
 
 };
 
