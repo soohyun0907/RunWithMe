@@ -1,4 +1,4 @@
-import {user, contacts, chatCollection} from "../../data/groupchat";
+import {user, contacts, chatCollection, chatroom} from "../../data/groupchat";
 import http from "@/utils/http-common";
 import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
@@ -16,7 +16,8 @@ const state = {
   roomName : "",
   token : "",
   sock : "",
-  ws: ""
+  ws: "",
+  chatrooms : chatroom,
 };
 
 

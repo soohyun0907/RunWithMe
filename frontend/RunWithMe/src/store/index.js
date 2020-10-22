@@ -11,7 +11,6 @@ import cart from "./modules/cart";
 import verticalSidebar from "./modules/verticalSidebar";
 import scrumboard from "./modules/scrumboard";
 
-
 // Load Vuex
 Vue.use(Vuex);
 

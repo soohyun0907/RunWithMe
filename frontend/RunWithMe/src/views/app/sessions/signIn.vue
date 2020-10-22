@@ -17,8 +17,8 @@
                   <b-form-input
                     class="form-control-rounded"
                     type="text"
-                    v-model="email"
-                    email
+                    v-model="userEmail"
+                    userEmail
                     required
                   ></b-form-input>
                 </b-form-group>
@@ -27,7 +27,7 @@
                   <b-form-input
                     class="form-control-rounded"
                     type="password"
-                    v-model="password"
+                    v-model="userPw"
                   ></b-form-input>
                 </b-form-group>
 
@@ -66,7 +66,7 @@
           <b-col
             md="6"
             class="text-center"
-            style="backgroundSize: cover;"
+            style="backgroundsize: cover"
             :style="{ backgroundImage: 'url(' + signInImage + ')' }"
           >
             <div class="pr-3 auth-right">
@@ -99,55 +99,55 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignIn"
+    title: "SignIn",
   },
   data() {
     return {
-      email: "ui-lib@gmail.com",
-      password: "123456",
-      // // password: "vue006",
+      userEmail: "123",
+      userPw: "123",
       userId: "",
       bgImage: require("@/assets/images/photo-wide-4.jpg"),
       logo: require("@/assets/images/logo.png"),
-      signInImage: require("@/assets/images/photo-long-3.jpg")
+      signInImage: require("@/assets/images/photo-long-3.jpg"),
     };
   },
   computed: {
     validation() {
       return this.userId.length > 4 && this.userId.length < 13;
     },
-    ...mapGetters(["loggedInUser", "loading", "error"])
+    ...mapGetters(["userInfo", "loading", "error"]),
   },
 
   methods: {
     ...mapActions(["login"]),
     formSubmit() {
-      this.login({ email: this.email, password: this.password });
+      this.login({ userEmail: this.userEmail, userPw: this.userPw });
     },
     makeToast(variant = null, msg) {
       this.$bvToast.toast(msg, {
         title: ` ${variant || "default"}`,
         variant: variant,
-        solid: true
+        solid: true,
       });
-    }
+    },
   },
   watch: {
-    loggedInUser(val) {
-      if (val && val.uid && val.uid.length > 0) {
+    checkUserInfo(val) {
+      if (this.userInfo != {}) {
         this.makeToast("success", "Successfully Logged In");
-
-        setTimeout(() => {
-          this.$router.push("/");
-        }, 500);
+      } else {
+        this.makeToast("Success", "Successfully Logged out");
       }
+      setTimeout(() => {
+        this.$router.push("/");
+      }, 300);
     },
     error(val) {
       if (val != null) {
         this.makeToast("warning", val.message);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
