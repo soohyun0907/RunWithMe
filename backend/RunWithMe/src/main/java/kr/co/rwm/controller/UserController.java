@@ -43,8 +43,8 @@ public class UserController {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SIGNIN_FAIL),
 					HttpStatus.FORBIDDEN);
 		}
-		
-		String token = jwtTokenProvider.generateToken(member.getUsername());
+		System.out.println("***"+member.getRoles());
+		String token = jwtTokenProvider.generateToken(member.getUsername(),member.getRoles());
 		
 		response.setHeader("AUTH", token);		
 		
