@@ -103,8 +103,8 @@
           :settings="{ suppressScrollX: true, wheelPropagation: false }"
           class="chat-content perfect-scrollbar rtl-ps-none ps scroll"
         >
-          <div v-for="m in updateMessages">
-                <h1> {{m}} </h1>
+          <div v-for=" m in updateMessages">
+                <h1> {{m.sender + " " + m.message}} </h1>
           </div>
           <!-- <div>
             <div class="d-flex mb-30">
@@ -178,13 +178,14 @@
         </vue-perfect-scrollbar>
 
         <div class="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
-          <form class="inputForm">
+          <form class="inputForm" @submit.prevent="send('TALK')">
             <div class="form-group">
               <textarea
                 class="form-control form-control-rounded"
                 placeholder="Type your message"
                 name="message"
                 id="message"
+                v-model="message"
                 cols="30"
                 rows="3"
                 spellcheck="false"
@@ -192,7 +193,7 @@
             </div>
             <div class="d-flex">
               <div class="flex-grow-1"></div>
-              <button class="btn btn-icon btn-rounded btn-primary mr-2">
+              <button class="btn btn-icon btn-rounded btn-primary mr-2" type="submit">
                 <i class="i-Paper-Plane"></i>
               </button>
               <button
@@ -200,7 +201,7 @@
                 type="button"
               >
                 <i class="i-Add-File"></i>
-              </button>
+              </button> 
             </div>
           </form>
         </div>
@@ -214,10 +215,8 @@
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import store from "@/store/modules/chat.js";
 import { isMobile } from 'mobile-device-detect';
-import Stomp from 'webstomp-client'
-import SockJS from 'sockjs-client'
-var sock = new SockJS("http://localhost:8080/ws-stomp");
-var ws = Stomp.over(sock);
+
+
 
 export default {
 
@@ -239,16 +238,22 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["changeSelectedUser", "createAndSelectChatroomAction"]),
+    ...mapActions(["changeSelectedUser", "createAndSelectChatroomAction","sendMessages"]),
     ...mapMutations(["selectUserLists"]),
     console() {
       console.log(this.test);
     },
 
     choice: function(uid){
-      this.createAndSelectChatroomAction(uid, sock, ws);
+      this.createAndSelectChatroomAction(uid);
       this.isMobile = false;
     },
+
+    send : function(type){
+      console.log(type)
+      console.log(this.message)
+      this.sendMessages(type, this.message);
+    }
 
   },
 
