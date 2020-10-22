@@ -140,7 +140,6 @@
                 <p class="m-0">Lorem ipsum dolor sit amet.</p>
               </div>
             </div>
-
             <div class="d-flex mb-30">
               <div class="message flex-grow-1">
                 <div class="d-flex">
@@ -159,7 +158,6 @@
                 class="avatar-sm rounded-circle ml-3"
               />
             </div>
-
             <div class="d-flex mb-30 user">
               <img
                 src="@/assets/images/faces/1.jpg"
@@ -301,10 +299,6 @@ export default {
 
     // 친구목록 불러오기
     this.selectUserLists();
-
-
-
-
   }
 };
 </script>
