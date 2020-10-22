@@ -385,36 +385,29 @@ const routes = [
           }
         ]
       },
-      // pages
+      // runnings
       {
-        path: "/app/pages",
-        component: () => import("./views/app/pages"),
-        redirect: "/app/pages/profile",
+        path: "/app/runnings",
+        component: () => import("./views/app/runnings"),
+        redirect: "/app/runnings/profile",
         children: [
           {
-            path: "profile",
-            component: () => import("./views/app/pages/profile")
+            path: "runningResult",
+            component: () => import("./views/app/runnings/runningResult")
           },
           {
-            path: "error",
-            component: () => import("./views/app/pages/notFound")
+            path: "running",
+            component: () => import("./views/app/runnings/running")
           },
           {
-            path: "icons",
-            component: () => import("./views/app/pages/icons")
+            path: "kakaomaptest",
+            component: () => import("./views/app/runnings/kakaomaptest")
           },
           {
-            path: "search-result",
-            component: () => import("./views/app/pages/search-result")
-          },
-          {
-            path: "pricing-table",
-            component: () => import("./views/app/pages/pricingTable")
-          },
-          {
-            path: "faq",
-            component: () => import("./views/app/pages/faq")
-          },
+            path: "kakaomapSH",
+            component: () => import("./views/app/runnings/kakaomap_sh")
+          }
+          
           
         ]
       },
@@ -503,10 +496,6 @@ const routes = [
   {
     path: "/vertical-sidebar",
     component: () => import("./containers/layouts/verticalSidebar")
-  },
-  {
-    path: "*",
-    component: () => import("./views/app/pages/notFound")
   }
 ];
 

@@ -1,6 +1,18 @@
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = {
+  devServer: { 
+    proxy: { 
+      '/api': { 
+        target: 'http://localhost:3000/api',
+        changeOrigin: true, 
+        pathRewrite: { 
+          '^/api': ''
+        } 
+      } 
+    } 
+  },
+  outputDir: '../public', 
   pages: {
     index: {
       entry: "src/main.js",
@@ -20,7 +32,8 @@ module.exports = {
     watchOptions: {
       poll: false,
       ignored: /node_modules/
-    }
+    },
+    disableHostCheck: true
   },
   chainWebpack: config => {
     config.module

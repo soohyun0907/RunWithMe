@@ -133,31 +133,14 @@
           </li>
           <li
             @mouseenter="toggleSubMenu"
-            :class="{ active: selectedParentMenu == 'pages' }"
+            :class="{ active: selectedParentMenu == 'runnings' }"
             class="nav-item"
-            data-item="pages"
+            data-item="runnings"
             :data-submenu="true"
           >
             <a class="nav-item-hold" href="#">
               <i class="nav-icon i-Double-Tap"></i>
-              <span class="nav-text">Pages</span>
-            </a>
-            <div class="triangle"></div>
-          </li>
-          <li
-            @mouseenter="toggleSubMenu"
-            class="nav-item"
-            data-item="doc"
-            :class="{ active: selectedParentMenu == 'doc' }"
-            :data-submenu="false"
-          >
-            <a
-              class="nav-item-hold"
-              href="http://demos.ui-lib.com/gull-vue-doc/"
-              target="_blank"
-            >
-              <i class="nav-icon i-Safe-Box1"></i>
-              <span class="nav-text">Doc</span>
+              <span class="nav-text">Runnings</span>
             </a>
             <div class="triangle"></div>
           </li>
@@ -207,6 +190,216 @@
               <span class="item-name">{{
                 $t("dashboardItems.versionFour")
               }}</span>
+            </router-link>
+          </li>
+        </ul>
+        <ul
+          class="childNav d-none"
+          data-parent="forms"
+          :class="{ 'd-block': selectedParentMenu == 'forms' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/forms/basicForms">
+              <i class="nav-icon i-File-Clipboard-Text--Image"></i>
+              <span class="item-name">Basic Elements</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/forms/formLayouts">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">Form Layouts</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/forms/basicActionBar">
+              <i class="nav-icon i-Receipt-4"></i>
+              <span class="item-name">Basic Action Bar</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/forms/formComponent">
+              <i class="nav-icon i-Close-Window"></i>
+              <span class="item-name">Form Validation</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/forms/formWizard">
+              <i class="nav-icon i-Width-Window"></i>
+              <span class="item-name">Form Wizard</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/forms/tagInput">
+              <i class="nav-icon i-Tag-2"></i>
+              <span class="item-name">Tag Input</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/forms/mask">
+              <i class="nav-icon i-Pen-2"></i>
+              <span class="item-name">Form Mask</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/forms/datepicker">
+              <i class="nav-icon i-Calendar-4"></i>
+              <span class="item-name">Datepicker</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/forms/V2Datepicker">
+              <i class="nav-icon i-Calendar-4"></i>
+              <span class="item-name">V2Datepicker</span>
+            </router-link>
+          </li>
+        </ul>
+
+        <ul
+          class="childNav d-none"
+          data-parent="forms"
+          :class="{ 'd-block': selectedParentMenu == 'datatables' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/datatables/paging">
+              <i class="nav-icon i-Split-Four-Square-Window"></i>
+              <span class="item-name">Paging</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/datatables/filter">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">Filter</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/datatables/list">
+              <i class="nav-icon i-Split-Vertical"></i>
+              <span class="item-name">List</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/datatables/vue-good-table">
+              <i class="nav-icon i-Split-Horizontal"></i>
+              <span class="item-name">Vue Good Table</span>
+            </router-link>
+          </li>
+        </ul>
+        <ul
+          class="childNav d-none"
+          data-parent="extrakits"
+          :class="{ 'd-block': selectedParentMenu == 'extrakits' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/dropdown">
+              <i class="nav-icon i-Arrow-Down"></i>
+              <span class="item-name">Dropdown</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/imageCropper">
+              <i class="nav-icon i-Crop-2"></i>
+              <span class="item-name">Image Cropper</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/loaders">
+              <i class="nav-icon i-Loading-3"></i>
+              <span class="item-name">Loaders</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/sidebar">
+              <i class="nav-icon i-Two-Windows"></i>
+              <span class="item-name">Sidebar</span>
+              <span class="ml-2 badge badge-pill badge-danger">New</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/spinners">
+              <i class="nav-icon i-Two-Windows"></i>
+              <span class="item-name">Overlay</span>
+              <span class="ml-2 badge badge-pill badge-danger">New</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/vueDraggable">
+              <i class="nav-icon i-Two-Windows"></i>
+              <span class="item-name">Vue Draggable</span>
+              <span class="ml-2 badge badge-pill badge-danger">New</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/avatar">
+              <i class="nav-icon i-Two-Windows"></i>
+              <span class="item-name">Avatar</span>
+              <span class="ml-2 badge badge-pill badge-danger">New</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/calendar">
+              <i class="nav-icon i-Calendar"></i>
+              <span class="item-name">Calendar</span>
+              <span class="ml-2 badge badge-pill badge-danger">New</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/rating">
+              <i class="nav-icon i-Circular-Point"></i>
+              <span class="item-name">Rating</span>
+              <span class="ml-2 badge badge-pill badge-danger">New</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/spinButton">
+              <i class="nav-icon i-Circular-Point"></i>
+              <span class="item-name">Spinbutton</span>
+              <span class="ml-2 badge badge-pill badge-danger">New</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/datePicker">
+              <i class="nav-icon i-Time-Window"></i>
+              <span class="item-name">Datepicker</span>
+              <span class="ml-2 badge badge-pill badge-danger">New</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/timePicker">
+              <i class="nav-icon i-Over-Time"></i>
+              <span class="item-name">TimePicker</span>
+              <span class="ml-2 badge badge-pill badge-danger">New</span>
+            </router-link>
+          </li>
+
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/vueTree">
+              <i class="nav-icon i-Up---Down-3"></i>
+              <span class="item-name">Vue Tree</span>
+              <span class="ml-2 badge badge-pill badge-danger">New</span>
+            </router-link>
+          </li>
+          <!-- <li class="nav-item">
+            <a href="ladda.button.html">
+              <i class="nav-icon i-Loading-2"></i>
+              <span class="item-name">Ladda Buttons</span>
+            </a>
+          </li>-->
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/toasts">
+              <i class="nav-icon i-Bell"></i>
+              <span class="item-name">Toastr</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/sweetAlerts">
+              <i class="nav-icon i-Approved-Window"></i>
+              <span class="item-name">Sweet Alerts</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/extraKits/tour">
+              <i class="nav-icon i-Plane"></i>
+              <span class="item-name">User Tour</span>
             </router-link>
           </li>
         </ul>
@@ -854,29 +1047,52 @@
         <ul
           class="childNav d-none"
           data-parent="others"
-          :class="{ 'd-block': selectedParentMenu == 'pages' }"
+          :class="{ 'd-block': selectedParentMenu == 'runnings' }"
         >
           <li class="nav-item">
-            <router-link tag="a" class to="/app/pages/error">
+            <router-link tag="a" class to="/app/runnings/error">
               <i class="nav-icon i-Error-404-Window"></i>
               <span class="item-name">Not Found</span>
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link tag="a" class to="/app/pages/profile">
+            <router-link tag="a" class to="/app/runnings/profile">
               <i class="nav-icon i-Male"></i>
               <span class="item-name">User Profile</span>
             </router-link>
           </li>
-
           <li class="nav-item">
-            <router-link tag="a" class to="/app/pages/icons">
+            <router-link tag="a" class to="/app/runnings/runningResult">
+              <i class="nav-icon i-File-Chart"></i>
+              <span class="item-name">RunningResult</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/runnings/running">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">Running</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/runnings/kakaomaptest">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">KakaoMapTest</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/runnings/kakaomapSH">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">KakaoMapSH</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/runnings/icons">
               <i class="nav-icon i-Male"></i>
               <span class="item-name">icons</span>
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link tag="a" class to="/app/pages/search-result">
+            <router-link tag="a" class to="/app/runnings/search-result">
               <i class="nav-icon i-File-Search"></i>
               <span class="item-name">
                 Search Result
@@ -885,7 +1101,7 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link tag="a" class to="/app/pages/pricing-table">
+            <router-link tag="a" class to="/app/runnings/pricing-table">
               <i class="nav-icon i-Billing"></i>
               <span class="item-name">
                 Pricing Table
@@ -894,20 +1110,20 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link tag="a" class to="/app/pages/faq">
+            <router-link tag="a" class to="/app/runnings/faq">
               <i class="nav-icon i-Billing"></i>
               <span class="item-name">
                 Faq
                 <span class="badge badge-pill badge-danger">New</span>
               </span>
             </router-link>
-          </li>
+          </li> -->
           <!-- <li class="nav-item">
             <a href="blank.html" class="open">
               <i class="nav-icon i-File-Horizontal"></i>
               <span class="item-name">Blank Page</span>
             </a>
-          </li>-->
+          </li> -->
         </ul>
       </div>
     </vue-perfect-scrollbar>

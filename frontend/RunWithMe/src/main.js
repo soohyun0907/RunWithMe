@@ -9,6 +9,7 @@ import GullKit from "./plugins/gull.kit";
 // es6Promise.polyfill();
 import store from "./store";
 import Breadcumb from "./components/breadcumb";
+import Breadcumbcustom from "./components/breadcumbcustom";
 import firebase from "firebase/app";
 import "firebase/auth";
 import {firebaseSettings} from "@/data/config";
@@ -18,14 +19,22 @@ import DateRangePicker from 'vue2-daterange-picker'
 import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 //import material-icon scss
 import "font-awesome/css/font-awesome.min.css";
- 
+import vueMoment from 'vue-moment' 
+Vue.use(vueMoment)
+
 //defined as global component
 Vue.component('VueFontawesome', require('vue-fontawesome-icon/VueFontawesome.vue').default);
 
 Vue.component("breadcumb", Breadcumb);
+Vue.component("breadcumbcustom", Breadcumbcustom);
 import InstantSearch from 'vue-instantsearch';
 // Vue.use(VueRouter);
  
+
+var sessionOptions = {
+  persist: true
+};
+Vue.use(sessionOptions)
 
 
 Vue.use(InstantSearch);
