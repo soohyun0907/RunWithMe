@@ -192,7 +192,7 @@
                 placeholder="Type your message"
                 name="message"
                 id="message"
-                v-model="message"
+                v-model="msg"
                 cols="30"
                 rows="3"
                 spellcheck="false"
@@ -238,7 +238,7 @@ export default {
       isMobile: false,
       roomId: "",
       roomName: "",
-      message: '',
+      msg: '',
       messages: ["test", "testtt"],
       token: '',
       userCount: 0,
@@ -258,8 +258,9 @@ export default {
 
     send : function(type){
       console.log(type)
-      console.log(this.message)
-      this.sendMessages(type, this.message);
+      console.log(this.msg)
+      var payload = {"type": type, "msg":this.msg}
+      this.sendMessages(payload);
     }
 
   },
