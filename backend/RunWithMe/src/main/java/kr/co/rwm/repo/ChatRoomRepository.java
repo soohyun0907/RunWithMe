@@ -28,6 +28,7 @@ public class ChatRoomRepository {
     private HashOperations<String, String, String> hashOpsEnterInfo;
     @Resource(name = "redisTemplate")
     private ValueOperations<String, String> valueOps;
+   
 
     @Autowired
     // 모든 채팅방 조회
