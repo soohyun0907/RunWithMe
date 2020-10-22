@@ -1,6 +1,7 @@
 package kr.co.rwm.repo;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Resource;
@@ -10,6 +11,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import kr.co.rwm.entity.Matching;
 import kr.co.rwm.model.ChatRoom;
 import lombok.RequiredArgsConstructor;
 
@@ -44,21 +46,28 @@ public class MatchRoomRepository {
     }
 
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
-    public ChatRoom createAndSelectChatroom(Integer friendId) {
+    public ChatRoom createAndSelectChatroom( Map<String, Integer> idInfo) {
     	
-    	String friendName = userRepository.findByUserId(friendId).getUsername();
-    	ChatRoom chatRoom = ChatRoom.create(friendName); 
-//    	if(!matchRepository.findByMasterIdAndGuestId(1, friendId).isPresent())
-//    	{
-//    		chatRoom    		
-//    	}
-//    		
-        hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
-        
-        
-        
-        System.out.println("chat :"+ chatRoom.getName());
-        return chatRoom;
+    	Optional<Matching> matching = matchRepository.findByMasterIdAndGuestId(idInfo.get("masterId"), idInfo.get("guestId"));
+    	
+    	if(matching.isPresent()) // 이미 방이 존재하다면,
+    	{
+    		System.out.println("있음");
+    		return hashOpsChatRoom.get(CHAT_ROOMS, matching.get().getRoomId());
+    	} 
+    	else 
+    	{
+    		String friendName = userRepository.findByUserId(idInfo.get("guestId")).getUsername();
+        	ChatRoom chatRoom = ChatRoom.create(friendName); 
+        	hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+        	
+        	Matching match = Matching.builder().masterId(idInfo.get("masterId")).guestId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
+        	matchRepository.save(match);
+        	match = Matching.builder().guestId(idInfo.get("masterId")).masterId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
+        	matchRepository.save(match);        	
+        	System.out.println("chat :"+ chatRoom.getName());
+        	return chatRoom;
+    	}
     }
 
     // 유저가 입장한 채팅방ID와 유저 세션ID 맵핑 정보 저장
