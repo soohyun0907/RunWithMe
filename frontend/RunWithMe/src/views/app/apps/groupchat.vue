@@ -40,7 +40,9 @@
                 v-for="chatroom in this.getChatRoom"
                 :key="chatroom.roomId"
               >
-              <h6 @click ="choice(chatroom.roomId)" class="">{{ chatroom.name }}</h6>
+                <h6 @click="choice(chatroom.roomId)" class="">
+                  {{ chatroom.name }}
+                </h6>
               </div>
               <!-- <div
                 class="p-3 d-flex border-bottom align-items-center contact"
@@ -92,6 +94,7 @@
           <a class="link-icon d-md-none" @click="isMobile = !isMobile">
             <i class="icon-regular i-Right ml-0 mr-3"></i>
           </a>
+          <!-- START 채팅 방 이름 -->
           <div class="d-flex align-items-center">
             <img
               :src="getSelectedUser.avatar"
@@ -99,16 +102,20 @@
               class="avatar-sm rounded-circle mr-2"
             />
             <p class="m-0 text-title text-16 flex-grow-1">
-              {{ getSelectedUser.name }}
+              {{ this.getSelectedChatroom.name }}
             </p>
           </div>
+          <!-- END 채팅방 이름 -->
         </div>
         <vue-perfect-scrollbar
           :settings="{ suppressScrollX: true, wheelPropagation: false }"
           class="chat-content perfect-scrollbar rtl-ps-none ps scroll"
         >
           <div>
-            <div class="d-flex mb-30">
+            <div class="list-group-item" v-for="(message ,index) in messages" :key="index">
+                {{message.sender}} - {{message.message}}
+                 <!-- START 나의 채팅 메시지 -->
+            <div class="d-flex mb-30" v-if="this.testUserId == message.sender">
               <div class="message flex-grow-1">
                 <div class="d-flex">
                   <p class="mb-1 text-title text-16 flex-grow-1">
@@ -116,9 +123,7 @@
                   </p>
                   <span class="text-small text-muted">25 min ago</span>
                 </div>
-                <p class="m-0">
-                  Do you ever find yourself falling into the “discount trap?
-                </p>
+                <p class="m-0">message.message</p>
               </div>
               <img
                 :src="getSelectedUser.avatar"
@@ -126,8 +131,9 @@
                 class="avatar-sm rounded-circle ml-3"
               />
             </div>
-
-            <div class="d-flex mb-30 user">
+            <!-- END 나의 채팅 메시지 -->
+            <!-- START 상대방의 메시지 -->
+            <div class="d-flex mb-30 user" v-if="this.testUserId != message.sender">
               <img
                 src="@/assets/images/faces/1.jpg"
                 alt=""
@@ -135,49 +141,22 @@
               />
               <div class="message flex-grow-1">
                 <div class="d-flex">
-                  <p class="mb-1 text-title text-16 flex-grow-1">Jhon Doe</p>
+                  <p class="mb-1 text-title text-16 flex-grow-1">Suns</p>
                   <span class="text-small text-muted">24 min ago</span>
                 </div>
-                <p class="m-0">Lorem ipsum dolor sit amet.</p>
+                <p class="m-0">너의 메시지</p>
               </div>
+            </div>
+            <!-- END 상대방의 메시지 -->
             </div>
 
-            <div class="d-flex mb-30">
-              <div class="message flex-grow-1">
-                <div class="d-flex">
-                  <p class="mb-1 text-title text-16 flex-grow-1">
-                    {{ getSelectedUser.name }}
-                  </p>
-                  <span class="text-small text-muted">25 min ago</span>
-                </div>
-                <p class="m-0">
-                  Do you ever find yourself falling into the “discount trap?
-                </p>
-              </div>
-              <img
-                :src="getSelectedUser.avatar"
-                alt=""
-                class="avatar-sm rounded-circle ml-3"
-              />
-            </div>
+           
 
-            <div class="d-flex mb-30 user">
-              <img
-                src="@/assets/images/faces/1.jpg"
-                alt=""
-                class="avatar-sm rounded-circle mr-3"
-              />
-              <div class="message flex-grow-1">
-                <div class="d-flex">
-                  <p class="mb-1 text-title text-16 flex-grow-1">Jhon Doe</p>
-                  <span class="text-small text-muted">24 min ago</span>
-                </div>
-                <p class="m-0">Lorem ipsum dolor sit amet.</p>
-              </div>
-            </div>
+            
           </div>
         </vue-perfect-scrollbar>
 
+        <!-- START 메시지 보내기 -->
         <div class="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
           <form class="inputForm">
             <div class="form-group">
@@ -189,11 +168,17 @@
                 cols="30"
                 rows="3"
                 spellcheck="false"
+                v-model="message"
+                v-on:keypress.enter="sendMessage('TALK')"
               ></textarea>
             </div>
             <div class="d-flex">
               <div class="flex-grow-1"></div>
-              <button class="btn btn-icon btn-rounded btn-primary mr-2">
+              <button
+                class="btn btn-icon btn-rounded btn-primary mr-2"
+                type="button"
+                @click="sendMessage('TALK')"
+              >
                 <i class="i-Paper-Plane"></i>
               </button>
               <button
@@ -205,6 +190,7 @@
             </div>
           </form>
         </div>
+        <!-- END 메시지 보내기 -->
       </div>
     </div>
   </div>
@@ -214,9 +200,12 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import store from "@/store/modules/groupchat.js";
-import { isMobile } from 'mobile-device-detect';
+import { isMobile } from "mobile-device-detect";
 import http from "@/utils/http-common";
-
+import Stomp from "webstomp-client";
+import SockJS from "sockjs-client";
+var sock = new SockJS("http://www.localhost:8080/ws-stomp");
+var ws = Stomp.over(sock);
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
@@ -227,34 +216,60 @@ export default {
       recentContacts: [],
       search: "",
       isMobile: false,
+      currentChatroom: {},
       chatrooms: [],
+      isMe: false /* 내가 보낸 메세지: true | 상대방이 보낸 메시지: false */,
+      message: "",
+      messages: [],
+      token: "",
+      userCount: 0,
+      testUserId:"123",
     };
   },
   methods: {
-    ...mapActions(["changeSelectedUser", "changeGroupChat"]),
-    ...mapMutations(["selectUserLists", "createAndSelectChatroom","selectOneGroupChat"]),
-    console() {
-      console.log(this.test);
-    },
+    ...mapActions([
+      "changeSelectedUser",
+      "changeGroupChat",
+      "selectOneGroupChat",
+    ]),
+    ...mapMutations(["selectUserLists", "createAndSelectChatroom"]),
 
-    choice: function (uid) {
-      console.log(this.createAndSelectChatroom());
-    },
     selectAllGroupChat() {
       http.get("/chat/room").then((data) => {
-        console.log(data.data.data);
         // this.chatrooms = data.data.data;
-        this.$store.commit("selectAllGroupChat",data.data.data);
+        this.$store.commit("selectAllGroupChat", data.data.data);
         console.log(store.state.chatrooms);
       });
     },
 
-    choice: function(roomId){
-      console.log(roomId);
-      console.log(this.selectOneGroupChat(roomId));
-      this.isMobile = false
+    choice(roomId) {
+      this.selectOneGroupChat(roomId);
+      // console.log(store.state.chatrooms);
+      setTimeout(() => {
+        console.log(this.getSelectedChatroom); // 현재 채팅방
+      }, 100);
+      this.isMobile = false;
     },
-
+    sendMessage: function (type) {
+      ws.send(
+        "/pub/chat/message",
+        { token: this.token },
+        JSON.stringify({
+          type: type,
+          roomId: this.roomId,
+          message: this.message,
+        })
+      );
+      this.message = "";
+    },
+    recvMessage: function (recv) {
+      this.userCount = recv.userCount;
+      this.messages.unshift({
+        type: recv.type,
+        sender: recv.sender,
+        message: recv.message,
+      });
+    },
   },
 
   computed: {
@@ -264,6 +279,7 @@ export default {
       "getCurrentUser",
       "getSelectedUser",
       "getChatRoom",
+      "getSelectedChatroom",
     ]),
 
     filterContacts() {
@@ -281,6 +297,27 @@ export default {
   },
 
   created: function () {
+    // 현재 채팅방
+    // this.getSelectedChatroom
+    http.get("/chat/user").then((response) => {
+      this.token = response.data.token;
+      ws.connect(
+        { token: this.token },
+        function (frame) {
+          ws.subscribe(
+            "/sub/chat/room/" + this.getSelectedChatroom.roomId,
+            function (message) {
+              var recv = JSON.parse(message.body);
+              this.recvMessage(recv);
+            }
+          );
+        },
+        function (error) {
+          alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
+        }
+      );
+    });
+
     // console.log(this.getChatRoom);
     // this.getChatRoom = this.selectAllGroupChat();
     // this.getCurrentUser.forEach(currentUser => {
@@ -292,7 +329,6 @@ export default {
     //     });
     //   });
     // });
-
     // DB에서 그룹채팅 목록 불러오기
     // this.selectUserLists();
   },
