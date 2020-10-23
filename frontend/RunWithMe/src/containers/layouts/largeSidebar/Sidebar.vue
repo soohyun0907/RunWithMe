@@ -144,23 +144,6 @@
             </a>
             <div class="triangle"></div>
           </li>
-          <!-- <li
-            @mouseenter="toggleSubMenu"
-            class="nav-item"
-            data-item="doc"
-            :class="{ active: selectedParentMenu == 'doc' }"
-            :data-submenu="false"
-          >
-            <a
-              class="nav-item-hold"
-              href="http://demos.ui-lib.com/gull-vue-doc/"
-              target="_blank"
-            >
-              <i class="nav-icon i-Safe-Box1"></i>
-              <span class="nav-text">Doc</span>
-            </a>
-            <div class="triangle"></div>
-          </li> -->
         </ul>
       </div>
     </vue-perfect-scrollbar>
@@ -1117,7 +1100,7 @@
               </span>
             </router-link>
           </li>
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/pricing-table">
               <i class="nav-icon i-Billing"></i>
               <span class="item-name">
