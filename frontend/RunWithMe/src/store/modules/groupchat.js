@@ -1,5 +1,10 @@
 import { user, contacts, chatCollection, chatroom } from "../../data/groupchat";
 import http from "@/utils/http-common";
+import Stomp from "webstomp-client";
+import SockJS from "sockjs-client";
+
+var sock = new SockJS("http://localhost:8080/ws-stomp");
+var ws = Stomp.over(sock);
 
 const state = {
   currentUser: user,
@@ -8,7 +13,9 @@ const state = {
   selectedUser: contacts[0],
   chats: chatCollection,
   chatrooms: [],
-  selectedChatroom:[]
+  selectedChatroom:[],
+
+  
 };
 
 const getters = {
@@ -60,6 +67,10 @@ const mutations = {
   setOneGroupChat: (state,selectedChatroom) => {
     state.selectedChatroom = selectedChatroom;
   },
+
+  groupChat:(state) =>{
+    
+  }
 
   // createChatRoom: (state) => {
   //   const chatRoom = state.chatrooms;
