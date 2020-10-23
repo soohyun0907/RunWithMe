@@ -406,31 +406,8 @@ const routes = [
           {
             path: "kakaomapSH",
             component: () => import("./views/app/runnings/kakaomap_sh")
-          },
-          {
-            path: "profile",
-            component: () => import("./views/app/runnings/profile")
-          },
-          {
-            path: "error",
-            component: () => import("./views/app/runnings/notFound")
-          },
-          {
-            path: "icons",
-            component: () => import("./views/app/runnings/icons")
-          },
-          {
-            path: "search-result",
-            component: () => import("./views/app/runnings/search-result")
-          },
-          {
-            path: "pricing-table",
-            component: () => import("./views/app/runnings/pricingTable")
-          },
-          {
-            path: "faq",
-            component: () => import("./views/app/runnings/faq")
-          },
+          }
+          
           
         ]
       },
@@ -519,10 +496,6 @@ const routes = [
   {
     path: "/vertical-sidebar",
     component: () => import("./containers/layouts/verticalSidebar")
-  },
-  {
-    path: "*",
-    component: () => import("./views/app/runnings/notFound")
   }
 ];
 

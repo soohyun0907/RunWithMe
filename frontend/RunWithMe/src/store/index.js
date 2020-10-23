@@ -11,26 +11,11 @@ import cart from "./modules/cart";
 import verticalSidebar from "./modules/verticalSidebar";
 import scrumboard from "./modules/scrumboard";
 
-
 // Load Vuex
 Vue.use(Vuex);
 
 // Create store
 export default new Vuex.Store({
-  state: {
-    // position: lat, lng, timestamp
-    position: {},
-  },
-  mutations: {
-    mutatePositions(state, position) {
-      state.position = position
-    },
-  },
-  getters: {
-    position(state) {
-      return state.position;
-    },
-  },
   modules: {
     largeSidebar,
     compactSidebar,
