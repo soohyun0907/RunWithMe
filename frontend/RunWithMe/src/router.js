@@ -408,30 +408,37 @@ const routes = [
             component: () => import("./views/app/runnings/kakaomap_sh")
           },
           {
+            path: "contact-grid",
+            component: () => import("./views/app/runnings/contact-grid")
+          },
+          {
+            path: "user-detail",
+            component: () => import("./views/app/runnings/user-detail")
+          },
+          {
             path: "profile",
             component: () => import("./views/app/runnings/profile")
           },
-          {
-            path: "error",
-            component: () => import("./views/app/runnings/notFound")
-          },
-          {
-            path: "icons",
-            component: () => import("./views/app/runnings/icons")
-          },
-          {
-            path: "search-result",
-            component: () => import("./views/app/runnings/search-result")
-          },
-          {
-            path: "pricing-table",
-            component: () => import("./views/app/runnings/pricingTable")
-          },
-          {
-            path: "faq",
-            component: () => import("./views/app/runnings/faq")
-          },
-          
+          // {
+          //   path: "error",
+          //   component: () => import("./views/app/runnings/notFound")
+          // },
+          // {
+          //   path: "icons",
+          //   component: () => import("./views/app/runnings/icons")
+          // },
+          // {
+          //   path: "search-result",
+          //   component: () => import("./views/app/runnings/search-result")
+          // },
+          // {
+          //   path: "pricing-table",
+          //   component: () => import("./views/app/runnings/pricingTable")
+          // },
+          // {
+          //   path: "faq",
+          //   component: () => import("./views/app/runnings/faq")
+          // },
         ]
       },
 
