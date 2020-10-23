@@ -1,4 +1,4 @@
-# :running_man: Run With Me ? :running_woman:
+# Run With Me ? 🏃️
 
 ![Github](https://img.shields.io/badge/vue-2.6.11-%234FC08D?style=plastic&logo=Vue.js)![Github](https://img.shields.io/badge/spring_boot-2.3.1-%236DB33F?style=plastic&logo=Spring)![Github](https://img.shields.io/badge/MySQL-8.0-%234479A1?style=plastic&logo=mysql)
 
@@ -21,7 +21,7 @@
 
 ## 📌 목차
 
-[:running_man: Run With Me ? :running_woman:](#-Run-With-Me-?-) **: TBU**
+[Run With Me ? 🏃️](-Run-With-Me-?-) **: TBU**
 
 * [시작하기](#시작하기) **: TBU**
      * [시작하기에 앞서](#시작하기에-앞서)
