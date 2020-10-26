@@ -526,10 +526,6 @@ const routes = [
   {
     path: "/vertical-sidebar",
     component: () => import("./containers/layouts/verticalSidebar")
-  },
-  {
-    path: "*",
-    component: () => import("./views/app/runnings/notFound")
   }
 ];
 

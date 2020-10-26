@@ -17,7 +17,8 @@ const getters = {
   // getRecentUser: state => state.recentUsers,
   // getSelectedUser: state => state.selectedUser,
   // getUserLists: state => state.getUserLists,
-  getChatRoom: state => state.chatrooms
+  getChatRoom: state => state.chatrooms,
+  getSelectedChatroom: state => state.selectedChatroom
 };
 
 const actions = {
@@ -25,6 +26,13 @@ const actions = {
     commit("updateSelectedUser", id);
   },
 
+  selectOneGroupChat({commit},roomId) {
+    http.get("/chat/room/"+roomId)
+    .then((data) => {
+      commit("setOneGroupChat",data.data)
+      // console.log(data.data.name)
+    })
+  },
   // changeGroupChat({commit}){
   //   commit("selectAllGroupChat");
   // },
@@ -49,12 +57,8 @@ const mutations = {
     state.chatrooms = chatrooms;
   },
 
-  selectOneGroupChat:(state,roomId) => {
-    http.get("/chat/room/"+roomId)
-    .then((data) => {
-      console.log(data);
-      state.selectedChatroom = data.data.name;
-    })
+  setOneGroupChat: (state,selectedChatroom) => {
+    state.selectedChatroom = selectedChatroom;
   },
 
   // createChatRoom: (state) => {

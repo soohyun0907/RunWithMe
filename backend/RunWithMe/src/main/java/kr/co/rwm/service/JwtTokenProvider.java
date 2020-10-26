@@ -1,6 +1,7 @@
 package kr.co.rwm.service;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,9 +39,11 @@ public class JwtTokenProvider {
 	/**
 	 * 이름으로 Jwt Token을 생성한다.
 	 */
-	public String generateToken(String name) {
+	public String generateToken(String name, List<String> roles) {
+		Claims claims = Jwts.claims().setSubject(name); // JWT payload 에 저장되는 정보단위
+		claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
 		Date now = new Date();
-		return Jwts.builder().setId(name).setIssuedAt(now) // 토큰 발행일자
+		return Jwts.builder().setClaims(claims).setId(name).setIssuedAt(now) // 토큰 발행일자
 				.setExpiration(new Date(now.getTime() + tokenValidMilisecond)) // 유효시간 설정
 				.signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret값 세팅
 				.compact();
@@ -93,7 +96,14 @@ public class JwtTokenProvider {
 
 	// JWT 토큰에서 인증 정보 조회
 	public Authentication getAuthentication(String token) {
-		UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
+		
+		UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserNameFromJwt(token));
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
+	
+	// 정보 확인
+		public List<String> getRole(String token) {
+			Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+			return (List<String>) claims.getBody().get("roles");
+		}
 }
