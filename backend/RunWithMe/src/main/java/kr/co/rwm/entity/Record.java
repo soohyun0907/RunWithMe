@@ -45,4 +45,7 @@ public class Record implements Serializable {
 	@Column(name = "accumulated_time", nullable = false)
 	private double accTime;
 	
+	@Column(name = "speed")
+	private double speed;
+	
 }
