@@ -6,12 +6,12 @@ public class ResponseMessage {
 	public static final String EMAIL_CHECK_OK = "회원 가입 가능한 Email";
 	public static final String EMAIL_CHECK_FAIL = "이메일 중복 확인하세요";
 	
-
-	
 	public static final String USER_NOT_FOUND = "사용자 정보 조회 실패";
     public static final String SIGNIN_SUCCESS = "로그인 성공";
     public static final String SIGNIN_FAIL = "로그인 실패";
     
+    public static final String LOGOUT_SUCCESS = "로그아웃 성공";
+    public static final String LOGOUT_FAIL = "로그아웃 실패";
     
     public static final String GROUP_LIST_SUCCESS = "그룹 채팅 목록 조회";
     

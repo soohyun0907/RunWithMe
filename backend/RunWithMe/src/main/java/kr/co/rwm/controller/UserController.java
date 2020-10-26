@@ -1,10 +1,13 @@
 package kr.co.rwm.controller;
 
-import java.util.Optional;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
@@ -49,6 +51,7 @@ public class UserController {
 	
 	private final PasswordEncoder passwordEncoder;
 	private final JwtTokenProvider jwtTokenProvider;
+	private final RedisTemplate<String, String> logoutRedis;
 	
 	@Autowired
 	private UserService userService;
@@ -76,7 +79,16 @@ public class UserController {
 		}
 	}
 	
-	// 이메일 중복 확인
+	/**
+	 * 이메일 중복 확인 
+	 * 
+	 * @param  userEmail 사용자 이메일
+	 * @return ResponseEntity<Response> - StatusCode,
+	 *         ResponseMessage(ALREADY_USER_EMAIL, EMAIL_CHECK_OK), HttpStatus <br>
+	 * @apiNote 중복일 경우 False / 중복이 아닐 경우 True를 반환        
+	 *      
+	 */
+	@ApiOperation(value = "회원 가입", response = ResponseEntity.class, notes = "userEmail로 이메일 중복체크를 한다.")
 	@GetMapping("/check/{userEmail}")
 	public ResponseEntity<?> emailCheck(@PathVariable String userEmail){
 		if(userService.findByUserEmail(userEmail).isPresent()) {
@@ -86,7 +98,17 @@ public class UserController {
 		return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.EMAIL_CHECK_OK,true),HttpStatus.OK);
 	}
 	
-	
+	/**
+	 * 로그인
+	 * 
+	 * @param  user 사용자 정보 (userEmail, userPw)
+	 * @return ResponseEntity<Response> - StatusCode, member
+	 *         ResponseMessage(USER_NOT_FOUND, SIGNIN_FAIL, SIGNIN_SUCCESS), HttpStatus <br>
+	 * @apiNote 해당 사용자 정보가 없는 경우 : USER_NOT_FOUND <br>
+	 * 			비밀번호가 일치하지 않는 경우 : SIGNIN_FAIL <br>
+	 * 			로그인 성공한 경우 : SIGNIN_SUCCESS <br>
+	 *      
+	 */
 	@PostMapping("/signin")
 	public ResponseEntity signin(@RequestBody User user, HttpServletResponse response){
 		User member = userService.findByUserEmail(user.getUserEmail())
@@ -106,9 +128,30 @@ public class UserController {
 				HttpStatus.OK);
 	}
 	
-	@GetMapping("/test")
-	public String test() {
-		return "test";
+	/**
+	 * 로그아웃 - 토큰을 만료시키고 redis에 저장하여 블랙리스트 생성(토큰만료시간까지 저장시켜두고 추후 자동 삭제)
+	 * 
+	 * @param
+	 * @return ResponseEntity<Response> - StatusCode,
+	 *         ResponseMessage(LOGOUT_SUCCESS,LOGOUT_FAIL), HttpStatus
+	 * @exception FORBIDDEN
+	 */
+	@ApiOperation(value = "로그아웃", response = ResponseEntity.class, notes = "토큰을 만료시키고 redis에 저장하여 블랙리스트를 생성합니다.(토큰만료시간까지 저장시켜두고 추후 자동 삭제)")
+	@GetMapping(path = "/signout")
+	public ResponseEntity logout(HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		if (jwtTokenProvider.validateToken(token)) {
+			Date expirationDate = jwtTokenProvider.getExpirationDate(token);
+			logoutRedis.opsForValue().set(token, "logout", expirationDate.getTime() - System.currentTimeMillis(),
+					TimeUnit.MILLISECONDS);
+			System.out.println(logoutRedis.opsForValue().get(token));
+			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.LOGOUT_SUCCESS),
+					HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.LOGOUT_FAIL),
+					HttpStatus.FORBIDDEN);
+		}
 	}
+	
 	
 }
