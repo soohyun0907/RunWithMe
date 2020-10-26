@@ -23,3 +23,15 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+
+cloud:
+  aws:
+    s3:
+      bucket: soonirwm
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      
+      
