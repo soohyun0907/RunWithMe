@@ -27,7 +27,6 @@ public class UserService implements UserDetailsService {
 
 	@Transactional
 	public Optional<User> findByUserEmail(String userEmail) {
-		System.out.println(userEmail);
 		return userRepository.findByUserEmail(userEmail);
 	}
 	
