@@ -36,9 +36,10 @@ public class UserController {
 	
 	@PostMapping("/signin")
 	public ResponseEntity signin(@RequestBody User user, HttpServletResponse response){
+		System.out.println(user);
 		User member = userService.findByUserEmail(user.getUserEmail())
 				.orElseThrow(()->new RestException(ResponseMessage.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
-		
+		System.out.println(member);
 		if(!passwordEncoder.matches(user.getPassword(),member.getPassword())) {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SIGNIN_FAIL),
 					HttpStatus.FORBIDDEN);

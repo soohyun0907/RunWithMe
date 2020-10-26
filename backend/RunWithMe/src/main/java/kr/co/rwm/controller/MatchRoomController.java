@@ -39,9 +39,9 @@ public class MatchRoomController {
 
     @PostMapping("/room")
     @ResponseBody
-    public ChatRoom createAndSelectChatroom(@RequestBody Map<String, Integer> friendId) {
-    	System.out.println(friendId);
-        return matchRoomRepository.createAndSelectChatroom(friendId.get("friendId"));
+    public ChatRoom createAndSelectChatroom(@RequestBody Map<String, Integer> idInfo) {
+    	System.out.println(idInfo);
+        return matchRoomRepository.createAndSelectChatroom(idInfo);
     }
 
 //    @GetMapping("/room/enter/{roomId}")
