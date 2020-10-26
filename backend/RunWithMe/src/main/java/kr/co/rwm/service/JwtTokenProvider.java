@@ -31,6 +31,7 @@ public class JwtTokenProvider {
 
 	@Value("${spring.jwt.secret}")
 	private String secretKey;
+	private final RedisTemplate<String, String> logoutRedis;
 
 	private long tokenValidMilisecond = 1000L * 60 * 60; // 1시간만 토큰 유효
 
@@ -60,7 +61,17 @@ public class JwtTokenProvider {
 	 * Jwt Token의 유효성을 체크한다.
 	 */
 	public boolean validateToken(String jwt) {
-		return this.getClaims(jwt) != null;
+		try {
+			Jws<Claims> claims = this.getClaims(jwt);
+			if (null != logoutRedis.opsForValue().get(jwt)) {
+				System.out.println(("이미 로그아웃 처리된 사용자"));
+				return false;
+			}
+
+			return !claims.getBody().getExpiration().before(new Date());
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	private Jws<Claims> getClaims(String jwt) {
@@ -96,14 +107,20 @@ public class JwtTokenProvider {
 
 	// JWT 토큰에서 인증 정보 조회
 	public Authentication getAuthentication(String token) {
-		
+
 		UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserNameFromJwt(token));
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
-	
+
+	// 만료기간 확인
+	public Date getExpirationDate(String token) {
+		Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+		return claims.getBody().getExpiration();
+	}
+
 	// 정보 확인
-		public List<String> getRole(String token) {
-			Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-			return (List<String>) claims.getBody().get("roles");
-		}
+	public List<String> getRole(String token) {
+		Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+		return (List<String>) claims.getBody().get("roles");
+	}
 }
