@@ -1,7 +1,9 @@
 package kr.co.rwm.repo;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -28,7 +30,19 @@ public class RecordTempRepository {
 	
 	// userId로 조회
 	public List<Record> findRecordByUserId(int userId) {
-		return hashOpsRecord.values(String.valueOf(userId));
+		Map<Integer, Record> map = hashOpsRecord.entries(String.valueOf(userId));
+		// 키로 정렬
+		Object[] mapkey = map.keySet().toArray();
+		Arrays.sort(mapkey);
+
+		List<Record> records = new ArrayList<Record>();
+		// 결과 출력
+		for (Integer nKey : map.keySet())
+		{
+			records.add(map.get(nKey));
+		}
+		
+		return records;
 	}
 	
 	public void deleteByUserId(int userId, int km) {

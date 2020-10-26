@@ -1,6 +1,7 @@
 package kr.co.rwm.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,15 @@ public class RecordServiceImpl implements RecordService {
 	@Override
 	public List<Record> findAllRecordByRunningId(int runningId) {
 		return recordRepository.findAllByRunningId(runningId);
+	}
+
+	@Override
+	public void updateRunningImage(int runningId, String url) {
+		Optional<Running> updateRunning = runningRepository.findByRunningId(runningId);
+		updateRunning.ifPresent(selectRunning -> {
+			selectRunning.setThumbnail(url);
+			runningRepository.save(selectRunning);
+		});
 	}
 
 	
