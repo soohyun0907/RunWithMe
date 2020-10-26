@@ -19,7 +19,7 @@ public class CorsFilter implements Filter {
          throws IOException, ServletException {
       HttpServletResponse res = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
-        
+
 //        res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
         res.setHeader("Access-Control-Allow-Credentials", "true");

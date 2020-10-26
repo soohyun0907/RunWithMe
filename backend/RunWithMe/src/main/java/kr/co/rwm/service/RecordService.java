@@ -21,4 +21,6 @@ public interface RecordService {
 	
 	public Running findRunningById(int runningId);
 	
+	public void updateRunningImage(int runningId, String url);
+	
 }

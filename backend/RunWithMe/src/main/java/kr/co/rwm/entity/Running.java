@@ -1,5 +1,6 @@
 package kr.co.rwm.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -35,16 +36,19 @@ public class Running {
 	private String polyline;
 	
 	@Column(name = "start_time")
-	private Long startTime;
+	private LocalDateTime startTime;
 	
 	@Column(name = "end_time")
-	private Long endTime;
+	private LocalDateTime endTime;
 	
 	@Column(name = "accumulated_distance", nullable = false)
 	private double accDistance;
 	
 	@Column(name = "accumulated_time", nullable = false)
-	private double accTime;
+	private Long accTime;
+	
+	@Column(name = "thumbnail", length = 300)
+	private String thumbnail;
 	
 	@Transient
 	private Date date;

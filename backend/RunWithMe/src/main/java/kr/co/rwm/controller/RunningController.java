@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
@@ -20,6 +21,7 @@ import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.repo.RecordTempRepository;
 import kr.co.rwm.service.RecordService;
+import kr.co.rwm.service.S3Service;
 import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins = "*")
@@ -30,6 +32,7 @@ public class RunningController {
 	
 	private final RecordTempRepository recordTempRepository;
 	private final RecordService recordService;
+	private final S3Service s3Service;
 
 	// 회원의 id로 모든 running을 조회: 프로필에서 약식으로 뜨는 것
 	@GetMapping("/{userId}")
@@ -71,6 +74,9 @@ public class RunningController {
 		 * redis에 있는 기록 다 지우기
 		 */
 		int userId = running.getUserId();
+		String strStartTime = String.valueOf(running.getStartTime());
+		String strEndTime = String.valueOf(running.getEndTime());
+		System.out.println(strStartTime+" "+strEndTime);
 		
 		Running savedRunning = recordService.saveRunning(running);
 		int runningId = savedRunning.getRunningId();
@@ -105,6 +111,27 @@ public class RunningController {
 		
 		return new ResponseEntity<Response>(new
 				Response(StatusCode.OK, ResponseMessage.RUNNING_GPS_SUCCESS, map), HttpStatus.OK);
+	}
+	
+	// running 썸네일 이미지 저장
+	@PostMapping("/{runningId}")
+	public ResponseEntity saveRunningImage(@PathVariable int runningId, MultipartFile file) {
+		
+		if(file == null) {
+			return new ResponseEntity<Response>(
+					new Response(StatusCode.FORBIDDEN, ResponseMessage.UPDATE_THUMBNAIL_FAIL), HttpStatus.FORBIDDEN);
+		}
+		
+		String url = s3Service.thumbnailUpload(file);
+		if (url != null) {
+			recordService.updateRunningImage(runningId, url);
+			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.UPDATE_THUMBNAIL_SUCCESS, url),
+					HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Response>(
+					new Response(StatusCode.FORBIDDEN, ResponseMessage.UPDATE_THUMBNAIL_FAIL), HttpStatus.FORBIDDEN);
+		}
+		
 	}
 
 }

@@ -114,6 +114,7 @@ public class UserController {
 	@ApiOperation(value = "로그인", response = ResponseEntity.class, notes = "userEmail, userPw로 로그인한다.")
 	@PostMapping("/signin")
 	public ResponseEntity signin(@RequestBody User user, HttpServletResponse response){
+		System.out.println(user);
 		User member = userService.findByUserEmail(user.getUserEmail())
 				.orElse(null);
 		if(member==null) {

@@ -49,13 +49,10 @@ public class UserService implements UserDetailsService {
 	public void update(Optional<User> user,User changeUser) {
 //		Optional<User> updateUser = userRepository.findByUserEmail(user.getUserEmail());
 		User temp = user.get();
-		System.out.println("************");
-		System.out.println(temp.getChangePw());
 		user.ifPresent(selectUser->{
 			selectUser.setUserId(temp.getUserId());
 			selectUser.setUserPw(changeUser.getChangePw());
 			selectUser.setUserName(changeUser.getUsername());
-//			selectUser.setDongId(temp.getDongId());
 			userRepository.save(selectUser);
 		});
 	}
