@@ -28,6 +28,18 @@ public class ResponseMessage {
     public static final String UPDATE_THUMBNAIL_SUCCESS = "런닝 썸네일 저장 성공";
     public static final String UPDATE_THUMBNAIL_FAIL = "런닝 썸네일 저장 실패";
     
+    public static final String CHALLENGE_INSERT_SUCCESS = "챌린지 등록 성공";
+    public static final String CHALLENGE_INSERT_FAIL = "챌린지 등록 실패";
+    public static final String CHALLENGE_UPDATE_SUCCESS = "챌린지 수정 성공";
+    public static final String CHALLENGE_UPDATE_FAIL = "챌린지 수정 실패";
+    public static final String CHALLENGE_DELETE_SUCCESS = "챌린지 삭제 성공";
+    public static final String CHALLENGE_DELETE_FAIL = "챌린지 삭제 실패";
+    public static final String CHALLENGE_LIST_SUCCESS = "챌린지 목록 조회 성공";
+    public static final String CHALLENGE_LIST_FAIL = "챌린지 목록 조회 실패";
+    public static final String CHALLENGE_SEARCH_SUCCESS = "챌린지 상세 조회 성공";
+    public static final String CHALLENGE_SEARCH_FAIL = "챌린지 상세 조회 실패";
+    public static final String CHALLENGE_ACCESS_FORBIDDEN = "권한 없음";
+    
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
     public static final String FORBIDDEN = "인가 실패";
