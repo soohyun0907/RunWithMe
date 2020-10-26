@@ -30,7 +30,7 @@ public class User implements UserDetails{
 	@Column(name = "user_id")
 	private Integer userId;
 	
-	@Column(name = "dong_id", nullable = false)
+	@Column(name = "dong_id", nullable = true)
 	private Integer dongId;
 	
 	@Column(name = "user_email", nullable = false)
@@ -45,6 +45,21 @@ public class User implements UserDetails{
 	
 	@Column(name = "profile")
 	private String profile;
+	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@Column(name = "auth", columnDefinition = "boolean default false")
+	private boolean emailAuth;
+	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String changePw;
+	
+	public String getChangePw() {
+		return this.changePw;
+	}
+	
+	public void setUserPw(String userPw) {
+		this.userPw = userPw;
+	}
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Builder.Default
@@ -68,6 +83,10 @@ public class User implements UserDetails{
     @Override
     public String getPassword() {
         return this.userPw;
+    }
+	
+    public boolean getAuth() {
+        return this.emailAuth;
     }
     
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
