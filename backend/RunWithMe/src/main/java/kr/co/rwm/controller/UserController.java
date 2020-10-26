@@ -1,5 +1,7 @@
 package kr.co.rwm.controller;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,13 +90,14 @@ public class UserController {
 	@PostMapping("/signin")
 	public ResponseEntity signin(@RequestBody User user, HttpServletResponse response){
 		User member = userService.findByUserEmail(user.getUserEmail())
-				.orElseThrow(()->new RestException(ResponseMessage.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
-		
+				.orElse(null);
+		if(member==null) {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN,ResponseMessage.USER_NOT_FOUND),HttpStatus.FORBIDDEN);
+		}
 		if(!passwordEncoder.matches(user.getPassword(),member.getPassword())) {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SIGNIN_FAIL),
 					HttpStatus.FORBIDDEN);
 		}
-		System.out.println("***"+member.getRoles());
 		String token = jwtTokenProvider.generateToken(member.getUsername(),member.getRoles());
 		
 		response.setHeader("AUTH", token);		
