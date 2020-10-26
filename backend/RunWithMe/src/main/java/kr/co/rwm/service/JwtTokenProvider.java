@@ -40,11 +40,11 @@ public class JwtTokenProvider {
 	/**
 	 * 이름으로 Jwt Token을 생성한다.
 	 */
-	public String generateToken(String name, List<String> roles) {
-		Claims claims = Jwts.claims().setSubject(name); // JWT payload 에 저장되는 정보단위
+	public String generateToken(String email, List<String> roles) {
+		Claims claims = Jwts.claims().setSubject(email); // JWT payload 에 저장되는 정보단위
 		claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
 		Date now = new Date();
-		return Jwts.builder().setClaims(claims).setId(name).setIssuedAt(now) // 토큰 발행일자
+		return Jwts.builder().setClaims(claims).setId(email).setIssuedAt(now) // 토큰 발행일자
 				.setExpiration(new Date(now.getTime() + tokenValidMilisecond)) // 유효시간 설정
 				.signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret값 세팅
 				.compact();
@@ -53,7 +53,7 @@ public class JwtTokenProvider {
 	/**
 	 * Jwt Token을 복호화 하여 이름을 얻는다.
 	 */
-	public String getUserNameFromJwt(String jwt) {
+	public String getUserEmailFromJwt(String jwt) {
 		return getClaims(jwt).getBody().getId();
 	}
 
@@ -108,7 +108,7 @@ public class JwtTokenProvider {
 	// JWT 토큰에서 인증 정보 조회
 	public Authentication getAuthentication(String token) {
 
-		UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserNameFromJwt(token));
+		UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserEmailFromJwt(token));
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
 

@@ -46,8 +46,20 @@ public class User implements UserDetails{
 	@Column(name = "profile")
 	private String profile;
 	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Column(name = "auth", columnDefinition = "boolean default false")
 	private boolean emailAuth;
+	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String changePw;
+	
+	public String getChangePw() {
+		return this.changePw;
+	}
+	
+	public void setUserPw(String userPw) {
+		this.userPw = userPw;
+	}
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Builder.Default
