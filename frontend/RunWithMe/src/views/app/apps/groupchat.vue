@@ -301,7 +301,7 @@ export default {
         var _this = this;
         // this.token = response.data.token;
         this.token =
-          "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjMiLCJyb2xlcyI6WyJVU0VSIl0sImp0aSI6IjEyMyIsImlhdCI6MTYwMzQzMDM2NiwiZXhwIjoxNjAzNDMzOTY2fQ.VYKhn6rIfG_pude_ENukj4Sy3SRMRWJ9oOXgK4QYrc4";
+          "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjMiLCJyb2xlcyI6WyJVU0VSIl0sImp0aSI6IjEyMyIsImlhdCI6MTYwMzQzNDY1MiwiZXhwIjoxNjAzNDM4MjUyfQ.1oOr5au3IpWiQzGu0HHlIBdl6hoAMXjt9ipiEgU8Roc";
         _ws.connect(
           { "token": this.token },
           function (frame) {
