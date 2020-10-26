@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,7 +65,7 @@ public class RunningController {
 	
 	// stop 눌렀을 때 redis에 있던 record를 꺼내서 db에 저장한다.
 	@PostMapping
-	public ResponseEntity saveStopRecord(@RequestBody Running running){
+	public ResponseEntity saveStopRecord(@RequestBody Running running, Authentication authentication){
 		System.out.println("gps/contoller/record");
 		/**
 		 * user_id
@@ -73,6 +74,7 @@ public class RunningController {
 		 * redis에 있는거랑, 마지막 records 저장해야함
 		 * redis에 있는 기록 다 지우기
 		 */
+//		authentication.
 		int userId = running.getUserId();
 		String strStartTime = String.valueOf(running.getStartTime());
 		String strEndTime = String.valueOf(running.getEndTime());
@@ -83,7 +85,7 @@ public class RunningController {
 		List<Record> records = recordTempRepository.findRecordByUserId(userId);
 		recordTempRepository.deleteByUserId(userId, (int) running.getAccDistance());
 		Record lastRecord = Record.builder()
-								.userId(userId)
+//								.userId(userId)
 								.accDistance(running.getAccDistance())
 								.accTime(running.getAccTime())
 								.build();
