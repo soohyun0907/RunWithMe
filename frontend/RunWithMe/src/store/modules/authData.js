@@ -23,6 +23,7 @@ export default {
       state.userInfo = userInfo;
       state.loading = false;
       state.error = null;
+      state.isLogin = true;
     },
     mutateAuthCode(state, authCode) {
       state.authCode = authCode
@@ -57,19 +58,14 @@ export default {
           userEmail:userEmail,
           userPw:userPw        
         }).then(res => {
-            context.commit('mutateIsLogin', true)
             context.commit('mutateUserInfo', res.data.data)
             context.commit('mutateAuthCode',res.headers.auth)
             localStorage.setItem("userInfo",JSON.stringify(res.data.data))
             console.log(res.data.data)
-            console.log(res.headers.auth)
+            console.log(res.headers.auth)// 토큰얻기
         })
         .catch(function(error) {
           // Handle Errors here.
-          // var errorCode = error.code;
-          // var errorMessage = error.message;
-          // console.log(error);
-          
           console.log(error)
           context.commit('mutateUserInfo',{})
           context.commit("setError", error);
@@ -79,27 +75,27 @@ export default {
     },
 
     signUserUp({commit}, data) {
-      // commit("setLoading", true);
-      // commit("clearError");
-      // firebase
-      //   .auth()
-      //   .createUserWithEmailAndPassword(data.email, data.password)
-      //   .then(user => {
-      //     commit("setLoading", false);
+      commit("setLoading", true);
+      commit("clearError");
+      http.post("/users",{data})
+        .then(res => {
+          commit("setLoading", false);
+          console.log("회원가입 성공")
+          console.log(res)
 
-      //     const newUser = {
-      //       uid: user.user.uid
-      //     };
-      //     console.log(newUser);
-      //     localStorage.setItem("userInfo", JSON.stringify(newUser));
-      //     commit("setUser", newUser);
-      //   })
-      //   .catch(error => {
-      //     commit("setLoading", false);
-      //     commit("setError", error);
-      //     localStorage.removeItem("userInfo");
-      //     console.log(error);
-      //   });
+          // const newUser = {
+          //   uid: user.user.uid
+          // };
+          // console.log(newUser);
+          // localStorage.setItem("userInfo", JSON.stringify(newUser));
+          // commit("setUser", newUser);
+        })
+        .catch(error => {
+          commit("setLoading", false);
+          commit("setError", error);
+          console.log("회원가입 실패")
+          console.log(error);
+        });
     },
     signOut(context) {
       localStorage.removeItem("userInfo");
