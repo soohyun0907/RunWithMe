@@ -53,7 +53,11 @@ public class MatchRoomRepository {
     	if(matching.isPresent()) // 이미 방이 존재하다면,
     	{
     		System.out.println("있음");
-    		return hashOpsChatRoom.get(CHAT_ROOMS, matching.get().getRoomId());
+    		ChatRoom result =  hashOpsChatRoom.get(CHAT_ROOMS, matching.get().getRoomId());
+    		System.out.println(matching.get().getRoomId());
+    		System.out.println(matching.get().getMasterId());
+    		 
+    		return result;
     	} 
     	else 
     	{
