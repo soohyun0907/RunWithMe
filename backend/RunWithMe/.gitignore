@@ -12,6 +12,13 @@ HELP.md
 .springBeans
 .sts4-cache
 
+### Java ###
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -29,3 +36,15 @@ HELP.md
 ### VS Code ###
 .vscode/
 /.metadata/
+
+### bin ### 
+bin
+
+### yml ###
+*.yml
+
+### generated ###
+generated
+
+### log ###
+log/
