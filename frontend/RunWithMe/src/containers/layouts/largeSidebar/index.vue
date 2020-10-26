@@ -22,14 +22,12 @@
 <script>
 import Sidebar from "./Sidebar";
 import TopNav from "./TopNav";
-// import appFooter from "../common/footer";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
     Sidebar,
     TopNav,
-    // appFooter
   },
   data() {
     return {};
