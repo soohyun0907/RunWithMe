@@ -15,6 +15,32 @@
         <ul class="navigation-left">
           <li
             @mouseenter="toggleSubMenu"
+            :class="{ active: selectedParentMenu == 'runnings' }"
+            class="nav-item"
+            data-item="runnings"
+            :data-submenu="true"
+          >
+            <a class="nav-item-hold" href="#">
+              <i class="nav-icon i-Double-Tap"></i>
+              <span class="nav-text">Runnings</span>
+            </a>
+            <div class="triangle"></div>
+          </li>
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'apps' }"
+            data-item="apps"
+            :data-submenu="true"
+          >
+            <a class="nav-item-hold" href="#">
+              <i class="nav-icon i-Computer-Secure"></i>
+              <span class="nav-text">Apps</span>
+            </a>
+            <div class="triangle"></div>
+          </li>
+          <!-- <li
+            @mouseenter="toggleSubMenu"
             :class="{ active: selectedParentMenu == 'dashboards' }"
             class="nav-item"
             data-item="dashboards"
@@ -50,19 +76,6 @@
             <a class="nav-item-hold" href="#">
               <i class="nav-icon i-Suitcase"></i>
               <span class="nav-text">Extra kits</span>
-            </a>
-            <div class="triangle"></div>
-          </li>
-          <li
-            @mouseenter="toggleSubMenu"
-            class="nav-item"
-            :class="{ active: selectedParentMenu == 'apps' }"
-            data-item="apps"
-            :data-submenu="true"
-          >
-            <a class="nav-item-hold" href="#">
-              <i class="nav-icon i-Computer-Secure"></i>
-              <span class="nav-text">Apps</span>
             </a>
             <div class="triangle"></div>
           </li>
@@ -117,7 +130,7 @@
               <span class="nav-text">Datatables</span>
             </a>
             <div class="triangle"></div>
-          </li>
+          </li> -->
           <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
@@ -128,19 +141,6 @@
             <a class="nav-item-hold" href="#">
               <i class="nav-icon i-Administrator"></i>
               <span class="nav-text">Sessions</span>
-            </a>
-            <div class="triangle"></div>
-          </li>
-          <li
-            @mouseenter="toggleSubMenu"
-            :class="{ active: selectedParentMenu == 'runnings' }"
-            class="nav-item"
-            data-item="runnings"
-            :data-submenu="true"
-          >
-            <a class="nav-item-hold" href="#">
-              <i class="nav-icon i-Double-Tap"></i>
-              <span class="nav-text">Runnings</span>
             </a>
             <div class="triangle"></div>
           </li>
@@ -502,7 +502,7 @@
         >
           <!-- invoice-list -->
 
-          <li
+          <!-- <li
             @click.prevent="toggleSidebarDropdwon($event)"
             class="nav-item dropdown-sidemenu"
           >
@@ -531,10 +531,10 @@
                 </router-link>
               </li>
             </ul>
-          </li>
+          </li> -->
 
           <!-- contact app -->
-          <li
+          <!-- <li
             @click.prevent="toggleSidebarDropdwon($event)"
             class="nav-item dropdown-sidemenu"
           >
@@ -620,7 +620,7 @@
               <i class="nav-icon i-Email"></i>
               <span class="item-name">Inbox</span>
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link tag="a" class to="/app/apps/chat">
               <i class="nav-icon i-Speach-Bubble-3"></i>
@@ -633,7 +633,7 @@
               <span class="item-name">Group-Chat</span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/apps/scrumboard">
               <i class="nav-icon i-Add-File"></i>
               <span class="item-name"
@@ -643,7 +643,7 @@
                 ></span
               >
             </router-link>
-          </li>
+          </li> -->
         </ul>
         <ul
           class="childNav d-none"
@@ -1050,6 +1050,12 @@
           :class="{ 'd-block': selectedParentMenu == 'runnings' }"
         >
           <li class="nav-item">
+            <router-link tag="a" class to="/app/runnings/contact-grid">
+              <i class="nav-icon i-File-CSV"></i>
+              <span class="item-name">Friends List</span>
+            </router-link>
+          </li>
+          <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/error">
               <i class="nav-icon i-Error-404-Window"></i>
               <span class="item-name">Not Found</span>
@@ -1060,7 +1066,7 @@
               <i class="nav-icon i-Male"></i>
               <span class="item-name">User Profile</span>
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/runningResult">
               <i class="nav-icon i-File-Chart"></i>
@@ -1079,13 +1085,13 @@
               <span class="item-name">KakaoMapTest</span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/kakaomapSH">
               <i class="nav-icon i-Stopwatch"></i>
               <span class="item-name">KakaoMapSH</span>
             </router-link>
-          </li>
-          <li class="nav-item">
+          </li> -->
+          <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/icons">
               <i class="nav-icon i-Male"></i>
               <span class="item-name">icons</span>
@@ -1099,8 +1105,8 @@
                 <span class="badge badge-pill badge-danger">New</span>
               </span>
             </router-link>
-          </li>
-          <li class="nav-item">
+          </li> -->
+          <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/pricing-table">
               <i class="nav-icon i-Billing"></i>
               <span class="item-name">
