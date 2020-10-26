@@ -415,10 +415,10 @@ const routes = [
             path: "user-detail",
             component: () => import("./views/app/runnings/user-detail")
           },
-          {
-            path: "profile",
-            component: () => import("./views/app/runnings/profile")
-          },
+          // {
+          //   path: "profile",
+          //   component: () => import("./views/app/runnings/profile")
+          // },
           // {
           //   path: "error",
           //   component: () => import("./views/app/runnings/notFound")

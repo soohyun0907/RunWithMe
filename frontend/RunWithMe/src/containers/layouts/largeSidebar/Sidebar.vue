@@ -39,7 +39,7 @@
             </a>
             <div class="triangle"></div>
           </li>
-          <li
+          <!-- <li
             @mouseenter="toggleSubMenu"
             :class="{ active: selectedParentMenu == 'dashboards' }"
             class="nav-item"
@@ -130,7 +130,7 @@
               <span class="nav-text">Datatables</span>
             </a>
             <div class="triangle"></div>
-          </li>
+          </li> -->
           <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
@@ -502,7 +502,7 @@
         >
           <!-- invoice-list -->
 
-          <li
+          <!-- <li
             @click.prevent="toggleSidebarDropdwon($event)"
             class="nav-item dropdown-sidemenu"
           >
@@ -531,10 +531,10 @@
                 </router-link>
               </li>
             </ul>
-          </li>
+          </li> -->
 
           <!-- contact app -->
-          <li
+          <!-- <li
             @click.prevent="toggleSidebarDropdwon($event)"
             class="nav-item dropdown-sidemenu"
           >
@@ -620,7 +620,7 @@
               <i class="nav-icon i-Email"></i>
               <span class="item-name">Inbox</span>
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link tag="a" class to="/app/apps/chat">
               <i class="nav-icon i-Speach-Bubble-3"></i>
@@ -633,7 +633,7 @@
               <span class="item-name">Group-Chat</span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/apps/scrumboard">
               <i class="nav-icon i-Add-File"></i>
               <span class="item-name"
@@ -643,7 +643,7 @@
                 ></span
               >
             </router-link>
-          </li>
+          </li> -->
         </ul>
         <ul
           class="childNav d-none"
@@ -1085,12 +1085,12 @@
               <span class="item-name">KakaoMapTest</span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/kakaomapSH">
               <i class="nav-icon i-Stopwatch"></i>
               <span class="item-name">KakaoMapSH</span>
             </router-link>
-          </li>
+          </li> -->
           <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/icons">
               <i class="nav-icon i-Male"></i>
