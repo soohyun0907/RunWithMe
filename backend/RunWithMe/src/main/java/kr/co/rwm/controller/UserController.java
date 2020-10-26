@@ -1,6 +1,7 @@
 package kr.co.rwm.controller;
 
 import java.util.Date;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,9 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +36,7 @@ import lombok.RequiredArgsConstructor;
  * UserController
  * <pre>
  * <b> History:</b>
- *			김형택, ver.0.1 , 2020-10-26, (First Commit)
+ *			김형택, ver.0.1 , 2020-10-26
  * </pre>
  * 
  * @author 김형택
@@ -88,13 +91,12 @@ public class UserController {
 	 * @apiNote 중복일 경우 False / 중복이 아닐 경우 True를 반환        
 	 *      
 	 */
-	@ApiOperation(value = "회원 가입", response = ResponseEntity.class, notes = "userEmail로 이메일 중복체크를 한다.")
+	@ApiOperation(value = "이메일 중복 확인", response = ResponseEntity.class, notes = "userEmail로 이메일 중복체크를 한다.")
 	@GetMapping("/check/{userEmail}")
 	public ResponseEntity<?> emailCheck(@PathVariable String userEmail){
 		if(userService.findByUserEmail(userEmail).isPresent()) {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN,ResponseMessage.ALREADY_USER_EMAIL,false),HttpStatus.FORBIDDEN);
 		}
-		
 		return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.EMAIL_CHECK_OK,true),HttpStatus.OK);
 	}
 	
@@ -109,6 +111,7 @@ public class UserController {
 	 * 			로그인 성공한 경우 : SIGNIN_SUCCESS <br>
 	 *      
 	 */
+	@ApiOperation(value = "로그인", response = ResponseEntity.class, notes = "userEmail, userPw로 로그인한다.")
 	@PostMapping("/signin")
 	public ResponseEntity signin(@RequestBody User user, HttpServletResponse response){
 		User member = userService.findByUserEmail(user.getUserEmail())
@@ -120,7 +123,7 @@ public class UserController {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SIGNIN_FAIL),
 					HttpStatus.FORBIDDEN);
 		}
-		String token = jwtTokenProvider.generateToken(member.getUsername(),member.getRoles());
+		String token = jwtTokenProvider.generateToken(member.getUserEmail(),member.getRoles());
 		
 		response.setHeader("AUTH", token);		
 		
@@ -152,6 +155,83 @@ public class UserController {
 					HttpStatus.FORBIDDEN);
 		}
 	}
+	
+	// 회원 정보 조회 (다른 사람)
+	@GetMapping(path="/{userId}")
+	public ResponseEntity userInfo(@PathVariable int userId) {
+		User member = userService.findByUserId(userId).orElse(null);
+		if(member == null) {
+			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.USERINFO_SEARCH_FAIL),
+					HttpStatus.OK);
+		}
+		return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.USERINFO_SEARCH_SUCCESS,member),HttpStatus.OK);
+	}
+	
+	// 회원 정보 조회 (해당 사용자)
+	@GetMapping(path="")
+	public ResponseEntity myUserInfo(HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		if(jwtTokenProvider.validateToken(token)) {
+			String userEmail = jwtTokenProvider.getUserEmailFromJwt(token);
+			
+			// 토큰 유효성 검사를 걸쳤기 때문에 무조건 정보가 존재한다.
+			User member = userService.findByUserEmail(userEmail).get(); 
+			return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.USERINFO_SEARCH_SUCCESS,member),HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	// 회원 탈퇴
+	@DeleteMapping(path="")
+	public ResponseEntity deleteUser(@RequestBody User user, HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		if(jwtTokenProvider.validateToken(token)) {
+			String userEmail = jwtTokenProvider.getUserEmailFromJwt(token);
+			String pw = userService.findByUserEmail(userEmail).get().getPassword();
+			if (!passwordEncoder.matches(user.getPassword(), pw)) {
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.USER_DELETE_FAIL),
+						HttpStatus.FORBIDDEN);
+			}
+			userService.delete(userEmail);
+			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT,ResponseMessage.USER_DELETE_SUCCESS),HttpStatus.OK);
+			
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	// 회원 정보 수정
+	// 기존 비밀번호를 입력받고 회원정보 수정 진행
+	@PutMapping(path="")
+	public ResponseEntity updateUser(@RequestBody User user, HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		if(jwtTokenProvider.validateToken(token)) {
+			String userEmail = jwtTokenProvider.getUserEmailFromJwt(token);
+			System.out.println("[TEST] "+userEmail);
+			System.out.println("[TEST] "+user.getChangePw());
+			// 해당 사용자 정보
+			Optional<User> member = userService.findByUserEmail(userEmail);
+			if (!passwordEncoder.matches(user.getPassword(), member.get().getPassword())) {
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.USER_UPDATE_FAIL),
+						HttpStatus.FORBIDDEN);
+			}
+			user.setUserId(member.get().getUserId());
+			user.setUserEmail(member.get().getUserEmail());
+			user.setChangePw(passwordEncoder.encode(user.getChangePw()));
+			userService.update(member,user);
+			return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.USER_UPDATE_SUCCESS,user),HttpStatus.OK);
+			
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	
+	// 프로필 이미지 등록
 	
 	
 }
