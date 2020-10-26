@@ -3,6 +3,8 @@
     <breadcumb :page="'Chat'" :folder="'apps'" />
 
     <div class="card chat-sidebar-container sidebar-container">
+
+
       <div class="chat-sidebar-wrap sidebar" :class="{ 'ml-0': isMobile }">
         <div class="border-right">
           <div
@@ -27,7 +29,8 @@
             class="contacts-scrollable perfect-scrollbar  rtl-ps-none ps scroll"
           >
             <div>
-              <!-- <div
+
+              <div
                 class="mt-4 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
               >
                 Recent
@@ -44,7 +47,11 @@
                   class="avatar-sm rounded-circle mr-3"
                 />
                 <h6 class="">{{ contact.name }}</h6>
-              </div> -->
+              </div>
+
+
+
+
 
               <div
                 class="mt-3 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
@@ -55,21 +62,25 @@
               <div
                 class="p-3 d-flex border-bottom align-items-center contact"
                 v-for="contact in filterContacts"
-                :key="contact.id"
-                :class="contact.status"
-                @click="changeSelectedUser(contact.id)"
+                :key="contact.userId"
               >
-                <img
+                <!-- :class="contact.status"
+              > -->
+                <!-- @click="changeSelectedUser(contact.id)"
+              > -->
+                <!-- <img
                   :src="contact.avatar"
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
-                />
-                <h6 class="">{{ contact.name }}</h6>
+                /> -->
+                <h6 @click ="choice(contact.userId)" class="">{{ contact.userEmail }}</h6>
               </div>
             </div>
           </vue-perfect-scrollbar>
         </div>
-      </div>
+      </div> 
+      <!-- 채팅사이드 바 -->
+
       <div class="chat-content-wrap sidebar-content">
         <div
           class="d-flex pl-3 pr-3 pt-2 pb-2 o-hidden box-shadow-1 chat-topbar"
@@ -78,13 +89,13 @@
             <i class="icon-regular i-Right ml-0 mr-3"></i>
           </a>
           <div class="d-flex align-items-center">
-            <img
+            <!-- <img
               :src="getSelectedUser.avatar"
               alt=""
               class="avatar-sm rounded-circle mr-2"
-            />
+            /> -->
             <p class="m-0 text-title text-16 flex-grow-1">
-              {{ getSelectedUser.name }}
+              {{ getSelectedUser  + "/" + roomDetail.roomId}}
             </p>
           </div>
         </div>
@@ -92,7 +103,11 @@
           :settings="{ suppressScrollX: true, wheelPropagation: false }"
           class="chat-content perfect-scrollbar rtl-ps-none ps scroll"
         >
-          <div>
+
+          <div v-for=" m in updateMessages">
+                <h1> {{m.sender + " " + m.message}} </h1>
+          </div>
+          <!-- <div>
             <div class="d-flex mb-30">
               <div class="message flex-grow-1">
                 <div class="d-flex">
@@ -158,17 +173,18 @@
                 <p class="m-0">Lorem ipsum dolor sit amet.</p>
               </div>
             </div>
-          </div>
+          </div> -->
         </vue-perfect-scrollbar>
 
         <div class="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
-          <form class="inputForm">
+          <form class="inputForm" @submit.prevent="send('TALK')">
             <div class="form-group">
               <textarea
                 class="form-control form-control-rounded"
                 placeholder="Type your message"
                 name="message"
                 id="message"
+                v-model="msg"
                 cols="30"
                 rows="3"
                 spellcheck="false"
@@ -176,7 +192,7 @@
             </div>
             <div class="d-flex">
               <div class="flex-grow-1"></div>
-              <button class="btn btn-icon btn-rounded btn-primary mr-2">
+              <button class="btn btn-icon btn-rounded btn-primary mr-2" type="submit">
                 <i class="i-Paper-Plane"></i>
               </button>
               <button
@@ -184,7 +200,7 @@
                 type="button"
               >
                 <i class="i-Add-File"></i>
-              </button>
+              </button> 
             </div>
           </form>
         </div>
@@ -195,9 +211,14 @@
 
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
+import store from "@/store/modules/chat.js";
+import { isMobile } from 'mobile-device-detect';
+
+
 
 export default {
+
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
     title: "Chat"
@@ -206,14 +227,34 @@ export default {
     return {
       recentContacts: [],
       search: "",
-      isMobile: false
+      isMobile: false,
+      roomId: "",
+      roomName: "",
+      msg: '',
+      messages: ["test", "testtt"],
+      token: '',
+      userCount: 0,
     };
   },
   methods: {
-    ...mapActions(["changeSelectedUser"]),
+    ...mapActions(["changeSelectedUser", "createAndSelectChatroomAction","sendMessages"]),
+    ...mapMutations(["selectUserLists"]),
     console() {
       console.log(this.test);
+    },
+
+    choice: function(uid){
+      this.createAndSelectChatroomAction(uid);
+      this.isMobile = false;
+    },
+
+    send : function(type){
+      console.log(type)
+      console.log(this.msg)
+      var payload = {"type": type, "msg":this.msg}
+      this.sendMessages(payload);
     }
+
   },
 
   computed: {
@@ -221,31 +262,48 @@ export default {
       "getContactLists",
       "getRecentUser",
       "getCurrentUser",
-      "getSelectedUser"
+      "getSelectedUser",
+      "getRoomInfo",
+      "getMessages"
+
     ]),
 
     filterContacts() {
-      return this.getContactLists.filter(contact => {
-        return contact.name.toLowerCase().match(this.search.toLowerCase());
-      });
+      return this.getContactLists;
+      // return this.getContactLists.filter(contact => {
+      //   return contact.name.toLowerCase().match(this.search.toLowerCase());
+      // });
+    },
+
+    roomDetail(){
+      return this.getRoomInfo;
+    },
+
+    updateMessages(){
+      return this.getMessages;
     }
+
+
   },
 
   created: function() {
     console.log(this.getSelectedUser);
-    // this.getCurrentUser.forEach(currentUser => {
-    //   currentUser.chatInfo.forEach(user => {
-    //     this.getContactLists.filter(contact => {
-    //       if (user.contactId == contact.id) {
-    //         this.recentContacts.push(contact);
-    //       }
-    //     });
-    //   });
-    // });
+
+    this.getCurrentUser.forEach(currentUser => {
+      currentUser.chatInfo.forEach(user => {
+        this.getContactLists.filter(contact => {
+          if (user.contactId == contact.id) {
+            this.recentContacts.push(contact);
+          }
+        });
+      });
+    });
+
+    // 친구목록 불러오기
+    this.selectUserLists();
   }
 };
 </script>
 
 <style>
 </style>
-

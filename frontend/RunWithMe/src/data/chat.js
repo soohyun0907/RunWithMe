@@ -22,6 +22,22 @@ export const user = [
     ]
   }
 ];
+export const chatroom = [
+  {
+    roomId: "1",
+    roomName: "싸피",
+    masterId:"8",
+    status:"online",
+    usercount:3
+  },
+  {
+    roomId: "2",
+    roomName: "싸피경로당",
+    masterId:"8",
+    status:"online",
+    usercount:5
+  }
+];
 export const contacts = [
   {
     id: "323sa680b3249760ea21rt47",
