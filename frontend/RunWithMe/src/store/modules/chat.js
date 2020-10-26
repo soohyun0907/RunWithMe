@@ -60,6 +60,7 @@ const mutations = {
       })
   },
   createAndSelectChatroom : (state, uid, sock, ws) => {
+    console.log("uid:" + uid)
     http
       .post("/match/room", 
       {
@@ -67,7 +68,7 @@ const mutations = {
           guestId : uid
       })
       .then((data) =>{
-        //console.log(data);
+        console.log(data);
         state.selectedUser = data.data.name;
         state.roomInfo = data.data;
        
@@ -77,7 +78,7 @@ const mutations = {
         http
           .get('/chat/user').then(response => {
               console.log("들어는 오냐")
-              state.token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGVzIjpbIlVTRVIiXSwianRpIjoidGVzdDEiLCJpYXQiOjE2MDMzODQzNzEsImV4cCI6MTYwMzM4Nzk3MX0.v6oP7WXsO4SIhzaOdMPHk1Cla2LJbF8XTMh1uVlSTPs";
+              state.token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGVzIjpbIlVTRVIiXSwianRpIjoidGVzdDEiLCJpYXQiOjE2MDM0MTc2MzksImV4cCI6MTYwMzQyMTIzOX0.p6ExO5ls81r1HjEy14Bnj4jLgkkz91PQUy5DtOEDhF0";
               console.log("token:" + state.token)
               state.sock = new SockJS("http://localhost:8080/ws-stomp")
               state.ws = Stomp.over(state.sock)
