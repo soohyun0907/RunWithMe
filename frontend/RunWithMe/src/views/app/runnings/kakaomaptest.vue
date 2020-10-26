@@ -104,20 +104,38 @@ export default {
               center: new google.maps.LatLng(37.331777, 127.129347),
         });
         this.linePath.push(new google.maps.LatLng(37.331777, 127.129347))
+        
         this.map = map;
       },
       startLocationUpdates() {
         this.startTime = new Date()
         this.startTime = this.$moment(this.startTime).format('YYYY-MM-DDTHH:mm:ss')
         this.watchLocationUpdates()
+        
       },
 
+      resetLocations() {
+        this.startTime = ""
+        this.endTime = ""
+        this.clock = "00:00:00";
+        this.timeBegan = null;
+        this.timeStopped = null;
+        this.stoppedDuration = 0;
+        this.started = null
+        this.checkSecond=0
+        this.checkOneKm=0
+        this.speed=0
+        this.current.lat=0
+        this.current.lng=0
+        this.previous.lat=0
+        this.previous.lng=0
+      },
       watchLocationUpdates() {
           // stopwatch
           if (this.running) return;
 
           if (this.timeBegan === null) {
-            this.endLocationUpdates();
+            this.resetLocations();
             this.timeBegan = new Date();
           }
 
@@ -150,7 +168,7 @@ export default {
                 // console.log(position);
                 map.setCenter(new google.maps.LatLng(this.current.lat, this.current.lng)); 
                 marker.setPosition(new google.maps.LatLng(this.current.lat, this.current.lng));
-
+                console.log(map.mapOp)
                 if(this.previous.lat==0){
                   this.previous.lat = this.current.lat;
                   this.previous.lng = this.current.lng;
@@ -162,9 +180,10 @@ export default {
                     strokeWeight: 3,
                     map: this.map
                   });
-                  var currentLatLng = new google.maps.LatLng(this.current.lat, this.current.lng);
-                  this.linePath.push(currentLatLng);
-                  this.make_encode_polyline(currentLatLng, this.poly);
+                  //테스트욜
+                  // var currentLatLng = new google.maps.LatLng(this.current.lat, this.current.lng);
+                  // this.linePath.push(currentLatLng);
+                  // this.make_encode_polyline(currentLatLng, this.poly);
 
                 }else{
                   var distance = this.computeDistance(this.previous, this.current);
@@ -182,13 +201,13 @@ export default {
                     this.linePath.push(currentLatLng);
                     this.make_encode_polyline(currentLatLng, this.poly);
                   }
-                if(this.checkOneKm>=1){
-                  this.savePosition()
-                  this.speed = (this.checkOneKm*1000)/this.checkSecond
-                  this.checkSecond=0
-                  this.checkOneKm-=1
-                  console.log("1km당 스피드 = " + this.speed)
-                }
+                  if(this.checkOneKm>=1){
+                    this.speed = (this.checkOneKm*1000)/this.checkSecond
+                    this.checkSecond=0
+                    this.checkOneKm-=1
+                    this.savePosition()
+                    console.log("최근 1km당 스피드 = " + this.speed)
+                  }
                 }
               },
               error => {
@@ -203,6 +222,30 @@ export default {
           this.cur_marker = marker
           
       },
+      getScreenShot() {
+       //google static map url
+       var staticM_URL = "https://maps.googleapis.com/maps/api/staticmap";
+       //Set the Google Map Center.
+       staticM_URL += "?center=37.483942, 126.918457" 
+
+       staticM_URL  += "&size=520x650";  //Set the Google Map Size. 
+
+       staticM_URL  += "&zoom=15";  //Set the Google Map Zoom. 
+
+       staticM_URL  += "&maptype=roadmap&key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=jpeg&path=color:0x0000ff" ;//Set the Google Map Type.
+
+              this.linePath.push(new google.maps.LatLng(37.483942, 126.918457))
+
+      console.log(this.linePath)
+      console.log(this.linePath.length)
+      console.log(this.linePath[0].lat())
+      
+      for(var i=0; i<this.linePath.length; i++){
+        staticM_URL +="|"+this.linePath[i].lat()+","+this.linePath[i].lng()
+      }
+
+      window.open(staticM_URL);
+      },
       stopLocationUpdates() {
         this.isPause = true;
         this.running = false;
@@ -210,7 +253,7 @@ export default {
         clearInterval(this.started);
         
         navigator.geolocation.clearWatch(this.watchPositionId);
-        this.drawLines(this.linePath);
+        this.drawLines();
         axios.get(SERVER.URL+"gps/" + this.userInfo.userId)
         .then(res => {
           console.log(res.data);
@@ -237,9 +280,11 @@ export default {
             })
             .catch(err => console.log(err.response))
       },
+     
       endLocationUpdates() {
-        this.startTime = ""
         this.stopLocationUpdates()
+      this.getScreenShot()
+        this.startTime = ""
         this.running = false;
         this.stoppedDuration = 0;
         this.timeBegan = null;
@@ -285,13 +330,7 @@ export default {
         return (zero + num).slice(-digit);
       },
      
-      drawLines(positions) {
-        var runningPathCoordinates = [];
-
-        for(var i=0; i<positions.length; i++){
-          // console.log(positions[i].lat);
-          runningPathCoordinates.push(new google.maps.LatLng(positions[i].lat, positions[i].lng));
-        }
+      drawLines() {
 
         const runningPath = new google.maps.Polyline({
           // path: runningPathCoordinates,
