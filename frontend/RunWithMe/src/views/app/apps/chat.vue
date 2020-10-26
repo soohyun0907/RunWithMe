@@ -141,10 +141,6 @@
                 <p class="m-0">Lorem ipsum dolor sit amet.</p>
               </div>
             </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> front_login
             <div class="d-flex mb-30">
               <div class="message flex-grow-1">
                 <div class="d-flex">
@@ -163,10 +159,6 @@
                 class="avatar-sm rounded-circle ml-3"
               />
             </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> front_login
             <div class="d-flex mb-30 user">
               <img
                 src="@/assets/images/faces/1.jpg"

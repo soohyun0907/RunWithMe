@@ -59,6 +59,7 @@ public class RedisConfig {
         
         // for Record
 //        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Record.class));
+
         return redisTemplate;
     }
 }
