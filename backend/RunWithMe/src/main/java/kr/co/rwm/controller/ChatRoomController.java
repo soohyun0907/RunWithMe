@@ -26,9 +26,9 @@ import kr.co.rwm.repo.ChatRoomRepository;
 import kr.co.rwm.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin(origins="*")
 @RequiredArgsConstructor
 @Controller
+@CrossOrigin(origins="*")
 @RequestMapping("/chat")
 public class ChatRoomController {
 
