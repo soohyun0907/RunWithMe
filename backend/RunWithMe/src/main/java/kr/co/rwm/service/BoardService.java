@@ -15,6 +15,6 @@ public interface BoardService {
 
 	Long delete(int board_id);
 
-	Board detail(int board_id);
+	Board detail(int board_id, int uid);
 
 }

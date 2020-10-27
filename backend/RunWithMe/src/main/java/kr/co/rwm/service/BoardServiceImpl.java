@@ -66,8 +66,14 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public Board detail(int board_id) {		
+	@Transactional
+	public Board detail(int board_id, int uid) {
+		
 		Optional<Board> board = boardRepository.findByBoardId(board_id);
+		if(uid != board.get().getWriterId())
+			board.get().setReadCount(board.get().getReadCount()+1);
+		System.out.println(uid);
+		System.out.println(board.get().getWriterId());
 		return board.get();
 	}
 	
