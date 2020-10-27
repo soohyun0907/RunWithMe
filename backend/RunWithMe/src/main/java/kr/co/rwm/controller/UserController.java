@@ -1,13 +1,9 @@
 package kr.co.rwm.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.User;
-import kr.co.rwm.model.MultipartImage;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.RestException;
@@ -38,7 +32,6 @@ import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.JwtTokenProvider;
 import kr.co.rwm.service.S3Service;
 import kr.co.rwm.service.UserService;
-import kr.co.rwm.util.FileUpload;
 import lombok.RequiredArgsConstructor;
 
 /*

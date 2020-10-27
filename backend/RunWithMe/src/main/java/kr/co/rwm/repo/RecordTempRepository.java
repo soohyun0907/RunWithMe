@@ -25,7 +25,7 @@ public class RecordTempRepository {
 		int km = (int) record.getAccDistance();
 		
 		System.out.println(record.toString()+" "+km);
-		hashOpsRecord.put(String.valueOf(record.getUserId()), km, record);
+		hashOpsRecord.put(String.valueOf(record.getUserId().getUserId()), km, record);
 	}
 	
 	// userId로 조회
