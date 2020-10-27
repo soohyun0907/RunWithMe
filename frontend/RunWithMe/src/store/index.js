@@ -10,6 +10,7 @@ import invoice from "./modules/invoice";
 import cart from "./modules/cart";
 import verticalSidebar from "./modules/verticalSidebar";
 import scrumboard from "./modules/scrumboard";
+import createPersistedState from 'vuex-persistedstate';
 
 // Load Vuex
 Vue.use(Vuex);
@@ -27,5 +28,8 @@ export default new Vuex.Store({
     cart,
     verticalSidebar,
     scrumboard
-  }
+  },
+  plugins: [
+    createPersistedState()
+  ]
 });

@@ -279,7 +279,7 @@
 
           <div class="dropdown-menu-right" aria-labelledby="userDropdown">
             <div class="dropdown-header">
-              <i class="i-Lock-User mr-1"></i> Timothy Carlson
+              <i class="i-Lock-User mr-1"></i> {{userInfo.username}}님
             </div>
             <a class="dropdown-item">Account settings</a>
             <a class="dropdown-item">Billing history</a>
@@ -327,7 +327,7 @@ export default {
     // document.addEventListener("click", this.closeMegaMenu);
   },
   computed: {
-    ...mapGetters(["getSideBarToggleProperties"])
+    ...mapGetters(["getSideBarToggleProperties","userInfo"])
   },
 
   methods: {
