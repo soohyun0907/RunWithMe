@@ -40,8 +40,9 @@ public class JwtTokenProvider {
 	/**
 	 * 이름으로 Jwt Token을 생성한다.
 	 */
-	public String generateToken(String email, List<String> roles) {
+	public String generateToken(Integer userId, String email, List<String> roles) {
 		Claims claims = Jwts.claims().setSubject(email); // JWT payload 에 저장되는 정보단위
+		claims.put("userPk", userId);	// user의 pk 저장
 		claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
 		Date now = new Date();
 		return Jwts.builder().setClaims(claims).setId(email).setIssuedAt(now) // 토큰 발행일자
@@ -56,7 +57,7 @@ public class JwtTokenProvider {
 	public String getUserEmailFromJwt(String jwt) {
 		return getClaims(jwt).getBody().getId();
 	}
-
+	
 	/**
 	 * Jwt Token의 유효성을 체크한다.
 	 */
@@ -123,4 +124,13 @@ public class JwtTokenProvider {
 		Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 		return (List<String>) claims.getBody().get("roles");
 	}
+
+	/**
+	 * Jwt Token을 복호화 하여 userPk를 얻는다.
+	 */
+	public Integer getUserIdFromJwt(String token) {
+		Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+		return (Integer) claims.getBody().get("userPk");
+	}
+
 }
