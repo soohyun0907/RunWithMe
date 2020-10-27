@@ -1,9 +1,13 @@
 package kr.co.rwm.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,22 +26,26 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.User;
+import kr.co.rwm.model.MultipartImage;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.RestException;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.JwtTokenProvider;
+import kr.co.rwm.service.S3Service;
 import kr.co.rwm.service.UserService;
+import kr.co.rwm.util.FileUpload;
 import lombok.RequiredArgsConstructor;
 
 /*
  * UserController
  * <pre>
  * <b> History:</b>
- *			김형택, ver.0.1 , 2020-10-26
+ *			김형택, ver.0.2 , 2020-10-27 : 프로필 이미지 Upload
  * </pre>
  * 
  * @author 김형택
@@ -55,6 +64,7 @@ public class UserController {
 	private final PasswordEncoder passwordEncoder;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final RedisTemplate<String, String> logoutRedis;
+	private final S3Service s3Service;
 	
 	@Autowired
 	private UserService userService;
@@ -62,7 +72,8 @@ public class UserController {
 	/**
 	 * 회원가입 - 이메일 중복 여부 True/False를 판단하고, True일 경우 JSON 객체 기반으로 회원가입을 진행한다.
 	 * 
-	 * @param	
+	 * @param	user userName, userEmail, userPw <br>
+	 * 			
 	 * @return ResponseEntity<Response> - StatusCode,
 	 *         ResponseMessage(SIGNUP_SUCCESS), HttpStatus <br>
 	 * @apiNote User user - 
@@ -70,9 +81,9 @@ public class UserController {
 	 *      
 	 * @exception RestException EMAIL_CHECK_FAIL
 	 */
-	@ApiOperation(value = "회원 가입", response = ResponseEntity.class, notes = "userName, userEmail, userPw가 담긴 JSON객체로 회원가입을 한다.")
+	@ApiOperation(value = "회원 가입", response = ResponseEntity.class, notes = "userName, userEmail, userPw가 담긴 JSON객체와 MultipartFile의 프로필 이미지로 회원가입을 한다.")
 	@PostMapping("")
-	public ResponseEntity<?> signup(@RequestBody User user){
+	public ResponseEntity<?> signup(@RequestBody User user, MultipartFile profile){
 		if(!user.getAuth()) {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN,ResponseMessage.EMAIL_CHECK_FAIL,false),HttpStatus.FORBIDDEN);
 		}else {
@@ -211,8 +222,6 @@ public class UserController {
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
 			String userEmail = jwtTokenProvider.getUserEmailFromJwt(token);
-			System.out.println("[TEST] "+userEmail);
-			System.out.println("[TEST] "+user.getChangePw());
 			// 해당 사용자 정보
 			Optional<User> member = userService.findByUserEmail(userEmail);
 			if (!passwordEncoder.matches(user.getPassword(), member.get().getPassword())) {
@@ -231,8 +240,51 @@ public class UserController {
 		}
 	}
 	
+//	final int IMAGE_WIDTH = 300;
+//	final int IMAGE_HEIGHT = 300;
 	
-	// 프로필 이미지 등록
+	// 프로필 이미지 등록/수정 (이미지 사이즈 조정)
+	@PutMapping("/{userId}/profile")
+	public ResponseEntity uploadProfile(@PathVariable int userId, MultipartFile profile,HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		if(jwtTokenProvider.validateToken(token)) {
+			
+			// 사이즈 조정 START (필요시 주석 해제)
+//			BufferedImage image = FileUpload.resize(profile, IMAGE_WIDTH, IMAGE_HEIGHT);
+//			ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+//			try {
+//				ImageIO.write(image, "jpg", baos); 
+//				baos.flush();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			} 
+//			String url = s3Service.profileUpload(profile,baos);
+			// 사이즈 조정 END
+			
+			String url = s3Service.thumbnailUpload(profile);
+			Optional<User> member = userService.findByUserId(userId);
+			if(member.get()==null) {
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.USER_NOT_FOUND),
+						HttpStatus.FORBIDDEN);
+			}else {
+				User changeUser = member.get();
+				changeUser.setProfile(url);
+				System.out.println(changeUser.getUserPw());
+				System.out.println(changeUser.getPassword());
+				changeUser.setChangePw(changeUser.getPassword());
+				userService.update(member, changeUser);
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.UPLOAD_PROFILE_SUCCESS,changeUser),
+						HttpStatus.OK);
+			}
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+					HttpStatus.FORBIDDEN);
+		}
+		
+		
+		
+		
+	}
 	
 	
 }

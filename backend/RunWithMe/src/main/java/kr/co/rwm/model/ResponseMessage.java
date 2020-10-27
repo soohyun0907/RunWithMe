@@ -48,4 +48,8 @@ public class ResponseMessage {
     public static final String SERVICE_UNAVAILABLE = "현재 서비스를 사용하실 수 없습니다. 잠시후 다시 시도해 주세요.";
 
     public static final String DB_ERROR = "데이터베이스 에러";
+    
+    
+    // 이미지 업로드 2020-10-27
+	public static final String UPLOAD_PROFILE_SUCCESS = "프로필 이미지 업로드 성공";
 }
