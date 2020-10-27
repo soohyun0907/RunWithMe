@@ -155,7 +155,7 @@
     >
       <div ref="sidebarChild">
         <!-- Submenu Dashboards -->
-        <ul
+        <!-- <ul
           class="childNav d-none"
           data-parent="dashboards"
           :class="{ 'd-block': selectedParentMenu == 'dashboards' }"
@@ -192,7 +192,7 @@
               }}</span>
             </router-link>
           </li>
-        </ul>
+        </ul> -->
         <ul
           class="childNav d-none"
           data-parent="forms"
