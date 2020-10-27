@@ -8,6 +8,8 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.Challenge;
+import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.ChallengeService;
+import kr.co.rwm.service.JwtTokenProvider;
+import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -45,6 +50,7 @@ import lombok.RequiredArgsConstructor;
 public class ChallengeController {
 	
 	private final ChallengeService challengeService;
+	private final UserService userService;
 	
 	/**
 	 * 관리자 - 챌린지 생성
@@ -57,7 +63,13 @@ public class ChallengeController {
 	@PostMapping
 	public ResponseEntity saveChallenge(@RequestBody Challenge challenge) {
 		System.out.println("/challenges/save - 관리자가 challenge를 등록합니다.");
-		challengeService.saveChallenge(challenge);
+		User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(loginUser.getRoles().stream().anyMatch(x -> x.equals("admin"))) {
+			challengeService.saveChallenge(challenge);
+		}else {
+			return new ResponseEntity<Response>(new 
+					Response(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_ACCESS_FORBIDDEN, null), HttpStatus.FORBIDDEN);
+		}
 		
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.CHALLENGE_INSERT_SUCCESS, null), HttpStatus.OK);
