@@ -177,7 +177,10 @@ export default {
       sameAsPassword: sameAs("password")
     },
     emailAuth:{
-      
+      emailAuthValidate(emailAuth){
+          if(emailAuth==false)
+            return false;
+      }
     }
 
     // add input
@@ -202,7 +205,7 @@ export default {
     ...mapActions(["signUserUp"]),
     //   validate form
     submit() {
-      console.log("submit!");
+      console.log("회원가입 데이터 전송중..");
 
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -237,6 +240,7 @@ export default {
         .catch((error) =>{
           console.log("이메일 인증 실패")
           console.log(error)
+          this.emailAuth=false
         });
     },
     makeToast(variant = null) {
