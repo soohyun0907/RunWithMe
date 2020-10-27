@@ -29,6 +29,9 @@ public class Challenge {
 	
 	@Column(length = 500, name = "title", nullable = false)
 	private String title;
+
+	@Column(columnDefinition = "LONGTEXT", name = "content")
+	private String content;
 	
 	@Column(name = "distance_goal")
 	private double distanceGoal;

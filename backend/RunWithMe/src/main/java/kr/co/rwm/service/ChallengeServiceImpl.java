@@ -38,6 +38,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 		Challenge updateChallenge = challengeRepository.findByChallengeId(challengeId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 챌린지가 없습니다."));
 		updateChallenge.setTitle(challenge.getTitle());
+		updateChallenge.setContent(challenge.getContent());
 		updateChallenge.setDistanceGoal(challenge.getDistanceGoal());
 		updateChallenge.setDonateGoal(challenge.getDonateGoal());
 		updateChallenge.setStartTime(challenge.getStartTime());
