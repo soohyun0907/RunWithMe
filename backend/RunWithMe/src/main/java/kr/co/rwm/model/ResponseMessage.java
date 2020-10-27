@@ -64,6 +64,13 @@ public class ResponseMessage {
     public static final String DETAIL_BOARD_SUCCESS = "게시물 상세 조회 성공";
     public static final String NOT_FOUND_BOARD = "게시물 조회 실패";
     
-
+    public static final String SIDO_LIST_SUCCESS = "모든 시도 조회 성공";
+    public static final String SIDO_SEARCH_FAIL = "해당 시도 조회 실패";
+    public static final String GUGUN_SEARCH_FAIL = "해당 구군 조회 실패";
+    public static final String GUGUN_LIST_SUCCESS = "해당 시도 구군 조회 성공";
+    public static final String ACTAREA_INSERT_SUCCESS = "유저 활동 지역 설정 성공";
+    public static final String ACTAREA_INSERT_FAIL = "유저 활동 지역 설정 실패";
+    public static final String ACTAREA_UPDATE_SUCCESS = "유저 활동 지역 수정 성공";
+    public static final String ACTAREA_UPDATE_FAIL = "유저 활동 지역 수정 실패";
     
 }
