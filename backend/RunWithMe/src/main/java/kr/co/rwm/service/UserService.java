@@ -1,4 +1,5 @@
 package kr.co.rwm.service;
+
 import java.util.Collections;
 import java.util.Optional;
 
@@ -18,22 +19,41 @@ import lombok.RequiredArgsConstructor;
 public class UserService implements UserDetailsService {
 
 	private final UserRepository userRepository;
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
 		System.out.println(userEmail);
-		return userRepository.findByUserEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+		return userRepository.findByUserEmail(userEmail)
+				.orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 	}
 
 	@Transactional
 	public Optional<User> findByUserEmail(String userEmail) {
-		System.out.println(userEmail);
 		return userRepository.findByUserEmail(userEmail);
 	}
-	
-	public void join(User user,String password) {
-		userRepository.save(User.builder().dongId(user.getDongId()).userEmail(user.getUserEmail()).userName(user.getUsername()).userPw(password)
-				.roles(Collections.singletonList("USER")).build());
+
+	public void join(User user, String password) {
+		userRepository.save(User.builder().dongId(user.getDongId()).userEmail(user.getUserEmail())
+				.userName(user.getUsername()).userPw(password).roles(Collections.singletonList("USER")).build());
 	}
 
+	public Optional<User> findByUserId(int userId) {
+		return userRepository.findByUserId(userId);
+	}
+
+	@Transactional
+	public void delete(String userEmail) {
+		userRepository.deleteByUserEmail(userEmail);
+	}
+
+	public void update(Optional<User> user,User changeUser) {
+//		Optional<User> updateUser = userRepository.findByUserEmail(user.getUserEmail());
+		User temp = user.get();
+		user.ifPresent(selectUser->{
+			selectUser.setUserId(temp.getUserId());
+			selectUser.setUserPw(changeUser.getChangePw());
+			selectUser.setUserName(changeUser.getUsername());
+			userRepository.save(selectUser);
+		});
+	}
 }
