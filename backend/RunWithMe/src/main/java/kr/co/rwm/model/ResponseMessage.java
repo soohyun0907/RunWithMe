@@ -33,7 +33,8 @@ public class ResponseMessage {
     public static final String UPDATE_BOARD_SUCCESS = "게시물 수정 성공";
     public static final String DELETE_BOARD_SUCCESS = "게시물 삭제 성공";
     public static final String DETAIL_BOARD_SUCCESS = "게시물 상세 조회 성공";
-
+    public static final String NOT_FOUND_BOARD = "게시물 조회 실패";
+    
 
     
 }
