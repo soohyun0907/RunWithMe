@@ -196,18 +196,19 @@
         </b-card>
       </b-col>
     <h3>친구 피드 시작</h3>
-    <b-col xl="3" md="6" sm="6">
+    <!-- <b-col xl="3" md="6" sm="6"> -->
         <b-card
           class="card-icon-bg card-icon-bg-primary o-hidden mb-30 text-center"
         >
-          <img src="https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png" />
+          <img src="https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png"
+            style="height:100%; width:50%;" />
           <div class="content">
             <b-avatar class="mr-2" variant="primary" text="BV"></b-avatar>
             <p class="text-muted mt-2 mb-0">New Leads</p>
             <p class="text-primary text-24 line-height-1 mb-2">205</p>
           </div>
         </b-card>
-      </b-col>
+      <!-- </b-col> -->
   </div>
 </template>
 <script>
@@ -226,6 +227,18 @@ export default {
   data() {
     return {
       slides: [
+        {
+          img : require('@/assets/images/photo-long-1.jpg'),
+        },
+        {
+          img : require('@/assets/images/photo-long-2.jpg'),
+        },
+        {
+          img : require('@/assets/images/photo-long-3.jpg'),
+        },
+        {
+          img : require('@/assets/images/photo-long-4.jpg'),
+        },
         {
           img : require('@/assets/images/photo-long-1.jpg'),
         },
