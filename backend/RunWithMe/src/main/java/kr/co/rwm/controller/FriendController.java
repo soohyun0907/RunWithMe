@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.rwm.entity.User;
+import kr.co.rwm.model.Response;
+import kr.co.rwm.model.ResponseMessage;
+import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.FriendService;
 
 @RestController
@@ -26,25 +29,16 @@ public class FriendController {
 	FriendService friendService;
 	
 	@GetMapping("/contacts/{uid}")
-	public List<User> contacts(@PathVariable int uid) {
+	public ResponseEntity contacts(@PathVariable int uid) {
 		List<User> list = friendService.list(uid);
-		
-//		for (User user : list) {
-//			System.out.println(user.getUsername());
-//		}
-		
-		return list;
+		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_FRIENDLIST_SUCCESS, list), HttpStatus.OK);
 	}
 	
 	@PostMapping("/friend")
-	public ResponseEntity<String> insert(@RequestBody Map<String, Integer> friendInfo){
+	public ResponseEntity insert(@RequestBody Map<String, Integer> friendInfo){
 		System.out.println("friends/controller/추가");
-		
-		
+
 		friendService.insert(friendInfo);
-		
-		
-		return new ResponseEntity<String>("success", HttpStatus.CREATED);
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.INSERT_FRIEND_SUCCESS, 1), HttpStatus.OK);
 	}
-	
 }

@@ -2,6 +2,8 @@ package kr.co.rwm.controller;
 
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.rwm.model.ChatRoom;
+import kr.co.rwm.model.Response;
+import kr.co.rwm.model.ResponseMessage;
+import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.repo.MatchRoomRepository;
 import kr.co.rwm.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +44,12 @@ public class MatchRoomController {
 
     @PostMapping("/room")
     @ResponseBody
-    public ChatRoom createAndSelectChatroom(@RequestBody Map<String, Integer> idInfo) {
+    public ResponseEntity createAndSelectChatroom(@RequestBody Map<String, Integer> idInfo) {
     	System.out.println(idInfo);
-        return matchRoomRepository.createAndSelectChatroom(idInfo);
+    	ChatRoom result =  matchRoomRepository.createAndSelectChatroom(idInfo);
+    	
+		return new ResponseEntity<Response>(new 
+				Response(StatusCode.OK, ResponseMessage.CREATE_CHATROOM_SUCCESS, result), HttpStatus.OK);
     }
 
 //    @GetMapping("/room/enter/{roomId}")
