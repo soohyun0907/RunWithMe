@@ -64,6 +64,13 @@ public class ResponseMessage {
     public static final String DETAIL_BOARD_SUCCESS = "게시물 상세 조회 성공";
     public static final String NOT_FOUND_BOARD = "게시물 조회 실패";
     
+    public static final String READ_REPLY_SUCCESS = "댓글 리스트 조회 성공";
+    public static final String INSERT_REPLY_SUCCESS = "댓글 추가 성공";
+    public static final String UPDATE_REPLY_SUCCESS = "댓글 수정 성공";
+    public static final String DELETE_REPLY_SUCCESS = "댓글 삭제 성공";
+    public static final String NOT_FOUND_REPLY = "댓글 조회 실패";
+    
+    
 
     
 }
