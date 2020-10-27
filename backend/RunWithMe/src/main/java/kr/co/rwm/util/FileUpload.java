@@ -1,12 +1,19 @@
 package kr.co.rwm.util;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.UUID;
 
+import javax.imageio.ImageIO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
 
 public class FileUpload {
@@ -69,4 +76,28 @@ public class FileUpload {
 			}
 		}
 	}
+	
+	public static BufferedImage resize(MultipartFile profile, int width, int height)
+            {
+        BufferedImage inputImage;
+		try {
+			inputImage = ImageIO.read(profile.getInputStream());
+			BufferedImage outputImage =
+					new BufferedImage(width, height, inputImage.getType());
+			
+			Graphics2D graphics2D = outputImage.createGraphics();
+			graphics2D.drawImage(inputImage, 0, 0, width, height, null);
+			graphics2D.dispose();
+			
+			return outputImage;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+
+    }
+
+	
+
 }
