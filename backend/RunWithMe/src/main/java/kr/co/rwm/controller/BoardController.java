@@ -3,9 +3,13 @@ package kr.co.rwm.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,14 +25,20 @@ import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.BoardService;
+import kr.co.rwm.service.JwtTokenProvider;
+import kr.co.rwm.service.S3Service;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @CrossOrigin(origins="*")
+@RequiredArgsConstructor
 @RequestMapping("/boards")
 public class BoardController {
 	
+	private final JwtTokenProvider jwtTokenProvider;
+
 	@Autowired BoardService boardService;
-	
+
 	@GetMapping("/")
 	public ResponseEntity allBoardList(){
 		List<Board> list = boardService.allBoardList();
@@ -56,9 +66,14 @@ public class BoardController {
 	}
 	
 	@GetMapping("/board/{board_id}")
-	ResponseEntity detail(@PathVariable int board_id) {
-		Board ret = boardService.detail(board_id);
-
+	ResponseEntity detail(@PathVariable int board_id, HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		int uid = 0;
+		if(jwtTokenProvider.validateToken(token)) {
+			uid = jwtTokenProvider.getUserIdFromJwt(token);
+		}
+		Board ret = boardService.detail(board_id, uid);
+		
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.DETAIL_BOARD_SUCCESS, ret), HttpStatus.OK);
 	}
 	
