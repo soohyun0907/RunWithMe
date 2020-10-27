@@ -2,6 +2,7 @@ package kr.co.rwm.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.FetchType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,12 +38,12 @@ public class Record implements Serializable {
 	private Integer recordId;
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "running_id")
 	private Running runningId;
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "user_id", nullable = false)
 	private User userId;
 	
