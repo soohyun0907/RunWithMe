@@ -1,4 +1,5 @@
 import http from "@/utils/http-common";
+import router from "@/router.js"
 
 export default {
   state: {
@@ -61,16 +62,20 @@ export default {
             context.commit('mutateUserInfo', res.data.data)
             context.commit('mutateAuthCode',res.headers.auth)
             localStorage.setItem("userInfo",JSON.stringify(res.data.data))
+            console.log("로그인 성공")
             console.log(res.data.data)
             console.log(res.headers.auth)// 토큰얻기
+            router.push('/')
+
         })
         .catch(function(error) {
           // Handle Errors here.
           console.log(error)
           context.commit('mutateUserInfo',{})
           context.commit("setError", error);
-          localStorage.removeItem("userInfo")
-          // ...
+          if(localStorage.getItem("userInfo")){
+            localStorage.removeItem("userInfo")
+          }
         });
     },
 
@@ -82,30 +87,32 @@ export default {
       var jsons = JSON.stringify(signUpUnit)
       console.log(signUpUnit)
       console.log(jsons)
-      http.post("/users",{jsons})
+      http.post("/users",jsons,{
+        headers:{'Content-Type':'application/json'}
+      })
         .then(res => {
           commit("setLoading", false);
           console.log("회원가입 성공")
           console.log(res)
-          this.$router.push("/")
-
-          // const newUser = {
-          //   uid: user.user.uid
-          // };
-          // console.log(newUser);
-          // localStorage.setItem("userInfo", JSON.stringify(newUser));
-          // commit("setUser", newUser);
+         
+          if(localStorage.getItem("userInfo")){
+            localStorage.removeItem("userInfo")
+          }
         })
         .catch(error => {
           commit("setLoading", false);
           commit("setError", error);
           console.log("회원가입 실패")
           console.log(error);
+          if(localStorage.getItem("userInfo")){
+            localStorage.removeItem("userInfo")
+          }
         });
     },
     signOut(context) {
-      localStorage.removeItem("userInfo");
-      context.commit("setLogout");
+      if(localStorage.getItem("userInfo")){
+        localStorage.removeItem("userInfo")
+      }     context.commit("setLogout");
     },
   }
 };
