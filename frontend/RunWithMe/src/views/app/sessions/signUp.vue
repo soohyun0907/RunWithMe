@@ -142,6 +142,7 @@
 <script>
 import { required, sameAs, minLength } from "vuelidate/lib/validators";
 import { mapGetters, mapActions } from "vuex";
+import http from "@/utils/http-common";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
@@ -174,6 +175,9 @@ export default {
     },
     repeatPassword: {
       sameAsPassword: sameAs("password")
+    },
+    emailAuth:{
+      
     }
 
     // add input
@@ -205,11 +209,12 @@ export default {
         this.submitStatus = "ERROR";
       } else {
         var data = {
-          email :this.email,
-          password :this.password,
-          name:this.fName,
+          userEmail :this.email,
+          userPw :this.password,
+          userName:this.fName,
           emailAuth:this.emailAuth
         }
+        console.log(data)
         this.signUserUp({ data });
         this.submitStatus = "PENDING";
         setTimeout(() => {
@@ -221,11 +226,12 @@ export default {
       http.get(`/users/check/${this.email}`)
         .then(res => {
           console.log("이메일 인증 시도 성공")
-          if(res.data==true){
-            console.log("회원 가입한 이메일입니다!")
+          if(res.data.data==true){
+            console.log("회원 가입 가능한 이메일입니다!")
             this.emailAuth=true
           }else{
             console.log("중복된 이메일입니다.")
+            console.log(res)
           }
         })
         .catch((error) =>{

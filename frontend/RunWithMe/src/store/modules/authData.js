@@ -77,11 +77,17 @@ export default {
     signUserUp({commit}, data) {
       commit("setLoading", true);
       commit("clearError");
-      http.post("/users",{data})
+      console.log("signUserup Data Check")
+      var signUpUnit = data.data
+      var jsons = JSON.stringify(signUpUnit)
+      console.log(signUpUnit)
+      console.log(jsons)
+      http.post("/users",{jsons})
         .then(res => {
           commit("setLoading", false);
           console.log("회원가입 성공")
           console.log(res)
+          this.$router.push("/")
 
           // const newUser = {
           //   uid: user.user.uid
