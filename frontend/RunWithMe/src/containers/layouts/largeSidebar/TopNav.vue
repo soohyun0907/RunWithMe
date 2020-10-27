@@ -1,8 +1,10 @@
 <template>
   <div class="main-header">
-    <div class="logo">
-      <img src="@/assets/images/logo.png" alt />
-    </div>
+    <router-link :to="`/app/dashboards/main`">
+      <div class="logo">
+        <img src="@/assets/images/logo.png" alt />
+      </div>
+    </router-link>
 
     <div @click="sideBarToggle" class="menu-toggle">
       <div></div>
