@@ -31,33 +31,35 @@ public class BoardController {
 	
 	@GetMapping("/")
 	public ResponseEntity allBoardList(){
-		List<Board> list = null;
-		
-		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_FRIENDLIST_SUCCESS, list), HttpStatus.OK);
+		List<Board> list = boardService.allBoardList();
+		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_BOARDLIST_SUCCESS, list), HttpStatus.OK);
 	}
 	
 	@PostMapping("/board")
-	int insert(@RequestBody Map<String, String> boardInfo) {
-		
-		return 0;
+	ResponseEntity insert(@RequestBody Map<String, String> boardInfo) {
+		Board ret = boardService.save(boardInfo);
+		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.INSERT_BOARD_SUCCESS, ret), HttpStatus.OK);
+
 	}
 	
-	@PutMapping("/board/{board_id}")
-	int update(@PathVariable int board_id) {
-		
-		return 0;
+	@PutMapping("/board")
+	ResponseEntity update(@RequestBody Map<String, String> boardInfo) {
+		Board ret = boardService.update(boardInfo);
+		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.UPDATE_BOARD_SUCCESS, ret), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/board/{board_id}")
-	int delete(@PathVariable int board_id) {
+	ResponseEntity delete(@PathVariable int board_id) {
+		Long ret = boardService.delete(board_id);
 		
-		return 0;
+		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.DELETE_BOARD_SUCCESS, ret), HttpStatus.OK);
 	}
 	
 	@GetMapping("/board/{board_id}")
-	Board detail(@PathVariable int board_id) {
-		
-		return null;
+	ResponseEntity detail(@PathVariable int board_id) {
+		Board ret = boardService.detail(board_id);
+
+		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.DETAIL_BOARD_SUCCESS, ret), HttpStatus.OK);
 	}
 	
 }
