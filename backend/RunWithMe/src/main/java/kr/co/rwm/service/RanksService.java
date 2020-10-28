@@ -31,9 +31,6 @@ public interface RanksService {
 	// 경험치 전체 목록
 	List<Ranks> totalRank();
 	
-	// userName으로 다른 사용자 랭킹 조회
-	Optional<User> findByUserName(String userName);
-
 	// 사용자 랭킹관련 정보 조회
-	Optional<User> findByUserId(int userId);
+	List<Ranks> findByUserId(User userId);
 }
