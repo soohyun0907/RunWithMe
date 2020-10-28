@@ -1,14 +1,21 @@
 package kr.co.rwm.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
+import kr.co.rwm.entity.RunningArea;
+import kr.co.rwm.repo.GugunRepository;
 import kr.co.rwm.repo.RecordRepository;
+import kr.co.rwm.repo.RunningAreaRepository;
 import kr.co.rwm.repo.RunningRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +25,8 @@ public class RecordServiceImpl implements RecordService {
 
 	private final RecordRepository recordRepository;
 	private final RunningRepository runningRepository;
+	private final GugunRepository gugunRepository;
+	private final RunningAreaRepository runningAreaRepository;
 	
 	@Override
 	public void saveRecord(Record record) {
@@ -40,7 +49,16 @@ public class RecordServiceImpl implements RecordService {
 	}
 
 	@Override
-	public Running saveRunning(Running running) {
+	public Running saveRunning(Map<String, Object> runningInfo, int userId) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+		Running running = Running.builder()
+								.userId(userId)
+								.accDistance((double) runningInfo.get("accDistance"))
+								.accTime(((Number) runningInfo.get("accTime")).longValue())
+								.startTime(LocalDateTime.parse((CharSequence) runningInfo.get("startTime"), formatter))
+								.endTime(LocalDateTime.parse((CharSequence) runningInfo.get("endTime"), formatter))
+								.build();
+								
 		return runningRepository.save(running);
 	}
 
@@ -66,6 +84,22 @@ public class RecordServiceImpl implements RecordService {
 			selectRunning.setThumbnail(url);
 			runningRepository.save(selectRunning);
 		});
+	}
+
+	@Override
+	public List<Gugun> saveAllGugun(Running savedRunning, List<String> guguns) {
+		List<Gugun> gugunList = new ArrayList<Gugun>();
+		for(String gugunName: guguns) {
+			Gugun gugun = gugunRepository.findByGugunName(gugunName);
+			RunningArea runningArea = RunningArea.builder()
+												.gugun(gugun)
+												.running(savedRunning)
+												.build();
+			runningAreaRepository.save(runningArea);
+			gugunList.add(gugun);
+		}
+		
+		return gugunList;
 	}
 
 	
