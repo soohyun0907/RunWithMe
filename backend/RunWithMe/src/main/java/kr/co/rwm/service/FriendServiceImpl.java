@@ -25,6 +25,7 @@ public class FriendServiceImpl implements FriendService {
 	public List<User> list(int uid) {
 		List<Friend> list =  friendRepository.findByUserId(uid);
 		List<User> contactsList = new ArrayList<User>();
+		System.out.println("uid: " + uid);
 		for (Friend friend : list) {
 			//System.out.println(friend.getUser().getUsername());
 			contactsList.add(friend.getUser());
