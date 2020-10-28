@@ -14,7 +14,7 @@
                 </b-col>
 
                 <b-col lg="6" xl="4" md="6" class="mb-30" v-for="(contact, index) in contactlist" :key="index">
-                    <a href="/app/runnings/user-detail">
+                    <router-link :to="`/app/runnings/friendsDetail`">
                     <div class="card">
                         <div class="card-body">
                             <div class="ul-contact-page__profile">
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                     </div>
-                    </a>
+                    </router-link>
                 </b-col>
             </div>
         </div>
