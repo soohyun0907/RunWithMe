@@ -41,9 +41,23 @@
 
           <b-col md="6">
             <div class="p-4">
-              <h1 class="mb-3 text-18">Sign Up</h1>
+              <h1 class="mb-3 text-18">회원가입</h1>
               <b-form @submit.prevent="submit">
-                <b-form-group label="Your Name">
+                
+
+                <b-form-group label="Email">
+                  <b-form-input
+                    class="form-control form-control-rounded"
+                    label="Name"
+                    type="email"
+                    v-model="email"
+                  >
+                  </b-form-input>
+                   <b-button @click="emailDuplicate" pill variant="primary ripple m-1">이메일 중복체크</b-button>
+
+                </b-form-group>
+
+                <b-form-group label="이름">
                   <b-form-input
                     class="form-control form-control-rounded"
                     label="Name"
@@ -56,19 +70,9 @@
                     variant="danger"
                     class="error col mt-1"
                     v-if="!$v.fName.minLength"
-                    >Name must have at least
-                    {{ $v.fName.$params.minLength.min }} letters.</b-alert
+                    >이름을 
+                    {{ $v.fName.$params.minLength.min }}글자 이상 입력해주세요.</b-alert
                   >
-                </b-form-group>
-
-                <b-form-group label="Email">
-                  <b-form-input
-                    class="form-control form-control-rounded"
-                    label="Name"
-                    type="email"
-                    v-model="email"
-                  >
-                  </b-form-input>
                 </b-form-group>
 
                 <b-form-group label="Password">
@@ -85,12 +89,12 @@
                     variant="danger"
                     class="error col mt-1"
                     v-if="!$v.password.minLength"
-                    >Minimum
-                    {{ $v.password.$params.minLength.min }} charaters.</b-alert
+                    >비밀번호는 
+                    {{ $v.password.$params.minLength.min }} 이상이어야 합니다.</b-alert
                   >
                 </b-form-group>
 
-                <b-form-group label="Repeat Password">
+                <b-form-group label="Password 확인">
                   <b-form-input
                     class="form-control form-control-rounded"
                     label="Name"
@@ -104,7 +108,7 @@
                     variant="danger"
                     class="error col mt-1"
                     v-if="!$v.repeatPassword.sameAsPassword"
-                    >Passwords must be identical.</b-alert
+                    >비밀번호가 일치하지 않습니다.</b-alert
                   >
                 </b-form-group>
 
@@ -138,6 +142,7 @@
 <script>
 import { required, sameAs, minLength } from "vuelidate/lib/validators";
 import { mapGetters, mapActions } from "vuex";
+import http from "@/utils/http-common";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
@@ -148,27 +153,34 @@ export default {
     return {
       fName: "",
       email: "",
+      password: "",
+      repeatPassword: "",
+      emailAuth:false,
       bgImage: require("@/assets/images/photo-wide-4.jpg"),
       logo: require("@/assets/images/logo.png"),
       signInImage: require("@/assets/images/photo-long-3.jpg"),
-      password: "",
-      repeatPassword: "",
-      submitStatus: null
+      submitStatus: null,
     };
   },
 
   validations: {
     fName: {
       required,
-      minLength: minLength(4)
+      minLength: minLength(2)
     },
 
     password: {
       required,
-      minLength: minLength(5)
+      minLength: minLength(8)
     },
     repeatPassword: {
       sameAsPassword: sameAs("password")
+    },
+    emailAuth:{
+      emailAuthValidate(emailAuth){
+          if(emailAuth==false)
+            return false;
+      }
     }
 
     // add input
@@ -193,18 +205,43 @@ export default {
     ...mapActions(["signUserUp"]),
     //   validate form
     submit() {
-      console.log("submit!");
+      console.log("회원가입 데이터 전송중..");
 
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.submitStatus = "ERROR";
       } else {
-        this.signUserUp({ email: this.email, password: this.password });
+        var data = {
+          userEmail :this.email,
+          userPw :this.password,
+          userName:this.fName,
+          emailAuth:this.emailAuth
+        }
+        console.log(data)
+        this.signUserUp({ data });
         this.submitStatus = "PENDING";
         setTimeout(() => {
           this.submitStatus = "OK";
         }, 1000);
       }
+    },
+    emailDuplicate() {
+      http.get(`/users/check/${this.email}`)
+        .then(res => {
+          console.log("이메일 인증 시도 성공")
+          if(res.data.data==true){
+            console.log("회원 가입 가능한 이메일입니다!")
+            this.emailAuth=true
+          }else{
+            console.log("중복된 이메일입니다.")
+            console.log(res)
+          }
+        })
+        .catch((error) =>{
+          console.log("이메일 인증 실패")
+          console.log(error)
+          this.emailAuth=false
+        });
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
@@ -234,4 +271,4 @@ export default {
 }
 </style>
 
-
+ㅌ

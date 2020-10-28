@@ -8,20 +8,17 @@
     <section ref="map" class="map"></section>
 
     <div class="btn_container">
-      <div align="center">
-        <div class="latLngLabel">{{ lat }}, {{ lng }}</div>
-        <div class="accumulatedDistanceLabel">{{ accumulated_distance }}</div>
-      </div>
       <div v-if="!running">
         <section class="bottom-bar">
           <div v-if="!isPause">
+            <div class="latLngLabel">{{ this.current.lat }}, {{ this.current.lng }}</div>
             <button class="running button green" @click="startLocationUpdates">
               <i class="i-Start-2"></i>
               Start
             </button>
           </div>
           <div v-if="isPause">
-            <button class="running button yellow" @click="startLocationUpdates">
+            <button class="running button yellow" @click="watchLocationUpdates">
               <i class="i-Start-2"></i>
               Resume
             </button>
@@ -46,14 +43,14 @@
     <div id="clock">
       <span id="time">{{ clock }}</span>
     </div>
-    <div>
     <textarea id="encoded-polyline"></textarea>
-    </div>
   </div>
 </template>
 <script>
 import SERVER from "@/api/api";
 import axios from "axios";
+import http from '@/utils/http-common'
+import {mapGetters} from 'vuex';
 
 export default {
 
@@ -63,19 +60,24 @@ export default {
   },
   data() {
       return {
-          lat: 0,
-          lng: 0,
-          timestamp: 0,
+          current:{lat:0, lng:0},
+          previous: {lat: 0, lng: 0},
           watchPositionId: null,
           map: null,
-          previous: {lat: 0, lng: 0},
           accumulated_distance: 0,
+          accumulated_time: 0,
+          checkOneKm:0,
+          checkSecond:0,
           linePath: [],
           poly: null,
           encoded_polyline: "",
+          cur_marker:null,
+          startTime:"",
+          endTime:"",
+          speed:0,
 
           //스톱워치 변수
-          clock: "00:00:00.000",
+          clock: "00:00:00",
           timeBegan: null,
           timeStopped: null,
           stoppedDuration: 0,
@@ -92,22 +94,48 @@ export default {
       script.onload = () => google.maps.load(this.initMap);
     }
   },
+  computed: {
+  ...mapGetters(["userInfo"])
+  },
   methods: {
       initMap(){
         var map = new google.maps.Map(this.$refs["map"], {
-              zoom: 18,
+              zoom: 16,
               center: new google.maps.LatLng(37.331777, 127.129347),
-              mapTypeId: google.maps.MapTypeId.ROADMAP
         });
-
+        this.linePath.push(new google.maps.LatLng(37.331777, 127.129347))
+        
         this.map = map;
       },
       startLocationUpdates() {
+        this.startTime = new Date()
+        this.startTime = this.$moment(this.startTime).format('YYYY-MM-DDTHH:mm:ss')
+        this.watchLocationUpdates()
+        
+      },
+
+      resetLocations() {
+        this.startTime = ""
+        this.endTime = ""
+        this.clock = "00:00:00";
+        this.timeBegan = null;
+        this.timeStopped = null;
+        this.stoppedDuration = 0;
+        this.started = null
+        this.checkSecond=0
+        this.checkOneKm=0
+        this.speed=0
+        this.current.lat=0
+        this.current.lng=0
+        this.previous.lat=0
+        this.previous.lng=0
+      },
+      watchLocationUpdates() {
           // stopwatch
           if (this.running) return;
 
           if (this.timeBegan === null) {
-            this.endLocationUpdates();
+            this.resetLocations();
             this.timeBegan = new Date();
           }
 
@@ -115,64 +143,71 @@ export default {
             this.stoppedDuration += new Date() - this.timeStopped;
           }
 
-          this.started = setInterval(this.clockRunning, 10);
+          this.started = setInterval(this.clockRunning, 1000);
           this.running = true;
           this.isPause = false;
 
-          // map
-          var map = new google.maps.Map(this.$refs["map"], {
-              zoom: 18,
-              mapTypeId: google.maps.MapTypeId.ROADMAP
-          });
+          //Map 시작
+          //Map 현재위치 마커
+          var runningMarkerSrc = require("../../../assets/images/running_marker.png")
+          var runningMarkerSize = new google.maps.Size(35,50)
+          var runningMarker = new google.maps.MarkerImage(runningMarkerSrc,null,null,null,runningMarkerSize)
+          var runningMarkerPosition = (this.current.lat !=0)? new google.maps.LatLng(this.current.lat, this.current.lng) : new google.maps.LatLng(37.331777, 127.129347)
+          var map = this.map
           var marker = new google.maps.Marker({
-              map: map
+              map: map,
+              title:"현재위치",
+              position:runningMarkerPosition,
+              icon:runningMarker,
           });
-          this.map = map;
-
+         
           this.watchPositionId = navigator.geolocation.watchPosition(
-              position => {
-                  this.lat = position.coords.latitude;
-                  this.lng = position.coords.longitude;
-                  console.log(position);
-                  map.setCenter(new google.maps.LatLng(this.lat, this.lng)); 
-                  marker.setPosition(new google.maps.LatLng(this.lat, this.lng));
+            position => {
+                this.current.lat= position.coords.latitude;
+                this.current.lng = position.coords.longitude;
+                // console.log(position);
+                map.setCenter(new google.maps.LatLng(this.current.lat, this.current.lng)); 
+                marker.setPosition(new google.maps.LatLng(this.current.lat, this.current.lng));
+                console.log(map.mapOp)
+                if(this.previous.lat==0){
+                  this.previous.lat = this.current.lat;
+                  this.previous.lng = this.current.lng;
+                  this.savePosition(position);
 
-                  if(this.previous.lat==0){
-                    this.previous.lat = this.lat;
-                    this.previous.lng = this.lng;
-                    this.savePosition(position);
+                  this.poly = new google.maps.Polyline({
+                    strokeColor: "#000000",
+                    strokeOpacity: 1,
+                    strokeWeight: 3,
+                    map: this.map
+                  });
+                  var currentLatLng = new google.maps.LatLng(this.current.lat, this.current.lng);
+                  this.linePath.push(currentLatLng);
+                  this.make_encode_polyline(currentLatLng, this.poly);
 
-                    // init linePath, poly
-                    // this.linePath.push(new google.maps.LatLng(this.lat, this.lng));
-                    this.poly = new google.maps.Polyline({
-                      strokeColor: "#000000",
-                      strokeOpacity: 1,
-                      strokeWeight: 3,
-                      map: this.map
-                    });
-                    var currentLatLng = new google.maps.LatLng(this.lat, this.lng);
+                }else{
+                  var distance = this.computeDistance(this.previous, this.current);
+                  console.log("watchposition 이동거리" + distance);
+                  console.log("watchposition 걸린시간"+ this.accumulated_time)
+                  var threshold = 0.01;
+                  if(distance > threshold){
+                    this.previous.lat = this.current.lat;
+                    this.previous.lng = this.current.lng;
+                    this.accumulated_distance += distance;
+                    this.checkOneKm= this.accumulated_distance
+                    this.checkSecond = this.accumulated_time
+                    
+                    var currentLatLng = new google.maps.LatLng(this.current.lat, this.current.lng);
                     this.linePath.push(currentLatLng);
-                    this.encode_polyline(currentLatLng, this.poly);
-
-                  }else{
-                    var current = {
-                      lat: this.lat,
-                      lng: this.lng
-                    };
-                    var distance = this.computeDistance(this.previous, current);
-                    console.log(distance);
-                    var threshold = 0.01;
-                    if(distance > threshold){
-                      this.previous.lat = this.lat;
-                      this.previous.lng = this.lng;
-                      this.accumulated_distance += distance;
-                      // this.savePosition(position);
-
-                      var currentLatLng = new google.maps.LatLng(this.lat, this.lng);
-                      this.linePath.push(currentLatLng);
-                      this.encode_polyline(currentLatLng, this.poly);
-                    }
+                    this.make_encode_polyline(currentLatLng, this.poly);
                   }
+                  if(this.checkOneKm>=1){
+                    this.speed = (this.checkOneKm*1000)/this.checkSecond
+                    this.checkSecond=0
+                    this.checkOneKm-=1
+                    this.savePosition()
+                    console.log("최근 1km당 스피드 = " + this.speed)
+                  }
+                }
               },
               error => {
                   console.log(error.message);
@@ -182,39 +217,25 @@ export default {
                 maximumAge: 0
               }
           );
+          this.map = map;
+          this.cur_marker = marker
           
       },
-      endLocationUpdates() {
-        this.running = false;
-        clearInterval(this.started);
-        this.stoppedDuration = 0;
-        this.timeBegan = null;
-        this.timeStopped = null;
-        this.clock = "00:00:00.000";
-      },
-      clockRunning() {
-        var currentTime = new Date();
-        var timeElapsed = new Date(currentTime - this.timeBegan);
-        var hour = timeElapsed.getUTCHours();
-        var min = timeElapsed.getUTCMinutes();
-        var sec = timeElapsed.getUTCSeconds();
-        var ms = timeElapsed.getUTCMilliseconds();
+      getScreenShot() {
+       //google static map url
+       var staticM_URL = "https://maps.googleapis.com/maps/api/staticmap";
 
-        this.clock =
-          this.zeroPrefix(hour, 2) +
-          ":" +
-          this.zeroPrefix(min, 2) +
-          ":" +
-          this.zeroPrefix(sec, 2) +
-          "." +
-          this.zeroPrefix(ms, 3);
-      },
-      zeroPrefix(num, digit) {
-        var zero = "";
-        for (var i = 0; i < digit; i++) {
-          zero += "0";
-        }
-        return (zero + num).slice(-digit);
+       //Set the Google Map Center.
+       staticM_URL += "?center=37.483942, 126.918457" 
+
+       staticM_URL  += "&size=520x650";  //Set the Google Map Size. 
+
+       staticM_URL  += "&zoom=15";  //Set the Google Map Zoom. 
+
+       staticM_URL  += "&maptype=roadmap&key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png" ;//Set the Google Map Type.
+
+
+      window.open(staticM_URL);
       },
       stopLocationUpdates() {
         this.isPause = true;
@@ -224,8 +245,7 @@ export default {
         
         navigator.geolocation.clearWatch(this.watchPositionId);
         this.drawLines(this.linePath);
-        var userId = 1;
-        axios.get(SERVER.URL+"gps/" + userId)
+        axios.get(SERVER.URL+"gps/" + this.userInfo.userId)
         .then(res => {
           console.log(res.data);
           this.drawLines(res.data.data);
@@ -236,22 +256,72 @@ export default {
       },
       savePosition(position) {
           let data = {
-            userId: 1,
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            timestamp: position.timestamp
+            userId: this.userInfo.userId,
+            accDistance : this.accumulated_distance,
+            accTime : this.accumulated_time,
+            speed: this.speed,
           };
-          axios.post(SERVER.URL+"gps", data, {
+          http.post(`runings/temp`, data, {
             headers: {
               "Content-type": "application/json"
             }
-          })
-            .then(res => {
-              console.log("response")
+          }).then(res => {
               console.log(res.data)
+              console.log("1키로당 기록 전송" + data.accDistance +" " + data.accTime)
             })
             .catch(err => console.log(err.response))
       },
+     
+      endLocationUpdates() {
+        this.stopLocationUpdates()
+        
+      this.getScreenShot()
+        this.startTime = ""
+        this.running = false;
+        this.stoppedDuration = 0;
+        this.timeBegan = null;
+        this.timeStopped = null;
+        this.clock = "00:00:00";
+        this.checkSecond=0
+        this.checkOneKm=0
+        this.endTime = new Date()
+        this.endTime = this.$moment(this.endTime).format('YYYY-MM-DDTHH:mm:ss')
+        
+        console.log(this.endTime)
+        let runningData = {
+            userId:this.userInfo.userId,
+            polyline:this.encode_polyline,
+            startTime:this.startTime,
+            endTime:this.endTime,
+            accDistance:this.accumulated_distance,
+            accTime:this.accumulated_time
+        }
+        http.post(`runnings/`,runningData)
+       
+      },
+      clockRunning() {
+        var currentTime = new Date();
+        var timeElapsed = new Date(currentTime - this.timeBegan-this.stoppedDuration);
+        var hour = timeElapsed.getUTCHours();
+        var min = timeElapsed.getUTCMinutes();
+        var sec = timeElapsed.getUTCSeconds();
+        this.accumulated_time+=1
+
+        this.clock =
+          this.zeroPrefix(hour, 2) +
+          ":" +
+          this.zeroPrefix(min, 2) +
+          ":" +
+          this.zeroPrefix(sec, 2)
+      },
+      zeroPrefix(num, digit) {
+        var zero = "";
+        for (var i = 0; i < digit; i++) {
+          zero += "0";
+        }
+        return (zero + num).slice(-digit);
+      },
+     
       drawLines(positions) {
         var runningPathCoordinates = [];
 
@@ -269,8 +339,7 @@ export default {
           strokeWeight: 2
         });
 
-        // console.log(runningPath);
-        console.log(this.linePath);
+        console.log("linepath" + this.linePath);
         runningPath.setMap(this.map);
         
       },
@@ -291,13 +360,13 @@ export default {
           var radians = (degrees * Math.PI)/180;
           return radians;
       },
-      encode_polyline(latLng, poly) {
+      make_encode_polyline(latLng, poly) {
         var path = poly.getPath();
         // Because path is an MVCArray, we can simply append a new coordinate
         // and it will automatically appear
         path.push(latLng);
         // Update the text field to display the polyline encodings
-        this.encode_polyline = google.maps.geometry.encoding.encodePath(path);
+        this.encode_polyline = new google.maps.geometry.encoding.encodePath(path);
         document.getElementById("encoded-polyline").value = this.encode_polyline;
       },
   }
@@ -325,5 +394,37 @@ export default {
   height: 100px;
   text-align: center;
   background: white;
+}
+/* 스톱워치 디자인 */
+@import url("https://fonts.googleapis.com/css?family=Share+Tech+Mono");
+#clock {
+  order: 0;
+  flex: 0 1 auto;
+  align-self: center;
+
+  color: rgb(200, 200, 200);
+}
+#time {
+  font-size: 6.5em;
+}
+.btn-container {
+  display: flex;
+  margin-top: 15px;
+}
+.running button {
+  text-align: center;
+  font-family: "Share Tech Mono", sans-serif;
+  background: transparent;
+  border: none;
+  color: rgb(200, 200, 200);
+  padding: 10px 15px;
+  margin: 0 10px;
+  text-transform: uppercase;
+  font-size: 2em;
+  cursor: pointer;
+
+  flex-grow: 1;
+
+  transition: color 0.1s ease-out;
 }
 </style>
