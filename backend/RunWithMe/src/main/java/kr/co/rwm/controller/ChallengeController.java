@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.Challenge;
+import kr.co.rwm.entity.ChallengeUser;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
@@ -51,6 +54,7 @@ public class ChallengeController {
 	
 	private final ChallengeService challengeService;
 	private final UserService userService;
+	private final JwtTokenProvider jwtTokenProvider;
 	
 	/**
 	 * 관리자 - 챌린지 생성
@@ -83,7 +87,7 @@ public class ChallengeController {
 	@ApiOperation(value = "챌린지 전체 목록 조회", response = ResponseEntity.class)
 	@GetMapping
 	public ResponseEntity findAllChallenge() {
-		System.out.println("/challenges/save - 관리자가 challenge를 전체조회합니다.");
+		System.out.println("/challenges/save - challenge를 전체조회합니다.");
 		List<Challenge> challenges = challengeService.findAllChallenge();
 		LocalDateTime today = LocalDateTime.now();
 		List<Challenge> beforeChallenges = challengeService.findAllChallengeGraterThanEndTime(today);	//진행 첼린지
@@ -106,7 +110,7 @@ public class ChallengeController {
 	@ApiOperation(value = "챌린지 상세 조회", response = ResponseEntity.class)
 	@GetMapping("/{challengeId}")
 	public ResponseEntity findChallengeByChallengeId(@PathVariable int challengeId) {
-		System.out.println("/challenges/save - 관리자가 challenge를 등록합니다.");
+		System.out.println("/challenges/detail - 상세 조회 합니다.");
 		Challenge challenge = challengeService.findChallengeByChallengeId(challengeId);
 		// 이 때, 딸린 유저들 싹다 데리고와야함 ㅎㅎ
 		
@@ -147,6 +151,26 @@ public class ChallengeController {
 				Response(StatusCode.OK, ResponseMessage.CHALLENGE_DELETE_SUCCESS, null), HttpStatus.OK);
 	}
 	
-	// challenges 
+	/**
+	 * 챌린지 참여
+	 * 
+	 * @param challengeId
+	 * @param request
+	 * @return
+	 */
+	@ApiOperation(value = "챌린지 참여", response = ResponseEntity.class)
+	@PostMapping("/runners/{challengeId}")
+	public ResponseEntity participateChallenge(@PathVariable int challengeId, HttpServletRequest request) {
+		System.out.println("/challenges/participate - 유저가 챌린지에 참여합니다.");
+		String token = request.getHeader("AUTH");
+		int userId = 0;
+		if(jwtTokenProvider.validateToken(token)) {
+			userId = jwtTokenProvider.getUserIdFromJwt(token);
+		}
+		ChallengeUser challengeUser = challengeService.participateChallenge(challengeId, userId);
+		
+		return new ResponseEntity<Response>(new 
+				Response(StatusCode.OK, ResponseMessage.CHALLENGE_PARTICIPATE_SUCCESS, challengeUser), HttpStatus.OK);
+	}
 }
 	
