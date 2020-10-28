@@ -1,5 +1,6 @@
 package kr.co.rwm.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -30,7 +31,8 @@ public class RanksServiceImpl implements RanksService{
 	// 회원가입시 활용 및 매달 스코어 초기화시 사용
 	@Override
 	public void join(User user) {
-		rankRepository.save(Ranks.builder().gugunId(user.getGugunId()).userId(user).raceExp(DEFAULT_EXP).donateExp(DEFAULT_EXP).totalExp(DEFAULT_EXP).build());
+//		rankRepository.save(Ranks.builder().gugunId(user.getGugunId()).userId(user).raceExp(DEFAULT_EXP).donateExp(DEFAULT_EXP).totalExp(DEFAULT_EXP).build());
+		rankRepository.save(Ranks.builder().userId(user).raceExp(DEFAULT_EXP).donateExp(DEFAULT_EXP).totalExp(DEFAULT_EXP).build());
 	}
 
 	@Override
@@ -76,7 +78,7 @@ public class RanksServiceImpl implements RanksService{
 			selectUser.setRankId(temp.getRankId());
 			selectUser.setUserId(temp.getUserId());
 			selectUser.setDonateExp(temp.getDonateExp());
-			selectUser.setGugunId(temp.getGugunId());
+//			selectUser.setGugunId(temp.getGugunId());
 			selectUser.setTotalExp(total);
 			selectUser.setRaceExp(result);
 			rankRepository.save(selectUser);
@@ -91,8 +93,7 @@ public class RanksServiceImpl implements RanksService{
 
 	@Override
 	public List<Ranks> raceTop() {
-		// TODO Auto-generated method stub
-		return null;
+		return rankRepository.findTop10ByOrderByRaceExpDesc();
 	}
 
 	@Override
@@ -103,8 +104,7 @@ public class RanksServiceImpl implements RanksService{
 
 	@Override
 	public List<Ranks> totalTop() {
-		// TODO Auto-generated method stub
-		return null;
+		return rankRepository.findTop10ByOrderByTotalExpDesc();
 	}
 
 	@Override
@@ -115,20 +115,27 @@ public class RanksServiceImpl implements RanksService{
 
 	@Override
 	public List<Ranks> totalRank() {
-		// TODO Auto-generated method stub
-		return null;
+		return rankRepository.findAllByOrderByTotalExpDesc();
 	}
 
+	// 사용자 정보 조회 ( 이메일 or 이름 or userid 모두 가능)
 	@Override
-	public Optional<User> findByUserName(String userName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Optional<User> findByUserId(int userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Ranks> findByUserId(User userId) {
+		User user;
+		List<Ranks> list = new ArrayList<Ranks>();
+		if(userId.getUserId()!=null) {
+			user = userRepository.findByUserId(userId.getUserId());
+			list.add(rankRepository.findByUserId(user).get());
+		}else if(userId.getUserEmail() != null) {
+			user = userRepository.findByUserEmail(userId.getUserEmail()).get();
+			list.add(rankRepository.findByUserId(user).get());
+		}else if(userId.getUsername() != null) {
+			List<User> users = userRepository.findByUserName(userId.getUsername());
+			for(int i=0;i<users.size();i++) {
+				list.add(rankRepository.findByUserId(users.get(i)).get());
+			}
+		}
+		return list;
 	}
 
 }
