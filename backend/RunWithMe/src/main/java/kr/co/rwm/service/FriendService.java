@@ -9,5 +9,7 @@ import kr.co.rwm.entity.User;
 public interface FriendService {
 	List<User> list(int uid);
 
-	void insert(Map<String, Integer> friendInfo);
+	Friend insert(int uid, Map<String, Integer> friendInfo);
+
+	Long delete(int uid, Map<String, Integer> friendInfo);
 }
