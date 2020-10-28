@@ -90,6 +90,23 @@ const routes = [
       }
     ]
   },
+
+   // mypages
+   {
+    path: "/app/mypages",
+    component: () => import("./views/app/mypages"),
+    redirect: "/app/sessions/signIn",
+    children: [
+      {
+        path: "byarea",
+        component: () => import("./views/app/mypages/byarea")
+      },
+      {
+        path: "friends",
+        component: () => import("./views/app/mypages/friends")
+      },
+    ]
+  },
 ];
 
 const router = new Router({
