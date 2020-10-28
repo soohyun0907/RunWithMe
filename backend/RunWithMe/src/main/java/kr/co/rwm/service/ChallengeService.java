@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import kr.co.rwm.entity.Challenge;
+import kr.co.rwm.entity.ChallengeUser;
 
 public interface ChallengeService {
 
@@ -57,4 +58,18 @@ public interface ChallengeService {
 	 * @return
 	 */
 	public List<Challenge> findAllChallengeLessThanEndTime(LocalDateTime endTime);
+
+	/**
+	 * 챌린지 참여
+	 * @param challengeId
+	 * @param userId
+	 */
+	public ChallengeUser participateChallenge(int challengeId, int userId);
+	
+	/**
+	 * 유저가 참여하고 있는 챌린지 아이디 가져오기
+	 * @param userId
+	 * @return
+	 */
+	public List<Integer> findByChallengeUserList(int userId);
 }
