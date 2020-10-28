@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.rwm.entity.Board;
+import kr.co.rwm.entity.User;
 import kr.co.rwm.repo.BoardRepository;
 
 @Service
@@ -75,6 +76,21 @@ public class BoardServiceImpl implements BoardService{
 		System.out.println(uid);
 		System.out.println(board.get().getWriterId());
 		return board.get();
+	}
+
+	@Override
+	public Optional<Board> findByBoardId(int board_id) {
+		return boardRepository.findByBoardId(board_id);
+	}
+
+	@Override
+	@Transactional
+	public void insertMedia(Optional<Board> board, Board updateBoard) {
+
+		board.ifPresent(selectBoard->{
+			selectBoard.setBoardMedia(updateBoard.getBoardMedia());
+			boardRepository.save(selectBoard);
+		});
 	}
 	
 	
