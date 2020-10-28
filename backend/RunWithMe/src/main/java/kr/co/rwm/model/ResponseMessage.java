@@ -57,6 +57,8 @@ public class ResponseMessage {
 
     public static final String READ_FRIENDLIST_SUCCESS = "친구목록 조회 성공";
     public static final String INSERT_FRIEND_SUCCESS = "친구 추가 성공";
+    public static final String DELETE_FRIEND_SUCCESS = "친구 삭제 성공";
+    
     
     public static final String READ_BOARDLIST_SUCCESS = "게시물 리스트 조회 성공";
     public static final String INSERT_BOARD_SUCCESS = "게시물 추가 성공";

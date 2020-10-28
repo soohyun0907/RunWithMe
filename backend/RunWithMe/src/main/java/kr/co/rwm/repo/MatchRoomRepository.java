@@ -46,9 +46,9 @@ public class MatchRoomRepository {
     }
 
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
-    public ChatRoom createAndSelectChatroom( Map<String, Integer> idInfo) {
+    public ChatRoom createAndSelectChatroom( int uid, Map<String, Integer> idInfo) {
     	
-    	Optional<Matching> matching = matchRepository.findByMasterIdAndGuestId(idInfo.get("masterId"), idInfo.get("guestId"));
+    	Optional<Matching> matching = matchRepository.findByMasterIdAndGuestId(uid, idInfo.get("guestId"));
     	
     	if(matching.isPresent()) // 이미 방이 존재하다면,
     	{
@@ -65,9 +65,9 @@ public class MatchRoomRepository {
         	ChatRoom chatRoom = ChatRoom.create(friendName); 
         	hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
         	
-        	Matching match = Matching.builder().masterId(idInfo.get("masterId")).guestId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
+        	Matching match = Matching.builder().masterId(uid).guestId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
         	matchRepository.save(match);
-        	match = Matching.builder().guestId(idInfo.get("masterId")).masterId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
+        	match = Matching.builder().guestId(uid).masterId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
         	matchRepository.save(match);        	
         	System.out.println("chat :"+ chatRoom.getName());
         	return chatRoom;
