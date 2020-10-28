@@ -60,4 +60,25 @@ public class S3ServiceImpl implements S3Service {
 		}
 	}
 
+	@Override
+	public String mediaFileUpload(MultipartFile multipartFile) {
+		try {
+			
+			String uploadpath = "media";
+			S3Util s3 = new S3Util(accessKey, secretKey);
+			String img_path = FileUpload.uploadFile(uploadpath, multipartFile.getOriginalFilename(), multipartFile.getBytes(), bucketName, accessKey, secretKey);
+			String img_url = img_path;
+			String url = s3.getFileURL(bucketName, uploadpath+img_url);
+			return url;
+		}catch(RuntimeException e) {
+			System.out.println(e);
+			return null;
+		}catch(Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	
+
 }

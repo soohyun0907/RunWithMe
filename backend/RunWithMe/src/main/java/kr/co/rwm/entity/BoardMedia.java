@@ -1,13 +1,12 @@
 package kr.co.rwm.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,17 +20,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Friend {
+public class BoardMedia {
+ 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "f_id")
-	private Integer fId;
-	 
-	@Column(name = "user_id", nullable = false)
-	private Integer userId;
-	
-	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_userId")
-	private User user;
-	
+	@Column(name = "board_media_id")
+	private Integer boardMediaId;
+
+	@Column(name = "media_id", nullable = false)
+	private Integer mediaId;
+
+	@Column(name = "media_url", nullable = false)
+	private String mediaURL;
+
 }

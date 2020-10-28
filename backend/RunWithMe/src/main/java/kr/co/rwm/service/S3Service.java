@@ -11,4 +11,6 @@ public interface S3Service {
 
 	String profileUpload(MultipartFile file, ByteArrayOutputStream profile);
 
+	public String mediaFileUpload(MultipartFile multipartFile);
+
 }
