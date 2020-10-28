@@ -67,7 +67,6 @@ export default {
             console.log(res.data.data)
             console.log(res.headers.auth)// 토큰얻기
             router.push('/')
-
         })
         .catch(function(error) {
           // Handle Errors here.
