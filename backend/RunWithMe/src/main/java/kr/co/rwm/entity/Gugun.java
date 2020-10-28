@@ -1,5 +1,7 @@
 package kr.co.rwm.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,18 +20,22 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Gugun {
+public class Gugun implements Serializable {
 
-	@Id
-	@Column(name = "gugun_id")
-	private Integer gugunId;
-	
-	@Column(name = "gugun_name")
-	private String gugunName;
-	
-	@ManyToOne
-	@JoinColumn(name = "sido_id", nullable = false)
-	private Sido sidoId;
-	
+   /**
+    * 
+    */
+   private static final long serialVersionUID = 11L;
+
+   @Id
+   @Column(name = "gugun_id")
+   private Integer gugunId;
+   
+   @Column(name = "gugun_name")
+   private String gugunName;
+   
+   @ManyToOne
+   @JoinColumn(name = "sido_id", nullable = false)
+   private Sido sidoId;
+   
 }
-

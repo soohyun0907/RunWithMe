@@ -63,8 +63,8 @@ public class RunningController {
 		System.out.println("running/controller/temp/getRecord");
 		User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
-		List<Record> records = recordTempRepository.findRecordByUserId(userId);	// 토큰X
-//		List<Record> records = recordTempRepository.findRecordByUserId(loginUser.getUserId());	// 토큰O 추후에 이렇게 바꿀것
+//		List<Record> records = recordTempRepository.findRecordByUserId(userId);	// 토큰X
+		List<Record> records = recordTempRepository.findRecordByUserId(loginUser.getUserId());	// 토큰O 추후에 이렇게 바꿀것
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.RUNNING_GPS_SUCCESS, records), HttpStatus.OK);
 	}
