@@ -39,6 +39,7 @@ public class ResponseMessage {
     public static final String CHALLENGE_SEARCH_SUCCESS = "챌린지 상세 조회 성공";
     public static final String CHALLENGE_SEARCH_FAIL = "챌린지 상세 조회 실패";
     public static final String CHALLENGE_ACCESS_FORBIDDEN = "권한 없음";
+    public static final String CHALLENGE_PARTICIPATE_SUCCESS = "챌린지 참여 성공";
     
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
