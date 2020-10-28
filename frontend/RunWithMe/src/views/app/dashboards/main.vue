@@ -196,24 +196,86 @@
         </b-card>
       </b-col>
     <h3>친구 피드 시작</h3>
-    <b-col xl="3" md="6" sm="6">
-        <b-card
-          class="card-icon-bg card-icon-bg-primary o-hidden mb-30 text-center"
+    <div
+      ref="rowView"
+      class="row "
+      :class="{ 'list-grid': isListView, 'list-horizontal': !isListView }"
+    >
+      <div
+        :class="{
+          'col-md-6  col-lg-4 col-xl-3': isListView,
+          'col-md-12': !isListView
+        }"
+        class="list-item "
+        :key="index"
+        v-for="(item, index) in items"
+        transition="list"
+      >
+        <div
+          class="card o-hidden mb-30 d-flex "
+          :class="{ 'flex-column': isListView, 'flex-row': !isListView }"
         >
-          <img src="https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png" />
-          <div class="content">
-            <b-avatar class="mr-2" variant="primary" text="BV"></b-avatar>
-            <p class="text-muted mt-2 mb-0">New Leads</p>
-            <p class="text-primary text-24 line-height-1 mb-2">205</p>
+          <div class="list-thumb d-flex">
+            <img alt="" :src="item.img" />
           </div>
-        </b-card>
-      </b-col>
+          <div
+            class="flex-grow-1 "
+            :class="{ 'd-bock': isListView, 'pl-2 d-flex': !isListView }"
+          >
+            <div
+              class="card-body align-self-center d-flex flex-column justify-content-between align-items-lg-center"
+              :class="{ 'flex-lg-row': !isListView }"
+            >
+              <a class="w-40 w-sm-100" href="">
+                <div class="item-title">
+                  <b-avatar class="mr-2" variant="info" src="/img/2.jpg"></b-avatar>
+                    {{ item.title }}
+                </div>
+              </a>
+              <br>
+              <!-- <p class="m-0 text-muted text-small w-15 w-sm-100">
+                총 킬로미터 평균페이스 총 런닝 시간
+              </p> -->
+              <p class="m-0 text-muted text-small w-15 w-sm-100">
+                {{ item.total_distance }}KM &nbsp; &nbsp; &nbsp; &nbsp;
+                {{convertToTime(item.running_avg_pace)}} &nbsp;
+                {{item.accumulcated_time}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import { Carousel3d, Slide } from 'vue-carousel-3d'
 import { VueperSlides, VueperSlide } from 'vueperslides'
 import 'vueperslides/dist/vueperslides.css'
+
+const items = [
+  {
+    img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
+    title: "Nickname",
+    total_distance: "8",
+    running_avg_pace : 325,
+    accumulcated_time: "38:11"
+  },
+  {
+    img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
+    title: "Nickname",
+    total_distance: "10",
+    running_avg_pace : 325,
+    accumulcated_time: "38:11"
+  },
+  {
+    img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
+    title: "Nickname",
+    total_distance: "5",
+    running_avg_pace : 325,
+    accumulcated_time: "38:11"
+  },
+];
 
 export default {
   name: 'mainpage',
@@ -225,7 +287,21 @@ export default {
   },
   data() {
     return {
+      items: items,
+      isListView: false,
       slides: [
+        {
+          img : require('@/assets/images/photo-long-1.jpg'),
+        },
+        {
+          img : require('@/assets/images/photo-long-2.jpg'),
+        },
+        {
+          img : require('@/assets/images/photo-long-3.jpg'),
+        },
+        {
+          img : require('@/assets/images/photo-long-4.jpg'),
+        },
         {
           img : require('@/assets/images/photo-long-1.jpg'),
         },
@@ -245,10 +321,15 @@ export default {
 
   },
   mounted() {
-    
+
   },
   methods: {
-
+    convertToTime(origin){
+        var time = "";
+        time += parseInt(origin/60) + "\'";
+        time += origin%60 + "\"";
+        return time;
+    }
   }
 };
 </script>
