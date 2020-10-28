@@ -32,8 +32,8 @@ public class UserService implements UserDetailsService {
 		return userRepository.findByUserEmail(userEmail);
 	}
 
-	public void join(User user, String password) {
-		userRepository.save(User.builder().gugunId(user.getGugunId()).userEmail(user.getUserEmail())
+	public User join(User user, String password) {
+		return userRepository.save(User.builder().gugunId(user.getGugunId()).userEmail(user.getUserEmail())
 				.userName(user.getUsername()).userPw(password).roles(Collections.singletonList("USER")).build());
 	}
 

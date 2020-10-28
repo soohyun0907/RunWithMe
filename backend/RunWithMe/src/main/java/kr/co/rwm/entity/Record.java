@@ -26,34 +26,34 @@ import lombok.Setter;
 @Setter
 @Builder
 public class Record implements Serializable {
-	
-	/**
-	 * Redis에 올리려면 Serializable 필요
-	 */
-	private static final long serialVersionUID = 1L;
+   
+   /**
+    * Redis에 올리려면 Serializable 필요
+    */
+   private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "record_id")
-	private Integer recordId;
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "record_id")
+   private Integer recordId;
 
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-	@JoinColumn(name = "running_id")
-	private Running runningId;
+   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+   @JoinColumn(name = "running_id")
+   private Running runningId;
 
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-	@JoinColumn(name = "user_id", nullable = false)
-	private User userId;
-	
-	@Column(name = "accumulated_distance", nullable = false)
-	private double accDistance;
-	
-	@Column(name = "accumulated_time", nullable = false)
-	private double accTime;
-	
-	@Column(name = "speed")
-	private double speed;
-	
+   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+   @JoinColumn(name = "user_id", nullable = false)
+   private User userId;
+   
+   @Column(name = "accumulated_distance", nullable = false)
+   private double accDistance;
+   
+   @Column(name = "accumulated_time", nullable = false)
+   private double accTime;
+   
+   @Column(name = "speed")
+   private double speed;
+   
 }

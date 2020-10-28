@@ -32,6 +32,7 @@ import kr.co.rwm.model.RestException;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.AreaService;
 import kr.co.rwm.service.JwtTokenProvider;
+import kr.co.rwm.service.RanksService;
 import kr.co.rwm.service.S3Service;
 import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -61,9 +62,8 @@ public class UserController {
 	private final RedisTemplate<String, String> logoutRedis;
 	private final S3Service s3Service;
 	private final AreaService areaService;
-	
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
+	private final RanksService rankService;
 	
 	/**
 	 * 회원가입 - 이메일 중복 여부 True/False를 판단하고, True일 경우 JSON 객체 기반으로 회원가입을 진행한다.
@@ -85,7 +85,8 @@ public class UserController {
 		}else {
 			Gugun gugun = areaService.findGugunByGugunId(user.getGugunId().getGugunId());
 			user.setGugunId(gugun);
-			userService.join(user, passwordEncoder.encode(user.getPassword()));
+			User result = userService.join(user, passwordEncoder.encode(user.getPassword()));
+			rankService.join(result);
 			
 			return new ResponseEntity<Response>(new Response(StatusCode.CREATED,ResponseMessage.SIGNUP_SUCCESS),HttpStatus.CREATED);
 		}
