@@ -28,21 +28,11 @@ Vue.component('VueFontawesome', require('vue-fontawesome-icon/VueFontawesome.vue
 Vue.component("breadcumb", Breadcumb);
 Vue.component("breadcumbcustom", Breadcumbcustom);
 import InstantSearch from 'vue-instantsearch';
-// Vue.use(VueRouter);
  
-
-var sessionOptions = {
-  persist: true
-};
-Vue.use(sessionOptions)
-
-
 Vue.use(InstantSearch);
 Vue.use(GullKit);
 
 firebase.initializeApp(firebaseSettings);
-
-
 
 Vue.config.productionTip = false;
 
