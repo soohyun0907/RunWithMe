@@ -13,4 +13,6 @@ public interface GugunRepository extends JpaRepository<Gugun, Long> {
 
 	Gugun findByGugunId(int gugunId);
 
+	Gugun findByGugunName(String gugunName);
+
 }

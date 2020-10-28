@@ -2,10 +2,10 @@ package kr.co.rwm.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
 import kr.co.rwm.entity.User;
@@ -72,34 +76,34 @@ public class RunningController {
 	
 	// stop 눌렀을 때 redis에 있던 record를 꺼내서 db에 저장한다.
 	@PostMapping
-	public ResponseEntity saveStopRecord(@RequestBody Running running){
+	public ResponseEntity saveStopRecord(@RequestBody Map<String, Object> runningInfo){
 		System.out.println("gps/contoller/record");
-		/**
-		 * user_id
-		 * running 먼저 저장
-		 * records를 running의 key를 이용해서 저장
-		 * redis에 있는거랑, 마지막 records 저장해야함
-		 * redis에 있는 기록 다 지우기
-		 */
 		User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		running.setUserId(loginUser.getUserId());
 		
-		Running savedRunning = recordService.saveRunning(running);
-		int runningId = savedRunning.getRunningId();
+		// 1. running 저장
+		Running savedRunning = recordService.saveRunning(runningInfo, loginUser.getUserId());
+		
+		// 2. redis에서 records 조회 + 삭제 + running의 마지막 값으로 마지막 record 추가
 		List<Record> records = recordTempRepository.findRecordByUserId(loginUser.getUserId());
-		recordTempRepository.deleteByUserId(loginUser.getUserId(), (int) running.getAccDistance());
+		recordTempRepository.deleteByUserId(loginUser.getUserId(), (int) savedRunning.getAccDistance());
 		Record lastRecord = Record.builder()
 								.userId(loginUser)
-								.accDistance(running.getAccDistance())
-								.accTime(running.getAccTime())
+								.accDistance(savedRunning.getAccDistance())
+								.accTime(savedRunning.getAccTime())
 								.build();
 		records.add(lastRecord);
+		
+		// 3. records 저장
+		int runningId = savedRunning.getRunningId();
 		recordService.saveAllRecord(runningId, records);
+		
+		// 4. 달린 지역 저장
+		List<Gugun> gugunList = recordService.saveAllGugun(savedRunning, (List<String>) runningInfo.get("gugun"));
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("running", savedRunning);
 		map.put("records", records);
+		map.put("area", gugunList);
 		
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.RUNNING_GPS_SUCCESS, map), HttpStatus.OK);
