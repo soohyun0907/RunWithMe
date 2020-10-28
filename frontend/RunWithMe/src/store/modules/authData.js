@@ -6,14 +6,14 @@ export default {
     loading: false,
     error: null,
     isLogin:false,
-    authToken:"",
+    auth:"",
     userInfo:{},
   },
   getters: {
     loading: state => state.loading,
     error: state => state.error,
     userInfo: state => state.userInfo,
-    authToken: state => state.authToken,
+    auth: state => state.auth,
     isLogin:state =>state.isLogin,
   },
   mutations: {
@@ -26,14 +26,14 @@ export default {
       state.error = null;
       state.isLogin = true;
     },
-    mutateAuthCode(state, authCode) {
-      state.authCode = authCode
+    mutateAuth(state, auth) {
+      state.auth = auth
     },
     setLogout(state) {
       state.userInfo = {};
       state.loading = false;
       state.error = null;
-      state.authCode=""
+      state.auth=""
       state.isLogin=false;
       // this.$router.push("/");
     },
@@ -60,13 +60,13 @@ export default {
           userPw:userPw        
         }).then(res => {
             context.commit('mutateUserInfo', res.data.data)
-            context.commit('mutateAuthCode',res.headers.auth)
+            context.commit('mutateAuth',res.headers.auth)
+            localStorage.setItem("auth",res.headers.auth)
             localStorage.setItem("userInfo",JSON.stringify(res.data.data))
             console.log("로그인 성공")
             console.log(res.data.data)
             console.log(res.headers.auth)// 토큰얻기
             router.push('/')
-
         })
         .catch(function(error) {
           // Handle Errors here.
@@ -75,6 +75,9 @@ export default {
           context.commit("setError", error);
           if(localStorage.getItem("userInfo")){
             localStorage.removeItem("userInfo")
+          }
+          if(localStorage.getItem("auth")){
+            localStorage.removeItem("auth")
           }
         });
     },
@@ -107,12 +110,28 @@ export default {
           if(localStorage.getItem("userInfo")){
             localStorage.removeItem("userInfo")
           }
+          if(localStorage.getItem("auth")){
+            localStorage.removeItem("auth")
+          }
         });
     },
     signOut(context) {
-      if(localStorage.getItem("userInfo")){
-        localStorage.removeItem("userInfo")
-      }     context.commit("setLogout");
+      http.get(`users/signout`)
+      .then(res =>{
+        console.log("로그아웃 성공")
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      
+        if(localStorage.getItem("userInfo")){
+          localStorage.removeItem("userInfo")
+        }    
+        if(localStorage.getItem("auth")){
+          localStorage.removeItem("auth")
+        }
+        context.commit("setLogout");
     },
-  }
+  },
 };
