@@ -39,6 +39,7 @@ public class ResponseMessage {
     public static final String CHALLENGE_SEARCH_SUCCESS = "챌린지 상세 조회 성공";
     public static final String CHALLENGE_SEARCH_FAIL = "챌린지 상세 조회 실패";
     public static final String CHALLENGE_ACCESS_FORBIDDEN = "권한 없음";
+    public static final String CHALLENGE_PARTICIPATE_SUCCESS = "챌린지 참여 성공";
     
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
@@ -70,7 +71,13 @@ public class ResponseMessage {
     public static final String DELETE_REPLY_SUCCESS = "댓글 삭제 성공";
     public static final String NOT_FOUND_REPLY = "댓글 조회 실패";
     
-    
-
+    public static final String SIDO_LIST_SUCCESS = "모든 시도 조회 성공";
+    public static final String SIDO_SEARCH_FAIL = "해당 시도 조회 실패";
+    public static final String GUGUN_SEARCH_FAIL = "해당 구군 조회 실패";
+    public static final String GUGUN_LIST_SUCCESS = "해당 시도 구군 조회 성공";
+    public static final String ACTAREA_INSERT_SUCCESS = "유저 활동 지역 설정 성공";
+    public static final String ACTAREA_INSERT_FAIL = "유저 활동 지역 설정 실패";
+    public static final String ACTAREA_UPDATE_SUCCESS = "유저 활동 지역 수정 성공";
+    public static final String ACTAREA_UPDATE_FAIL = "유저 활동 지역 수정 실패";
     
 }
