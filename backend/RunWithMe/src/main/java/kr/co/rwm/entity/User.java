@@ -30,8 +30,9 @@ public class User implements UserDetails{
 	@Column(name = "user_id")
 	private Integer userId;
 	
-	@Column(name = "dong_id", nullable = true)
-	private Integer dongId;
+	@OneToOne
+	@JoinColumn(name = "gugunId")
+	private Gugun gugunId;
 	
 	@Column(name = "user_email", nullable = false)
 	private String userEmail;
