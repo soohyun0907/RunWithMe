@@ -8,50 +8,85 @@
             총 킬로미터
             <h2>100KM</h2>
         </div>
-        <div v-for="(record, index) in records" :key="index" style="margin-bottom: 5%;">
-            <!-- <b-card class="h-100" v-bind:title=record.runningDate.toLocaleDateString()>
-                <b-button  variant="primary ripple m-1" v-b-toggle.sidebar-footer>Toggle Sidebar</b-button>
-                <b-sidebar id="sidebar-footer" aria-label="Sidebar with custom footer" no-header shadow>
-                    <template v-slot:footer="{ hide }">
-                        <div class="d-flex bg-dark text-light align-items-center px-3 py-2">
-                            <strong class="mr-auto">Footer</strong>
-                            <b-button size="sm" @click="hide">Close</b-button>
+        <br>
+        <div
+            ref="rowView"
+            class="row "
+            :class="{ 'list-grid': isListView, 'list-horizontal': !isListView }"
+        >
+            <div
+                :class="{ 'col-md-6  col-lg-4 col-xl-3': isListView,
+                            'col-md-12': !isListView }"
+                class="list-item "
+                :key="index"
+                v-for="(item, index) in items"
+                transition="list"
+            >
+                <router-link :to="`/app/runnings/runningResult`">
+                    <div
+                        class="card o-hidden mb-30 d-flex "
+                        :class="{ 'flex-column': isListView, 'flex-row': !isListView }"
+                    >
+                        <div class="list-thumb d-flex">
+                            <img alt="" :src="item.img" />
                         </div>
-                    </template>
-                    <div class="px-3 py-2">
-                        <p>
-                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis
-                        in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                        </p>
-                        <img
-                        src="@/assets/images/photo-long-2.jpg"
-                        alt=""
-                        />
+                        <div
+                            class="flex-grow-1 "
+                            :class="{ 'd-bock': isListView, 'pl-2 d-flex': !isListView }"
+                        >
+                            <div
+                                class="card-body align-self-center d-flex flex-column justify-content-between align-items-lg-center"
+                                :class="{ 'flex-lg-row': !isListView }"
+                            >
+                                <div class="item-title">
+                                    <b-avatar class="mr-2" variant="info" src="/img/2.jpg"></b-avatar>
+                                    {{ item.title }}
+                                </div>
+                                <br>
+                                <p class="m-0 text-muted text-small w-15 w-sm-100">
+                                {{ item.total_distance }}KM &nbsp; &nbsp; &nbsp; &nbsp;
+                                {{convertToTime(item.running_avg_pace)}} &nbsp;
+                                {{item.accumulcated_time}}
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </b-sidebar>
-            </b-card> -->
-            <b-card class="h-100" v-bind:title=record.runningDate.toLocaleDateString()>
-                <b-card-text>
-                    Set the <strong class="text-danger">right</strong> prop to  <strong class="text-danger">true</strong>  
-                </b-card-text>
-                <b-button variant="primary ripple m-1" v-b-toggle.sidebar-right>Toggle Sidebar</b-button>
-                <b-sidebar id="sidebar-right" title="Sidebar" bg-variant="white" right  shadow>
-                    <div class="px-3 py-2">
-                        <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis
-                        in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                        </p>
-                        <img src="@/assets/images/photo-long-2.jpg" />
-                    </div>
-                </b-sidebar>
-            </b-card>
+                </router-link>
+            </div>
         </div>
     </div>
 </template>
 <script>
+const items = [
+  {
+    img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
+    title: "Nickname",
+    total_distance: "8",
+    running_avg_pace : 325,
+    accumulcated_time: "38:11"
+  },
+  {
+    img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
+    title: "Nickname",
+    total_distance: "10",
+    running_avg_pace : 325,
+    accumulcated_time: "38:11"
+  },
+  {
+    img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
+    title: "Nickname",
+    total_distance: "5",
+    running_avg_pace : 325,
+    accumulcated_time: "38:11"
+  },
+];
+
 export default {
     name: 'userDetail',
     data() {
         return {
+            items: items,
+            isListView: false,
             records : [
                 {
                     runningDate: new Date(),
