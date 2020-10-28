@@ -24,11 +24,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
+import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.RestException;
 import kr.co.rwm.model.StatusCode;
+import kr.co.rwm.service.AreaService;
 import kr.co.rwm.service.JwtTokenProvider;
 import kr.co.rwm.service.S3Service;
 import kr.co.rwm.service.UserService;
@@ -38,7 +40,7 @@ import lombok.RequiredArgsConstructor;
  * UserController
  * <pre>
  * <b> History:</b>
- *			김형택, ver.0.2 , 2020-10-27 : 프로필 이미지 Upload
+ *			김순빈, ver.0.3 , 2020-10-28 : join, update - 활동지역 등록 및 수정 (참고-User Entity: dongId->gugunId)
  * </pre>
  * 
  * @author 김형택
@@ -58,6 +60,7 @@ public class UserController {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final RedisTemplate<String, String> logoutRedis;
 	private final S3Service s3Service;
+	private final AreaService areaService;
 	
 	@Autowired
 	private UserService userService;
@@ -80,6 +83,8 @@ public class UserController {
 		if(!user.getAuth()) {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN,ResponseMessage.EMAIL_CHECK_FAIL,false),HttpStatus.FORBIDDEN);
 		}else {
+			Gugun gugun = areaService.findGugunByGugunId(user.getGugunId().getGugunId());
+			user.setGugunId(gugun);
 			userService.join(user, passwordEncoder.encode(user.getPassword()));
 			
 			return new ResponseEntity<Response>(new Response(StatusCode.CREATED,ResponseMessage.SIGNUP_SUCCESS),HttpStatus.CREATED);
@@ -224,6 +229,8 @@ public class UserController {
 			user.setUserId(member.get().getUserId());
 			user.setUserEmail(member.get().getUserEmail());
 			user.setChangePw(passwordEncoder.encode(user.getChangePw()));
+			Gugun gugun = areaService.findGugunByGugunId(user.getGugunId().getGugunId());
+			user.setGugunId(gugun);
 			userService.update(member,user);
 			return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.USER_UPDATE_SUCCESS,user),HttpStatus.OK);
 			
