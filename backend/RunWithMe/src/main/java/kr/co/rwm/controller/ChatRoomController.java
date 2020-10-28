@@ -2,7 +2,6 @@ package kr.co.rwm.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.rwm.entity.User;
 import kr.co.rwm.model.ChatRoom;
 import kr.co.rwm.model.LoginInfo;
 import kr.co.rwm.model.Response;
@@ -71,8 +71,11 @@ public class ChatRoomController {
     @ResponseBody
     public LoginInfo getUserInfo() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        Integer userId = user.getUserId();
+        
         String name = auth.getName();
         System.out.println(name);
-        return LoginInfo.builder().name(name).token(jwtTokenProvider.generateToken(name, null)).build();
+        return LoginInfo.builder().name(name).token(jwtTokenProvider.generateToken(userId, name, null)).build();
     }
 }

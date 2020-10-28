@@ -10,14 +10,14 @@ import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
 import kr.co.rwm.repo.RecordRepository;
 import kr.co.rwm.repo.RunningRepository;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class RecordServiceImpl implements RecordService {
 
-	@Autowired
-	RecordRepository recordRepository;
-	@Autowired
-	RunningRepository runningRepository;
+	private final RecordRepository recordRepository;
+	private final RunningRepository runningRepository;
 	
 	@Override
 	public void saveRecord(Record record) {
@@ -26,8 +26,10 @@ public class RecordServiceImpl implements RecordService {
 	
 	@Override
 	public void saveAllRecord(int runningId, List<Record> records) {
+		Running running = runningRepository.findByRunningId(runningId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 런닝이 없습니다."));
 		for(Record record: records) {
-			record.setRunningId(runningId);
+			record.setRunningId(running);
 			recordRepository.save(record);
 		}
 	}
