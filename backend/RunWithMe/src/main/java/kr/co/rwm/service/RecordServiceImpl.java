@@ -56,7 +56,7 @@ public class RecordServiceImpl implements RecordService {
 
 	@Override
 	public List<Record> findAllRecordByRunningId(int runningId) {
-		return recordRepository.findAllByRunningId(runningId);
+		return recordRepository.findAllRecordByRunningId(runningId);
 	}
 
 	@Override

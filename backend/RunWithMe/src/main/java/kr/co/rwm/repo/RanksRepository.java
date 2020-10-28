@@ -10,7 +10,7 @@ import kr.co.rwm.entity.User;
 
 public interface RanksRepository extends JpaRepository<Ranks, Long>{
 	Optional<Ranks> findByRankId(int rankId);
-	Optional<Ranks> findByUserId(int userId);
+	Optional<Ranks> findByUserId(User userId);
 	List<Ranks> findTop10ByOrderByRaceExpDesc();
 	List<Ranks> findTop10ByOrderByDonateExpDesc();
 	List<Ranks> findTop10ByOrderByTotalExpDesc();
