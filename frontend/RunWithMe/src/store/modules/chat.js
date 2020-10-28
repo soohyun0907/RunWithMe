@@ -1,12 +1,13 @@
 import {user, contacts, chatCollection, chatroom} from "../../data/groupchat";
 import http from "@/utils/http-common";
-import Stomp from 'webstomp-client'
-import SockJS from 'sockjs-client'
+import Stomp from 'webstomp-client';
+import SockJS from 'sockjs-client';
+import authData from "@/store/modules/authData";
 
 
 const state = {
   currentUser: user,
-  contactList: contacts,
+  contactList: [],
   recentUsers: [],
   selectedUser: contacts[0],
   chats: chatCollection,
@@ -53,10 +54,13 @@ const mutations = {
   },
   selectUserLists:(state) => {
     http
-      .get("/friends/contacts/"+1)
+      .get("/friends/contacts")
       .then((data)=>{
-        console.log(data);
-        state.contactList = data.data;
+        console.log(data.data.data);
+        
+        state.contactList = data.data.data;
+
+        
       })
   },
   createAndSelectChatroom : (state, uid, sock, ws) => {
@@ -64,21 +68,22 @@ const mutations = {
     http
       .post("/match/room", 
       {
-          masterId : 1, // 사용자 정보에서 가져와야함 
+          //masterId : 1, // 사용자 정보에서 가져와야함 
           guestId : uid
       })
       .then((data) =>{
         console.log(data);
-        state.selectedUser = data.data.name;
-        state.roomInfo = data.data;
-       
-        // state.messages.unshift("add");
-        state.roomId = data.data.roomId;
-        state.roomName =  data.data.roomName;
+        state.roomInfo = data.data.data;
+        state.selectedUser = state.roomInfo.name;
+        state.roomId = state.roomInfo.roomId;
+        //state.roomName =  data.data.roomName;
         http
           .get('/chat/user').then(response => {
               console.log("들어는 오냐")
-              state.token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGVzIjpbIlVTRVIiXSwianRpIjoidGVzdDEiLCJpYXQiOjE2MDM0MTc2MzksImV4cCI6MTYwMzQyMTIzOX0.p6ExO5ls81r1HjEy14Bnj4jLgkkz91PQUy5DtOEDhF0";
+              console.log(localStorage.getItem('auth'));
+              // state.token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGVzIjpbIlVTRVIiXSwianRpIjoidGVzdDEiLCJpYXQiOjE2MDM0MTc2MzksImV4cCI6MTYwMzQyMTIzOX0.p6ExO5ls81r1HjEy14Bnj4jLgkkz91PQUy5DtOEDhF0";
+              state.token = localStorage.getItem('auth');
+
               console.log("token:" + state.token)
               state.sock = new SockJS("http://localhost:8080/ws-stomp")
               state.ws = Stomp.over(state.sock)

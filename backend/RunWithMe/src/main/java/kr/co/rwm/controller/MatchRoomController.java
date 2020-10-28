@@ -2,6 +2,8 @@ package kr.co.rwm.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -44,9 +46,14 @@ public class MatchRoomController {
 
     @PostMapping("/room")
     @ResponseBody
-    public ResponseEntity createAndSelectChatroom(@RequestBody Map<String, Integer> idInfo) {
+    public ResponseEntity createAndSelectChatroom(@RequestBody Map<String, Integer> idInfo, HttpServletRequest request) {
     	System.out.println(idInfo);
-    	ChatRoom result =  matchRoomRepository.createAndSelectChatroom(idInfo);
+		String token = request.getHeader("AUTH");
+		int uid = 0;
+		if(jwtTokenProvider.validateToken(token)) {
+			uid = jwtTokenProvider.getUserIdFromJwt(token);
+		}
+    	ChatRoom result =  matchRoomRepository.createAndSelectChatroom(uid, idInfo);
     	
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.CREATE_CHATROOM_SUCCESS, result), HttpStatus.OK);
