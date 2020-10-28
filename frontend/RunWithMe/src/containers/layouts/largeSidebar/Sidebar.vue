@@ -52,6 +52,20 @@
             </a>
             <div class="triangle"></div>
           </li>
+
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'mypages' }"
+            data-item="mypages"
+            :data-submenu="true"
+          >
+            <a class="nav-item-hold" href="#">
+              <i class="nav-icon i-Administrator"></i>
+              <span class="nav-text">My Page</span>
+            </a>
+            <div class="triangle"></div>
+          </li>
         </ul>
       </div>
     </vue-perfect-scrollbar>
@@ -128,6 +142,26 @@
             </router-link>
           </li>
         </ul>
+
+        <ul
+          class="childNav d-none"
+          data-parent="mypages"
+          :class="{ 'd-block': selectedParentMenu == 'mypages' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/mypages/friends">
+              <i class="nav-icon i-File-CSV"></i>
+              <span class="item-name">Friends</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/mypages/byarea">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">지역별로 보기</span>
+            </router-link>
+          </li>
+        </ul>
+
       </div>
     </vue-perfect-scrollbar>
     <div
