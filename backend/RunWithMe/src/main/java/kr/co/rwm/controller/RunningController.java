@@ -27,6 +27,7 @@ import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.repo.RecordTempRepository;
+import kr.co.rwm.service.RanksService;
 import kr.co.rwm.service.RecordService;
 import kr.co.rwm.service.S3Service;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class RunningController {
 	
 	private final RecordTempRepository recordTempRepository;
 	private final RecordService recordService;
+	private final RanksService rankService;
 	private final S3Service s3Service;
 
 	// 회원의 id로 모든 running을 조회: 프로필에서 약식으로 뜨는 것
@@ -104,6 +106,9 @@ public class RunningController {
 		map.put("running", savedRunning);
 		map.put("records", records);
 		map.put("area", gugunList);
+		
+		System.out.println(loginUser.getUserId()+" 저장 "+runningId);
+		rankService.getRaceExp(loginUser.getUserId(), runningId);
 		
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.RUNNING_GPS_SUCCESS, map), HttpStatus.OK);

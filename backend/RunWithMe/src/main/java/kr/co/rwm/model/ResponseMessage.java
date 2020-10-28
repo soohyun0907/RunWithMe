@@ -41,6 +41,10 @@ public class ResponseMessage {
     public static final String CHALLENGE_ACCESS_FORBIDDEN = "권한 없음";
     public static final String CHALLENGE_PARTICIPATE_SUCCESS = "챌린지 참여 성공";
     
+    public static final String RACE_TOP_RANKING_OK = "레이스 랭킹 Top 10 조회 성공";
+    public static final String TOTAL_TOP_RANKING_OK = "합산 랭킹 Top 10 조회 성공";
+    public static final String TOTAL_RANKING_OK = "전체 랭킹 조회 성공";
+
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
     public static final String FORBIDDEN = "인가 실패";
