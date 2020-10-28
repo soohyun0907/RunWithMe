@@ -59,12 +59,12 @@ const routes = [
             component: () => import("./views/app/runnings/running")
           },
           {
-            path: "contact-grid",
-            component: () => import("./views/app/runnings/contact-grid")
+            path: "friendsList",
+            component: () => import("./views/app/runnings/friendsList")
           },
           {
-            path: "user-detail",
-            component: () => import("./views/app/runnings/user-detail")
+            path: "friendsDetail",
+            component: () => import("./views/app/runnings/friendsDetail")
           },
         ]
       },
