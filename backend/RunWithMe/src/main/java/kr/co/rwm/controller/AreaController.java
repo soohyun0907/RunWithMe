@@ -1,6 +1,7 @@
 package kr.co.rwm.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,25 +73,33 @@ public class AreaController {
 		
 		//
 		User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
+		Optional<User> opLoginUser = Optional.ofNullable(loginUser);
+		System.out.println("hi "+opLoginUser.get().getUserPw());
+		loginUser.setGugunId(saveGugun);
+		userService.update(opLoginUser, loginUser);
 		
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.ACTAREA_INSERT_SUCCESS, null), HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "유저의 활동 지역 수정", response = ResponseEntity.class)
-	@PutMapping
-	public ResponseEntity updateUserArea(@RequestBody Gugun gugun) {
-		System.out.println("/areas/update");
-		// Gugun 확인
-		Gugun saveGugun = areaService.findGugunByGugunId(gugun.getGugunId());
-		if(saveGugun == null) {
-			return new ResponseEntity<Response>(new 
-				Response(StatusCode.NOT_FOUND, ResponseMessage.GUGUN_SEARCH_FAIL, null), HttpStatus.NOT_FOUND);
-		}
-		
-		return new ResponseEntity<Response>(new 
-				Response(StatusCode.OK, ResponseMessage.ACTAREA_UPDATE_SUCCESS, null), HttpStatus.OK);
-	}
+//	@ApiOperation(value = "유저의 활동 지역 수정", response = ResponseEntity.class)
+//	@PutMapping
+//	public ResponseEntity updateUserArea(@RequestBody Gugun gugun) {
+//		System.out.println("/areas/update");
+//		// Gugun 확인
+//		Gugun saveGugun = areaService.findGugunByGugunId(gugun.getGugunId());
+//		if(saveGugun == null) {
+//			return new ResponseEntity<Response>(new 
+//				Response(StatusCode.NOT_FOUND, ResponseMessage.GUGUN_SEARCH_FAIL, null), HttpStatus.NOT_FOUND);
+//		}
+//		//
+//		Optional<User> loginUser = (Optional<User>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		User updateUser = loginUser.get();
+//		updateUser.setGugunId(saveGugun);
+//		userService.update(loginUser, updateUser);
+//		
+//		return new ResponseEntity<Response>(new 
+//				Response(StatusCode.OK, ResponseMessage.ACTAREA_UPDATE_SUCCESS, null), HttpStatus.OK);
+//	}
 
 }

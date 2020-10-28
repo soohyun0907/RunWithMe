@@ -33,7 +33,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	public void join(User user, String password) {
-		userRepository.save(User.builder().dongId(user.getDongId()).userEmail(user.getUserEmail())
+		userRepository.save(User.builder().gugunId(user.getGugunId()).userEmail(user.getUserEmail())
 				.userName(user.getUsername()).userPw(password).roles(Collections.singletonList("USER")).build());
 	}
 
@@ -53,6 +53,7 @@ public class UserService implements UserDetailsService {
 			selectUser.setUserPw(changeUser.getChangePw());
 			selectUser.setUserName(changeUser.getUsername());
 			selectUser.setProfile(changeUser.getProfile());
+			selectUser.setGugunId(changeUser.getGugunId());
 			userRepository.save(selectUser);
 		});
 	}
