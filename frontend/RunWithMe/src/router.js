@@ -59,10 +59,6 @@ const routes = [
             component: () => import("./views/app/runnings/running")
           },
           {
-            path: "kakaomaptest",
-            component: () => import("./views/app/runnings/kakaomaptest")
-          },
-          {
             path: "contact-grid",
             component: () => import("./views/app/runnings/contact-grid")
           },
