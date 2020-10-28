@@ -32,22 +32,6 @@ export default {
       // The `import` function returns a Promise.
       () => import("../containers/layouts/largeSidebar")
     );
-
-    Vue.component(
-      "compact-sidebar",
-      // The `import` function returns a Promise.
-      () => import("../containers/layouts/compactSidebar")
-    );
-    Vue.component(
-      "vertical-sidebar",
-      // The `import` function returns a Promise.
-      () => import("../containers/layouts/verticalSidebar")
-    );
-    Vue.component(
-      "customizer",
-      // The `import` function returns a Promise.
-      () => import("../components/common/customizer.vue")
-    );
     Vue.component("vue-perfect-scrollbar", () =>
       import("vue-perfect-scrollbar")
     );

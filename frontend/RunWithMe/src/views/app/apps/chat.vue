@@ -73,7 +73,7 @@
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
                 /> -->
-                <h6 @click ="choice(contact.userId)" class="">{{ contact.userEmail }}</h6>
+                <h6 @click ="choice(contact.userId)" class="">{{ contact.username }}</h6>
               </div>
             </div>
           </vue-perfect-scrollbar>

@@ -1,18 +1,19 @@
 import http from "@/utils/http-common";
+import router from "@/router.js"
 
 export default {
   state: {
     loading: false,
     error: null,
     isLogin:false,
-    authToken:"",
+    auth:"",
     userInfo:{},
   },
   getters: {
     loading: state => state.loading,
     error: state => state.error,
     userInfo: state => state.userInfo,
-    authToken: state => state.authToken,
+    auth: state => state.auth,
     isLogin:state =>state.isLogin,
   },
   mutations: {
@@ -23,15 +24,16 @@ export default {
       state.userInfo = userInfo;
       state.loading = false;
       state.error = null;
+      state.isLogin = true;
     },
-    mutateAuthCode(state, authCode) {
-      state.authCode = authCode
+    mutateAuth(state, auth) {
+      state.auth = auth
     },
     setLogout(state) {
       state.userInfo = {};
       state.loading = false;
       state.error = null;
-      state.authCode=""
+      state.auth=""
       state.isLogin=false;
       // this.$router.push("/");
     },
@@ -57,53 +59,79 @@ export default {
           userEmail:userEmail,
           userPw:userPw        
         }).then(res => {
-            context.commit('mutateIsLogin', true)
             context.commit('mutateUserInfo', res.data.data)
-            context.commit('mutateAuthCode',res.headers.auth)
+            context.commit('mutateAuth',res.headers.auth)
+            localStorage.setItem("auth",res.headers.auth)
             localStorage.setItem("userInfo",JSON.stringify(res.data.data))
+            console.log("로그인 성공")
             console.log(res.data.data)
-            console.log(res.headers.auth)
+            console.log(res.headers.auth)// 토큰얻기
+            router.push('/')
         })
         .catch(function(error) {
           // Handle Errors here.
-          // var errorCode = error.code;
-          // var errorMessage = error.message;
-          // console.log(error);
-          
           console.log(error)
           context.commit('mutateUserInfo',{})
           context.commit("setError", error);
-          localStorage.removeItem("userInfo")
-          // ...
+          if(localStorage.getItem("userInfo")){
+            localStorage.removeItem("userInfo")
+          }
+          if(localStorage.getItem("auth")){
+            localStorage.removeItem("auth")
+          }
         });
     },
 
     signUserUp({commit}, data) {
-      // commit("setLoading", true);
-      // commit("clearError");
-      // firebase
-      //   .auth()
-      //   .createUserWithEmailAndPassword(data.email, data.password)
-      //   .then(user => {
-      //     commit("setLoading", false);
-
-      //     const newUser = {
-      //       uid: user.user.uid
-      //     };
-      //     console.log(newUser);
-      //     localStorage.setItem("userInfo", JSON.stringify(newUser));
-      //     commit("setUser", newUser);
-      //   })
-      //   .catch(error => {
-      //     commit("setLoading", false);
-      //     commit("setError", error);
-      //     localStorage.removeItem("userInfo");
-      //     console.log(error);
-      //   });
+      commit("setLoading", true);
+      commit("clearError");
+      console.log("signUserup Data Check")
+      var signUpUnit = data.data
+      var jsons = JSON.stringify(signUpUnit)
+      console.log(signUpUnit)
+      console.log(jsons)
+      http.post("/users",jsons,{
+        headers:{'Content-Type':'application/json'}
+      })
+        .then(res => {
+          commit("setLoading", false);
+          console.log("회원가입 성공")
+          console.log(res)
+         
+          if(localStorage.getItem("userInfo")){
+            localStorage.removeItem("userInfo")
+          }
+        })
+        .catch(error => {
+          commit("setLoading", false);
+          commit("setError", error);
+          console.log("회원가입 실패")
+          console.log(error);
+          if(localStorage.getItem("userInfo")){
+            localStorage.removeItem("userInfo")
+          }
+          if(localStorage.getItem("auth")){
+            localStorage.removeItem("auth")
+          }
+        });
     },
     signOut(context) {
-      localStorage.removeItem("userInfo");
-      context.commit("setLogout");
+      http.get(`users/signout`)
+      .then(res =>{
+        console.log("로그아웃 성공")
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      
+        if(localStorage.getItem("userInfo")){
+          localStorage.removeItem("userInfo")
+        }    
+        if(localStorage.getItem("auth")){
+          localStorage.removeItem("auth")
+        }
+        context.commit("setLogout");
     },
-  }
+  },
 };
