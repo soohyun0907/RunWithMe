@@ -11,7 +11,7 @@ public interface RanksService {
 	void join(User user); 
 	
 	// 경험치 쌓기(기록) - 기록id로 분석해서 점수 책정
-	void getRaceExp(int userId,int recordId);
+	void getRaceExp(int userId,int runningId);
 	
 	// 경험치 쌓기(기부) - 챌린지 달성하면 무조건 쌓임
 	void getDonateExp(int userId);
@@ -31,9 +31,6 @@ public interface RanksService {
 	// 경험치 전체 목록
 	List<Ranks> totalRank();
 	
-	// userName으로 다른 사용자 랭킹 조회
-	Optional<User> findByUserName(String userName);
-
 	// 사용자 랭킹관련 정보 조회
-	Optional<User> findByUserId(int userId);
+	List<Ranks> findByUserId(User userId);
 }
