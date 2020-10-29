@@ -17,12 +17,12 @@
         <section class="bottom-bar">
           <div v-if="!isPause">
             <button type="button" @click="startLocationUpdates" class="btn round btn btn-success btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 7px;" class="i-Start-2"></i></span>
+             <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
             </button>
           </div>
           <div v-if="isPause">
              <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Start-2"></i></span>
+             <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
             </button>
 
           </div>
