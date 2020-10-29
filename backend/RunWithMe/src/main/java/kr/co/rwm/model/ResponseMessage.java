@@ -24,9 +24,14 @@ public class ResponseMessage {
 
     public static final String GROUP_LIST_SUCCESS = "그룹 채팅 목록 조회";
     
-    public static final String RUNNING_GPS_SUCCESS = "현재 위치 목록 조회";
+    public static final String RUNNING_LIST_SUCCESS = "유저의 모든 런닝 리스트 조회";
+    public static final String RUNNING_SEARCH_SUCCESS = "런닝 상세 정보 조회 성공";
     public static final String UPDATE_THUMBNAIL_SUCCESS = "런닝 썸네일 저장 성공";
     public static final String UPDATE_THUMBNAIL_FAIL = "런닝 썸네일 저장 실패";
+    public static final String RUNNING_INSERT_SUCCESS = "런닝 저장 성공";
+    public static final String RUNNING_DELETE_RECORD = "런닝 삭제";
+    public static final String RECORD_REDIS_INSERT_SUCCESS = "레디스에 레코드 저장";
+    public static final String RECORD_REDIS_LIST_SUCCESS = "레디스에서 레코드 목록 조회";
     
     public static final String CHALLENGE_INSERT_SUCCESS = "챌린지 등록 성공";
     public static final String CHALLENGE_INSERT_FAIL = "챌린지 등록 실패";
@@ -96,6 +101,6 @@ public class ResponseMessage {
     public static final String ACTAREA_UPDATE_FAIL = "유저 활동 지역 수정 실패";
     public static final String AREA_RUNNINGS_SUCCESS = "지역에 따른 런닝 기록 조회 성공";
     
-    public static final String FRIENDS_RUNNING_RECORD = "메인페이지: 친구의 최근 기록 1개 조회 성공";
+    public static final String RUNNING_FRIENDS_RECORD = "메인페이지: 친구의 최근 기록 1개 조회 성공";
     
 }

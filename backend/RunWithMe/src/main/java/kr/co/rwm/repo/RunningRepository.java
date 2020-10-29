@@ -14,5 +14,7 @@ public interface RunningRepository extends JpaRepository<Running, Long> {
 	Optional<Running> findByRunningId(int runningId);
 	
 	Running getOneByUserIdOrderByStartTimeDesc(int userId);
+
+	Long deleteByRunningId(int runningId);
 	
 }

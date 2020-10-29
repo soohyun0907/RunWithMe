@@ -33,6 +33,7 @@ import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.AreaService;
 import kr.co.rwm.service.JwtTokenProvider;
 import kr.co.rwm.service.RanksService;
+import kr.co.rwm.service.RecordService;
 import kr.co.rwm.service.S3Service;
 import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -64,6 +65,7 @@ public class UserController {
 	private final AreaService areaService;
 	private final UserService userService;
 	private final RanksService rankService;
+	private final RecordService recordService;
 	
 	/**
 	 * 회원가입 - 이메일 중복 여부 True/False를 판단하고, True일 경우 JSON 객체 기반으로 회원가입을 진행한다.
@@ -87,6 +89,7 @@ public class UserController {
 			user.setGugunId(gugun);
 			User result = userService.join(user, passwordEncoder.encode(user.getPassword()));
 			rankService.join(result);
+			recordService.join(result);
 			
 			return new ResponseEntity<Response>(new Response(StatusCode.CREATED,ResponseMessage.SIGNUP_SUCCESS),HttpStatus.CREATED);
 		}
