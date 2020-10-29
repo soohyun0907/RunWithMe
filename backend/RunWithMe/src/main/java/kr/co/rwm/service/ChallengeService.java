@@ -87,4 +87,12 @@ public interface ChallengeService {
 	 * @return
 	 */
 	public List<User> findAllChallengeEqualDate();
+
+	/**
+	 * 챌린지와 유저 pk로 유저가 해당 챌린지를 참여하는지 확인
+	 * @param userId
+	 * @param challenge
+	 * @return
+	 */
+	public ChallengeUser findChallengeUserByUserIdAndChallengeId(int userId, Challenge challenge);
 }
