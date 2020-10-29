@@ -115,7 +115,7 @@ public class RunningController {
 		if(check) {
 			// 기부점수 오르기
 			rankService.getDonateExp(loginUser.getUserId());
-		}
+		}	
 				
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.RUNNING_GPS_SUCCESS, map), HttpStatus.OK);
