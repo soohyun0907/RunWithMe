@@ -14,4 +14,6 @@ public interface ChallengeUserRepository extends JpaRepository<ChallengeUser, Lo
 
 	List<ChallengeUser> findAllByChallengeId(Challenge challenge);
 
+	ChallengeUser findByUserIdAndChallengeId(User user, Challenge challenge);
+
 }
