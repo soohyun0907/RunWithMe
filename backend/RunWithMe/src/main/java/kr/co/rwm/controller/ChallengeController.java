@@ -6,11 +6,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +29,7 @@ import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.ChallengeService;
 import kr.co.rwm.service.JwtTokenProvider;
+import kr.co.rwm.service.RanksService;
 import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -55,6 +54,7 @@ public class ChallengeController {
 	private final ChallengeService challengeService;
 	private final UserService userService;
 	private final JwtTokenProvider jwtTokenProvider;
+	private final RanksService ranksService;
 	
 	/**
 	 * 관리자 - 챌린지 생성
@@ -171,6 +171,17 @@ public class ChallengeController {
 		
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.CHALLENGE_PARTICIPATE_SUCCESS, challengeUser), HttpStatus.OK);
+	}
+	
+	// 매일 자정마다 실행
+	@Scheduled(cron = "1 0 00 * * ?")
+	@ApiOperation(value = "챌린지 끝내기")
+	@GetMapping("/end")
+	public void endChallenge(HttpServletRequest request) {
+		System.out.println("챌린지 업데이트 - 챌린지 여부");
+		
+		List<User> successUsers = challengeService.findAllChallengeEqualDate();
+		ranksService.getDonateExp(successUsers);
 	}
 }
 	

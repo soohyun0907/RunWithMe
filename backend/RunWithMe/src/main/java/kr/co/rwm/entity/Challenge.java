@@ -51,4 +51,7 @@ public class Challenge {
 	@Column(name = "end_time")
 	private LocalDateTime endTime;
 	
+	@Column(name = "personal_distance_goal")
+	private double personalDistanceGoal;
+	
 }
