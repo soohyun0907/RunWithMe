@@ -27,6 +27,7 @@ import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.repo.RecordTempRepository;
+import kr.co.rwm.service.ChallengeService;
 import kr.co.rwm.service.RanksService;
 import kr.co.rwm.service.RecordService;
 import kr.co.rwm.service.S3Service;
@@ -42,6 +43,7 @@ public class RunningController {
 	private final RecordService recordService;
 	private final RanksService rankService;
 	private final S3Service s3Service;
+	private final ChallengeService challengeService;
 
 	// 회원의 id로 모든 running을 조회: 프로필에서 약식으로 뜨는 것
 	@GetMapping("/{userId}")
@@ -109,13 +111,7 @@ public class RunningController {
 		
 		System.out.println(loginUser.getUserId()+" 저장 "+runningId);
 		rankService.getRaceExp(loginUser.getUserId(), runningId);
-		
-//		boolean check = true;
-//		// boolean check = 챌린지 달성 했다면 true 안했으면 false - false -> true 바꼈을때 : true / 그 외에는 false
-//		if(check) {
-//			// 기부점수 오르기
-//			rankService.getDonateExp(loginUser.getUserId());
-//		}	
+		challengeService.updateAccDistance(loginUser, savedRunning.getAccDistance());	// update위해서
 				
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.RUNNING_GPS_SUCCESS, map), HttpStatus.OK);

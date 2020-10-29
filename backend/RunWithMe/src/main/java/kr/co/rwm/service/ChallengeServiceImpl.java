@@ -23,7 +23,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 	private final ChallengeRepository challengeRepository;
 	private final UserRepository userRepository;
 	private final ChallengeUserRepository challengeUserRepository;
-	
+
 	@Override
 	public void saveChallenge(Challenge challenge) {
 		challengeRepository.save(challenge);
@@ -51,7 +51,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 		updateChallenge.setStartTime(challenge.getStartTime());
 		updateChallenge.setEndTime(challenge.getEndTime());
 		challengeRepository.save(updateChallenge);
-		
+
 		return updateChallenge;
 	}
 
@@ -59,7 +59,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 	@Override
 	public void deleteChallenge(int challengeId) {
 		Challenge challenge = challengeRepository.findByChallengeId(challengeId)
-					.orElseThrow(() -> new IllegalArgumentException("해당 챌린지가 없습니다."));
+				.orElseThrow(() -> new IllegalArgumentException("해당 챌린지가 없습니다."));
 		challengeRepository.delete(challenge);
 	}
 
@@ -69,7 +69,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 				.orElseThrow(() -> new IllegalArgumentException("해당 챌린지가 없습니다."));
 		challenge.setDistanceCurrent(challenge.getDistanceCurrent() + distance);
 		challengeRepository.save(challenge);
-		
+
 		return null;
 	}
 
@@ -79,7 +79,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 				.orElseThrow(() -> new IllegalArgumentException("해당 챌린지가 없습니다."));
 		challenge.setDonateCurrent(challenge.getDonateCurrent() + donate);
 		challengeRepository.save(challenge);
-		
+
 		return null;
 	}
 
@@ -99,11 +99,8 @@ public class ChallengeServiceImpl implements ChallengeService {
 	public ChallengeUser participateChallenge(int challengeId, int userId) {
 		User user = userRepository.findByUserId(userId).get();
 		Challenge challenge = challengeRepository.findByChallengeId(challengeId).get();
-		ChallengeUser challengeUser = ChallengeUser.builder()
-													.userId(user)
-													.challengeId(challenge)
-													.accDistance(0)
-													.build();
+		ChallengeUser challengeUser = ChallengeUser.builder().userId(user).challengeId(challenge).accDistance(0)
+				.build();
 		return challengeUserRepository.save(challengeUser);
 	}
 
@@ -112,10 +109,53 @@ public class ChallengeServiceImpl implements ChallengeService {
 		User user = userRepository.findByUserId(userId).get();
 		List<ChallengeUser> challengeUser = challengeUserRepository.findAllByUserId(user);
 		List<Integer> challengeIds = new ArrayList<Integer>();
-		for(ChallengeUser cu: challengeUser) {
+		for (ChallengeUser cu : challengeUser) {
 			challengeIds.add(cu.getChallengeId().getChallengeId());
 		}
 		return challengeIds;
+	}
+
+	@Override
+	public void updateAccDistance(User user, double accDistance) {
+		List<ChallengeUser> challengeUsers = challengeUserRepository.findAllByUserId(user);
+		double newDistance;
+		LocalDateTime today = LocalDateTime.now();
+		for (ChallengeUser cu : challengeUsers) {
+			if ((cu.getChallengeId().getEndTime()).isAfter(today))
+				continue;
+			newDistance = cu.getAccDistance() + accDistance;
+			cu.setAccDistance(newDistance);
+			challengeUserRepository.save(cu); // update challenge user
+		}
+	}
+
+	@Override
+	public List<User> findAllChallengeEqualDate() {
+		List<User> successUsers = new ArrayList<User>();
+
+		LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+		yesterday = yesterday.withHour(23).withMinute(59).withSecond(59).withNano(0);
+		System.out.println(yesterday);
+
+		List<Challenge> challenges = challengeRepository.findAllByEndTime(yesterday);
+		System.out.println(challenges.size());
+
+		double personalGoal;
+		for (Challenge c : challenges) {
+			System.out.println(c.toString());
+			personalGoal = c.getPersonalDistanceGoal();
+			List<ChallengeUser> challengeUsers = challengeUserRepository.findAllByChallengeId(c);
+
+			for (ChallengeUser cu : challengeUsers) {
+				if (cu.getAccDistance() < personalGoal)
+					continue;
+				cu.setSuccess(true);
+				challengeUserRepository.save(cu);
+				successUsers.add(cu.getUserId());
+			}
+
+		}
+		return successUsers;
 	}
 
 }
