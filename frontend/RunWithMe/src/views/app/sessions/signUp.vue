@@ -7,7 +7,7 @@
       <div class="card o-hidden">
         <div class="row">
           <div
-            class="col-md-6 text-center "
+            class="col-md-6 text-center"
             style="background-size: cover"
             :style="{ backgroundImage: 'url(' + signInImage + ')' }"
           >
@@ -16,25 +16,7 @@
                 <img :src="logo" alt="" />
               </div>
               <div class="flex-grow-1"></div>
-              <div class="w-100 mb-30">
-                <router-link
-                  to="signIn"
-                  class="btn btn-outline-primary btn-outline-email btn-block btn-icon-text btn-rounded"
-                  href="signin.html"
-                >
-                  <i class="i-Mail-with-At-Sign"></i> Sign in with Email
-                </router-link>
-                <a
-                  class="btn btn-outline-primary btn-outline-google btn-block btn-icon-text btn-rounded"
-                >
-                  <i class="i-Google-Plus"></i> Sign in with Google
-                </a>
-                <a
-                  class="btn btn-outline-primary btn-outline-facebook btn-block btn-icon-text btn-rounded"
-                >
-                  <i class="i-Facebook-2"></i> Sign in with Facebook
-                </a>
-              </div>
+              <div class="w-100 mb-30"></div>
               <div class="flex-grow-1"></div>
             </div>
           </div>
@@ -43,8 +25,6 @@
             <div class="p-4">
               <h1 class="mb-3 text-18">회원가입</h1>
               <b-form @submit.prevent="submit">
-                
-
                 <b-form-group label="Email">
                   <b-form-input
                     class="form-control form-control-rounded"
@@ -53,8 +33,12 @@
                     v-model="email"
                   >
                   </b-form-input>
-                   <b-button @click="emailDuplicate" pill variant="primary ripple m-1">이메일 중복체크</b-button>
-
+                  <b-button
+                    @click="emailDuplicate"
+                    pill
+                    variant="primary ripple m-1"
+                    >이메일 중복체크</b-button
+                  >
                 </b-form-group>
 
                 <b-form-group label="이름">
@@ -70,10 +54,29 @@
                     variant="danger"
                     class="error col mt-1"
                     v-if="!$v.fName.minLength"
-                    >이름을 
-                    {{ $v.fName.$params.minLength.min }}글자 이상 입력해주세요.</b-alert
+                    >이름을 {{ $v.fName.$params.minLength.min }}글자 이상
+                    입력해주세요.</b-alert
                   >
                 </b-form-group>
+
+                <b-col md="4" class="mb-30">
+                  <b-card class="h-100" title="주 활동지역 선택">
+                    <b-dropdown id="dropdown-1" text="시도 선택" class="">
+                      <div v-for="(sido, index) in sidos" v-bind:key="index">
+                        <b-dropdown-item @click="sidoSelected(sido)">{{
+                          sido.sidoName
+                        }}</b-dropdown-item>
+                      </div>
+                    </b-dropdown>
+                    <b-dropdown id="dropdown-2" text="구군 선택" class="">
+                      <div v-for="(gugun, index) in guguns" v-bind:key="index">
+                        <b-dropdown-item @click="gugunSelected(gugun)">{{
+                          gugun.gugunName
+                        }}</b-dropdown-item>
+                      </div>
+                    </b-dropdown>
+                  </b-card>
+                </b-col>
 
                 <b-form-group label="Password">
                   <b-form-input
@@ -89,8 +92,9 @@
                     variant="danger"
                     class="error col mt-1"
                     v-if="!$v.password.minLength"
-                    >비밀번호는 
-                    {{ $v.password.$params.minLength.min }} 이상이어야 합니다.</b-alert
+                    >비밀번호는
+                    {{ $v.password.$params.minLength.min }} 이상이어야
+                    합니다.</b-alert
                   >
                 </b-form-group>
 
@@ -143,10 +147,11 @@
 import { required, sameAs, minLength } from "vuelidate/lib/validators";
 import { mapGetters, mapActions } from "vuex";
 import http from "@/utils/http-common";
+import dropdown from "vue-dropdowns";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignUp"
+    title: "SignUp",
   },
 
   data() {
@@ -155,33 +160,39 @@ export default {
       email: "",
       password: "",
       repeatPassword: "",
-      emailAuth:false,
+      emailAuth: false,
       bgImage: require("@/assets/images/photo-wide-4.jpg"),
       logo: require("@/assets/images/logo.png"),
       signInImage: require("@/assets/images/photo-long-3.jpg"),
       submitStatus: null,
+      sidos: [],
+      guguns:[],
+      selectedgugun:"",
     };
+  },
+  components: {
+    dropdown: dropdown,
   },
 
   validations: {
     fName: {
       required,
-      minLength: minLength(2)
+      minLength: minLength(2),
     },
 
     password: {
       required,
-      minLength: minLength(8)
+      minLength: minLength(8),
     },
     repeatPassword: {
-      sameAsPassword: sameAs("password")
+      sameAsPassword: sameAs("password"),
     },
-    emailAuth:{
-      emailAuthValidate(emailAuth){
-          if(emailAuth==false)
-            return false;
-      }
-    }
+    // emailAuth:{
+    //   emailAuthValidate(emailAuth){
+    //       if(emailAuth==false)
+    //         return false;
+    //   }
+    // }
 
     // add input
     // peopleAdd: {
@@ -196,14 +207,34 @@ export default {
     // },
     // validationsGroup:['peopleAdd.multipleName']
   },
+  mounted: function () {
+    http.get(`areas`).then((res) => {
+      console.log(JSON.stringify(res.data.data));
+      this.sidos = res.data.data;
+      console.log(this.sidos[0].sidoName);
+    });
+  },
 
   computed: {
-    ...mapGetters(["loggedInUser", "loading", "error"])
+    ...mapGetters(["loggedInUser", "loading", "error"]),
   },
 
   methods: {
     ...mapActions(["signUserUp"]),
     //   validate form
+    sidoSelected(sido) {
+      console.log(sido.sidoId)
+      http.get(`areas/`+sido.sidoId).then((res) =>{
+        this.guguns= res.data.data
+        console.log(this.guguns)
+      })
+      document.getElementById('dropdown-1').innerText=sido.sidoName
+    },
+    gugunSelected(gugun){
+      this.selectedgugun = gugun.gugunId
+      console.log(this.selectedgugun)
+      document.getElementById('dropdown-2').innerText=gugun.gugunName
+    },
     submit() {
       console.log("회원가입 데이터 전송중..");
 
@@ -211,57 +242,63 @@ export default {
       if (this.$v.$invalid) {
         this.submitStatus = "ERROR";
       } else {
+        var gugunId = new Object();
+        gugunId.gugunId = this.selectedgugun
+        var jsonGugunId = gugunId
         var data = {
-          userEmail :this.email,
-          userPw :this.password,
-          userName:this.fName,
-          emailAuth:this.emailAuth
-        }
-        console.log(data)
+          userEmail: this.email,
+          userPw: this.password,
+          userName: this.fName,
+          emailAuth: this.emailAuth,
+          gugunId: jsonGugunId,
+        };
+        console.log(data);
         this.signUserUp({ data });
         this.submitStatus = "PENDING";
         setTimeout(() => {
           this.submitStatus = "OK";
         }, 1000);
+        this.$router.push('/')
       }
     },
     emailDuplicate() {
-      http.get(`/users/check/${this.email}`)
-        .then(res => {
-          console.log("이메일 인증 시도 성공")
-          if(res.data.data==true){
-            console.log("회원 가입 가능한 이메일입니다!")
-            this.emailAuth=true
-          }else{
-            console.log("중복된 이메일입니다.")
-            console.log(res)
+      http
+        .get(`/users/check/${this.email}`)
+        .then((res) => {
+          console.log("이메일 인증 시도 성공");
+          if (res.data.data == true) {
+            console.log("회원 가입 가능한 이메일입니다!");
+            this.emailAuth = true;
+          } else {
+            console.log("중복된 이메일입니다.");
+            console.log(res);
           }
         })
-        .catch((error) =>{
-          console.log("이메일 인증 실패")
-          console.log(error)
-          this.emailAuth=false
+        .catch((error) => {
+          console.log("이메일 인증 실패");
+          console.log(error);
+          this.emailAuth = false;
         });
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
         title: `Variant ${variant || "default"}`,
         variant: variant,
-        solid: true
+        solid: true,
       });
     },
     makeToastTwo(variant = null) {
       this.$bvToast.toast("Successfully Created Account", {
         title: `Variant ${variant || "default"}`,
         variant: variant,
-        solid: true
+        solid: true,
       });
     },
 
     inputSubmit() {
       console.log("submitted");
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

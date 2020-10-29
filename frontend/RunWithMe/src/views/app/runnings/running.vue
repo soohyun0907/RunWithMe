@@ -49,7 +49,6 @@
   </div>
 </template>
 <script>
-import SERVER from "@/api/api";
 import http from "@/utils/http-common";
 import { mapGetters } from "vuex";
 
@@ -107,7 +106,6 @@ export default {
         this.current.lat = position.coords.latitude;
         this.current.lng = position.coords.longitude;
         this.show_distance = Math.round(this.accumulated_distance * 100) /100
-              
 
         var startLoc = new google.maps.LatLng(
           this.current.lat,
@@ -214,9 +212,6 @@ export default {
               if (status == google.maps.GeocoderStatus.OK) {
                 var split_address = results[0].formatted_address.split(" ");
                 currentCity = split_address[2].trim();
-                console.log("현재 도시");
-                console.log(currentCity);
-                console.log(gugun)
                 var cityDuplicate = false
                 for (var i = 0; i < gugun.length; i++) {
                   if (gugun[i] == currentCity) {
@@ -232,9 +227,7 @@ export default {
               }
             }
           );
-          console.log("제발떠주세요")
           this.gugun = gugun
-          console.log(this.gugun)
 
            //gugun배열에 현재도시 없을시 추가.
           // console.log(this.gugun);
@@ -271,7 +264,6 @@ export default {
               this.current.lng
             );
             this.linePath.push(currentLatLng);
-            this.make_encode_polyline(currentLatLng);
           } else {
             var distance = this.computeDistance(this.previous, this.current);
             console.log("watchposition 이동거리" + distance);
@@ -291,7 +283,6 @@ export default {
                 this.current.lng
               );
               this.linePath.push(currentLatLng);
-              this.make_encode_polyline(currentLatLng);
             }
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
@@ -311,26 +302,35 @@ export default {
         {
           timeout: 5000,
           maximumAge: 0,
-          enableHighAccuracy:true,
-          distanceFilter:40,          
+          // enableHighAccuracy:true,
+          // distanceFilter:40,          
         }
       );
       this.map = map;
       this.cur_marker = marker;
     },
     getScreenShot() {
+      console.log(this.linePath)
+
       //google static map url
-      var staticM_URL = "https://maps.googleapis.com/maps/api/staticmap";
+      var staticM_URL = "https://maps.googleapis.com/maps/api/staticmap?";
 
       //Set the Google Map Center.
-      staticM_URL += "?center=37.483942, 126.918457";
+      // staticM_URL += "center="+this.current.lat+","+this.current.lng
 
       staticM_URL += "&size=520x650"; //Set the Google Map Size.
 
-      staticM_URL += "&zoom=15"; //Set the Google Map Zoom.
+      staticM_URL += "&zoom=11"; //Set the Google Map Zoom.
 
       staticM_URL +=
-        "&maptype=roadmap&key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png"; //Set the Google Map Type.
+        "&maptype=roadmap&key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
+
+      staticM_URL +="path=color:0xff0000ff|weight:3"
+      
+      for(var i=0; i<this.linePath.length; i++){
+        staticM_URL +="|"+this.linePath[i].lat()+","+this.linePath[i].lng()
+      }
+
 
       window.open(staticM_URL);
     },
@@ -369,9 +369,9 @@ export default {
     },
 
     endLocationUpdates() {
-      this.stopLocationUpdates();
-      this.isPause=false;
+     this.stopLocationUpdates();
       this.getScreenShot();
+      this.isPause=false;
       this.running = false;
       this.stoppedDuration = 0;
       this.timeBegan = null;
@@ -436,9 +436,15 @@ export default {
         strokeWeight: 2,
         map:this.map
       });
-      console.log("runningPath")
-      console.log(runningPath)
       this.poly = runningPath
+
+      this.encode_polyline = new google.maps.geometry.encoding.encodePath(runningPath);
+      console.log("here!!!")
+      console.log(runningPath)
+      console.log(this.encode_polyline)
+      document.getElementById("encoded-polyline").value = this.encode_polyline;
+ 
+
     },
     computeDistance(startCoords, destCoords) {
       var startLatRads = this.degreesToRadians(startCoords.lat);
@@ -462,18 +468,6 @@ export default {
       return radians;
     },
            
-    make_encode_polyline(latLng) {
-      var path = this.poly.getPath();
-      // Because path is an MVCArray, we can simply append a new coordinate
-      // and it will automatically appear
-      path.push(latLng);
-      console.log(path)
-      // Update the text field to display the polyline encodings
-      this.encode_polyline = new google.maps.geometry.encoding.encodePath(path);
-      console.log("encoded polyline!!")
-      console.log(this.encode_polyline)
-      document.getElementById("encoded-polyline").value = this.encode_polyline;
-    },
   },
 };
 </script>
