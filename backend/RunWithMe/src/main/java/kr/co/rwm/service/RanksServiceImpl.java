@@ -122,6 +122,7 @@ public class RanksServiceImpl implements RanksService{
 		return rankRepository.findTop10ByOrderByTotalExpDesc();
 	}
 
+	// 지역별 랭킹
 	@Override
 	public List<Ranks> totalTopByRegion(int regionId) {
 		List<Ranks> list = rankRepository.findAll();
