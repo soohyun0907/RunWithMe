@@ -50,7 +50,10 @@ public class User implements UserDetails {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Column(name = "auth", columnDefinition = "boolean default false")
 	private boolean emailAuth;
-
+	
+	@Column(name = "gender") // 1: 남자 2: 여자
+	private Integer gender;
+	
 //	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 //	@OneToOne(fetch = FetchType.LAZY, mappedBy="userId", cascade = CascadeType.ALL)
 //	private Ranks rank;
