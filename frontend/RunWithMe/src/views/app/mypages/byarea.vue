@@ -1,95 +1,469 @@
 <template>
   <div class="main-content">
-    <section class="top-bar">
-      <breadcumb :page="'Record Running'" :folder="'Runnings'" />
-      <h4>Run With Me?</h4>
-    </section>
+    <breadcumb :page="'User Profile'" :folder="'Pages'" />
 
-    <span id="acc_dis" > {{ show_distance }}</span>
-    <div id="run_desc distance">누적 거리</div>
-    <span id="acc_time">{{ speed }}</span>
-    <div id="run_desc time">현재 속도</div>
-
-    <section ref="map" class="map"></section>
-
-    <div class="btn_container">
-      <div v-if="!running">
-        <section class="bottom-bar">
-          <div v-if="!isPause">
-            <button type="button" @click="startLocationUpdates" class="btn round btn btn-success btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 7px;" class="i-Start-2"></i></span>
-            </button>
-          </div>
-          <div v-if="isPause">
-             <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Start-2"></i></span>
-            </button>
-
-          </div>
-        </section>
+    <div class="card user-profile o-hidden mb-30">
+      <div
+        class="header-cover"
+        style="
+          background-image: url(http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-5.jpeg;
+        "
+      ></div>
+      <div class="user-info">
+        <img
+          class="profile-picture avatar-lg mb-2"
+          src="http://gull-html-laravel.ui-lib.com/assets/images/faces/1.jpg"
+          alt=""
+        />
+        <p class="m-0 text-24">Timothy Carlson</p>
+        <p class="text-muted m-0">Digital Marketer</p>
       </div>
-      <div v-if="running">
-        <section class="bottom-bar">
+      <div class="card-body">
+        <div>
+          <b-tabs content-class="mt-3" align="center">
+            <b-tab title="지역별 런닝" active>
+              <section ref="map" class="map"></section>
 
-          <button type="button" @click="stopLocationUpdates" class="btn round btn btn-danger btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Pause"></i></span>
-          </button>
+              <ul class="timeline clearfix">
+                <li class="timeline-line"></li>
+                <li class="timeline-item">
+                  <div class="timeline-badge">
+                    <i
+                      class="badge-icon bg-primary text-white i-Cloud-Picture"
+                    ></i>
+                  </div>
+                  <div class="timeline-card card">
+                    <div class="card-body">
+                      <div class="mb-1">
+                        <strong class="mr-1">Timothy Carlson</strong> added a
+                        new photo
+                        <p class="text-muted">3 hours ago</p>
+                      </div>
+                      <img
+                        class="rounded mb-2"
+                        src="http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-1.jpg"
+                        alt=""
+                      />
+                      <div class="mb-3">
+                        <a href="#" class="mr-1">Like</a>
+                        <a href="#">Comment</a>
+                      </div>
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Write comment"
+                          aria-label="comment"
+                        />
+                        <div class="input-group-append">
+                          <button
+                            class="btn btn-primary"
+                            type="button"
+                            id="button-comment1"
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="timeline-item">
+                  <div class="timeline-badge">
+                    <img
+                      class="badge-img"
+                      src="http://gull-html-laravel.ui-lib.com/assets/images/faces/1.jpg"
+                      alt=""
+                    />
+                  </div>
+                  <div class="timeline-card card">
+                    <div class="card-body">
+                      <div class="mb-1">
+                        <strong class="mr-1">Timothy Carlson</strong> updated
+                        his sattus
+                        <p class="text-muted">16 hours ago</p>
+                      </div>
+                      <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Modi dicta beatae illo illum iusto iste mollitia
+                        explicabo quam officia. Quas ullam, quisquam architecto
+                        aspernatur enim iure debitis dignissimos suscipit ipsa.
+                      </p>
+                      <div class="mb-3">
+                        <a href="#" class="mr-1">Like</a>
+                        <a href="#">Comment</a>
+                      </div>
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Write comment"
+                          aria-label="comment"
+                        />
+                        <div class="input-group-append">
+                          <button
+                            class="btn btn-primary"
+                            type="button"
+                            id="button-comment"
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <ul class="timeline clearfix">
+                <li class="timeline-line"></li>
+                <li class="timeline-group text-center">
+                  <button class="btn btn-icon-text btn-primary">
+                    <i class="i-Calendar-4"></i> 2018
+                  </button>
+                </li>
+              </ul>
+              <ul class="timeline clearfix">
+                <li class="timeline-line"></li>
+                <li class="timeline-item">
+                  <div class="timeline-badge">
+                    <i class="badge-icon bg-danger text-white i-Love-User"></i>
+                  </div>
+                  <div class="timeline-card card">
+                    <div class="card-body">
+                      <div class="mb-1">
+                        <strong class="mr-1">New followers</strong>
+                        <p class="text-muted">2 days ago</p>
+                      </div>
+                      <p>
+                        <a href="#">Henry krick</a> and 16 others followed you
+                      </p>
+                      <div class="mb-3">
+                        <a href="#" class="mr-1">Like</a>
+                        <a href="#">Comment</a>
+                      </div>
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Write comment"
+                          aria-label="comment"
+                        />
+                        <div class="input-group-append">
+                          <button
+                            class="btn btn-primary"
+                            type="button"
+                            id="button-comment3"
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="timeline-item">
+                  <div class="timeline-badge">
+                    <i
+                      class="badge-icon bg-primary text-white i-Cloud-Picture"
+                    ></i>
+                  </div>
+                  <div class="timeline-card card">
+                    <div class="card-body">
+                      <div class="mb-1">
+                        <strong class="mr-1">Timothy Carlson</strong> added a
+                        new photo
+                        <p class="text-muted">2 days ago</p>
+                      </div>
+                      <img
+                        class="rounded mb-2"
+                        src="http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-2.jpg"
+                        alt=""
+                      />
+                      <div class="mb-3">
+                        <a href="#" class="mr-1">Like</a>
+                        <a href="#">Comment</a>
+                      </div>
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Write comment"
+                          aria-label="comment"
+                        />
+                        <div class="input-group-append">
+                          <button
+                            class="btn btn-primary"
+                            type="button"
+                            id="button-comment4"
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <ul class="timeline clearfix">
+                <li class="timeline-line"></li>
+                <li class="timeline-group text-center">
+                  <button class="btn btn-icon-text btn-warning">
+                    <i class="i-Calendar-4"></i> Joined in 2013
+                  </button>
+                </li>
+              </ul>
+            </b-tab>
+            <b-tab title="About">
+              <h4>Personal Information</h4>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Eveniet, commodi quam! Provident quis voluptate asperiores
+                ullam, quidem odio pariatur. Lorem ipsum, dolor sit amet
+                consectetur adipisicing elit. Voluptatem, nulla eos? Cum non ex
+                voluptate corporis id asperiores doloribus dignissimos
+                blanditiis iusto qui repellendus deleniti aliquam, vel quae
+                eligendi explicabo.
+              </p>
 
-          <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Stop-2"></i></span>
-          </button>
+              <hr />
 
-        </section>
+              <div class="row">
+                <div class="col-md-4 col-6">
+                  <div class="mb-30">
+                    <p class="text-primary mb-1">
+                      <i class="i-Calendar text-16 mr-1"></i> Birth Date
+                    </p>
+                    <span>1 Jan, 1994</span>
+                  </div>
+                  <div class="mb-30">
+                    <p class="text-primary mb-1">
+                      <i class="i-Edit-Map text-16 mr-1"></i> Birth Place
+                    </p>
+                    <span>Dhaka, DB</span>
+                  </div>
+                  <div class="mb-30">
+                    <p class="text-primary mb-1">
+                      <i class="i-Globe text-16 mr-1"></i> Lives In
+                    </p>
+                    <span>Dhaka, DB</span>
+                  </div>
+                </div>
+                <div class="col-md-4 col-6">
+                  <div class="mb-30">
+                    <p class="text-primary mb-1">
+                      <i class="i-MaleFemale text-16 mr-1"></i> Gender
+                    </p>
+                    <span>1 Jan, 1994</span>
+                  </div>
+                  <div class="mb-30">
+                    <p class="text-primary mb-1">
+                      <i class="i-MaleFemale text-16 mr-1"></i> Email
+                    </p>
+                    <span>example@ui-lib.com</span>
+                  </div>
+                  <div class="mb-30">
+                    <p class="text-primary mb-1">
+                      <i class="i-Cloud-Weather text-16 mr-1"></i> Website
+                    </p>
+                    <span>www.ui-lib.com</span>
+                  </div>
+                </div>
+                <div class="col-md-4 col-6">
+                  <div class="mb-30">
+                    <p class="text-primary mb-1">
+                      <i class="i-Face-Style-4 text-16 mr-1"></i> Profession
+                    </p>
+                    <span>Digital Marketer</span>
+                  </div>
+                  <div class="mb-30">
+                    <p class="text-primary mb-1">
+                      <i class="i-Professor text-16 mr-1"></i> Experience
+                    </p>
+                    <span>8 Years</span>
+                  </div>
+                  <div class="mb-30">
+                    <p class="text-primary mb-1">
+                      <i class="i-Home1 text-16 mr-1"></i> School
+                    </p>
+                    <span>School of Digital Marketing</span>
+                  </div>
+                </div>
+              </div>
+
+              <hr />
+
+              <h4>Other Info</h4>
+
+              <p class="mb-30">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum
+                dolore labore reiciendis ab quo ducimus reprehenderit natus
+                debitis, provident ad iure sed aut animi dolor incidunt
+                voluptatem. Blanditiis, nobis aut.
+              </p>
+
+              <div class="row">
+                <div class="col-md-2 col-sm-4 col-6 text-center">
+                  <i class="i-Plane text-32 text-primary"></i>
+                  <p class="text-16 mt-1">Travelling</p>
+                </div>
+                <div class="col-md-2 col-sm-4 col-6 text-center">
+                  <i class="i-Camera text-32 text-primary"></i>
+                  <p class="text-16 mt-1">Photography</p>
+                </div>
+                <div class="col-md-2 col-sm-4 col-6 text-center">
+                  <i class="i-Car-3 text-32 text-primary"></i>
+                  <p class="text-16 mt-1">Driving</p>
+                </div>
+                <div class="col-md-2 col-sm-4 col-6 text-center">
+                  <i class="i-Gamepad-2 text-32 text-primary"></i>
+                  <p class="text-16 mt-1">Gaming</p>
+                </div>
+                <div class="col-md-2 col-sm-4 col-6 text-center">
+                  <i class="i-Music-Note-2 text-32 text-primary"></i>
+                  <p class="text-16 mt-1">Music</p>
+                </div>
+                <div class="col-md-2 col-sm-4 col-6 text-center">
+                  <i class="i-Shopping-Bag text-32 text-primary"></i>
+                  <p class="text-16 mt-1">Shopping</p>
+                </div>
+              </div>
+            </b-tab>
+            <b-tab title="Friends">
+              <b-row>
+                <b-col md="3">
+                  <b-card class="card-profile-1 mb-30 text-center">
+                    <div class="avatar box-shadow-2 mb-3">
+                      <img src="@/assets/images/faces/16.jpg" alt="" />
+                    </div>
+                    <h5 class="m-0">Jassica Hike</h5>
+                    <p class="mt-0">UI/UX Designer</p>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Recusandae cumque.
+                    </p>
+                    <button class="btn btn-primary btn-rounded">
+                      Contact Jassica
+                    </button>
+                    <div class="card-socials-simple mt-4">
+                      <a href="">
+                        <i class="i-Linkedin-2"></i>
+                      </a>
+                      <a href="">
+                        <i class="i-Facebook-2"></i>
+                      </a>
+                      <a href="">
+                        <i class="i-Twitter"></i>
+                      </a>
+                    </div>
+                  </b-card>
+                </b-col>
+                <b-col md="3">
+                  <b-card class="card-profile-1 mb-30 text-center">
+                    <div class="avatar box-shadow-2 mb-3">
+                      <img src="@/assets/images/faces/2.jpg" alt="" />
+                    </div>
+                    <h5 class="m-0">Frank Powell</h5>
+                    <p class="mt-0">UI/UX Designer</p>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Recusandae cumque.
+                    </p>
+                    <button class="btn btn-primary btn-rounded">
+                      Contact Jassica
+                    </button>
+                    <div class="card-socials-simple mt-4">
+                      <a href="">
+                        <i class="i-Linkedin-2"></i>
+                      </a>
+                      <a href="">
+                        <i class="i-Facebook-2"></i>
+                      </a>
+                      <a href="">
+                        <i class="i-Twitter"></i>
+                      </a>
+                    </div>
+                  </b-card>
+                </b-col>
+                <b-col md="3">
+                  <b-card class="card-profile-1 mb-30 text-center">
+                    <div class="avatar box-shadow-2 mb-3">
+                      <img src="@/assets/images/faces/3.jpg" alt="" />
+                    </div>
+                    <h5 class="m-0">Jassica Hike</h5>
+                    <p class="mt-0">UI/UX Designer</p>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Recusandae cumque.
+                    </p>
+                    <button class="btn btn-primary btn-rounded">
+                      Arthur Mendoza
+                    </button>
+                    <div class="card-socials-simple mt-4">
+                      <a href="">
+                        <i class="i-Linkedin-2"></i>
+                      </a>
+                      <a href="">
+                        <i class="i-Facebook-2"></i>
+                      </a>
+                      <a href="">
+                        <i class="i-Twitter"></i>
+                      </a>
+                    </div>
+                  </b-card>
+                </b-col>
+                <b-col md="3">
+                  <b-card class="card-profile-1 mb-30 text-center">
+                    <div class="avatar box-shadow-2 mb-3">
+                      <img src="@/assets/images/faces/4.jpg" alt="" />
+                    </div>
+                    <h5 class="m-0">Jassica Hike</h5>
+                    <p class="mt-0">UI/UX Designer</p>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Recusandae cumque.
+                    </p>
+                    <button class="btn btn-primary btn-rounded">
+                      Jacqueline Day
+                    </button>
+                    <div class="card-socials-simple mt-4">
+                      <a href="">
+                        <i class="i-Linkedin-2"></i>
+                      </a>
+                      <a href="">
+                        <i class="i-Facebook-2"></i>
+                      </a>
+                      <a href="">
+                        <i class="i-Twitter"></i>
+                      </a>
+                    </div>
+                  </b-card>
+                </b-col>
+              </b-row>
+            </b-tab>
+          </b-tabs>
+        </div>
       </div>
     </div>
-    <div id="clock">
-      <span id="time">{{ clock }}</span>
-    </div>
-    <textarea id="encoded-polyline"></textarea>
   </div>
 </template>
+
 <script>
-import SERVER from "@/api/api";
 import http from "@/utils/http-common";
 import { mapGetters } from "vuex";
 
 export default {
   metaInfo: {
-    // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Running",
+    title: "byArea",
   },
-  data() {
+   data() {
     return {
       current: { lat: 0, lng: 0 },
       previous: { lat: 0, lng: 0 },
       watchPositionId: null,
-      map: null,
-      accumulated_distance: 0.949595,
-      accumulated_time: 0,
-      show_distance:0,
-      show_speed:0,
-      checkOneKm: 0,
-      checkSecond: 0,
-      linePath: [],
-      poly: null,
-      encoded_polyline: "",
-      cur_marker: null,
-      startTime: "",
-      endTime: "",
-      speed: 0,
-      gugun: ["광명시"],
-      currentCity: "",
+      map:null,
+    }
+   },
 
-      //스톱워치 변수
-      clock: "00:00:00",
-      timeBegan: null,
-      timeStopped: null,
-      stoppedDuration: 0,
-      started: null,
-      running: false,
-      isPause: false,
-    };
-  },
   mounted() {
     if (window.google && window.google.maps) {
       this.initMap();
@@ -98,16 +472,11 @@ export default {
       script.onload = () => google.maps.load(this.initMap);
     }
   },
-  computed: {
-    ...mapGetters(["userInfo"]),
-  },
   methods: {
     initMap() {
       navigator.geolocation.getCurrentPosition((position) => {
         this.current.lat = position.coords.latitude;
         this.current.lng = position.coords.longitude;
-        this.show_distance = Math.round(this.accumulated_distance * 100) /100
-              
 
         var startLoc = new google.maps.LatLng(
           this.current.lat,
@@ -119,423 +488,18 @@ export default {
           center: startLoc,
         });
 
-        //Map 현재위치 마커
-        var runningMarkerSrc = require("../../../assets/images/running_marker.png");
-        var runningMarkerSize = new google.maps.Size(35, 50);
-        var runningMarker = new google.maps.MarkerImage(
-          runningMarkerSrc,
-          null,
-          null,
-          null,
-          runningMarkerSize
-        );
-        var runningMarkerPosition =
-          this.current.lat != 0
-            ? new google.maps.LatLng(this.current.lat, this.current.lng)
-            : startLoc;
-
-        var marker = new google.maps.Marker({
-          map: map,
-          title: "현재위치",
-          position: runningMarkerPosition,
-          icon: runningMarker,
-        });
-
-        this.linePath.push(new google.maps.LatLng(37.331777, 127.129347));
+console.log(map)
         this.map = map;
-        this.marker = marker;
       });
-    },
-    startLocationUpdates() {
-      this.startTime = new Date();
-      this.startTime = this.$moment(this.startTime).format(
-        "YYYY-MM-DDTHH:mm:ss"
-      );
-      this.watchLocationUpdates();
-    },
-
-    resetLocations() {
-      this.startTime = "";
-      this.endTime = "";
-      this.clock = "00:00:00";
-      this.timeBegan = null;
-      this.timeStopped = null;
-      this.stoppedDuration = 0;
-      this.started = null;
-      this.checkSecond = 0;
-      this.checkOneKm = 0;
-      this.speed = 0;
-      this.current.lat = 0;
-      this.current.lng = 0;
-      this.previous.lat = 0;
-      this.previous.lng = 0;
-    },
-    watchLocationUpdates() {
-      // stopwatch
-      if (this.running) return;
-
-      if (this.timeBegan === null) {
-        this.resetLocations();
-        this.timeBegan = new Date();
-      }
-
-      if (this.timeStopped !== null) {
-        this.stoppedDuration += new Date() - this.timeStopped;
-      }
-
-      this.started = setInterval(this.clockRunning, 1000);
-      this.running = true;
-      this.isPause = false;
-
-      //Map 시작
-      var map = this.map;
-      var marker = this.marker;
-
-      var geocoder = new google.maps.Geocoder();
-
-      this.watchPositionId = navigator.geolocation.watchPosition(
-        (position) => {
-          this.current.lat = position.coords.latitude;
-          this.current.lng = position.coords.longitude;
-          var now = new google.maps.LatLng(
-            position.coords.latitude,
-            position.coords.longitude
-          );
-
-          var gugun = this.gugun
-          var currentCity = this.currentCity
-
-          //현재 위도 경도를 주소로 변환
-          geocoder.geocode(
-            {
-              latLng: now,
-            },
-            function (results, status) {
-              if (status == google.maps.GeocoderStatus.OK) {
-                var split_address = results[0].formatted_address.split(" ");
-                currentCity = split_address[2].trim();
-                console.log("현재 도시");
-                console.log(currentCity);
-                console.log(gugun)
-                var cityDuplicate = false
-                for (var i = 0; i < gugun.length; i++) {
-                  if (gugun[i] == currentCity) {
-                    console.log("이미 존재해요");
-                    cityDuplicate = true
-                  }
-                }
-                if (currentCity != "" && !cityDuplicate) {
-                  gugun.push(currentCity);
-                }
-              } else {
-                console.log(status);
-              }
-            }
-          );
-          console.log("제발떠주세요")
-          this.gugun = gugun
-          console.log(this.gugun)
-
-           //gugun배열에 현재도시 없을시 추가.
-          // console.log(this.gugun);
-          // console.log("this.currentcity")
-          // console.log(currentCity); //안됨
-          // for (var i = 0; i < this.gugun.length(); i++) {
-          //   console.log(this.gugun[i]);
-          //   if (this.gugun[i] == this.currentCity) {
-          //     console.log("이미 존재해요");
-          //     break;
-          //   }
-          //   if (this.currentCity != "") {
-          //   }
-          // }
-
-          map.setCenter(now);
-          marker.setPosition(now);
-
-          
-          if (this.previous.lat == 0) {
-            //이제 런닝 시작이면
-            this.previous.lat = this.current.lat;
-            this.previous.lng = this.current.lng;
-            this.savePosition(position);
-
-            this.poly = new google.maps.Polyline({
-              strokeColor: "#000000",
-              strokeOpacity: 1,
-              strokeWeight: 3,
-              map: this.map,
-            });
-            var currentLatLng = new google.maps.LatLng(
-              this.current.lat,
-              this.current.lng
-            );
-            this.linePath.push(currentLatLng);
-            this.make_encode_polyline(currentLatLng);
-          } else {
-            var distance = this.computeDistance(this.previous, this.current);
-            console.log("watchposition 이동거리" + distance);
-            console.log("watchposition 걸린시간" + this.accumulated_time);
-            var threshold = 0.01;
-            if (distance > threshold) {
-              // 일정속도 이상으로 뛸때만 기록.
-              this.previous.lat = this.current.lat;
-              this.previous.lng = this.current.lng;
-              this.accumulated_distance += distance;
-              this.show_distance = Math.round(this.accumulated_distance * 100) /100
-              this.checkOneKm = this.accumulated_distance;
-              this.checkSecond = this.accumulated_time;
-
-              var currentLatLng = new google.maps.LatLng(
-                this.current.lat,
-                this.current.lng
-              );
-              this.linePath.push(currentLatLng);
-              this.make_encode_polyline(currentLatLng);
-            }
-            if (this.checkOneKm >= 1) {
-              //1km 도달시 마다
-              this.speed = (this.checkOneKm * 1000) / this.checkSecond;
-              this.show_speed = this.speed
-              this.checkSecond = 0;
-              this.checkOneKm -= 1;
-
-              this.savePosition();
-              console.log("최근 1km당 스피드 = " + this.speed);
-            }
-          }
-        },
-        (error) => {
-          console.log(error.message);
-        },
-        {
-          timeout: 5000,
-          maximumAge: 0,
-          enableHighAccuracy:true,
-          distanceFilter:40,          
-        }
-      );
-      this.map = map;
-      this.cur_marker = marker;
-    },
-    getScreenShot() {
-      //google static map url
-      var staticM_URL = "https://maps.googleapis.com/maps/api/staticmap";
-
-      //Set the Google Map Center.
-      staticM_URL += "?center=37.483942, 126.918457";
-
-      staticM_URL += "&size=520x650"; //Set the Google Map Size.
-
-      staticM_URL += "&zoom=15"; //Set the Google Map Zoom.
-
-      staticM_URL +=
-        "&maptype=roadmap&key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png"; //Set the Google Map Type.
-
-      window.open(staticM_URL);
-    },
-    stopLocationUpdates() {
-      this.isPause = true;
-      this.running = false;
-      this.timeStopped = new Date();
-      clearInterval(this.started);
-
-      navigator.geolocation.clearWatch(this.watchPositionId);
-      this.drawLines();
-
-    },
-    savePosition(position) {
-      let data = {
-        userId: this.userInfo.userId,
-        accDistance: this.accumulated_distance,
-        accTime: this.accumulated_time,
-        speed: this.speed,
-      };
-      http
-        .post(`runings/temp`, data, {
-          headers: {
-            "Content-type": "application/json",
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          console.log(
-            "1키로당 기록 전송" + data.accDistance + " " + data.accTime
-          );
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-
-    endLocationUpdates() {
-      this.stopLocationUpdates();
-      this.isPause=false;
-      this.getScreenShot();
-      this.running = false;
-      this.stoppedDuration = 0;
-      this.timeBegan = null;
-      this.timeStopped = null;
-      this.clock = "00:00:00";
-      this.checkSecond = 0;
-      this.checkOneKm = 0;
-      this.endTime = new Date();
-      this.endTime = this.$moment(this.endTime).format("YYYY-MM-DDTHH:mm:ss");
-
-      console.log(this.endTime);
-      let runningData = {
-        userId: this.userInfo.userId,
-        polyline: this.encode_polyline,
-        startTime: this.startTime,
-        endTime: this.endTime,
-        accDistance: this.accumulated_distance,
-        accTime: this.accumulated_time,
-        gugun:this.gugun,
-      };
-      http.post(`runnings/`, runningData);
-    },
-    clockRunning() {
-      var currentTime = new Date();
-      var timeElapsed = new Date(
-        currentTime - this.timeBegan - this.stoppedDuration
-      );
-      var hour = timeElapsed.getUTCHours();
-      var min = timeElapsed.getUTCMinutes();
-      var sec = timeElapsed.getUTCSeconds();
-      this.accumulated_time += 1;
-
-      this.clock =
-        this.zeroPrefix(hour, 2) +
-        ":" +
-        this.zeroPrefix(min, 2) +
-        ":" +
-        this.zeroPrefix(sec, 2);
-    },
-    zeroPrefix(num, digit) {
-      var zero = "";
-      for (var i = 0; i < digit; i++) {
-        zero += "0";
-      }
-      return (zero + num).slice(-digit);
-    },
-    drawLines() {
-      var runningPathCoordinates = [];
-
-      for (var i = 0; i < this.linePath.length; i++) {
-        runningPathCoordinates.push(
-          new google.maps.LatLng(this.linePath[i].lat,this.linePath[i].lng)
-        );
-      }
-
-      const runningPath = new google.maps.Polyline({
-        // path: runningPathCoordinates,
-        path: this.linePath,
-        geodesic: true,
-        strokeColor: "#ff0000",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-        map:this.map
-      });
-      console.log("runningPath")
-      console.log(runningPath)
-      this.poly = runningPath
-    },
-    computeDistance(startCoords, destCoords) {
-      var startLatRads = this.degreesToRadians(startCoords.lat);
-      var startLongRads = this.degreesToRadians(startCoords.lng);
-      var destLatRads = this.degreesToRadians(destCoords.lat);
-      var destLongRads = this.degreesToRadians(destCoords.lng);
-
-      var Radius = 6371; //지구의 반경(km)
-      var distance =
-        Math.acos(
-          Math.sin(startLatRads) * Math.sin(destLatRads) +
-            Math.cos(startLatRads) *
-              Math.cos(destLatRads) *
-              Math.cos(startLongRads - destLongRads)
-        ) * Radius;
-
-      return distance;
-    },
-    degreesToRadians(degrees) {
-      var radians = (degrees * Math.PI) / 180;
-      return radians;
-    },
-           
-    make_encode_polyline(latLng) {
-      var path = this.poly.getPath();
-      // Because path is an MVCArray, we can simply append a new coordinate
-      // and it will automatically appear
-      path.push(latLng);
-      console.log(path)
-      // Update the text field to display the polyline encodings
-      this.encode_polyline = new google.maps.geometry.encoding.encodePath(path);
-      console.log("encoded polyline!!")
-      console.log(this.encode_polyline)
-      document.getElementById("encoded-polyline").value = this.encode_polyline;
     },
   },
 };
 </script>
 
-<style>
-.driver-view {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-.top-bar {
-  height: 100px;
-  text-align: center;
-  background: white;
-}
+<style scoped>
 .map {
   flex-grow: 1;
   width: 100%;
   height: 400px;
-}
-.bottom-bar {
-  height: 100px;
-  text-align: center;
-  background: white;
-}
-/* 스톱워치 디자인 */
-@import url("https://fonts.googleapis.com/css?family=Share+Tech+Mono");
-#clock {
-
-  order: 0;
-  flex: 0 1 auto;
-  align-self: center;
-
-  color: rgb(200, 200, 200);
-}
-#time {
-  font-size: 5em;
-}
-#acc_time {
-  font-size: 2em;
-}
-#acc_dis {
-  font-size: 2em;
-}
-.btn-container {
-  display: flex;
-  margin-top: 15px;
-}
-.running button {
-  text-align: center;
-  font-family: "Share Tech Mono", sans-serif;
-  background: transparent;
-  border: none;
-  color: rgb(200, 200, 200);
-  /* padding: 20px 15px; */
-  margin: 0 10px;
-  text-transform: uppercase;
-  font-size: 2em;
-  cursor: pointer;
-
-  flex-grow: 1;
-
-  transition: color 0.1s ease-out;
 }
 </style>

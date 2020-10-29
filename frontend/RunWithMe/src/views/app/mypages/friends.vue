@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Contact List'" :folder="'Apps'" />
+    <breadcumb :page="'Friends List'" :folder="'MyPage'" />
     <!-- <div class="wrapper"> -->
     <b-card>
       <vue-good-table
@@ -119,10 +119,10 @@ export default {
           label: "Email",
           field: "email"
         },
-        {
-          label: "Phone",
-          field: "phone"
-        },
+        // {
+        //   label: "Phone",
+        //   field: "phone"
+        // },
         {
           label: "Span",
           field: "span",
@@ -137,10 +137,10 @@ export default {
           label: "Joining Date",
           field: "join"
         },
-        {
-          label: "Salary",
-          field: "salary"
-        },
+        // {
+        //   label: "Salary",
+        //   field: "salary"
+        // },
         {
           label: "Button",
           field: "button",
@@ -153,8 +153,8 @@ export default {
         {
           id: 1,
           avatar: require("@/assets/images/faces/1.jpg"),
-          name: "John",
-          email: "jhonwick_23@gmail.com",
+          name: "daeyong",
+          email: "kim940813@gmail.com",
           phone: "+88012378478",
           span: '<span class="badge badge-primary">Primary</span>',
           join: "April 25, 2019",
@@ -172,116 +172,6 @@ export default {
           age: "31",
           salary: "$320,800"
         },
-        {
-          id: 3,
-          avatar: require("@/assets/images/faces/2.jpg"),
-          name: "Susan",
-          email: "jameswann@gmail.com",
-          phone: "+88012378478",
-          span: '<span class="badge badge-warning">Primary</span>',
-          join: "April 34, 2019",
-          age: "10",
-          salary: "$320,800"
-        },
-        {
-          id: 4,
-          avatar: require("@/assets/images/faces/1.jpg"),
-          name: "Chris",
-          email: "jhonwick_23@gmail.com",
-          phone: "+88012378478",
-          span: '<span class="badge badge-primary">Primary</span>',
-          join: "April 25, 2019",
-          age: "20",
-          salary: "$320,800"
-        },
-        {
-          id: 5,
-          avatar: require("@/assets/images/faces/4.jpg"),
-          name: "Dan",
-          email: "jhonwick_23@gmail.com",
-          phone: "+88012378478",
-          span: '<span class="badge badge-danger">Primary</span>',
-          join: "April 25, 2019",
-          age: "21",
-          salary: "$320,800"
-        },
-        {
-          id: 6,
-          avatar: require("@/assets/images/faces/5.jpg"),
-          name: "John",
-          email: "jameswann@gmail.com",
-          phone: "+88012378478",
-          span: '<span class="badge badge-success">success</span>',
-          join: "April 25, 2019",
-          age: "31",
-          salary: "$320,800"
-        },
-        {
-          id: 1,
-          avatar: require("@/assets/images/faces/4.jpg"),
-          name: "John",
-          email: "dan_brown@gmail.com",
-          phone: "+88012378478",
-          span: '<span class="badge badge-warning">Warning</span>',
-          join: "April 25, 2019",
-          age: "35 ",
-          salary: "$320,800"
-        },
-        {
-          id: 2,
-          avatar: require("@/assets/images/faces/3.jpg"),
-          name: "Jane",
-          email: "jameswann@gmail.com",
-          phone: "+88012378478",
-          span: '<span class="badge badge-info">Info</span>',
-          join: "April 25, 2019",
-          age: "11",
-          salary: "$320,800"
-        },
-        {
-          id: 3,
-          avatar: require("@/assets/images/faces/2.jpg"),
-          name: "Susan",
-          email: "janeswann@gmail.com",
-          phone: "+88012378478",
-          span: '<span class="badge badge-dark">Dark</span>',
-          join: "April 25, 2019",
-          age: "2011-10-30",
-          salary: "$320,800"
-        },
-        {
-          id: 4,
-          avatar: require("@/assets/images/faces/1.jpg"),
-          name: "Chris",
-          email: "jaasdameswann@gmail.com",
-          phone: "+88012378478",
-          span: '<span class="badge badge-warning">Warning</span>',
-          join: "April 25, 2019",
-          age: "20",
-          salary: "$320,800"
-        },
-        {
-          id: 5,
-          avatar: require("@/assets/images/faces/5.jpg"),
-          name: "Dan",
-          email: "doomwaytne@gmail.com",
-          phone: "+88012378478",
-          span: '<span class="badge badge-info">Info</span>',
-          join: "April 25, 2019",
-          age: "21",
-          salary: "$320,800"
-        },
-        {
-          id: 6,
-          avatar: require("@/assets/images/faces/3.jpg"),
-          name: "John",
-          email: "sidsacc@gmail.com",
-          phone: "+88012378478",
-          span: '<span class="badge badge-primary">Primary</span>',
-          join: "April 25, 2019",
-          age: "31",
-          salary: "$320,800"
-        }
       ]
     };
   },
