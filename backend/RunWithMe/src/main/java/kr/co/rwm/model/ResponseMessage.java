@@ -90,4 +90,6 @@ public class ResponseMessage {
     public static final String ACTAREA_UPDATE_FAIL = "유저 활동 지역 수정 실패";
     public static final String AREA_RUNNINGS_SUCCESS = "지역에 따른 런닝 기록 조회 성공";
     
+    public static final String FRIENDS_RUNNING_RECORD = "메인페이지: 친구의 최근 기록 1개 조회 성공";
+    
 }

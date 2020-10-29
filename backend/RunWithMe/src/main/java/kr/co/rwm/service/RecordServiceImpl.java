@@ -13,6 +13,7 @@ import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
 import kr.co.rwm.entity.RunningArea;
+import kr.co.rwm.entity.User;
 import kr.co.rwm.repo.GugunRepository;
 import kr.co.rwm.repo.RecordRepository;
 import kr.co.rwm.repo.RunningAreaRepository;
@@ -64,7 +65,7 @@ public class RecordServiceImpl implements RecordService {
 
 	@Override
 	public List<Running> findRunningByUserId(int userId) {
-		return runningRepository.findAllByUserId(userId);
+		return runningRepository.findAllByUserIdOrderByStartTimeDesc(userId);
 	}
 
 	@Override
@@ -104,13 +105,24 @@ public class RecordServiceImpl implements RecordService {
 
 	@Override
 	public List<Running> findAllRunningByGugunIdAndUserId(int gugunId, int userId) {
-		List<Running> userRunning = runningRepository.findAllByUserId(userId);
+		List<Running> userRunning = runningRepository.findAllByUserIdOrderByStartTimeDesc(userId);
 		List<Running> runningList = new ArrayList<Running>();
 		for(Running running: userRunning) {
 			if(running.getRunningArea().stream().anyMatch(x -> x.getGugun().getGugunId()==gugunId))
 				runningList.add(running);
 		}
 		return runningList; 
+	}
+
+	@Override
+	public List<Running> findRunningByFriendsId(List<User> friends) {
+		List<Running> runnings = new ArrayList<Running>();
+		for(User friend: friends) {
+			List<Running> temp = runningRepository.findAllByUserIdOrderByStartTimeDesc(friend.getUserId());
+			if(temp.isEmpty()) continue;
+			runnings.add(temp.get(0));
+		}
+		return runnings;
 	}
 
 	

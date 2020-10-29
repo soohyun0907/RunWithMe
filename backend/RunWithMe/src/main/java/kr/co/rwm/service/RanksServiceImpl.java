@@ -66,7 +66,7 @@ public class RanksServiceImpl implements RanksService{
 		}
 		User member = userRepository.findByUserId(userId).get();
 		Optional<Ranks> user = rankRepository.findByUserId(member);
-		Ranks temp = user.get();
+		Ranks temp = user.get(); 
 		
 		final double total = sum + temp.getTotalExp();
 		sum += temp.getRaceExp();
