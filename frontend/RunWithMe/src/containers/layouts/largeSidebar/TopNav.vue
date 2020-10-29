@@ -159,6 +159,16 @@
       :isSearchOpen.sync="isSearchOpen"
       @closeSearch="toggleSearch"
     ></search-component>
+
+    <infinite-slide-bar duration="20s">
+      <div class="items">
+        <div v-for="ranker in rankList" :key="ranker.id">
+          <img class="profile-picture rounded-circle avatar-sm" :src="ranker.imgUrl">
+          {{ranker.id}}. {{ranker.nickname}}
+          {{ranker.accumulcated_distance}} KM
+        </div>
+      </div>
+    </infinite-slide-bar>
   </div>
 
   <!-- header top menu end -->
@@ -170,22 +180,55 @@ import searchComponent from "../common/search";
 import { isMobile } from "mobile-device-detect";
 import { mapGetters, mapActions } from "vuex";
 import { mixin as clickaway } from "vue-clickaway";
+import InfiniteSlideBar from 'vue-infinite-slide-bar';
 
 export default {
   mixins: [clickaway],
   components: {
     Sidebar,
-    searchComponent
+    searchComponent,
+    InfiniteSlideBar
   },
 
   data() {
     return {
       isDisplay: true,
-
       isStyle: true,
       isSearchOpen: false,
       isMouseOnMegaMenu: true,
-      isMegaMenuOpen: false
+      isMegaMenuOpen: false,
+      rankList : [
+        {
+          id: 1,
+          nickname: "Timothy Carlson",
+          imgUrl: "/img/1.jpg",
+          accumulcated_distance: 120,
+        },
+        {
+          id: 2,
+          nickname: "Jaret Leto",
+          imgUrl: "/img/2.jpg",
+          accumulcated_distance: 100,
+        },
+        {
+          id: 3,
+          nickname: "Kim",
+          imgUrl: "/img/3.jpg",
+          accumulcated_distance: 95,
+        },
+        {
+          id: 4,
+          nickname: "Lee",
+          imgUrl: "/img/4.jpg",
+          accumulcated_distance: 80,
+        },
+        {
+          id: 5,
+          nickname: "Lee",
+          imgUrl: "/img/4.jpg",
+          accumulcated_distance: 80,
+        },
+      ]
     };
   },
   mounted() {
@@ -258,6 +301,11 @@ export default {
   }
 };
 </script>
-
+<style scoped>
+.items { 
+  display: flex; 
+  justify-content: space-around; 
+}
+</style>
 
 
