@@ -27,6 +27,7 @@ public class RanksServiceImpl implements RanksService{
 	private final UserRepository userRepository;
 	
 	private final int DEFAULT_EXP = 0;
+	private final int DONATE_EXP = 100;
 	
 	// 회원가입시 활용 및 매달 스코어 초기화시 사용
 	@Override
@@ -38,8 +39,6 @@ public class RanksServiceImpl implements RanksService{
 	@Override
 	public void getRaceExp(int userId, int runningId) {
 		// 해당 레코드아이디를 받아오고
-		System.out.println("TEST");
-		System.out.println(runningId);
 		Running running = runningRepository.findByRunningId(runningId).get();
 		List<Record> list = recordRepository.findAllRecordByRunningId(running);
 		
@@ -69,16 +68,13 @@ public class RanksServiceImpl implements RanksService{
 		Optional<Ranks> user = rankRepository.findByUserId(member);
 		Ranks temp = user.get();
 		
-		System.out.println(sum); // 획득 점수
 		final double total = sum + temp.getTotalExp();
 		sum += temp.getRaceExp();
-		System.out.println(sum); // 획득 점수
 		final double result = sum;
 		user.ifPresent(selectUser->{
 			selectUser.setRankId(temp.getRankId());
 			selectUser.setUserId(temp.getUserId());
 			selectUser.setDonateExp(temp.getDonateExp());
-//			selectUser.setGugunId(temp.getGugunId());
 			selectUser.setTotalExp(total);
 			selectUser.setRaceExp(result);
 			rankRepository.save(selectUser);
@@ -87,8 +83,21 @@ public class RanksServiceImpl implements RanksService{
 
 	@Override
 	public void getDonateExp(int userId) {
-		// TODO Auto-generated method stub
+		User member = userRepository.findByUserId(userId).get();
+		Optional<Ranks> user = rankRepository.findByUserId(member);
+		Ranks temp = user.get();
 		
+		final double total = DONATE_EXP + temp.getTotalExp();
+		double sum = DONATE_EXP + temp.getDonateExp();
+		final double result = sum;
+		user.ifPresent(selectUser->{
+			selectUser.setRankId(temp.getRankId());
+			selectUser.setUserId(temp.getUserId());
+			selectUser.setDonateExp(result);
+			selectUser.setTotalExp(total);
+			selectUser.setRaceExp(temp.getRaceExp());
+			rankRepository.save(selectUser);
+		});
 	}
 
 	@Override

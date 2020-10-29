@@ -110,6 +110,13 @@ public class RunningController {
 		System.out.println(loginUser.getUserId()+" 저장 "+runningId);
 		rankService.getRaceExp(loginUser.getUserId(), runningId);
 		
+		boolean check = true;
+		// boolean check = 챌린지 달성 했다면 true 안했으면 false - false -> true 바꼈을때 : true / 그 외에는 false
+		if(check) {
+			// 기부점수 오르기
+			rankService.getDonateExp(loginUser.getUserId());
+		}
+				
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.RUNNING_GPS_SUCCESS, map), HttpStatus.OK);
 	}
