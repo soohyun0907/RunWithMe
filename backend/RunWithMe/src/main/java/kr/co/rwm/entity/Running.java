@@ -1,14 +1,20 @@
 package kr.co.rwm.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,7 +56,8 @@ public class Running {
 	@Column(name = "thumbnail", length = 300)
 	private String thumbnail;
 	
-	@Transient
-	private Date date;
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@OneToMany(mappedBy = "running", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RunningArea> runningArea = new ArrayList<>();
 	
 }
