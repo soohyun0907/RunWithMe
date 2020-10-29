@@ -36,7 +36,8 @@ public class ResponseMessage {
     public static final String CHALLENGE_DELETE_FAIL = "챌린지 삭제 실패";
     public static final String CHALLENGE_LIST_SUCCESS = "챌린지 목록 조회 성공";
     public static final String CHALLENGE_LIST_FAIL = "챌린지 목록 조회 실패";
-    public static final String CHALLENGE_SEARCH_SUCCESS = "챌린지 상세 조회 성공";
+    public static final String CHALLENGE_SEARCH_SUCCESS_T = "챌린지 상세 조회 성공: 유저정보 있음";
+    public static final String CHALLENGE_SEARCH_SUCCESS_F = "챌린지 상세 조회 성공: 유저정보 없음";
     public static final String CHALLENGE_SEARCH_FAIL = "챌린지 상세 조회 실패";
     public static final String CHALLENGE_ACCESS_FORBIDDEN = "권한 없음";
     public static final String CHALLENGE_PARTICIPATE_SUCCESS = "챌린지 참여 성공";

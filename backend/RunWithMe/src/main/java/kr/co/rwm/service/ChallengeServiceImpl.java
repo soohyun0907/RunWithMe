@@ -157,4 +157,11 @@ public class ChallengeServiceImpl implements ChallengeService {
 		return successUsers;
 	}
 
+	@Override
+	public ChallengeUser findChallengeUserByUserIdAndChallengeId(int userId, Challenge challenge) {
+		User user = userRepository.findByUserId(userId).get();
+		ChallengeUser challengeUser = challengeUserRepository.findByUserIdAndChallengeId(user, challenge);
+		return challengeUser;
+	}
+
 }
