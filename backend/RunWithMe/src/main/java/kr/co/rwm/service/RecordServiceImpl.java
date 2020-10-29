@@ -73,7 +73,7 @@ public class RecordServiceImpl implements RecordService {
 	}
 
 	@Override
-	public List<Record> findAllRecordByRunningId(int runningId) {
+	public List<Record> findAllRecordByRunningId(Running runningId) {
 		return recordRepository.findAllRecordByRunningId(runningId);
 	}
 
@@ -100,6 +100,17 @@ public class RecordServiceImpl implements RecordService {
 		}
 		
 		return gugunList;
+	}
+
+	@Override
+	public List<Running> findAllRunningByGugunIdAndUserId(int gugunId, int userId) {
+		List<Running> userRunning = runningRepository.findAllByUserId(userId);
+		List<Running> runningList = new ArrayList<Running>();
+		for(Running running: userRunning) {
+			if(running.getRunningArea().stream().anyMatch(x -> x.getGugun().getGugunId()==gugunId))
+				runningList.add(running);
+		}
+		return runningList; 
 	}
 
 	
