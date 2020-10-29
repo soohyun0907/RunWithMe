@@ -22,12 +22,18 @@ import "font-awesome/css/font-awesome.min.css";
 import vueMoment from 'vue-moment' 
 Vue.use(vueMoment)
 
+//dropdown
+import VueDropdown from 'vue-dynamic-dropdown'
+Vue.component('vue-dropdown',VueDropdown)
+
+
 //defined as global component
 Vue.component('VueFontawesome', require('vue-fontawesome-icon/VueFontawesome.vue').default);
 
 Vue.component("breadcumb", Breadcumb);
 Vue.component("breadcumbcustom", Breadcumbcustom);
 import InstantSearch from 'vue-instantsearch';
+
  
 Vue.use(InstantSearch);
 Vue.use(GullKit);
