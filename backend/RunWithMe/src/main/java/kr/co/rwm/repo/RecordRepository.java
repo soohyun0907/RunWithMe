@@ -12,6 +12,7 @@ public interface RecordRepository extends JpaRepository<Record, Integer>{
 	List<Record> findAllByUserId(int userId);
 	
 	List<Record> findAllRecordByRunningId(int runningId);
+	
 	List<Record> findAllRecordByRunningId(Running running);
 	
 }
