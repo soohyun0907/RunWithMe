@@ -54,6 +54,9 @@ public class User implements UserDetails {
 	@Column(name = "gender") // 1: 남자 2: 여자
 	private Integer gender;
 	
+	@Column(name = "mileage", columnDefinition = "Integer default 0")
+	private Integer mileage;
+	
 //	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 //	@OneToOne(fetch = FetchType.LAZY, mappedBy="userId", cascade = CascadeType.ALL)
 //	private Ranks rank;
