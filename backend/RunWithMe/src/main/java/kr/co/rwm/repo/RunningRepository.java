@@ -9,8 +9,10 @@ import kr.co.rwm.entity.Running;
 
 public interface RunningRepository extends JpaRepository<Running, Long> {
 	
-	List<Running> findAllByUserId(int userId);
+	List<Running> findAllByUserIdOrderByStartTimeDesc(int userId);
 
 	Optional<Running> findByRunningId(int runningId);
+	
+	Running getOneByUserIdOrderByStartTimeDesc(int userId);
 	
 }

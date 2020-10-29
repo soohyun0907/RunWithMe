@@ -6,11 +6,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -171,6 +169,22 @@ public class ChallengeController {
 		
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.CHALLENGE_PARTICIPATE_SUCCESS, challengeUser), HttpStatus.OK);
+	}
+	
+	// 매일 자정마다 실행
+//	@Scheduled(cron = "1 0 00 * * ?")
+	@ApiOperation(value = "챌린지 끝내기")
+	@GetMapping("/end")
+	public ResponseEntity endChallenge(HttpServletRequest request) {
+		System.out.println("챌린지 업데이트 - 챌린지 여부");
+		/**
+		 * 1초로 바뀌자마자 -> 그 전날이랑 endTime이 같은 challenge들 뽑고 -> 그 이후에 검사하고 List<User>
+		 */
+		
+		List<User> successUsers = challengeService.findAllChallengeEqualDate();
+		
+		return new ResponseEntity<Response>(new 
+				Response(StatusCode.OK, ResponseMessage.CHALLENGE_PARTICIPATE_SUCCESS, null), HttpStatus.OK);
 	}
 }
 	
