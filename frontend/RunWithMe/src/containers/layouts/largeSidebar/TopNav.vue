@@ -160,9 +160,9 @@
       @closeSearch="toggleSearch"
     ></search-component>
 
-    <infinite-slide-bar duration="20s">
+    <infinite-slide-bar duration="20s" :barStyle="{ padding: '5px 0' }">
       <div class="items">
-        <div v-for="ranker in rankList" :key="ranker.id">
+        <div v-for="ranker in rankList" :key="ranker.id" style="margin-right:50px;">
           <img class="profile-picture rounded-circle avatar-sm" :src="ranker.imgUrl">
           {{ranker.id}}. {{ranker.nickname}}
           {{ranker.accumulcated_distance}} KM

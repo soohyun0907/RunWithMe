@@ -59,8 +59,8 @@ const routes = [
             component: () => import("./views/app/runnings/running")
           },
           {
-            path: "friendsList",
-            component: () => import("./views/app/runnings/friendsList")
+            path: "neighborhoodList",
+            component: () => import("./views/app/runnings/neighborhoodList")
           },
           {
             path: "friendsDetail",

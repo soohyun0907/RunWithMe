@@ -1,11 +1,25 @@
 <template>
   <div class="main-content">
     <h3>기부/이벤트</h3>
-    <carousel-3d :width="180" :height="230">
-      <slide v-for="(slide, i) in slides" :index="i" :key="i">
-        <img :src="slide.img" />
-        <!-- <span class="title">You know</span>
-        <p>You know, being a test pilot isn't always the healthiest business in the world.</p> -->
+    <carousel-3d :width="180" :height="250">
+      <slide v-for="(slide, i) in slides" :index="i" :key="i" style="border: 0px;">
+        <div @click="toggleOverlay">
+          <b-overlay 
+          :show="slidesOverlayShow" 
+          :variant="variant"
+          :opacity="opacity"
+          :blur="blur"
+          rounded="sm">
+            <img :src="slide.img" />
+            <template #overlay>
+              <div class="text-center">
+                <h3>{{slide.title}}</h3>
+                <h5>StartDate ~ EndDate</h5>
+              </div>
+            </template>
+          </b-overlay>
+          <h3 v-if="slidesOverlayShow">title</h3>
+        </div>
       </slide>
     </carousel-3d>
     <!-- <vueper-slides
@@ -20,66 +34,42 @@
       <vueper-slide v-for="(slide, i) in slides" :index="i" :key="i"
         :image="slide.img" />
     </vueper-slides> -->
-    <h3>TOP RANK</h3>
-    <b-col lg="6" xl="6" md="12" class="mb-30">
-      <b-card class>
-        <!-- <div class="card-title">Top Authors</div> -->
-        <div
-          class="d-flex flex-column flex-md-row text-center text-md-left text-lg-left flex-lg-row align-items-center border-bottom-dotted-dim pb-1 mb-3"
-        >
-          <img class="avatar-md rounded mr-md-3 mb-2" src="@/assets/images/faces/2.jpg" alt />
-            <div class="flex-grow-1">
-              <h6 class="m-0">David Hopkins</h6>
-              <b-progress
-                :value="100"
-                show-value
-                variant="success"
-                striped
-                animated
-              />
-            </div>
-            <div>
-              <button class="btn btn-outline-primary btn-rounded btn-sm mt-md-0 mt-2">Follow</button>
-            </div>
+    <hr>
+    <b-card style="margin-bottom:15px;">
+      <div class="d-flex justify-content-between">
+        <h3 class="ul-widget__head-title">
+          TOP RANK
+        </h3>
+      </div>
+      <div class="ul-widget__body">
+        <div class="ul-widget1">
+          <div class="ul-widget__item ul-widget4__users" v-for="ranker in rankList" :key="ranker.id">
+            <!-- <div > -->
+              <h5 style="margin-right:5px;">{{ ranker.id }} </h5>
+              <div class="ul-widget4__img">
+                <img
+                  :src="ranker.imgUrl"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+              </div>
+              <div class="ul-widget2__info ul-widget4__users-info">
+                <router-link :to="`/app/runnings/friendsDetail`">
+                <!-- <a href="#" class="ul-widget2__title"> -->
+                  {{ranker.nickname}}
+                </router-link>
+                <!-- </a> -->
+              </div>
+              <span class="ul-widget4__number t-font-boldest text-success">
+                {{ranker.accumulcated_distance}} KM
+              </span>
+            <!-- </div> -->
+          </div>
         </div>
-        <div
-          class="d-flex flex-column flex-md-row text-center text-md-left text-lg-left flex-lg-row align-items-center border-bottom-dotted-dim pb-3 mb-3"
-        >
-          <img class="avatar-md rounded mr-md-3 mb-2" src="@/assets/images/faces/3.jpg" alt />
-            <div class="flex-grow-1">
-              <h6 class="m-0">James Mitchell</h6>
-              <b-progress
-                :value="75"
-                show-value
-                variant="danger"
-                striped
-                animated
-              />
-            </div>
-            <div>
-              <button class="btn btn-outline-primary btn-rounded btn-sm mt-md-0 mt-2">Follow</button>
-            </div>
-        </div>
-        <div
-          class="d-flex flex-column flex-md-row text-center text-md-left text-lg-left flex-lg-row align-items-center border-bottom-dotted-dim mb-3"
-        >
-          <img class="avatar-md rounded mr-md-3 mb-2" src="@/assets/images/faces/4.jpg" alt />
-            <div class="flex-grow-1">
-              <h6 class="m-0">Jessica Mitchell</h6>
-              <b-progress
-                :value="65"
-                show-value
-                variant="danger"
-                striped
-                animated
-              />
-            </div>
-            <div>
-              <button class="btn btn-outline-primary btn-rounded btn-sm mt-md-0 mt-2">Follow</button>
-            </div>
-        </div>
-      </b-card>
-    </b-col>
+      </div>
+    </b-card>
+    <hr>
     <h3>친구 피드 시작</h3>
     <div
       ref="rowView"
@@ -96,12 +86,13 @@
         v-for="(item, index) in items"
         transition="list"
       >
+        <router-link :to="`/app/runnings/runningResult`">
         <div
           class="card o-hidden mb-30 d-flex "
           :class="{ 'flex-column': isListView, 'flex-row': !isListView }"
         >
           <div class="list-thumb d-flex">
-            <img alt="" :src="item.img" />
+            <img :src="item.img" />
           </div>
           <div
             class="flex-grow-1 "
@@ -122,13 +113,14 @@
                 총 킬로미터 평균페이스 총 런닝 시간
               </p> -->
               <p class="m-0 text-muted text-small w-15 w-sm-100">
-                {{ item.total_distance }}KM &nbsp; &nbsp; &nbsp; &nbsp;
-                {{convertToTime(item.running_avg_pace)}} &nbsp;
+                {{ item.total_distance }}KM /
+                {{convertToTime(item.running_avg_pace)}} /
                 {{item.accumulcated_time}}
               </p>
             </div>
           </div>
         </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -174,32 +166,77 @@ export default {
     return {
       items: items,
       isListView: false,
+      // overlay data
+      variant: 'white',
+      opacity: 0.70,
+      blur: '2px',
+      slidesOverlayShow: false,
       slides: [
         {
+          title : "challenge 1",
           img : require('@/assets/images/photo-long-1.jpg'),
         },
         {
+          title : "challenge 2",
           img : require('@/assets/images/photo-long-2.jpg'),
         },
         {
+          title : "challenge 3",
           img : require('@/assets/images/photo-long-3.jpg'),
         },
         {
+          title : "challenge 4",
           img : require('@/assets/images/photo-long-4.jpg'),
         },
         {
+          title : "challenge 5",
           img : require('@/assets/images/photo-long-1.jpg'),
         },
         {
+          title : "challenge 6",
           img : require('@/assets/images/photo-long-2.jpg'),
         },
         {
+          title : "challenge 7",
           img : require('@/assets/images/photo-long-3.jpg'),
         },
         {
+          title : "challenge 8",
           img : require('@/assets/images/photo-long-4.jpg'),
         },
       ],
+      rankList : [
+        {
+          id: 1,
+          nickname: "Timothy Carlson",
+          imgUrl: "/img/1.jpg",
+          accumulcated_distance: 120,
+        },
+        {
+          id: 2,
+          nickname: "Jaret Leto",
+          imgUrl: "/img/2.jpg",
+          accumulcated_distance: 100,
+        },
+        {
+          id: 3,
+          nickname: "Kim",
+          imgUrl: "/img/3.jpg",
+          accumulcated_distance: 95,
+        },
+        {
+          id: 4,
+          nickname: "Lee",
+          imgUrl: "/img/4.jpg",
+          accumulcated_distance: 80,
+        },
+        {
+          id: 5,
+          nickname: "Lee",
+          imgUrl: "/img/4.jpg",
+          accumulcated_distance: 80,
+        },
+      ]
     };
   },
   created() {
@@ -214,6 +251,12 @@ export default {
         time += parseInt(origin/60) + "\'";
         time += origin%60 + "\"";
         return time;
+    },
+    toggleOverlay(){
+      if(this.slidesOverlayShow)
+        this.slidesOverlayShow = false;
+      else
+        this.slidesOverlayShow = true;
     }
   }
 };

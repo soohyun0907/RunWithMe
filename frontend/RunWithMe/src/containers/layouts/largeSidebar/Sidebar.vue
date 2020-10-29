@@ -127,9 +127,9 @@
           :class="{ 'd-block': selectedParentMenu == 'runnings' }"
         >
           <li class="nav-item">
-            <router-link tag="a" class to="/app/runnings/friendsList">
+            <router-link tag="a" class to="/app/runnings/neighborhoodList">
               <i class="nav-icon i-File-CSV"></i>
-              <span class="item-name">Friends List</span>
+              <span class="item-name">Neighborhood List</span>
             </router-link>
           </li>
           <li class="nav-item">
