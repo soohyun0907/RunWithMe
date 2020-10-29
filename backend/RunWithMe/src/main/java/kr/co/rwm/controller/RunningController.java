@@ -119,7 +119,7 @@ public class RunningController {
 	public ResponseEntity findRecordsByRunningId(@PathVariable int runningId) {
 		System.out.println("gps/controller/get");
 		Running running = recordService.findRunningById(runningId);
-		List<Record> records = recordService.findAllRecordByRunningId(runningId);
+		List<Record> records = recordService.findAllRecordByRunningId(running);
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("running", running);
