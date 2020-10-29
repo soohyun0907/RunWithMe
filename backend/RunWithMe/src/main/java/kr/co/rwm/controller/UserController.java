@@ -229,6 +229,7 @@ public class UserController {
 			}
 			user.setUserId(member.get().getUserId());
 			user.setUserEmail(member.get().getUserEmail());
+			user.setGender(member.get().getGender());
 			user.setChangePw(passwordEncoder.encode(user.getChangePw()));
 			Gugun gugun = areaService.findGugunByGugunId(user.getGugunId().getGugunId());
 			user.setGugunId(gugun);
