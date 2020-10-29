@@ -7,27 +7,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
 import kr.co.rwm.entity.RunningArea;
+import kr.co.rwm.entity.RunningUser;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.repo.GugunRepository;
 import kr.co.rwm.repo.RecordRepository;
 import kr.co.rwm.repo.RunningAreaRepository;
 import kr.co.rwm.repo.RunningRepository;
+import kr.co.rwm.repo.RunningUserRepository;
+import kr.co.rwm.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
 public class RecordServiceImpl implements RecordService {
 
+	private final UserRepository userRepository;
 	private final RecordRepository recordRepository;
 	private final RunningRepository runningRepository;
 	private final GugunRepository gugunRepository;
 	private final RunningAreaRepository runningAreaRepository;
+	private final RunningUserRepository runningUserRepository;
 	
 	@Override
 	public void saveRecord(Record record) {
@@ -77,6 +84,20 @@ public class RecordServiceImpl implements RecordService {
 	public List<Record> findAllRecordByRunningId(Running runningId) {
 		return recordRepository.findAllRecordByRunningId(runningId);
 	}
+	
+	@Override
+	@Transactional
+	public Long deleteRunningByUserId(int userId, int runningId) {
+		User user = userRepository.findByUserId(userId).get();
+		Running running = runningRepository.findByRunningId(runningId).get();
+		RunningUser runningUser = runningUserRepository.findByUserId(user);
+		runningUser.setTotalCount(runningUser.getTotalCount()-1);
+		runningUser.setTotalDistane(runningUser.getTotalDistane()-running.getAccDistance());
+		runningUser.setTotalTime(runningUser.getTotalTime()-running.getAccTime());
+		runningUserRepository.save(runningUser);
+		
+		return runningRepository.deleteByRunningId(runningId);
+	}
 
 	@Override
 	public void updateRunningImage(int runningId, String url) {
@@ -125,5 +146,31 @@ public class RecordServiceImpl implements RecordService {
 		return runnings;
 	}
 
+	@Override
+	public void join(User user) {
+		RunningUser runningUser = RunningUser.builder()
+											.userId(user)
+											.totalDistane(0)
+											.totalTime(0L)
+											.totalCount(0)
+											.build();
+		
+		runningUserRepository.save(runningUser);
+	}
+
+	@Override
+	public RunningUser findRunningUserByUserId(User user) {
+		return runningUserRepository.findByUserId(user);
+	}
+
+	@Override
+	public RunningUser updateRunningUser(User user, Running running) {
+		RunningUser runningUser = runningUserRepository.findByUserId(user);
+		runningUser.setTotalCount(runningUser.getTotalCount()+1);
+		runningUser.setTotalDistane(runningUser.getTotalDistane()+running.getAccDistance());
+		runningUser.setTotalTime(runningUser.getTotalTime()+running.getAccTime());
+		
+		return runningUserRepository.save(runningUser);
+	}
 	
 }
