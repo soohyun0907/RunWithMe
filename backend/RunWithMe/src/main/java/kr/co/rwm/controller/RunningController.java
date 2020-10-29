@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,9 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
@@ -28,6 +27,8 @@ import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.repo.RecordTempRepository;
 import kr.co.rwm.service.ChallengeService;
+import kr.co.rwm.service.FriendService;
+import kr.co.rwm.service.JwtTokenProvider;
 import kr.co.rwm.service.RanksService;
 import kr.co.rwm.service.RecordService;
 import kr.co.rwm.service.S3Service;
@@ -44,6 +45,8 @@ public class RunningController {
 	private final RanksService rankService;
 	private final S3Service s3Service;
 	private final ChallengeService challengeService;
+	private final JwtTokenProvider jwtTokenProvider;
+	private final FriendService friendService;
 
 	// 회원의 id로 모든 running을 조회: 프로필에서 약식으로 뜨는 것
 	@GetMapping("/{userId}")
@@ -112,7 +115,7 @@ public class RunningController {
 		System.out.println(loginUser.getUserId()+" 저장 "+runningId);
 		rankService.getRaceExp(loginUser.getUserId(), runningId);
 		challengeService.updateAccDistance(loginUser, savedRunning.getAccDistance());	// update위해서
-				
+		
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.RUNNING_GPS_SUCCESS, map), HttpStatus.OK);
 	}
@@ -151,6 +154,22 @@ public class RunningController {
 					new Response(StatusCode.FORBIDDEN, ResponseMessage.UPDATE_THUMBNAIL_FAIL), HttpStatus.FORBIDDEN);
 		}
 		
+	}
+	
+	// 친구의 피드를 최신 런닝을 하나만 보내준다.
+	@GetMapping("/friends")
+	public ResponseEntity findOneByFriendsId(HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		int uid = 0;
+		if(jwtTokenProvider.validateToken(token)) {
+			uid = jwtTokenProvider.getUserIdFromJwt(token);
+		}
+		
+		List<User> friends = friendService.list(uid);
+		List<Running> runnings = recordService.findRunningByFriendsId(friends);
+		
+		return new ResponseEntity<Response>(
+				new Response(StatusCode.FORBIDDEN, ResponseMessage.FRIENDS_RUNNING_RECORD, runnings), HttpStatus.FORBIDDEN);
 	}
 
 }

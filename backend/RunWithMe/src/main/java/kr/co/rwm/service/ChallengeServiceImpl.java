@@ -139,10 +139,9 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 		List<Challenge> challenges = challengeRepository.findAllByEndTime(yesterday);
 		System.out.println(challenges.size());
-
+		
 		double personalGoal;
 		for (Challenge c : challenges) {
-			System.out.println(c.toString());
 			personalGoal = c.getPersonalDistanceGoal();
 			List<ChallengeUser> challengeUsers = challengeUserRepository.findAllByChallengeId(c);
 
