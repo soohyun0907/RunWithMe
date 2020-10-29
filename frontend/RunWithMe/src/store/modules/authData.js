@@ -55,7 +55,7 @@ export default {
         context.commit("clearError");
         context.commit("setLoading", true);
         console.log("login on")
-        http.post("/users/signin",{
+        http.post("users/signin",{
           userEmail:userEmail,
           userPw:userPw        
         }).then(res => {
@@ -64,8 +64,9 @@ export default {
             localStorage.setItem("auth",res.headers.auth)
             localStorage.setItem("userInfo",JSON.stringify(res.data.data))
             console.log("로그인 성공")
-            console.log(res.data.data)
-            console.log(res.headers.auth)// 토큰얻기
+            console.log(res.data)
+            console.log("토큰 받아오기" + res.headers.auth)// 토큰얻기
+            console.log(localStorage.getItem("auth"))
             router.push('/')
         })
         .catch(function(error) {
@@ -90,7 +91,7 @@ export default {
       var jsons = JSON.stringify(signUpUnit)
       console.log(signUpUnit)
       console.log(jsons)
-      http.post("/users",jsons,{
+      http.post("users",jsons,{
         headers:{'Content-Type':'application/json'}
       })
         .then(res => {
@@ -116,15 +117,12 @@ export default {
         });
     },
     signOut(context) {
-      http.get(`users/signout`)
+      http.get(`http://localhost:8080/users/signout`, {
+        // headers:{'AUTH':localStorage.getItem("auth")}
+      })
       .then(res =>{
         console.log("로그아웃 성공")
         console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-      
         if(localStorage.getItem("userInfo")){
           localStorage.removeItem("userInfo")
         }    
@@ -132,6 +130,12 @@ export default {
           localStorage.removeItem("auth")
         }
         context.commit("setLogout");
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      
+      
     },
   },
 };

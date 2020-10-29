@@ -53,7 +53,7 @@
             </a>
             <div class="triangle"></div>
           </li>
-          
+
           <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
@@ -179,6 +179,7 @@
 <script>
 import Topnav from "./TopNav";
 import { isMobile } from "mobile-device-detect";
+import axios from "axios";
 
 import { mapGetters, mapActions } from "vuex";
 
@@ -201,6 +202,14 @@ export default {
     window.addEventListener("resize", this.handleWindowResize);
     document.addEventListener("click", this.returnSelectedParentMenu);
     this.handleWindowResize();
+    
+    
+     this.$store.subscribe((mutation, state) => {
+      if(mutation.type=="mutateAuth"){
+        console.log("auth 변경")
+        axios.defaults.headers.common['AUTH'] = this.$store.state.auth
+      }
+    })
   },
 
   beforeDestroy() {
