@@ -39,6 +39,21 @@
             </a>
             <div class="triangle"></div>
           </li>
+
+            <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'mypages' }"
+            data-item="mypages"
+            :data-submenu="true"
+          >
+            <a class="nav-item-hold" href="#">
+              <i class="nav-icon i-Administrator"></i>
+              <span class="nav-text">My Page</span>
+            </a>
+            <div class="triangle"></div>
+          </li>
+          
           <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
@@ -53,19 +68,7 @@
             <div class="triangle"></div>
           </li>
 
-          <li
-            @mouseenter="toggleSubMenu"
-            class="nav-item"
-            :class="{ active: selectedParentMenu == 'mypages' }"
-            data-item="mypages"
-            :data-submenu="true"
-          >
-            <a class="nav-item-hold" href="#">
-              <i class="nav-icon i-Administrator"></i>
-              <span class="nav-text">My Page</span>
-            </a>
-            <div class="triangle"></div>
-          </li>
+        
         </ul>
       </div>
     </vue-perfect-scrollbar>
