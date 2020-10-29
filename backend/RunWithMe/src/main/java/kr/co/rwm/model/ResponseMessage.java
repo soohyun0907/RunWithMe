@@ -85,5 +85,6 @@ public class ResponseMessage {
     public static final String ACTAREA_INSERT_FAIL = "유저 활동 지역 설정 실패";
     public static final String ACTAREA_UPDATE_SUCCESS = "유저 활동 지역 수정 성공";
     public static final String ACTAREA_UPDATE_FAIL = "유저 활동 지역 수정 실패";
+    public static final String AREA_RUNNINGS_SUCCESS = "지역에 따른 런닝 기록 조회 성공";
     
 }

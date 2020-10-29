@@ -15,7 +15,7 @@ public interface RecordService {
 	
 	public List<Record> findAllRecordByUserId(int userId);
 	
-	public List<Record> findAllRecordByRunningId(int runningId);
+	public List<Record> findAllRecordByRunningId(Running running);
 	
 	public Running saveRunning(Map<String, Object> runningInfo, int userId);
 	
@@ -26,5 +26,7 @@ public interface RecordService {
 	public void updateRunningImage(int runningId, String url);
 
 	public List<Gugun> saveAllGugun(Running savedRunning, List<String> guguns);
+
+	public List<Running> findAllRunningByGugunIdAndUserId(int gugunId, int userId);
 	
 }
