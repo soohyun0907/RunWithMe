@@ -18,4 +18,5 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long>{
 
 	List<Challenge> findAllByEndTimeLessThanEqual(LocalDateTime today);
 
+	List<Challenge> findAllByEndTime(LocalDateTime yesterday);
 }
