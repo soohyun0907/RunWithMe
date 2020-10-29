@@ -6,6 +6,7 @@ import java.util.Map;
 import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
+import kr.co.rwm.entity.User;
 
 public interface RecordService {
 	
@@ -28,5 +29,7 @@ public interface RecordService {
 	public List<Gugun> saveAllGugun(Running savedRunning, List<String> guguns);
 
 	public List<Running> findAllRunningByGugunIdAndUserId(int gugunId, int userId);
+
+	public List<Running> findRunningByFriendsId(List<User> friends);
 	
 }
