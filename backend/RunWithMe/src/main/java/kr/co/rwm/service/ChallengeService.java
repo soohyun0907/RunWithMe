@@ -5,6 +5,7 @@ import java.util.List;
 
 import kr.co.rwm.entity.Challenge;
 import kr.co.rwm.entity.ChallengeUser;
+import kr.co.rwm.entity.User;
 
 public interface ChallengeService {
 
@@ -72,4 +73,18 @@ public interface ChallengeService {
 	 * @return
 	 */
 	public List<Integer> findByChallengeUserList(int userId);
+
+	/**
+	 * 유저가 참여하고 있는 모든 챌린지 누적 거리 업데이트 시키기
+	 * @param loginUser
+	 * @param accDistance
+	 */
+	public void updateAccDistance(User user, double accDistance);
+
+	/**
+	 * 오늘 이전 날짜 확인
+	 * @param today
+	 * @return
+	 */
+	public List<User> findAllChallengeEqualDate();
 }
