@@ -48,6 +48,11 @@ public class ResponseMessage {
     public static final String REGION_TOP_RANKING_OK = "지역 랭킹 조회 성공";
     public static final String SEARCH_RANKER_OK = "랭커 조회 성공";
 
+    public static final String CHARGE_SUCCESS = "마일리지 충전 성공";
+    public static final String PAY_SUCCESS = "결제 성공";
+    public static final String PAY_FAIL = "결제 실패";
+    
+    
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
     public static final String FORBIDDEN = "인가 실패";
