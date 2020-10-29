@@ -14,7 +14,7 @@ public interface RanksService {
 	void getRaceExp(int userId,int runningId);
 	
 	// 경험치 쌓기(기부) - 챌린지 달성하면 무조건 쌓임
-	void getDonateExp(int userId);
+	void getDonateExp(List<User> user);
 	
 	// 경험치 top 10 (기록) - 사용자 이름, 점수, 
 	List<Ranks> raceTop();

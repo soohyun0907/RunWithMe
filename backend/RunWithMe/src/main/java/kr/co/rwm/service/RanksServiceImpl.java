@@ -33,7 +33,7 @@ public class RanksServiceImpl implements RanksService{
 	@Override
 	public void join(User user) {
 //		rankRepository.save(Ranks.builder().gugunId(user.getGugunId()).userId(user).raceExp(DEFAULT_EXP).donateExp(DEFAULT_EXP).totalExp(DEFAULT_EXP).build());
-		rankRepository.save(Ranks.builder().userId(user).raceExp(DEFAULT_EXP).donateExp(DEFAULT_EXP).totalExp(DEFAULT_EXP).build());
+		rankRepository.save(Ranks.builder().userId(user).raceExp(DEFAULT_EXP).donateExp(DEFAULT_EXP).totalExp(DEFAULT_EXP).tier(DEFAULT_EXP).build());
 	}
 
 	@Override
@@ -71,33 +71,40 @@ public class RanksServiceImpl implements RanksService{
 		final double total = sum + temp.getTotalExp();
 		sum += temp.getRaceExp();
 		final double result = sum;
+		final int tier = (int)total / 100;
 		user.ifPresent(selectUser->{
 			selectUser.setRankId(temp.getRankId());
 			selectUser.setUserId(temp.getUserId());
 			selectUser.setDonateExp(temp.getDonateExp());
 			selectUser.setTotalExp(total);
 			selectUser.setRaceExp(result);
+			selectUser.setTier(tier);
 			rankRepository.save(selectUser);
 		});
 	}
 
 	@Override
-	public void getDonateExp(int userId) {
-		User member = userRepository.findByUserId(userId).get();
-		Optional<Ranks> user = rankRepository.findByUserId(member);
-		Ranks temp = user.get();
-		
-		final double total = DONATE_EXP + temp.getTotalExp();
-		double sum = DONATE_EXP + temp.getDonateExp();
-		final double result = sum;
-		user.ifPresent(selectUser->{
-			selectUser.setRankId(temp.getRankId());
-			selectUser.setUserId(temp.getUserId());
-			selectUser.setDonateExp(result);
-			selectUser.setTotalExp(total);
-			selectUser.setRaceExp(temp.getRaceExp());
-			rankRepository.save(selectUser);
-		});
+	public void getDonateExp(List<User> users) {
+		int len = users.size();
+		for(int i=0;i<len;i++) {
+			User member= users.get(i);
+			Optional<Ranks> user = rankRepository.findByUserId(member);
+			Ranks temp = user.get();
+			
+			final double total = DONATE_EXP + temp.getTotalExp();
+			double sum = DONATE_EXP + temp.getDonateExp();
+			final double result = sum;
+			final int tier = (int)total / 100;
+			user.ifPresent(selectUser->{
+				selectUser.setRankId(temp.getRankId());
+				selectUser.setUserId(temp.getUserId());
+				selectUser.setDonateExp(result);
+				selectUser.setTotalExp(total);
+				selectUser.setRaceExp(temp.getRaceExp());
+				selectUser.setTier(tier);
+				rankRepository.save(selectUser);
+			});
+		}
 	}
 
 	@Override
@@ -107,8 +114,7 @@ public class RanksServiceImpl implements RanksService{
 
 	@Override
 	public List<Ranks> donateTop() {
-		// TODO Auto-generated method stub
-		return null;
+		return rankRepository.findTop10ByOrderByDonateExpDesc();
 	}
 
 	@Override
@@ -116,10 +122,29 @@ public class RanksServiceImpl implements RanksService{
 		return rankRepository.findTop10ByOrderByTotalExpDesc();
 	}
 
+	// 지역별 랭킹
 	@Override
 	public List<Ranks> totalTopByRegion(int regionId) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Ranks> list = rankRepository.findAll();
+		List<Ranks> region = new ArrayList<Ranks>();
+		int len = list.size();
+		for(int i=0;i<len;i++) {
+			Ranks temp = list.get(i);
+			if(temp.getUserId().getGugunId().getGugunId() == regionId) {
+				region.add(temp);
+			}
+		}
+		Collections.sort(region,new Comparator<Ranks>(){ 
+			@Override
+			public int compare(Ranks o1, Ranks o2) {
+				return Double.compare(o2.getTotalExp(), o1.getTotalExp());
+			}
+		});
+		if(region.size()<10) {
+			return region;
+		}else {
+			return region.subList(0, 10);
+		}
 	}
 
 	@Override

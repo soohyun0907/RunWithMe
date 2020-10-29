@@ -51,6 +51,7 @@ public class Ranks {
 	@Column(name = "total_exp", nullable = false)
 	private double totalExp;
 	
-	
+	@Column(name = "tier", columnDefinition = "Integer default 0")
+	private Integer tier;
 	
 }
