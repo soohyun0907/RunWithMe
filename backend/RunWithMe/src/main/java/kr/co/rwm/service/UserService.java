@@ -33,7 +33,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	public User join(User user, String password) {
-		return userRepository.save(User.builder().gugunId(user.getGugunId()).userEmail(user.getUserEmail())
+		return userRepository.save(User.builder().gugunId(user.getGugunId()).gender(user.getGender()).userEmail(user.getUserEmail())
 				.userName(user.getUsername()).userPw(password).roles(Collections.singletonList("USER")).build());
 	}
 
@@ -51,6 +51,7 @@ public class UserService implements UserDetailsService {
 		user.ifPresent(selectUser->{
 			selectUser.setUserId(temp.getUserId());
 			selectUser.setUserPw(changeUser.getChangePw());
+			selectUser.setGender(temp.getGender());
 			selectUser.setUserName(changeUser.getUsername());
 			selectUser.setProfile(changeUser.getProfile());
 			selectUser.setGugunId(changeUser.getGugunId());
