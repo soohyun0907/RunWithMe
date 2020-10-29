@@ -68,6 +68,22 @@ const routes = [
           },
         ]
       },
+      // mypages
+      {
+        path: "/app/mypages",
+        component: () => import("./views/app/mypages"),
+        redirect: "/app/mypages/byarea",
+        children: [
+          {
+            path: "byarea",
+            component: () => import("./views/app/mypages/byarea")
+          },
+          {
+            path: "friends",
+            component: () => import("./views/app/mypages/friends")
+          },
+        ]
+      },
     ]
   },
   // sessions
@@ -90,6 +106,8 @@ const routes = [
       }
     ]
   },
+
+
 ];
 
 const router = new Router({
@@ -97,7 +115,7 @@ const router = new Router({
   linkActiveClass: "open",
   routes,
   scrollBehavior(to, from, savedPosition) {
-    return {x: 0, y: 0};
+    return { x: 0, y: 0 };
   }
 });
 
