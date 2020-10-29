@@ -38,12 +38,12 @@ public class Record implements Serializable {
    private Integer recordId;
 
    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
    @JoinColumn(name = "running_id")
    private Running runningId;
 
    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
    @JoinColumn(name = "user_id", nullable = false)
    private User userId;
    

@@ -6,6 +6,7 @@ import java.util.Map;
 import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
+import kr.co.rwm.entity.RunningUser;
 import kr.co.rwm.entity.User;
 
 public interface RecordService {
@@ -24,6 +25,8 @@ public interface RecordService {
 	
 	public Running findRunningById(int runningId);
 	
+	public Long deleteRunningByUserId(int userId, int runningId);
+	
 	public void updateRunningImage(int runningId, String url);
 
 	public List<Gugun> saveAllGugun(Running savedRunning, List<String> guguns);
@@ -32,4 +35,10 @@ public interface RecordService {
 
 	public List<Running> findRunningByFriendsId(List<User> friends);
 	
+	public void join(User user);
+	
+	public RunningUser findRunningUserByUserId(User user);
+	
+	public RunningUser updateRunningUser(User user, Running running);
+
 }
