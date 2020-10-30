@@ -172,5 +172,20 @@ public class RecordServiceImpl implements RecordService {
 		
 		return runningUserRepository.save(runningUser);
 	}
+
+	@Override
+	public List<Running> findAllRunningByActivityArea(int userId) {
+		User user = userRepository.findByUserId(userId).get();
+		int gugunId = user.getGugunId().getGugunId();
+
+		List<Running> runningList = new ArrayList<Running>();
+		List<Running> userRunning = runningRepository.findAllByUserIdOrderByStartTimeDesc(userId);
+		for(Running running: userRunning) {
+			if(running.getRunningArea().stream().anyMatch(x -> x.getGugun().getGugunId()==gugunId))
+				runningList.add(running);
+		}
+		
+		return runningList;
+	}
 	
 }

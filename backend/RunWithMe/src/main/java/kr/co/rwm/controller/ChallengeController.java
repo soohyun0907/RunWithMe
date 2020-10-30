@@ -136,7 +136,7 @@ public class ChallengeController {
 	@ApiOperation(value = "종료 챌린지 목록 조회", response = ResponseEntity.class)
 	@GetMapping("/end")
 	public ResponseEntity findEndChallenge() {
-		System.out.println("/challenges/save - challenge를 전체조회합니다.");
+		System.out.println("/challenges/end - 종료 챌린지 조회");
 		List<Challenge> challenges = challengeService.findAllChallenge();
 		LocalDateTime today = LocalDateTime.now();
 		List<Challenge> endChallenges = challengeService.findAllChallengeLessThanEndTime(today); // 끝난 챌린지
