@@ -48,6 +48,7 @@ public class MatchRoomRepository {
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
     public ChatRoom createAndSelectChatroom( int uid, Map<String, Integer> idInfo) {
     	
+    	System.out.println("uid: " + uid);
     	Optional<Matching> matching = matchRepository.findByMasterIdAndGuestId(uid, idInfo.get("guestId"));
     	
     	if(matching.isPresent()) // 이미 방이 존재하다면,

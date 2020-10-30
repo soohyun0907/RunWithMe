@@ -2,16 +2,18 @@ import {user, contacts, chatCollection, chatroom} from "../../data/groupchat";
 import http from "@/utils/http-common";
 import Stomp from 'webstomp-client';
 import SockJS from 'sockjs-client';
-import authData from "@/store/modules/authData";
-
+import authData from '@/store/modules/authData.js';
 
 const state = {
   currentUser: user,
   contactList: [],
   recentUsers: [],
-  selectedUser: contacts[0],
+  selectedUser: JSON.parse(localStorage.getItem('userInfo')).username,
   chats: chatCollection,
-  roomInfo : "",
+  roomInfo : {
+    roomId : "~id",
+    roomName : "~name"
+  },
   messages : [],
   roomId : "",
   roomName : "",
@@ -33,33 +35,40 @@ const getters = {
 };
 
 const actions = {
-  changeSelectedUser({commit}, id) {
-    commit("updateSelectedUser", id);
+  changeSelectedUser({commit}, username) {
+    commit("updateSelectedUser", username);
   },
   createAndSelectChatroomAction({commit}, uid){
     commit("createAndSelectChatroom", uid);
-    // commit("test", state.roomInfo);
   },
   sendMessages({commit}, payload){
     console.log("msg: " + payload.msg)
     commit("sendMessage", payload);
+  },
+  selectUserList({commit}){
+    commit("selectUserLists")
   }
+
 };
 
 const mutations = {
   updateSelectedUser: (state, id) => {
-    const sUser = state.contactList.filter(user => user.id == id);
-    state.selectedUser = sUser[0];
+    // const sUser = state.contactList.filter(user => user.id == id);
+    // state.selectedUser = username;
     // console.log(state.selectedUser);
   },
   selectUserLists:(state) => {
     http
       .get("/friends/contacts")
       .then((data)=>{
-        console.log(data.data.data);
+        // console.log("localstorage_auth");
+        // console.log(localStorage.getItem('auth'));
+        // console.log("before");
+        // console.log(data.data.data);
         
         state.contactList = data.data.data;
-
+        // console.log("?")
+        // console.log(state.contactList)
         
       })
   },
@@ -76,7 +85,7 @@ const mutations = {
         state.roomInfo = data.data.data;
         state.selectedUser = state.roomInfo.name;
         state.roomId = state.roomInfo.roomId;
-        //state.roomName =  data.data.roomName;
+        state.roomName =  state.roomInfo.roomName;
         http
           .get('/chat/user').then(response => {
               console.log("들어는 오냐")

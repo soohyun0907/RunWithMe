@@ -39,7 +39,8 @@ public class FriendController {
 	@GetMapping("/contacts")
 	public ResponseEntity contacts(HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
-		int uid = 0;
+		int uid = 0; 
+		System.out.println("token: " + token);
 		if(jwtTokenProvider.validateToken(token)) {
 			uid = jwtTokenProvider.getUserIdFromJwt(token);
 		}

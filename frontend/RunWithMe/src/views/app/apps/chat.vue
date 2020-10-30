@@ -3,8 +3,6 @@
     <breadcumb :page="'Chat'" :folder="'apps'" />
 
     <div class="card chat-sidebar-container sidebar-container">
-
-
       <div class="chat-sidebar-wrap sidebar" :class="{ 'ml-0': isMobile }">
         <div class="border-right">
           <div
@@ -85,7 +83,7 @@
         <div
           class="d-flex pl-3 pr-3 pt-2 pb-2 o-hidden box-shadow-1 chat-topbar"
         >
-          <a class="link-icon d-md-none" @click="isMobile = !isMobile">
+          <a class="link-icon d-md-none" @click="getContactList()">
             <i class="icon-regular i-Right ml-0 mr-3"></i>
           </a>
           <div class="d-flex align-items-center">
@@ -95,7 +93,7 @@
               class="avatar-sm rounded-circle mr-2"
             /> -->
             <p class="m-0 text-title text-16 flex-grow-1">
-              {{ getSelectedUser  + "/" + roomDetail.roomId}}
+               {{ getSelectedUser }} <!--+ "/" + roomDetail.roomId}} -->
             </p>
           </div>
         </div>
@@ -229,7 +227,7 @@ export default {
       search: "",
       isMobile: false,
       roomId: "",
-      roomName: "",
+      roomName: JSON.parse(localStorage.getItem('userInfo')),
       msg: '',
       messages: ["test", "testtt"],
       token: '',
@@ -239,9 +237,6 @@ export default {
   methods: {
     ...mapActions(["changeSelectedUser", "createAndSelectChatroomAction","sendMessages"]),
     ...mapMutations(["selectUserLists"]),
-    console() {
-      console.log(this.test);
-    },
 
     choice: function(uid){
       this.createAndSelectChatroomAction(uid);
@@ -253,7 +248,15 @@ export default {
       console.log(this.msg)
       var payload = {"type": type, "msg":this.msg}
       this.sendMessages(payload);
+    },
+
+    getContactList : function(){
+      if(this.isMobile == false)
+        this.selectUserLists();
+
+      this.isMobile = !this.isMobile;
     }
+
 
   },
 
@@ -287,8 +290,7 @@ export default {
   },
 
   created: function() {
-    console.log(this.getSelectedUser);
-
+    // console.log(this.getSelectedUser);
     this.getCurrentUser.forEach(currentUser => {
       currentUser.chatInfo.forEach(user => {
         this.getContactLists.filter(contact => {
