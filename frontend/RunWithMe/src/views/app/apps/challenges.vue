@@ -27,21 +27,21 @@
                                 <h6>모인 금액</h6>
                                 <b-progress class="mb-3"
                                     variant="success"
-                                    :max="max"
+                                    :max="challenge.max"
                                     :value="challenge.value.toFixed(2)"
                                     animated show-progress>
                                 </b-progress>
                                 <h6>전체 달성률</h6>
                                 <b-progress class="mb-3"
                                     variant="warning"
-                                    :max="max"
+                                    :max="challenge.max"
                                     :value="challenge.value.toFixed(2)"
                                     animated show-progress>
                                 </b-progress>
                                 <h6>개인 달성률</h6>
                                 <b-progress class="mb-3"
                                     variant="danger"
-                                    :max="max"
+                                    :max="challenge.max"
                                     :value="challenge.value.toFixed(2)"
                                     animated show-progress>
                                 </b-progress>
