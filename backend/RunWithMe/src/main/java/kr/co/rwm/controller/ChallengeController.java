@@ -82,7 +82,7 @@ public class ChallengeController {
 	}
 
 	/**
-	 * 관리자, 유저 - 챌린지 전체 목록 조회
+	 * 관리자 - 챌린지 전체 목록 조회
 	 * 
 	 * @return
 	 */
@@ -91,15 +91,57 @@ public class ChallengeController {
 	public ResponseEntity findAllChallenge() {
 		System.out.println("/challenges/save - challenge를 전체조회합니다.");
 		List<Challenge> challenges = challengeService.findAllChallenge();
+
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_LIST_SUCCESS, challenges),
+				HttpStatus.OK);
+	}
+	
+	/**
+	 * 관리자, 유저 - 진행중 챌린지 목록 조회
+	 * 
+	 * @return
+	 */
+	@ApiOperation(value = "진행중 챌린지 목록 조회", response = ResponseEntity.class)
+	@GetMapping("/ing")
+	public ResponseEntity findIngChallenge() {
+		System.out.println("/challenges/ing - 진행중인 챌린지 조회");
 		LocalDateTime today = LocalDateTime.now();
 		List<Challenge> ingChallenges = challengeService.findAllChallengeGraterThanEndTime(today); // 진행 첼린지
+
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_ING_SUCCESS, ingChallenges),
+				HttpStatus.OK);
+	}
+	
+	/**
+	 * 관리자, 유저 - 예정 챌린지 목록 조회
+	 * 
+	 * @return
+	 */
+	@ApiOperation(value = "예정 챌린지 목록 조회", response = ResponseEntity.class)
+	@GetMapping("/comingsoon")
+	public ResponseEntity findComingSoonChallenge() {
+		System.out.println("/challenges/comingsoon - 예정 챌린지 조회");
+		LocalDateTime today = LocalDateTime.now();
+		List<Challenge> coingSoonChallenges = challengeService.findAllChallengeGraterThanStartTime(today); // 예정 첼린지
+
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_COMINGSOON_SUCCESS, coingSoonChallenges),
+				HttpStatus.OK);
+	}
+	
+	/**
+	 * 관리자, 유저 - 종료 챌린지 목록 조회
+	 * 
+	 * @return
+	 */
+	@ApiOperation(value = "종료 챌린지 목록 조회", response = ResponseEntity.class)
+	@GetMapping("/end")
+	public ResponseEntity findEndChallenge() {
+		System.out.println("/challenges/save - challenge를 전체조회합니다.");
+		List<Challenge> challenges = challengeService.findAllChallenge();
+		LocalDateTime today = LocalDateTime.now();
 		List<Challenge> endChallenges = challengeService.findAllChallengeLessThanEndTime(today); // 끝난 챌린지
 
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("all", challenges);
-		map.put("ing", ingChallenges);
-		map.put("end", endChallenges);
-		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_LIST_SUCCESS, map),
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_END_SUCCESS, endChallenges),
 				HttpStatus.OK);
 	}
 
@@ -193,11 +235,14 @@ public class ChallengeController {
 				HttpStatus.OK);
 	}
 
-	// 매일 자정마다 실행
+	/**
+	 * 매일 자정마다 챌린지 끝내면서 유저의 정보 업데이트
+	 * @param request
+	 */
 	@Scheduled(cron = "1 0 00 * * ?")
 	@ApiOperation(value = "챌린지 끝내기")
-	@GetMapping("/end")
-	public void endChallenge(HttpServletRequest request) {
+	@GetMapping("/finish")
+	public void finishChallenge(HttpServletRequest request) {
 		System.out.println("챌린지 업데이트 - 챌린지 달성 여부");
 
 		List<User> successUsers = challengeService.findAllChallengeEqualDate();
