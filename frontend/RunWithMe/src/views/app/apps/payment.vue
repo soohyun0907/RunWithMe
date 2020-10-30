@@ -27,6 +27,7 @@ export default {
 
             IMP.request_pay({
                 pg: 'kakao',
+                pay_method : 'card',
                 merchant_uid: 'merchant_' + new Date().getTime(),
                 name: '주문명 : 주문명 설정',
                 amount: money,
