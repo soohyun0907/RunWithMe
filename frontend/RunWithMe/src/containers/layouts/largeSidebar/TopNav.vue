@@ -23,10 +23,10 @@
 
     <div class="header-part-right">
       <!-- Full screen toggle -->
-      <i
+      <!-- <i
         class="i-Full-Screen header-icon d-none d-sm-inline-block"
         @click="handleFullScreen"
-      ></i>
+      ></i> -->
       <!-- Notificaiton -->
       <div class="dropdown">
         <b-dropdown

@@ -43,6 +43,10 @@ const routes = [
             component: () => import("./views/app/apps/groupchat")
           },
           {
+            path: "challenges",
+            component: () => import("./views/app/apps/challenges")
+          },
+          {
             path: "payment",
             component: () => import("./views/app/apps/payment")
           },
