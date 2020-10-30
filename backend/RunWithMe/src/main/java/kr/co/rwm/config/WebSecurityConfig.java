@@ -14,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import kr.co.rwm.service.JwtTokenProvider;
@@ -50,19 +53,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		filter.setEncoding("UTF-8");
 		filter.setForceEncoding(true);
 		http.httpBasic().disable() // rest api 만을 고려하여 기본 설정은 해제하겠습니다.
-			.csrf().disable() // 기본값이 on인 csrf 취약점 보안을 해제한다. on으로 설정해도 되나 설정할경우 웹페이지에서 추가처리가 필요함.
-				.headers().frameOptions().sameOrigin() // SockJS는 기본적으로 HTML iframe 요소를 통한 전송을 허용하지 않도록 설정되는데 해당 내용을
-														// 해제한다.
-				.and().authorizeRequests().antMatchers("/c/**").hasRole("*") // chat으로 시작하는 리소스에 대한 접근 권한 설정
+				.csrf().disable() // 기본값이 on인 csrf 취약점 보안을 해제한다. on으로 설정해도 되나 설정할경우 웹페이지에서
+				// 추가처리가 필요함.
+				.headers().frameOptions().sameOrigin() // SockJS는 기본적으로 HTML iframe 요소를 통한 전송을 허용하지 않도록 설정되는데 해당 내용을									// 해제한다.
+				.and().authorizeRequests()
+				.antMatchers("/c/**").hasRole("*") // chat으로 시작하는 리소스에 대한 접근 권한 설정
+//				.antMatchers("/ws-stomp").permitAll()
 				.anyRequest().permitAll() // 나머지 리소스에 대한 접근 설정
 //				.and().addFilterBefore(filter, CsrfFilter.class)
 //				.and().formLogin(); // 권한없이 페이지 접근하면 로그인 페이지로 이동한다.
 				.and()
-				.addFilterBefore(filter,CsrfFilter.class)
+				.addFilterBefore(filter, CsrfFilter.class)
 				.addFilterBefore(new CorsFilter(), SecurityContextPersistenceFilter.class)
-				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-						UsernamePasswordAuthenticationFilter.class);
+				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 	}
+ 
+//	@Bean
+//	public CorsConfigurationSource corsConfigurationSource() {
+//		CorsConfiguration configuration = new CorsConfiguration();
+//		// - (3)
+//		configuration.addAllowedOrigin("http://localhost:8082");
+//		configuration.addAllowedMethod("http://localhost:8081");
+//		configuration.addAllowedHeader("*");
+//		configuration.setAllowCredentials(true);
+//		configuration.setMaxAge(3600L);
+//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//		source.registerCorsConfiguration("/**", configuration);
+//		return source;
+//	}
 
 	@Autowired
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
