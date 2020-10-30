@@ -1,6 +1,6 @@
 <template>
     <div class="main-content">
-        <breadcumb :page="'Neighborhood List'" :folder="'Apps'" />
+        <breadcumb :page="'Neighborhood List'" :folder="'Runnings'" />
         <div class="ul-contact-page">
             <div class="row">
                 <b-col lg="12" md="12" class=" mb-30 text-center">
