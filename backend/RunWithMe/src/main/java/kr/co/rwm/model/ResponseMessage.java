@@ -40,6 +40,9 @@ public class ResponseMessage {
     public static final String CHALLENGE_DELETE_SUCCESS = "챌린지 삭제 성공";
     public static final String CHALLENGE_DELETE_FAIL = "챌린지 삭제 실패";
     public static final String CHALLENGE_LIST_SUCCESS = "챌린지 목록 조회 성공";
+    public static final String CHALLENGE_ING_SUCCESS = "진행중 챌린지 목록 조회 성공";
+    public static final String CHALLENGE_COMINGSOON_SUCCESS = "예정 챌린지 목록 조회 성공";
+    public static final String CHALLENGE_END_SUCCESS = "종료 챌린지 목록 조회 성공";
     public static final String CHALLENGE_LIST_FAIL = "챌린지 목록 조회 실패";
     public static final String CHALLENGE_SEARCH_SUCCESS_T = "챌린지 상세 조회 성공: 유저정보 있음";
     public static final String CHALLENGE_SEARCH_SUCCESS_F = "챌린지 상세 조회 성공: 유저정보 없음";
