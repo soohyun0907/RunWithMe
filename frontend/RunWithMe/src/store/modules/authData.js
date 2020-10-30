@@ -1,5 +1,7 @@
 import http from "@/utils/http-common";
 import router from "@/router.js"
+import axios from "axios";
+
 
 export default {
   state: {
@@ -35,10 +37,14 @@ export default {
       state.error = null;
       state.auth=""
       state.isLogin=false;
+      if(localStorage.getItem("userInfo"))
+        localStorage.removeItem("userInfo")
+      if(localStorage.getItem("auth"))
+        localStorage.removeItem("auth")
       // this.$router.push("/");
     },
-    setLoading(state, data) {
-      state.loading = data;
+    setLoading(state) {
+      state.loading = false;
       state.error = null;
     },
     setError(state, data) {
@@ -55,7 +61,7 @@ export default {
         context.commit("clearError");
         context.commit("setLoading", true);
         console.log("login on")
-        http.post("users/signin",{
+        http.post(`users/signin`,{
           userEmail:userEmail,
           userPw:userPw        
         }).then(res => {
@@ -117,19 +123,16 @@ export default {
         });
     },
     signOut(context) {
+      context.commit("setLogout");
+      axios.defaults.headers.common['auth'] = ""
+   
       http.get(`http://localhost:8080/users/signout`, {
         // headers:{'AUTH':localStorage.getItem("auth")}
       })
       .then(res =>{
         console.log("로그아웃 성공")
         console.log(res)
-        if(localStorage.getItem("userInfo")){
-          localStorage.removeItem("userInfo")
-        }    
-        if(localStorage.getItem("auth")){
-          localStorage.removeItem("auth")
-        }
-        context.commit("setLogout");
+       
       })
       .catch(err => {
         console.log(err)
