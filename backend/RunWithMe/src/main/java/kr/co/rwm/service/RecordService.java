@@ -41,4 +41,6 @@ public interface RecordService {
 	
 	public RunningUser updateRunningUser(User user, Running running);
 
+	public List<Running> findAllRunningByActivityArea(int userId);
+
 }
