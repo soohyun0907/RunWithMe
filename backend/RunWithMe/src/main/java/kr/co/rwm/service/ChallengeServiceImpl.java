@@ -85,12 +85,26 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 	@Override
 	public List<Challenge> findAllChallengeGraterThanEndTime(LocalDateTime endTime) {
+		// 진행중
+		List<Challenge> ingChallenges = new ArrayList<Challenge>();
 		List<Challenge> challenges = challengeRepository.findAllByEndTimeGreaterThanEqual(endTime);
-		return challenges;
+		for(Challenge challenge: challenges) {
+			if(challenge.getStartTime().isAfter(endTime)) continue;
+			ingChallenges.add(challenge);
+		}
+		return ingChallenges;
 	}
 
 	@Override
+	public List<Challenge> findAllChallengeGraterThanStartTime(LocalDateTime startTime) {
+		// 끝남
+		List<Challenge> challenges = challengeRepository.findAllByStartTimeGreaterThan(startTime);
+		return challenges;
+	}
+	
+	@Override
 	public List<Challenge> findAllChallengeLessThanEndTime(LocalDateTime endTime) {
+		// 끝남
 		List<Challenge> challenges = challengeRepository.findAllByEndTimeLessThanEqual(endTime);
 		return challenges;
 	}
