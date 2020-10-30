@@ -1,5 +1,6 @@
 package kr.co.rwm.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
+import kr.co.rwm.entity.RunningArea;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
@@ -130,10 +133,16 @@ public class RunningController {
 		System.out.println("gps/controller/get");
 		Running running = recordService.findRunningById(runningId);
 		List<Record> records = recordService.findAllRecordByRunningId(running);
+		List<RunningArea> runningAreas = running.getRunningArea();
+		List<Gugun> areas = new ArrayList<>();
+		for(RunningArea ra: runningAreas) {
+			areas.add(ra.getGugun());
+		}
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("running", running);
-		map.put("records", records); 
+		map.put("records", records);
+		map.put("areas", areas);
 		
 		return new ResponseEntity<Response>(new
 				Response(StatusCode.OK, ResponseMessage.RUNNING_SEARCH_SUCCESS, map), HttpStatus.OK);
@@ -191,5 +200,19 @@ public class RunningController {
 				new Response(StatusCode.FORBIDDEN, ResponseMessage.RUNNING_DELETE_RECORD, ret), HttpStatus.FORBIDDEN);
 	}
 	
-
+	@ApiOperation(value = "유저가 활동 지역으로 설정한 곳에서의 런닝 기록 조회", response = ResponseEntity.class)
+	@GetMapping("/areas")
+	public ResponseEntity findAllRunningByArea(HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		int userId = 0;
+		if(jwtTokenProvider.validateToken(token)) {
+			userId = jwtTokenProvider.getUserIdFromJwt(token);
+		}
+		
+		List<Running> runnings = recordService.findAllRunningByActivityArea(userId);
+		
+		return new ResponseEntity<Response>(new 
+				Response(StatusCode.OK, ResponseMessage.AREA_RUNNINGS_SUCCESS, runnings), HttpStatus.OK);
+	}
+	
 }
