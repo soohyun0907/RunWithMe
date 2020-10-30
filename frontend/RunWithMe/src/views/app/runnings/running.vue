@@ -229,20 +229,6 @@ export default {
           );
           this.gugun = gugun
 
-           //gugun배열에 현재도시 없을시 추가.
-          // console.log(this.gugun);
-          // console.log("this.currentcity")
-          // console.log(currentCity); //안됨
-          // for (var i = 0; i < this.gugun.length(); i++) {
-          //   console.log(this.gugun[i]);
-          //   if (this.gugun[i] == this.currentCity) {
-          //     console.log("이미 존재해요");
-          //     break;
-          //   }
-          //   if (this.currentCity != "") {
-          //   }
-          // }
-
           map.setCenter(now);
           marker.setPosition(now);
 
@@ -259,11 +245,14 @@ export default {
               strokeWeight: 3,
               map: this.map,
             });
+
             var currentLatLng = new google.maps.LatLng(
               this.current.lat,
               this.current.lng
             );
             this.linePath.push(currentLatLng);
+            
+            this.encode_polyline(currentLatLng, this.poly);
           } else {
             var distance = this.computeDistance(this.previous, this.current);
             console.log("watchposition 이동거리" + distance);
@@ -283,6 +272,7 @@ export default {
                 this.current.lng
               );
               this.linePath.push(currentLatLng);
+              this.encode_polyline(currentLatLng, this.poly);
             }
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
@@ -314,17 +304,10 @@ export default {
 
       //google static map url
       var staticM_URL = "https://maps.googleapis.com/maps/api/staticmap?";
-
-      //Set the Google Map Center.
-      // staticM_URL += "center="+this.current.lat+","+this.current.lng
-
       staticM_URL += "&size=520x650"; //Set the Google Map Size.
-
       staticM_URL += "&zoom=11"; //Set the Google Map Zoom.
-
       staticM_URL +=
         "&maptype=roadmap&key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
-
       staticM_URL +="path=color:0xff0000ff|weight:3"
       
       for(var i=0; i<this.linePath.length; i++){
@@ -352,7 +335,7 @@ export default {
         speed: this.speed,
       };
       http
-        .post(`runings/temp`, data, {
+        .post(`runnings/temp`, JSON.stringify(data), {
           headers: {
             "Content-type": "application/json",
           },
@@ -364,6 +347,7 @@ export default {
           );
         })
         .catch((err) => {
+          console.log("savePosition Error")
           console.log(err);
         });
     },
@@ -426,8 +410,7 @@ export default {
           new google.maps.LatLng(this.linePath[i].lat,this.linePath[i].lng)
         );
       }
-
-      const runningPath = new google.maps.Polyline({
+      this.poly = new google.maps.Polyline({
         // path: runningPathCoordinates,
         path: this.linePath,
         geodesic: true,
@@ -436,16 +419,19 @@ export default {
         strokeWeight: 2,
         map:this.map
       });
-      this.poly = runningPath
-
-      this.encode_polyline = new google.maps.geometry.encoding.encodePath(runningPath);
+      console.log(this.poly)
+    },
+    encode_polyline(latLng, poly) {
+       var path = poly.getPath();
+       path.push(latLng)
+      this.encode_polyline = google.maps.geometry.encoding.encodePath(path);
       console.log("here!!!")
-      console.log(runningPath)
+      console.log(path)
       console.log(this.encode_polyline)
       document.getElementById("encoded-polyline").value = this.encode_polyline;
  
-
     },
+    
     computeDistance(startCoords, destCoords) {
       var startLatRads = this.degreesToRadians(startCoords.lat);
       var startLongRads = this.degreesToRadians(startCoords.lng);
