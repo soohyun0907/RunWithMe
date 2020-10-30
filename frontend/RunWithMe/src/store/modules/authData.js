@@ -66,6 +66,7 @@ export default {
             console.log("로그인 성공")
             console.log(res.data.data)
             console.log(res.headers.auth)// 토큰얻기
+            console.log(localStorage.getItem("auth"))// 토큰얻기
             router.push('/')
         })
         .catch(function(error) {
