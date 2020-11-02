@@ -25,8 +25,8 @@ public class ChallengeServiceImpl implements ChallengeService {
 	private final ChallengeUserRepository challengeUserRepository;
 
 	@Override
-	public void saveChallenge(Challenge challenge) {
-		challengeRepository.save(challenge);
+	public Challenge saveChallenge(Challenge challenge) {
+		return challengeRepository.save(challenge);
 	}
 
 	@Override

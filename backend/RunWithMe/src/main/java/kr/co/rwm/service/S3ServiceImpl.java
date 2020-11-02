@@ -41,12 +41,32 @@ public class S3ServiceImpl implements S3Service {
 	}
 	
 	@Override
-	public String profileUpload(MultipartFile file,ByteArrayOutputStream profile) {
+	public String profileUpload(MultipartFile file, ByteArrayOutputStream profile) {
 		try {
 			
 			String uploadpath = "profile";
 			S3Util s3 = new S3Util(accessKey, secretKey);
 			String img_path = FileUpload.uploadFile(uploadpath, file.getOriginalFilename(), profile.toByteArray(), bucketName, accessKey, secretKey);
+			String img_url = img_path;
+			String url = s3.getFileURL(bucketName, uploadpath+img_url);
+			return url;
+			
+		}catch(RuntimeException e) {
+			System.out.println(e);
+			return null;
+		}catch(Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	@Override
+	public String challengeImgUpload(MultipartFile file) {
+		try {
+			
+			String uploadpath = "challenges";
+			S3Util s3 = new S3Util(accessKey, secretKey);
+			String img_path = FileUpload.uploadFile(uploadpath, file.getOriginalFilename(), file.getBytes(), bucketName, accessKey, secretKey);
 			String img_url = img_path;
 			String url = s3.getFileURL(bucketName, uploadpath+img_url);
 			return url;
