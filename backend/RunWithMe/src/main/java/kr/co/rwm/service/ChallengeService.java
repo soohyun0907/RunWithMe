@@ -47,14 +47,21 @@ public interface ChallengeService {
 	public Challenge updateChallengeDonate(int challengeId, long donate);
 	
 	/**
-	 * endTime보다(어떤 날짜가 들어오는지에 따라 다름) 종료 날짜가 나중인 챌린지
+	 * endTime보다(어떤 날짜가 들어오는지에 따라 다름) 종료 날짜가 나중인 챌린지 - 진행중
 	 * @param endTime
 	 * @return
 	 */
 	public List<Challenge> findAllChallengeGraterThanEndTime(LocalDateTime endTime);
 	
 	/**
-	 * endTime보다(어떤 날짜가 들어오는지에 따라 다름) 종료 날짜가 이전인 챌린지
+	 * startTime보다 시작 시간이 나중인 챌린지 - 예정
+	 * @param startTime
+	 * @return
+	 */
+	public List<Challenge> findAllChallengeGraterThanStartTime(LocalDateTime startTime);
+	
+	/**
+	 * endTime보다(어떤 날짜가 들어오는지에 따라 다름) 종료 날짜가 이전인 챌린지 - 종료
 	 * @param endTime
 	 * @return
 	 */
@@ -87,4 +94,13 @@ public interface ChallengeService {
 	 * @return
 	 */
 	public List<User> findAllChallengeEqualDate();
+
+	/**
+	 * 챌린지와 유저 pk로 유저가 해당 챌린지를 참여하는지 확인
+	 * @param userId
+	 * @param challenge
+	 * @return
+	 */
+	public ChallengeUser findChallengeUserByUserIdAndChallengeId(int userId, Challenge challenge);
+
 }
