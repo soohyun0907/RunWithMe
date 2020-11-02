@@ -154,10 +154,10 @@
                 />
                 <div class="message flex-grow-1">
                   <div class="d-flex">
-                    <p class="mb-1 text-title text-16 flex-grow-1">Suns</p>
+                    <p class="mb-1 text-title text-16 flex-grow-1">{{message.sender}}</p>
                     <span class="text-small text-muted">24 min ago</span>
                   </div>
-                  <p class="m-0">너의 메시지</p>
+                  <p class="m-0">{{message.message}}</p>
                 </div>
               </div>
               <!-- END 상대방의 메시지 -->
@@ -236,7 +236,7 @@ export default {
       messages: [],
       token: "",
       userCount: 0,
-      testUserId: "123",
+      testUserId: "",
       back: "[알림]",
       sock: null,
       ws: null,
@@ -271,14 +271,18 @@ export default {
       console.log(this.message);
       console.log(this.getSelectedChatroom.roomId);
       console.log("------------");
-      this.ws.send(
-        "/pub/chat/message",
-        JSON.stringify({
+      var data = {
           type: type,
           roomId: this.getSelectedChatroom.roomId,
           message: this.message,
-        }),
-        { "token": this.token }
+        } 
+      var header =  { 
+        'AUTH' : this.token,
+        'Content-Type':'application/json',
+      }
+      console.log(header)
+      this.ws.send(
+        "/pub/chat/message",JSON.stringify(data),{"AUTH":this.token}
       );
       this.message = "";
     },
@@ -297,13 +301,16 @@ export default {
       http.get("/chat/user").then((response) => {
         this.sock = new SockJS("http://localhost:8080/ws-stomp");
         var _ws = Stomp.over(this.sock);
+        console.log(response.data);
+        console.log("------------------------");
         
         var _this = this;
-        // this.token = response.data.token;
-        this.token =
-          "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjMiLCJyb2xlcyI6WyJVU0VSIl0sImp0aSI6IjEyMyIsImlhdCI6MTYwMzQzODY1OCwiZXhwIjoxNjAzNDQyMjU4fQ.R6Ie4ISP-EOyol_-C-c6dMFeU0ZVckOai-jfxeeXnqs";
+        this.testUserId="change"
+        this.testUserId = response.data;
+        // this.token = this.auth
+  
         _ws.connect(
-          { "token": this.token },
+          { "AUTH": this.token },
           function (frame) {
             _ws.subscribe(
               "/sub/chat/room/" + _this.getSelectedChatroom.roomId,
@@ -359,11 +366,16 @@ export default {
       "getSelectedUser",
       "getChatRoom",
       "getSelectedChatroom",
+      "userInfo",
+      "auth",
     ]),
 
   },
 
   mounted: function () {
+    this.token = this.auth
+    console.log("here mount") 
+    console.log(this.token) 
     setTimeout(() => {
       this.selectAllGroupChat();
     }, 100);

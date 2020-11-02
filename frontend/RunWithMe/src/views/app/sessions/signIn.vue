@@ -1,3 +1,10 @@
+1102_signin.txt
+오늘
+오후 2:07
+k
+k g님이 항목 1개를 업로드했습니다.
+텍스트
+1102_signin.txt
 <template>
   <div
     class="auth-layout-wrap"
@@ -95,7 +102,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions,mapMutations } from "vuex";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
@@ -111,6 +118,19 @@ export default {
       signInImage: require("@/assets/images/photo-long-3.jpg"),
     };
   },
+   mounted() {
+     this.setLoading();
+     this.setLogout();
+     this.$store.subscribe((mutation,state) =>{
+      if(mutation.type =="mutateAuth"){
+        console.log("바껴써용")
+        setTimeout(() => {
+          this.$router.go(0)
+          
+        }, 100);
+      }
+     })
+  },
   computed: {
     validation() {
       return this.userId.length > 4 && this.userId.length < 13;
@@ -119,7 +139,8 @@ export default {
   },
 
   methods: {
-    ...mapActions(["login"]),
+    ...mapActions(["login","signOut"]),
+    ...mapMutations(["setLoading","setLogout"]),
     formSubmit() {
       this.login({ userEmail: this.userEmail, userPw: this.userPw });
     },
@@ -133,14 +154,12 @@ export default {
   },
   watch: {
     checkUserInfo(val) {
+      console.log("checking,,,")
       if (this.userInfo != {}) {
         this.makeToast("success", "Successfully Logged In");
       } else {
         this.makeToast("Success", "Successfully Logged out");
       }
-      setTimeout(() => {
-        this.$router.push("/");
-      }, 300);
     },
     error(val) {
       if (val != null) {

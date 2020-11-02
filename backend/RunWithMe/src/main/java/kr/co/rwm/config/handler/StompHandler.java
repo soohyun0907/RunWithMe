@@ -28,9 +28,10 @@ public class StompHandler implements ChannelInterceptor {
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
+    	System.out.println("[StompHandler] preSend");
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if (StompCommand.CONNECT == accessor.getCommand()) { // websocket 연결요청
-            String jwtToken = accessor.getFirstNativeHeader("token");
+            String jwtToken = accessor.getFirstNativeHeader("AUTH");
             log.info("CONNECT {}", jwtToken);
             // Header의 jwt token 검증
             jwtTokenProvider.validateToken(jwtToken);
@@ -59,6 +60,7 @@ public class StompHandler implements ChannelInterceptor {
             chatRoomRepository.removeUserEnterInfo(sessionId);
             log.info("DISCONNECTED {}, {}", sessionId, roomId);
         }
+        System.out.println(message);
         return message;
     }
 }

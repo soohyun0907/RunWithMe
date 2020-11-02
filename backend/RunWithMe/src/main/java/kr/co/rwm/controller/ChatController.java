@@ -31,11 +31,13 @@ public class ChatController {
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message, @Header("token") String token) { 
+    public void message(ChatMessage message, @Header("AUTH") String token) { 
+    	System.out.println("****************************");
     	System.out.println(message.getMessage());
+    	System.out.println("****************************");
+//    	String token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ0ZXN0NCIsImlhdCI6MTYwMzM3NzIzOSwiZXhwIjoxNjAzMzgwODM5fQ.mWC-X7UtaQ87EuWW_pcwbMt8tL2-naiShegDfW3t090";
     	System.out.println(token);
-    	//String token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ0ZXN0NCIsImlhdCI6MTYwMzM3NzIzOSwiZXhwIjoxNjAzMzgwODM5fQ.mWC-X7UtaQ87EuWW_pcwbMt8tL2-naiShegDfW3t090";
-        String email = jwtTokenProvider.getUserEmailFromJwt(token);
+        String email = jwtTokenProvider.getUserEmailFromJwt(token.toString());
         String nickname = userService.findByUserEmail(email).get().getUsername();
         // 로그인 회원 정보로 대화명 설정
         message.setSender(nickname); 
