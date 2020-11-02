@@ -25,6 +25,7 @@ import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
 import kr.co.rwm.entity.RunningArea;
+import kr.co.rwm.entity.RunningUser;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
@@ -179,10 +180,15 @@ public class RunningController {
 		}
 		
 		List<User> friends = friendService.list(userId);
+//		List<RunningUser> runningUsers = recordService.findAllRunningUserByUserId(friends);
 		List<Running> runnings = recordService.findRunningByFriendsId(friends);
 		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("friends", friends);
+		map.put("runnings", runnings);
+		
 		return new ResponseEntity<Response>(
-				new Response(StatusCode.FORBIDDEN, ResponseMessage.RUNNING_FRIENDS_RECORD, runnings), HttpStatus.FORBIDDEN);
+				new Response(StatusCode.OK, ResponseMessage.RUNNING_FRIENDS_RECORD, map), HttpStatus.OK);
 	}
 	
 	// running을 삭제한다.
@@ -197,7 +203,7 @@ public class RunningController {
 		Long ret = recordService.deleteRunningByUserId(userId, runningId);
 		
 		return new ResponseEntity<Response>(
-				new Response(StatusCode.FORBIDDEN, ResponseMessage.RUNNING_DELETE_RECORD, ret), HttpStatus.FORBIDDEN);
+				new Response(StatusCode.OK, ResponseMessage.RUNNING_DELETE_RECORD, ret), HttpStatus.FORBIDDEN);
 	}
 	
 	@ApiOperation(value = "유저가 활동 지역으로 설정한 곳에서의 런닝 기록 조회", response = ResponseEntity.class)
