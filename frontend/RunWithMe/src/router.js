@@ -72,11 +72,11 @@ const routes = [
       {
         path: "/app/mypages",
         component: () => import("./views/app/mypages"),
-        redirect: "/app/mypages/byarea",
+        redirect: "/app/mypages/mypageTab",
         children: [
           {
-            path: "byarea",
-            component: () => import("./views/app/mypages/byarea")
+            path: "mypageTab",
+            component: () => import("./views/app/mypages/mypageTab")
           },
           {
             path: "friends",

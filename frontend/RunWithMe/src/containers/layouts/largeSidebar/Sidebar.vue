@@ -158,9 +158,9 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link tag="a" class to="/app/mypages/byarea">
+            <router-link tag="a" class to="/app/mypages/mypageTab">
               <i class="nav-icon i-Stopwatch"></i>
-              <span class="item-name">지역별로 보기</span>
+              <span class="item-name">런닝 기록 보기</span>
             </router-link>
           </li>
         </ul>
