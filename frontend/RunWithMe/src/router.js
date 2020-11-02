@@ -84,6 +84,25 @@ const routes = [
           },
         ]
       },
+
+      // challengeBoard
+      {
+        path: "/app/board",
+        component: () => import("./views/app/board"),
+        redirect: "/app/board/challengeBoard",
+        children: [
+          {
+            path: "challengeBoard",
+            component: () => import("./views/app/board/challengeBoard")
+          },
+          {
+            path : 'challengeBoardDetail',
+            component :()=> import("./views/app/board/challengeBoardDetail") ,
+            props: true
+          },
+        ]
+      },
+
     ]
   },
   // sessions

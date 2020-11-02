@@ -17,6 +17,7 @@
         />
         <p class="m-0 text-24">{{ userInfo.username }}</p>
         <p class="text-muted m-0">{{ userInfo.userEmail }}</p>
+        <p class="text-muted m-0">{{userInfo.gugunId.sidoId.sidoName}} {{ userInfo.gugunId.gugunName }}</p>
       </div>
       <div class="card-body">
         <div>
@@ -24,7 +25,7 @@
             <b-tab title="지역별 런닝" active>
 
 
-            <h3 class="heading text-primary">[관악구]에서의 런닝</h3>
+            <h3 class="heading text-primary">[{{userInfo.gugunId.gugunName}}]에서의 런닝</h3>
               <section ref="map" class="map"></section>
 
               <ul class="timeline clearfix">
@@ -40,6 +41,7 @@
                             <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=50px height=50px/>
                           </span>
                           2020.11.03 13:33 런닝기록
+                          
                         </b-button>
                       </b-card-header>
                       
