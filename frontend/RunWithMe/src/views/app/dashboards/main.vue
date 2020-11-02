@@ -62,7 +62,7 @@
                 <!-- </a> -->
               </div>
               <span class="ul-widget4__number t-font-boldest text-success">
-                {{ranker.accumulcated_distance}} KM
+                {{ranker.totalExp}} p
               </span>
             <!-- </div> -->
           </div>
@@ -129,30 +129,8 @@
 import { Carousel3d, Slide } from 'vue-carousel-3d'
 import { VueperSlides, VueperSlide } from 'vueperslides'
 import 'vueperslides/dist/vueperslides.css'
-
-const items = [
-  {
-    img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
-    title: "Nickname",
-    total_distance: "8",
-    running_avg_pace : 325,
-    accumulcated_time: "38:11"
-  },
-  {
-    img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
-    title: "Nickname",
-    total_distance: "10",
-    running_avg_pace : 325,
-    accumulcated_time: "38:11"
-  },
-  {
-    img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
-    title: "Nickname",
-    total_distance: "5",
-    running_avg_pace : 325,
-    accumulcated_time: "38:11"
-  },
-];
+import http from "@/utils/http-common";
+import { mapGetters } from "vuex";
 
 export default {
   name: 'mainpage',
@@ -164,99 +142,109 @@ export default {
   },
   data() {
     return {
-      items: items,
+      // items: items,
       isListView: false,
       // overlay data
       variant: 'white',
       opacity: 0.70,
       blur: '2px',
       slidesOverlayShow: false,
-      slides: [
-        {
-          title : "challenge 1",
-          img : require('@/assets/images/photo-long-1.jpg'),
-        },
-        {
-          title : "challenge 2",
-          img : require('@/assets/images/photo-long-2.jpg'),
-        },
-        {
-          title : "challenge 3",
-          img : require('@/assets/images/photo-long-3.jpg'),
-        },
-        {
-          title : "challenge 4",
-          img : require('@/assets/images/photo-long-4.jpg'),
-        },
-        {
-          title : "challenge 5",
-          img : require('@/assets/images/photo-long-1.jpg'),
-        },
-        {
-          title : "challenge 6",
-          img : require('@/assets/images/photo-long-2.jpg'),
-        },
-        {
-          title : "challenge 7",
-          img : require('@/assets/images/photo-long-3.jpg'),
-        },
-        {
-          title : "challenge 8",
-          img : require('@/assets/images/photo-long-4.jpg'),
-        },
-      ],
-      rankList : [
-        {
-          id: 1,
-          nickname: "Timothy Carlson",
-          imgUrl: "/img/1.jpg",
-          accumulcated_distance: 120,
-        },
-        {
-          id: 2,
-          nickname: "Jaret Leto",
-          imgUrl: "/img/2.jpg",
-          accumulcated_distance: 100,
-        },
-        {
-          id: 3,
-          nickname: "Kim",
-          imgUrl: "/img/3.jpg",
-          accumulcated_distance: 95,
-        },
-        {
-          id: 4,
-          nickname: "Lee",
-          imgUrl: "/img/4.jpg",
-          accumulcated_distance: 80,
-        },
-        {
-          id: 5,
-          nickname: "Lee",
-          imgUrl: "/img/4.jpg",
-          accumulcated_distance: 80,
-        },
-      ]
+      slides: [],
+      rankList : [],
+      items: [],
     };
   },
   created() {
-
+    this.getChallenges();
+    this.getTopRankers();
+    this.getFriendsRunning();
   },
   mounted() {
 
   },
   methods: {
-    convertToTime(origin){
+    convertToTime(origin) {
         var time = "";
         time += parseInt(origin/60) + "\'";
         time += origin%60 + "\"";
         return time;
     },
-    toggleOverlay(){
+    toggleOverlay() {
       if(this.slidesOverlayShow)
         this.slidesOverlayShow = false;
       else
         this.slidesOverlayShow = true;
+    },
+    getChallenges() {
+      http
+        .get(`challenges/ing`, {
+          headers: {
+            "Content-type": "application/json",
+          },
+        })
+        .then(res => {
+          console.log(res)
+          console.log(res.data.data.length)
+          let obj;
+          for(var i=0; i<res.data.data.length; i++) {
+            obj = new Object();
+            obj.title = res.data.data[i].title;
+            obj.img = res.data.data[i].challengeImg;
+            this.slides.push(obj);
+          }
+          console.log(this.slides);
+        });
+    },
+    getTopRankers() {
+      http
+        .get(`ranks/top/total`, {
+          headers: {
+            "Content-type": "application/json",
+          },
+        })
+        .then(res => {
+          console.log(res)
+          let obj;
+          for(var i=0; i<res.data.data.length; i++) {
+            obj = new Object();
+            obj.id = i+1;
+            obj.userId = res.data.data[i].userId.userId;
+            obj.nickname = res.data.data[i].userId.userEmail;
+            obj.imgUrl = res.data.data[i].userId.imgUrl;
+            obj.totalExp = res.data.data[i].totalExp;
+            this.rankList.push(obj);
+          }
+          console.log(this.rankList);
+
+        });
+    },
+    getFriendsRunning() {
+      http
+        .get(`runnings/friends`, {
+          headers: {
+            "Content-type": "application/json",
+          },
+        })
+        .then(res => {
+          console.log(res)
+          let obj;
+          for(var i=0; i<res.data.data.friends.length; i++) {
+            obj = new Object();
+            if(res.data.data.runnings[i] == null) {
+              obj.total_distance = "기록이 없습니다";
+            }else {
+              obj.runningId = res.data.data.runnings[i].runningId;
+              obj.total_distance = res.data.data.runnings[i].accDistance;
+              obj.accumulcated_time = res.data.data.runnings[i].accTime;
+              obj.running_avg_pace = obj.accumulcated_distance / obj.total_distance;
+            }
+            obj.userId = res.data.data.friends[i].userId;
+            obj.img = res.data.data.friends[i].profile;
+            obj.title = res.data.data.friends[i].username;
+            this.items.push(obj);
+          }
+          console.log(this.items);
+        });
     }
   }
 };
