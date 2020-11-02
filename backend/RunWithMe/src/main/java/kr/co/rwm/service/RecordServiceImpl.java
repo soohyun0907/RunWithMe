@@ -140,8 +140,8 @@ public class RecordServiceImpl implements RecordService {
 		List<Running> runnings = new ArrayList<Running>();
 		for(User friend: friends) {
 			List<Running> temp = runningRepository.findAllByUserIdOrderByStartTimeDesc(friend.getUserId());
-			if(temp.isEmpty()) continue;
-			runnings.add(temp.get(0));
+			if(temp.isEmpty()) runnings.add(null);
+			else runnings.add(temp.get(0));
 		}
 		return runnings;
 	}
@@ -161,6 +161,15 @@ public class RecordServiceImpl implements RecordService {
 	@Override
 	public RunningUser findRunningUserByUserId(User user) {
 		return runningUserRepository.findByUserId(user);
+	}
+
+	@Override
+	public List<RunningUser> findAllRunningUserByUserId(List<User> users) {
+		List<RunningUser> runningUsers = new ArrayList<RunningUser>();
+		for(User user: users) {
+			runningUsers.add(runningUserRepository.findByUserId(user));
+		}
+		return runningUsers;
 	}
 
 	@Override

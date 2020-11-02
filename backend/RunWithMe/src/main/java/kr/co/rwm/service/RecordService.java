@@ -1,5 +1,6 @@
 package kr.co.rwm.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,8 @@ public interface RecordService {
 	public void join(User user);
 	
 	public RunningUser findRunningUserByUserId(User user);
+	
+	public List<RunningUser> findAllRunningUserByUserId(List<User> users);
 	
 	public RunningUser updateRunningUser(User user, Running running);
 
