@@ -43,6 +43,19 @@
             <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
+            :class="{ active: selectedParentMenu == 'challengeBoard' }"
+            data-item="challengeBoard"
+            :data-submenu="true"
+          >
+            <a class="nav-item-hold" href="#">
+              <i class="nav-icon i-Administrator"></i>
+              <span class="nav-text">ChallengeBoard</span>
+            </a>
+            <div class="triangle"></div>
+          </li>
+          <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
             :class="{ active: selectedParentMenu == 'mypages' }"
             data-item="mypages"
             :data-submenu="true"
@@ -53,6 +66,7 @@
             </a>
             <div class="triangle"></div>
           </li>
+
 
           <li
             @mouseenter="toggleSubMenu"
@@ -170,12 +184,41 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link tag="a" class to="/app/mypages/byarea">
+            <router-link tag="a" class to="/app/mypages/mypageTab">
               <i class="nav-icon i-Stopwatch"></i>
-              <span class="item-name">지역별로 보기</span>
+              <span class="item-name">런닝 기록 보기</span>
             </router-link>
           </li>
         </ul>
+
+        <ul
+          class="childNav d-none"
+          data-parent="challengeBoard"
+          :class="{ 'd-block': selectedParentMenu == 'challengeBoard' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/board/challengeBoard">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">챌린지 제안</span>
+            </router-link>
+          </li>
+        </ul>
+
+        
+        <ul
+          class="childNav d-none"
+          data-parent="challengeBoard"
+          :class="{ 'd-block': selectedParentMenu == 'challengeBoard' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/board/challengeBoardDetail">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">챌린지 제안 상세</span>
+            </router-link>
+          </li>
+        </ul>
+
+
 
       </div>
     </vue-perfect-scrollbar>
