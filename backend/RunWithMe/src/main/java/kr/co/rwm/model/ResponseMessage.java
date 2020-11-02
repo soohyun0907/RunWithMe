@@ -34,6 +34,7 @@ public class ResponseMessage {
     public static final String RECORD_REDIS_LIST_SUCCESS = "레디스에서 레코드 목록 조회";
     
     public static final String CHALLENGE_INSERT_SUCCESS = "챌린지 등록 성공";
+    public static final String CHALLENGE_IMG_INSERT_SUCCESS = "챌린지 이미지 등록 성공";
     public static final String CHALLENGE_INSERT_FAIL = "챌린지 등록 실패";
     public static final String CHALLENGE_UPDATE_SUCCESS = "챌린지 수정 성공";
     public static final String CHALLENGE_UPDATE_FAIL = "챌린지 수정 실패";
