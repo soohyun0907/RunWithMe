@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.Challenge;
@@ -30,6 +31,7 @@ import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.ChallengeService;
 import kr.co.rwm.service.JwtTokenProvider;
 import kr.co.rwm.service.RanksService;
+import kr.co.rwm.service.S3Service;
 import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -56,6 +58,7 @@ public class ChallengeController {
 	private final UserService userService;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final RanksService ranksService;
+	private final S3Service s3Service;
 
 	/**
 	 * 관리자 - 챌린지 생성
@@ -69,16 +72,38 @@ public class ChallengeController {
 	public ResponseEntity saveChallenge(@RequestBody Challenge challenge) {
 		System.out.println("/challenges/save - 관리자가 challenge를 등록합니다.");
 		User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Challenge newChallenge = new Challenge();
 		if (loginUser.getRoles().stream().anyMatch(x -> x.equals("admin"))) {
-			challengeService.saveChallenge(challenge);
+			newChallenge = challengeService.saveChallenge(challenge);
 		} else {
 			return new ResponseEntity<Response>(
 					new Response(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_ACCESS_FORBIDDEN, null),
 					HttpStatus.FORBIDDEN);
 		}
 
-		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_INSERT_SUCCESS, null),
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_INSERT_SUCCESS, newChallenge),
 				HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "챌린지 이미지 저장", response = ResponseEntity.class)
+	@PostMapping("/images/{challengeId}")
+	public ResponseEntity saveChallengeImage(@PathVariable int challengeId, MultipartFile challengeImg, HttpServletRequest request) {
+		System.out.println("/challenges/save - 관리자가 challenge를 등록합니다.");
+		User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (loginUser.getRoles().stream().anyMatch(x -> x.equals("admin"))) {
+			String url = s3Service.challengeImgUpload(challengeImg);
+			System.out.println("images"+url);
+			Challenge challenge = challengeService.findChallengeByChallengeId(challengeId);
+			challenge.setChallengeImg(url);
+			challengeService.updateChallenge(challengeId, challenge);
+
+			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_IMG_INSERT_SUCCESS, challenge),
+					HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Response>(
+					new Response(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_ACCESS_FORBIDDEN, null),
+					HttpStatus.FORBIDDEN);
+		}
 	}
 
 	/**

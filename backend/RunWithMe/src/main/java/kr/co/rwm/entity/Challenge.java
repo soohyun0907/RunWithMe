@@ -54,4 +54,7 @@ public class Challenge {
 	@Column(name = "personal_distance_goal")
 	private double personalDistanceGoal;
 	
+	@Column(length = 500, name = "challenge_image")
+	private String challengeImg;
+	
 }

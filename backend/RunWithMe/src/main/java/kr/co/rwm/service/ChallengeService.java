@@ -9,7 +9,7 @@ import kr.co.rwm.entity.User;
 
 public interface ChallengeService {
 
-	public void saveChallenge(Challenge challenge);
+	public Challenge saveChallenge(Challenge challenge);
 	
 	public List<Challenge> findAllChallenge();
 	
