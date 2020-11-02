@@ -16,21 +16,21 @@
 </template>
 
 <script>
+import { mobileModel } from 'mobile-device-detect';
 export default {
     methods: {
         chargeKakao() {
             var IMP = window.IMP;
-            IMP.init('imp42556076');
-            var money = $('input[name="cp_item"]:checked').val();
-            console.log(money);
+            IMP.init("imp42556076");
+            // var money = $('input[name="cp_item"]:checked').val();
+            // console.log(money);
             
-
             IMP.request_pay({
-                pg: 'kakao',
+                pg: 'kakaopay',
                 pay_method : 'card',
                 merchant_uid: 'merchant_' + new Date().getTime(),
                 name: '주문명 : 주문명 설정',
-                amount: money,
+                amount: 5000,
                 buyer_email: 'iamport@siot.do',
                 buyer_name: '구매자이름',
                 buyer_tel: '010-1234-5678',
@@ -44,9 +44,10 @@ export default {
                     msg += '상점 거래ID : ' + rsp.merchant_uid;
                     msg += '결제 금액 : ' + rsp.paid_amount;
                     msg += '카드 승인번호 : ' + rsp.apply_num;
+                    // http.get(`/payment/${money}`)
                     jQuery.ajax({
                         type: "GET", 
-                        url: "http://6a713d4e015f.ngrok.io/payment/charge/", //충전 금액값을 보낼 url 설정
+                        url: "http://localhost:8080/payment/charge/", //충전 금액값을 보낼 url 설정
                         data: {
                             "money" : money
                         },
