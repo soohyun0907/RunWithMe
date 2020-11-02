@@ -321,7 +321,7 @@ export default {
 
   },
   mounted() {
-
+    console.log("Smain hihi")
   },
   methods: {
     convertToTime(origin){
