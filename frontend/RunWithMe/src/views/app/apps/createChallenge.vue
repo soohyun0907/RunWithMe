@@ -90,8 +90,11 @@
           </b-form>
         </b-card>
       </b-col>
-
     </b-row>
+
+    <input type="file" id="files" ref="files" v-on:change="handleFileUpload()"
+      accept="image/*" />
+    <button v-on:click="submitFile()">Submit</button>
   </div>
 </template>
 <script>
@@ -109,6 +112,7 @@ export default {
   components: { DateRangePicker },
   data() {
     return {
+      file: [],
       form: {
         cName: "",
         content: "",
@@ -136,7 +140,7 @@ export default {
           personalDistanceGoal: this.form.personalDistanceGoal
         })
         .then(({ data }) => {
-          if(data.status == "success"){
+          if(data.status == 200){
             alert("챌린지 생성 완료 이미지 등록으로 이동");
           } else {
             alert("오류가 발생하였습니다.");
@@ -153,11 +157,33 @@ export default {
       this.form.dateRange = {
             startDate: new Date(),
             endDate: new Date()};
-      // Trick to reset/clear native browser form validation state
-      // this.show = false;
-      // this.$nextTick(() => {
-      //   this.show = true;
-      // });
+    },
+    submitFile(){
+      let formData = new FormData();
+      formData.append('file', this.file[0],"D:\PJT3\s03p31a303\frontend\RunWithMe\src\assets\images\photo-long-2.jpg");
+      console.log(this.file[0]);
+      http
+        .post('/challenges/images/2',{
+          // challengeId: 1,
+          challengeImg: formData
+        }, {
+          headers: {
+            // 'Content-Type': 'multipart/form-data'
+            'Content-Type': 'application/form-data'
+          }
+        })
+        .then(({ data }) => {
+          if(data.status == 200){
+            alert(data.message);
+          } else {
+            alert("오류가 발생하였습니다.");
+            return;
+          }
+        })
+    },
+    handleFileUpload() {
+      this.file = this.$refs.files.files;
+      console.log(this.file);
     }
   }
 };
