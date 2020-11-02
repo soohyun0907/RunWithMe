@@ -24,9 +24,14 @@ public class ResponseMessage {
 
     public static final String GROUP_LIST_SUCCESS = "그룹 채팅 목록 조회";
     
-    public static final String RUNNING_GPS_SUCCESS = "현재 위치 목록 조회";
+    public static final String RUNNING_LIST_SUCCESS = "유저의 모든 런닝 리스트 조회";
+    public static final String RUNNING_SEARCH_SUCCESS = "런닝 상세 정보 조회 성공";
     public static final String UPDATE_THUMBNAIL_SUCCESS = "런닝 썸네일 저장 성공";
     public static final String UPDATE_THUMBNAIL_FAIL = "런닝 썸네일 저장 실패";
+    public static final String RUNNING_INSERT_SUCCESS = "런닝 저장 성공";
+    public static final String RUNNING_DELETE_RECORD = "런닝 삭제";
+    public static final String RECORD_REDIS_INSERT_SUCCESS = "레디스에 레코드 저장";
+    public static final String RECORD_REDIS_LIST_SUCCESS = "레디스에서 레코드 목록 조회";
     
     public static final String CHALLENGE_INSERT_SUCCESS = "챌린지 등록 성공";
     public static final String CHALLENGE_INSERT_FAIL = "챌린지 등록 실패";
@@ -35,8 +40,12 @@ public class ResponseMessage {
     public static final String CHALLENGE_DELETE_SUCCESS = "챌린지 삭제 성공";
     public static final String CHALLENGE_DELETE_FAIL = "챌린지 삭제 실패";
     public static final String CHALLENGE_LIST_SUCCESS = "챌린지 목록 조회 성공";
+    public static final String CHALLENGE_ING_SUCCESS = "진행중 챌린지 목록 조회 성공";
+    public static final String CHALLENGE_COMINGSOON_SUCCESS = "예정 챌린지 목록 조회 성공";
+    public static final String CHALLENGE_END_SUCCESS = "종료 챌린지 목록 조회 성공";
     public static final String CHALLENGE_LIST_FAIL = "챌린지 목록 조회 실패";
-    public static final String CHALLENGE_SEARCH_SUCCESS = "챌린지 상세 조회 성공";
+    public static final String CHALLENGE_SEARCH_SUCCESS_T = "챌린지 상세 조회 성공: 유저정보 있음";
+    public static final String CHALLENGE_SEARCH_SUCCESS_F = "챌린지 상세 조회 성공: 유저정보 없음";
     public static final String CHALLENGE_SEARCH_FAIL = "챌린지 상세 조회 실패";
     public static final String CHALLENGE_ACCESS_FORBIDDEN = "권한 없음";
     public static final String CHALLENGE_PARTICIPATE_SUCCESS = "챌린지 참여 성공";
@@ -95,6 +104,6 @@ public class ResponseMessage {
     public static final String ACTAREA_UPDATE_FAIL = "유저 활동 지역 수정 실패";
     public static final String AREA_RUNNINGS_SUCCESS = "지역에 따른 런닝 기록 조회 성공";
     
-    public static final String FRIENDS_RUNNING_RECORD = "메인페이지: 친구의 최근 기록 1개 조회 성공";
+    public static final String RUNNING_FRIENDS_RECORD = "메인페이지: 친구의 최근 기록 1개 조회 성공";
     
 }

@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,19 +22,24 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class RunningArea {
-
+public class RunningUser {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "running_area_id")
-	private Integer runningAreaId;
+	@Column(name="running_user_id")
+	private Integer runningUserId;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "running_id")
-	private Running running;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name="user_id",referencedColumnName = "user_id")
+	private User userId;
+
+	@Column(name = "total_distance", nullable = false)
+	private double totalDistane;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	@JoinColumn(name = "gugun_id")
-	private Gugun gugun;
+	@Column(name = "total_time", nullable = false)
+	private Long totalTime;
+	
+	@Column(name = "total_count")
+	private Integer totalCount;
 	
 }
