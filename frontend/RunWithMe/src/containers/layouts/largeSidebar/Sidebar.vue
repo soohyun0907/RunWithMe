@@ -96,11 +96,29 @@
               <span class="item-name">Group-Chat</span>
             </router-link>
           </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/apps/challenges">
+          <li
+            @click.prevent="toggleSidebarDropdwon($event)"
+            class="nav-item dropdown-sidemenu"
+          >
+            <a href="#">
               <i class="nav-icon i-Speach-Bubble-3"></i>
               <span class="item-name">Challenges</span>
-            </router-link>
+              <i class="dd-arrow i-Arrow-Down"></i>
+            </a>
+            <ul class="submenu">
+              <li>
+                <router-link tag="a" class to="/app/apps/challenges">
+                  <i class="nav-icon i-Speach-Bubble-3"></i>
+                  <span class="item-name">Challenge List</span>
+                </router-link>
+              </li>
+              <li>
+                <router-link tag="a" class to="/app/apps/createChallenge">
+                  <i class="nav-icon i-Speach-Bubble-3"></i>
+                  <span class="item-name">Challenge Creation Form</span>
+                </router-link>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
             <router-link tag="a" class to="/app/apps/payment">
