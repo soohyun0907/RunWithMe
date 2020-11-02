@@ -160,7 +160,7 @@ export default {
     this.getFriendsRunning();
   },
   mounted() {
-
+    console.log("Smain hihi")
   },
   methods: {
     convertToTime(origin) {
