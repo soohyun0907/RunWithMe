@@ -1,6 +1,7 @@
 package kr.co.rwm.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -87,11 +89,11 @@ public class ChallengeController {
 	
 	@ApiOperation(value = "챌린지 이미지 저장", response = ResponseEntity.class)
 	@PostMapping("/images/{challengeId}")
-	public ResponseEntity saveChallengeImage(@PathVariable int challengeId, MultipartFile file, HttpServletRequest request) {
+	public ResponseEntity saveChallengeImage(@PathVariable int challengeId, @RequestParam("files") MultipartFile files, HttpServletRequest request) {
 		System.out.println("/challenges/save - 관리자가 challenge를 등록합니다.");
 		User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (loginUser.getRoles().stream().anyMatch(x -> x.equals("admin"))) {
-			String url = s3Service.challengeImgUpload(file);
+			String url = s3Service.challengeImgUpload(files);
 			System.out.println("images"+url);
 			Challenge challenge = challengeService.findChallengeByChallengeId(challengeId);
 			challenge.setChallengeImg(url);
