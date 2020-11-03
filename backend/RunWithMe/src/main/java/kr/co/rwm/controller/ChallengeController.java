@@ -87,11 +87,11 @@ public class ChallengeController {
 	
 	@ApiOperation(value = "챌린지 이미지 저장", response = ResponseEntity.class)
 	@PostMapping("/images/{challengeId}")
-	public ResponseEntity saveChallengeImage(@PathVariable int challengeId, MultipartFile challengeImg, HttpServletRequest request) {
+	public ResponseEntity saveChallengeImage(@PathVariable int challengeId, MultipartFile file, HttpServletRequest request) {
 		System.out.println("/challenges/save - 관리자가 challenge를 등록합니다.");
 		User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (loginUser.getRoles().stream().anyMatch(x -> x.equals("admin"))) {
-			String url = s3Service.challengeImgUpload(challengeImg);
+			String url = s3Service.challengeImgUpload(file);
 			System.out.println("images"+url);
 			Challenge challenge = challengeService.findChallengeByChallengeId(challengeId);
 			challenge.setChallengeImg(url);
