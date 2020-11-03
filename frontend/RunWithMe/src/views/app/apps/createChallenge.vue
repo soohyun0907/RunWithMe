@@ -160,16 +160,13 @@ export default {
     },
     submitFile(){
       let formData = new FormData();
-      formData.append('file', this.file[0],"D:\PJT3\s03p31a303\frontend\RunWithMe\src\assets\images\photo-long-2.jpg");
+      formData.append('files', this.file[0]);
       console.log(this.file[0]);
       http
-        .post('/challenges/images/2',{
-          // challengeId: 1,
-          challengeImg: formData
-        }, {
+        .post('/challenges/images/', formData, 
+        {
           headers: {
-            // 'Content-Type': 'multipart/form-data'
-            'Content-Type': 'application/form-data'
+            'Content-Type': 'multipart/form-data',
           }
         })
         .then(({ data }) => {
