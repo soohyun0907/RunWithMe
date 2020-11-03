@@ -62,8 +62,8 @@ public class UserService implements UserDetailsService {
 		});
 	}
 	
-	public void charge(long uid,int money) {
-		Optional<User> user = userRepository.findById(uid);
+	public void charge(int uid,int money) {
+		Optional<User> user = userRepository.findByUserId(uid);
 		int total = user.get().getMileage() + money;
  		user.ifPresent(selectUser->{
 			selectUser.setMileage(total);

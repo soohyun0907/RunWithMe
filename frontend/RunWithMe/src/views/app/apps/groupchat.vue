@@ -305,7 +305,7 @@ export default {
         console.log("------------------------");
         
         var _this = this;
-        this.testUserId="change"
+        // this.testUserId="change"
         this.testUserId = response.data;
         // this.token = this.auth
   

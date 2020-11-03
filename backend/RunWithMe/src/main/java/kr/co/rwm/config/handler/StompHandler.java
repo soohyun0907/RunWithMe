@@ -1,9 +1,11 @@
 package kr.co.rwm.config.handler;
 
+import kr.co.rwm.entity.User;
 import kr.co.rwm.model.ChatMessage;
 import kr.co.rwm.repo.ChatRoomRepository;
 import kr.co.rwm.service.ChatService;
 import kr.co.rwm.service.JwtTokenProvider;
+import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -24,6 +26,7 @@ public class StompHandler implements ChannelInterceptor {
     private final JwtTokenProvider jwtTokenProvider;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatService chatService;
+    private final UserService userService;
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
     @Override
@@ -46,11 +49,22 @@ public class StompHandler implements ChannelInterceptor {
             // 클라이언트 입장 메시지를 채팅방에 발송한다.(redis publish)
             String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("UnknownUser");
             chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
+            
+            // test
+//            String jwtToken = message.getHeaders().get("AUTH").toString();
+            
+//            String email = jwtTokenProvider.getUserEmailFromJwt(jwtToken);
+//            String name2 = userService.findByUserEmail(email).get().getUsername();
+//            System.out.println("[TEST : 2020-11-02 StompHandler] "+sessionId +" "+roomId+" "+name);
+//            System.out.println("[TEST : 2020-11-02 StompHandler] "+jwtToken);
+            System.out.println(message);
+            System.out.println("****************");
             log.info("SUBSCRIBED {}, {}", name, roomId);
         } else if (StompCommand.DISCONNECT == accessor.getCommand()) { // Websocket 연결 종료
             // 연결이 종료된 클라이언트 sesssionId로 채팅방 id를 얻는다.
             String sessionId = (String) message.getHeaders().get("simpSessionId");
             String roomId = chatRoomRepository.getUserEnterRoomId(sessionId);
+            System.out.println("[TEST : 2020-11-02 StompHandler] "+sessionId +" "+roomId);
             // 채팅방의 인원수를 -1한다.
             chatRoomRepository.minusUserCount(roomId);
             // 클라이언트 퇴장 메시지를 채팅방에 발송한다.(redis publish)
