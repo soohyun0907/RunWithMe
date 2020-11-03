@@ -103,4 +103,25 @@ public interface ChallengeService {
 	 */
 	public ChallengeUser findChallengeUserByUserIdAndChallengeId(int userId, Challenge challenge);
 
+	/**
+	 * 유저의 참가 챌린지 목록
+	 * @param userId
+	 * @return
+	 */
+	public List<ChallengeUser> findAllChallengeUserByUserIdIng(int userId);
+	
+	/**
+	 * 유저의 참가 예정 챌린지 목록
+	 * @param userId
+	 * @return
+	 */
+	public List<ChallengeUser> findAllChallengeUserByUserIdComingSoon(int userId);
+	
+	/**
+	 * 유저의 종료 챌린지 목록
+	 * @param userId
+	 * @return
+	 */
+	public List<ChallengeUser> findAllChallengeUserByUserIdEnd(int userId);
+
 }
