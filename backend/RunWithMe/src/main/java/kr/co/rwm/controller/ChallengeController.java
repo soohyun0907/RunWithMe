@@ -275,4 +275,67 @@ public class ChallengeController {
 		List<User> successUsers = challengeService.findAllChallengeEqualDate();
 		ranksService.getDonateExp(successUsers);
 	}
+	
+	/**
+	 * 유저의 참여 챌린지 목록
+	 * @param request
+	 * @return
+	 */
+	@ApiOperation(value = "유저가 참여중인 챌린지 조회", response = ResponseEntity.class)
+	@GetMapping("/user/ing")
+	public ResponseEntity findChallengeUserByUserIdIng(HttpServletRequest request) {
+		System.out.println("/challenges/user/ing - 유저가 참여중인 챌린지 조회");
+		String token = request.getHeader("AUTH");
+		int userId = 0;
+		if (jwtTokenProvider.validateToken(token)) {
+			userId = jwtTokenProvider.getUserIdFromJwt(token);
+		}
+		List<ChallengeUser> challengeUsers = challengeService.findAllChallengeUserByUserIdIng(userId);
+
+		return new ResponseEntity<Response>(
+				new Response(StatusCode.OK, ResponseMessage.CHALLENGE_USER_SEARCH_ING, challengeUsers),
+				HttpStatus.OK);
+	}
+	
+	/**
+	 * 유저의 참여 예정 챌린지 목록
+	 * @param request
+	 * @return
+	 */
+	@ApiOperation(value = "유저가 참여 예정 챌린지 조회", response = ResponseEntity.class)
+	@GetMapping("/user/comingsoon")
+	public ResponseEntity findChallengeUserByUserIdComingSoon(HttpServletRequest request) {
+		System.out.println("/challenges/user/comingsoon - 유저가 참여 예정인 챌린지 조회");
+		String token = request.getHeader("AUTH");
+		int userId = 0;
+		if (jwtTokenProvider.validateToken(token)) {
+			userId = jwtTokenProvider.getUserIdFromJwt(token);
+		}
+		List<ChallengeUser> challengeUsers = challengeService.findAllChallengeUserByUserIdComingSoon(userId);
+
+		return new ResponseEntity<Response>(
+				new Response(StatusCode.OK, ResponseMessage.CHALLENGE_USER_SEARCH_COMINGSOON, challengeUsers),
+				HttpStatus.OK);
+	}
+	
+	/**
+	 * 유저의 참여 종료 챌린지 목록
+	 * @param request
+	 * @return
+	 */
+	@ApiOperation(value = "유저가 참여 종료한 챌린지 조회", response = ResponseEntity.class)
+	@GetMapping("/user/end")
+	public ResponseEntity findChallengeUserByUserIdEnd(HttpServletRequest request) {
+		System.out.println("/challenges/user/end - 유저가 참여 종료한 챌린지 조회");
+		String token = request.getHeader("AUTH");
+		int userId = 0;
+		if (jwtTokenProvider.validateToken(token)) {
+			userId = jwtTokenProvider.getUserIdFromJwt(token);
+		}
+		List<ChallengeUser> challengeUsers = challengeService.findAllChallengeUserByUserIdEnd(userId);
+
+		return new ResponseEntity<Response>(
+				new Response(StatusCode.OK, ResponseMessage.CHALLENGE_USER_SEARCH_END, challengeUsers),
+				HttpStatus.OK);
+	}
 }

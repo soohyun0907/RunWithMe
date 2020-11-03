@@ -135,7 +135,8 @@ public class ChallengeServiceImpl implements ChallengeService {
 		double newDistance;
 		LocalDateTime today = LocalDateTime.now();
 		for (ChallengeUser cu : challengeUsers) {
-			if ((cu.getChallengeId().getEndTime()).isAfter(today))
+			if ((cu.getChallengeId().getEndTime()).isBefore(today) 
+					|| cu.getChallengeId().getStartTime().isAfter(today))
 				continue;
 			newDistance = cu.getAccDistance() + accDistance;
 			cu.setAccDistance(newDistance);
@@ -176,6 +177,58 @@ public class ChallengeServiceImpl implements ChallengeService {
 		User user = userRepository.findByUserId(userId).get();
 		ChallengeUser challengeUser = challengeUserRepository.findByUserIdAndChallengeId(user, challenge);
 		return challengeUser;
+	}
+
+	@Override
+	public List<ChallengeUser> findAllChallengeUserByUserIdIng(int userId) {
+		User user = userRepository.findByUserId(userId).get();
+		List<ChallengeUser> challengeUserList = challengeUserRepository.findAllByUserId(user);
+		List<ChallengeUser> challengeUsers = new ArrayList<ChallengeUser>(); 
+		
+		LocalDateTime today = LocalDateTime.now();
+		today = today.withHour(23).withMinute(59).withSecond(59).withNano(0);
+		for(ChallengeUser cu: challengeUserList) {
+			// 끝나는 시간이 오늘보다 나중이고, 시작시간이 오늘보다 이전인 경우
+			if ((cu.getChallengeId().getEndTime()).isAfter(today) 
+					&& cu.getChallengeId().getStartTime().isBefore(today)) {
+				challengeUsers.add(cu);
+			}
+		}
+		return challengeUsers;
+	}
+
+	@Override
+	public List<ChallengeUser> findAllChallengeUserByUserIdComingSoon(int userId) {
+		User user = userRepository.findByUserId(userId).get();
+		List<ChallengeUser> challengeUserList = challengeUserRepository.findAllByUserId(user);
+		List<ChallengeUser> challengeUsers = new ArrayList<ChallengeUser>(); 
+		
+		LocalDateTime today = LocalDateTime.now();
+		today = today.withHour(23).withMinute(59).withSecond(59).withNano(0);
+		for(ChallengeUser cu: challengeUserList) {
+			// 시작시간이 오늘보다 나중일 때
+			if (cu.getChallengeId().getStartTime().isAfter(today)) {
+				challengeUsers.add(cu);
+			}
+		}
+		return challengeUsers;
+	}
+
+	@Override
+	public List<ChallengeUser> findAllChallengeUserByUserIdEnd(int userId) {
+		User user = userRepository.findByUserId(userId).get();
+		List<ChallengeUser> challengeUserList = challengeUserRepository.findAllByUserId(user);
+		List<ChallengeUser> challengeUsers = new ArrayList<ChallengeUser>(); 
+		
+		LocalDateTime today = LocalDateTime.now();
+		today = today.withHour(23).withMinute(59).withSecond(59).withNano(0);
+		for(ChallengeUser cu: challengeUserList) {
+			// 끝나는 시간이 오늘보다 이전일때
+			if ((cu.getChallengeId().getEndTime()).isBefore(today)) {
+				challengeUsers.add(cu);
+			}
+		}
+		return challengeUsers;
 	}
 
 }
