@@ -50,6 +50,10 @@ const routes = [
             path: "payment",
             component: () => import("./views/app/apps/payment")
           },
+          {
+            path: "paymentDone",
+            component: () => import("./views/app/apps/paymentDone")
+          },
         ]
       },
       // runnings
@@ -89,6 +93,10 @@ const routes = [
           {
             path: "friends",
             component: () => import("./views/app/mypages/friends")
+          },
+          {
+            path: "myChallenges",
+            component: () => import("./views/app/mypages/myChallenges")
           },
         ]
       },
