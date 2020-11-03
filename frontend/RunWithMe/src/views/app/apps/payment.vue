@@ -22,7 +22,7 @@ export default {
         chargeKakao() {
             var IMP = window.IMP;
             IMP.init("imp42556076");
-            // var money = $('input[name="cp_item"]:checked').val();
+            var money = $('input[name="cp_item"]:checked').val();
             // console.log(money);
             
             IMP.request_pay({
@@ -30,7 +30,7 @@ export default {
                 pay_method : 'card',
                 merchant_uid: 'merchant_' + new Date().getTime(),
                 name: '주문명 : 주문명 설정',
-                amount: 5000,
+                amount: money,
                 buyer_email: 'iamport@siot.do',
                 buyer_name: '구매자이름',
                 buyer_tel: '010-1234-5678',
@@ -44,23 +44,22 @@ export default {
                     msg += '상점 거래ID : ' + rsp.merchant_uid;
                     msg += '결제 금액 : ' + rsp.paid_amount;
                     msg += '카드 승인번호 : ' + rsp.apply_num;
-                    // http.get(`/payment/${money}`)
                     jQuery.ajax({
                         type: "GET", 
-                        url: "http://localhost:8080/payment/charge/", //충전 금액값을 보낼 url 설정
-                        data: {
-                            "money" : money
-                        },
+                        url: "http://localhost:8080/payment/charge/"+money, //충전 금액값을 보낼 url 설정
                         headers: {
                             "AUTH":localStorage.getItem("auth")
                         }
                     });
+                    alert(msg);
+                    // document.location.href="/app/apps/payment";
+                    document.location.href="/app/apps/paymentDone"; //챌린지 참여 목록으로 이동?
                 } else {
                     var msg = '결제에 실패하였습니다.';
                     msg += '에러내용 : ' + rsp.error_msg;
+                    alert(msg);
+                    document.location.href="/app/apps/payment";
                 }
-                alert(msg);
-                // document.location.href="/app/apps/payment"; //alert창 확인 후 이동할 url 설정
             });
         }
     }
