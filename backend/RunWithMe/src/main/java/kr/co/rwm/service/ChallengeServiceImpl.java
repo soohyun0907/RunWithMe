@@ -112,7 +112,11 @@ public class ChallengeServiceImpl implements ChallengeService {
 	@Override
 	public ChallengeUser participateChallenge(int challengeId, int userId) {
 		User user = userRepository.findByUserId(userId).get();
+		
 		Challenge challenge = challengeRepository.findByChallengeId(challengeId).get();
+		challenge.setParticipant(challenge.getParticipant()+1);
+		challengeRepository.save(challenge);
+		
 		ChallengeUser challengeUser = ChallengeUser.builder().userId(user).challengeId(challenge).accDistance(0)
 				.build();
 		return challengeUserRepository.save(challengeUser);
