@@ -38,7 +38,7 @@
           variant="link"
         >
           <template slot="button-content">
-            <span class="badge badge-primary">3</span>
+            <span class="badge badge-primary">1</span>
             <i class="i-Bell text-muted header-icon"></i>
           </template>
           <!-- Notification dropdown -->
@@ -55,24 +55,24 @@
               </div>
               <div class="notification-details flex-grow-1">
                 <p class="m-0 d-flex align-items-center">
-                  <span>New message</span>
+                  <!-- <span>New message</span> -->
                   <!-- <span class="badge badge-pill badge-primary ml-1 mr-1">new</span> -->
-                  <span class="flex-grow-1"></span>
-                  <span class="text-small text-muted ml-auto">10 sec ago</span>
+                  <!-- <span class="flex-grow-1"></span>
+                  <span class="text-small text-muted ml-auto">10 sec ago</span> -->
                 </p>
                 <p class="text-small text-muted m-0">
-                  James: Hey! are you busy?
+                  서비스 준비 중 입니다.
                 </p>
               </div>
             </div>
-            <div class="dropdown-item d-flex">
+            <!-- <div class="dropdown-item d-flex">
               <div class="notification-icon">
                 <i class="i-Receipt-3 text-success mr-1"></i>
               </div>
               <div class="notification-details flex-grow-1">
                 <p class="m-0 d-flex align-items-center">
                   <span>New order received</span>
-                  <!-- <span class="badge badge-pill badge-success ml-1 mr-1">new</span> -->
+                  <span class="badge badge-pill badge-success ml-1 mr-1">new</span>
                   <span class="flex-grow-1"></span>
                   <span class="text-small text-muted ml-auto">2 hours ago</span>
                 </p>
@@ -86,7 +86,7 @@
               <div class="notification-details flex-grow-1">
                 <p class="m-0 d-flex align-items-center">
                   <span>Product out of stock</span>
-                  <!-- <span class="badge badge-pill badge-danger ml-1 mr-1">3</span> -->
+                  <span class="badge badge-pill badge-danger ml-1 mr-1">3</span>
                   <span class="flex-grow-1"></span>
                   <span class="text-small text-muted ml-auto"
                     >10 hours ago</span
@@ -104,7 +104,7 @@
               <div class="notification-details flex-grow-1">
                 <p class="m-0 d-flex align-items-center">
                   <span>Server Up!</span>
-                  <!-- <span class="badge badge-pill badge-success ml-1 mr-1">3</span> -->
+                  <span class="badge badge-pill badge-success ml-1 mr-1">3</span>
                   <span class="flex-grow-1"></span>
                   <span class="text-small text-muted ml-auto"
                     >14 hours ago</span
@@ -114,7 +114,7 @@
                   Server rebooted successfully
                 </p>
               </div>
-            </div>
+            </div> -->
             <!-- </div> -->
           </vue-perfect-scrollbar>
         </b-dropdown>
