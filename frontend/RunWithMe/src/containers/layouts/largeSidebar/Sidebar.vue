@@ -35,7 +35,7 @@
           >
             <a class="nav-item-hold" href="#">
               <i class="nav-icon i-Computer-Secure"></i>
-              <span class="nav-text">Apps</span>
+              <span class="nav-text">Community</span>
             </a>
             <div class="triangle"></div>
           </li>
@@ -67,20 +67,6 @@
             <div class="triangle"></div>
           </li>
 
-
-          <li
-            @mouseenter="toggleSubMenu"
-            class="nav-item"
-            :class="{ active: selectedParentMenu == 'sessions' }"
-            data-item="sessions"
-            :data-submenu="true"
-          >
-            <a class="nav-item-hold" href="#">
-              <i class="nav-icon i-Administrator"></i>
-              <span class="nav-text">Sessions</span>
-            </a>
-            <div class="triangle"></div>
-          </li>
 
         
         </ul>
@@ -143,30 +129,6 @@
         </ul>
         <ul
           class="childNav d-none"
-          data-parent="sessions"
-          :class="{ 'd-block': selectedParentMenu == 'sessions' }"
-        >
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/sessions/signIn">
-              <i class="nav-icon i-Checked-User"></i>
-              <span class="item-name">Sign in</span>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/sessions/signUp">
-              <i class="nav-icon i-Add-User"></i>
-              <span class="item-name">Sign up</span>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/sessions/forgot">
-              <i class="nav-icon i-Find-User"></i>
-              <span class="item-name">Forgot</span>
-            </router-link>
-          </li>
-        </ul>
-        <ul
-          class="childNav d-none"
           data-parent="others"
           :class="{ 'd-block': selectedParentMenu == 'runnings' }"
         >
@@ -198,13 +160,19 @@
           <li class="nav-item">
             <router-link tag="a" class to="/app/mypages/friends">
               <i class="nav-icon i-File-CSV"></i>
-              <span class="item-name">Friends</span>
+              <span class="item-name">친구 목록</span>
             </router-link>
           </li>
           <li class="nav-item">
             <router-link tag="a" class to="/app/mypages/mypageTab">
               <i class="nav-icon i-Stopwatch"></i>
-              <span class="item-name">런닝 기록 보기</span>
+              <span class="item-name">런닝 정보</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/mypages/myUserInfo">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">회원 정보 관리</span>
             </router-link>
           </li>
         </ul>
@@ -220,14 +188,6 @@
               <span class="item-name">챌린지 제안</span>
             </router-link>
           </li>
-        </ul>
-
-        
-        <ul
-          class="childNav d-none"
-          data-parent="challengeBoard"
-          :class="{ 'd-block': selectedParentMenu == 'challengeBoard' }"
-        >
           <li class="nav-item">
             <router-link tag="a" class to="/app/board/challengeBoardDetail">
               <i class="nav-icon i-Stopwatch"></i>

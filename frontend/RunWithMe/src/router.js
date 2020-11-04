@@ -102,6 +102,11 @@ const routes = [
             path: "myChallenges",
             component: () => import("./views/app/mypages/myChallenges")
           },
+          {
+            path: "myUserInfo",
+            component: () => import("./views/app/mypages/myUserInfo")
+          },
+          
         ]
       },
 
@@ -139,10 +144,6 @@ const routes = [
         path: "signUp",
         component: () => import("./views/app/sessions/signUp")
       },
-      {
-        path: "forgot",
-        component: () => import("./views/app/sessions/forgot")
-      }
     ]
   },
 
