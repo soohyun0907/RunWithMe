@@ -45,7 +45,7 @@ public class MatchRoomController {
 //    }
 
     @PostMapping("/room")
-    @ResponseBody
+    @ResponseBody 
     public ResponseEntity createAndSelectChatroom(@RequestBody Map<String, Integer> idInfo, HttpServletRequest request) {
     	System.out.println(idInfo);
 		String token = request.getHeader("AUTH");
