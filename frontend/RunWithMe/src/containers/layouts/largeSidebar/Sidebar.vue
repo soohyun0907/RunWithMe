@@ -35,23 +35,40 @@
           >
             <a class="nav-item-hold" href="#">
               <i class="nav-icon i-Computer-Secure"></i>
-              <span class="nav-text">Apps</span>
+              <span class="nav-text">Community</span>
+            </a>
+            <div class="triangle"></div>
+          </li>
+
+            <li
+            @mouseenter="toggleSubMenu"
+            class="nav-item"
+            :class="{ active: selectedParentMenu == 'challengeBoard' }"
+            data-item="challengeBoard"
+            :data-submenu="true"
+          >
+            <a class="nav-item-hold" href="#">
+              <i class="nav-icon i-Administrator"></i>
+              <span class="nav-text">ChallengeBoard</span>
             </a>
             <div class="triangle"></div>
           </li>
           <li
             @mouseenter="toggleSubMenu"
             class="nav-item"
-            :class="{ active: selectedParentMenu == 'sessions' }"
-            data-item="sessions"
+            :class="{ active: selectedParentMenu == 'mypages' }"
+            data-item="mypages"
             :data-submenu="true"
           >
             <a class="nav-item-hold" href="#">
               <i class="nav-icon i-Administrator"></i>
-              <span class="nav-text">Sessions</span>
+              <span class="nav-text">My Page</span>
             </a>
             <div class="triangle"></div>
           </li>
+
+
+        
         </ul>
       </div>
     </vue-perfect-scrollbar>
@@ -79,28 +96,34 @@
               <span class="item-name">Group-Chat</span>
             </router-link>
           </li>
-        </ul>
-        <ul
-          class="childNav d-none"
-          data-parent="sessions"
-          :class="{ 'd-block': selectedParentMenu == 'sessions' }"
-        >
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/sessions/signIn">
-              <i class="nav-icon i-Checked-User"></i>
-              <span class="item-name">Sign in</span>
-            </router-link>
+          <li
+            @click.prevent="toggleSidebarDropdwon($event)"
+            class="nav-item dropdown-sidemenu"
+          >
+            <a href="#">
+              <i class="nav-icon i-Speach-Bubble-3"></i>
+              <span class="item-name">Challenges</span>
+              <i class="dd-arrow i-Arrow-Down"></i>
+            </a>
+            <ul class="submenu">
+              <li>
+                <router-link tag="a" class to="/app/apps/challenges">
+                  <i class="nav-icon i-Speach-Bubble-3"></i>
+                  <span class="item-name">Challenge List</span>
+                </router-link>
+              </li>
+              <li>
+                <router-link tag="a" class to="/app/apps/createChallenge">
+                  <i class="nav-icon i-Speach-Bubble-3"></i>
+                  <span class="item-name">Challenge Creation Form</span>
+                </router-link>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
-            <router-link tag="a" class to="/app/sessions/signUp">
-              <i class="nav-icon i-Add-User"></i>
-              <span class="item-name">Sign up</span>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/sessions/forgot">
-              <i class="nav-icon i-Find-User"></i>
-              <span class="item-name">Forgot</span>
+            <router-link tag="a" class to="/app/apps/payment">
+              <i class="nav-icon i-Speach-Bubble-3"></i>
+              <span class="item-name">Payment</span>
             </router-link>
           </li>
         </ul>
@@ -110,9 +133,9 @@
           :class="{ 'd-block': selectedParentMenu == 'runnings' }"
         >
           <li class="nav-item">
-            <router-link tag="a" class to="/app/runnings/contact-grid">
+            <router-link tag="a" class to="/app/runnings/neighborhoodList">
               <i class="nav-icon i-File-CSV"></i>
-              <span class="item-name">Friends List</span>
+              <span class="item-name">Neighborhood List</span>
             </router-link>
           </li>
           <li class="nav-item">
@@ -128,6 +151,59 @@
             </router-link>
           </li>
         </ul>
+
+        <ul
+          class="childNav d-none"
+          data-parent="mypages"
+          :class="{ 'd-block': selectedParentMenu == 'mypages' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/mypages/friends">
+              <i class="nav-icon i-File-CSV"></i>
+              <span class="item-name">친구 목록</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/mypages/mypageTab">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">런닝 정보</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/mypages/myUserInfo">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">회원 정보 관리</span>
+            </router-link>
+          </li>
+        </ul>
+
+        <ul
+          class="childNav d-none"
+          data-parent="challengeBoard"
+          :class="{ 'd-block': selectedParentMenu == 'challengeBoard' }"
+        >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/board/challengeBoard">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">챌린지 제안</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/board/challengeBoardDetail">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">챌린지 제안 상세</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/mypages/myChallenges">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">나의 챌린지</span>
+            </router-link>
+          </li>
+        </ul>
+
+
+
       </div>
     </vue-perfect-scrollbar>
     <div
@@ -142,6 +218,7 @@
 <script>
 import Topnav from "./TopNav";
 import { isMobile } from "mobile-device-detect";
+import axios from "axios";
 
 import { mapGetters, mapActions } from "vuex";
 
@@ -164,6 +241,14 @@ export default {
     window.addEventListener("resize", this.handleWindowResize);
     document.addEventListener("click", this.returnSelectedParentMenu);
     this.handleWindowResize();
+    
+    
+     this.$store.subscribe((mutation, state) => {
+      if(mutation.type=="mutateAuth"){
+        console.log("auth 변경")
+        axios.defaults.headers.common['AUTH'] = this.$store.state.auth
+      }
+    })
   },
 
   beforeDestroy() {
