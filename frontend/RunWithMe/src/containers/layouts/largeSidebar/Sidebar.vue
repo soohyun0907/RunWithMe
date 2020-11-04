@@ -198,13 +198,19 @@
           <li class="nav-item">
             <router-link tag="a" class to="/app/mypages/friends">
               <i class="nav-icon i-File-CSV"></i>
-              <span class="item-name">Friends</span>
+              <span class="item-name">친구 목록</span>
             </router-link>
           </li>
           <li class="nav-item">
             <router-link tag="a" class to="/app/mypages/mypageTab">
               <i class="nav-icon i-Stopwatch"></i>
-              <span class="item-name">런닝 기록 보기</span>
+              <span class="item-name">런닝 정보</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/mypages/myUserInfo">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">회원 정보 관리</span>
             </router-link>
           </li>
         </ul>
@@ -220,14 +226,6 @@
               <span class="item-name">챌린지 제안</span>
             </router-link>
           </li>
-        </ul>
-
-        
-        <ul
-          class="childNav d-none"
-          data-parent="challengeBoard"
-          :class="{ 'd-block': selectedParentMenu == 'challengeBoard' }"
-        >
           <li class="nav-item">
             <router-link tag="a" class to="/app/board/challengeBoardDetail">
               <i class="nav-icon i-Stopwatch"></i>

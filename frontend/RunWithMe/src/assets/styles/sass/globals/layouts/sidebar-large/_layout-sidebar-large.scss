@@ -9,9 +9,9 @@
   .main-content-wrap {
     width: 100%;
     float: right;
-    margin-top: $topbar-height;
+    margin-top: $topbar-height+15px;
     transition: width 0.24s ease-in-out;
-    padding: 2rem 2rem 0;
+    // padding: 2rem 2rem 0;
     position: relative;
     min-height: calc(100vh - #{$topbar-height});
     background: $white;
@@ -247,7 +247,7 @@
 
 @media (max-width: 576px) {
   .main-content-wrap {
-    padding: 1.5rem;
+    // padding: 1.5rem;
     &.sidenav-open {
       width: 100%;
     }

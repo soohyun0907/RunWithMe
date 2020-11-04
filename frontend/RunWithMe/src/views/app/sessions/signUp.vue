@@ -9,12 +9,9 @@
           <div
             class="col-md-6 text-center"
             style="background-size: cover"
-            :style="{ backgroundImage: 'url(' + signInImage + ')' }"
+            :style="{ backgroundImage: 'url(' + logo + ')' }"
           >
             <div class="pl-3 auth-right">
-              <div class="auth-logo text-center mt-4">
-                <img :src="logo" alt="" />
-              </div>
               <div class="flex-grow-1"></div>
               <div class="w-100 mb-30"></div>
               <div class="flex-grow-1"></div>
@@ -59,15 +56,16 @@
                   >
                 </b-form-group>
 
-                <b-col md="4" class="mb-30">
                   <b-card class="h-100" title="주 활동지역 선택">
-                    <b-dropdown id="dropdown-1" text="시도 선택" class="">
+
+                    <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
                       <div v-for="(sido, index) in sidos" v-bind:key="index">
                         <b-dropdown-item @click="sidoSelected(sido)">{{
                           sido.sidoName
                         }}</b-dropdown-item>
                       </div>
                     </b-dropdown>
+
                     <b-dropdown id="dropdown-2" text="구군 선택" class="">
                       <div v-for="(gugun, index) in guguns" v-bind:key="index">
                         <b-dropdown-item @click="gugunSelected(gugun)">{{
@@ -76,7 +74,6 @@
                       </div>
                     </b-dropdown>
                   </b-card>
-                </b-col>
 
                 <b-form-group label="Password">
                   <b-form-input
