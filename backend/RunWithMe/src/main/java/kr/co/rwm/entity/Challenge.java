@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,5 +51,14 @@ public class Challenge {
 
 	@Column(name = "end_time")
 	private LocalDateTime endTime;
+	
+	@Column(name = "personal_distance_goal")
+	private double personalDistanceGoal;
+	
+	@Column(length = 500, name = "challenge_image")
+	private String challengeImg;
+	
+	@Column(name = "participant", columnDefinition = "Integer default 0")
+	private int participant;
 	
 }
