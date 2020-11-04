@@ -13,7 +13,7 @@ const routes = [
   {
     path: "/",
     component: () => import("./views/app"), //webpackChunkName app
-    // beforeEnter: authenticate,
+    beforeEnter: authenticate,
     redirect: "/app/dashboards/main",
 
     children: [
@@ -42,6 +42,26 @@ const routes = [
             path: "groupchat",
             component: () => import("./views/app/apps/groupchat")
           },
+          {
+            path: "challenges",
+            component: () => import("./views/app/apps/challenges")
+          },
+          {
+            path: "createChallenge",
+            component: () => import("./views/app/apps/createChallenge")
+          },
+          {
+            path: "payChallenge",
+            component: () => import("./views/app/apps/payChallenge")
+          },
+          {
+            path: "payment",
+            component: () => import("./views/app/apps/payment")
+          },
+          {
+            path: "paymentDone",
+            component: () => import("./views/app/apps/paymentDone")
+          },
         ]
       },
       // runnings
@@ -59,15 +79,59 @@ const routes = [
             component: () => import("./views/app/runnings/running")
           },
           {
-            path: "contact-grid",
-            component: () => import("./views/app/runnings/contact-grid")
+            path: "neighborhoodList",
+            component: () => import("./views/app/runnings/neighborhoodList")
           },
           {
-            path: "user-detail",
-            component: () => import("./views/app/runnings/user-detail")
+            path: "friendsDetail",
+            component: () => import("./views/app/runnings/friendsDetail")
           },
         ]
       },
+      // mypages
+      {
+        path: "/app/mypages",
+        component: () => import("./views/app/mypages"),
+        redirect: "/app/mypages/mypageTab",
+        children: [
+          {
+            path: "mypageTab",
+            component: () => import("./views/app/mypages/mypageTab")
+          },
+          {
+            path: "friends",
+            component: () => import("./views/app/mypages/friends")
+          },
+          {
+            path: "myChallenges",
+            component: () => import("./views/app/mypages/myChallenges")
+          },
+          {
+            path: "myUserInfo",
+            component: () => import("./views/app/mypages/myUserInfo")
+          },
+          
+        ]
+      },
+
+      // challengeBoard
+      {
+        path: "/app/board",
+        component: () => import("./views/app/board"),
+        redirect: "/app/board/challengeBoard",
+        children: [
+          {
+            path: "challengeBoard",
+            component: () => import("./views/app/board/challengeBoard")
+          },
+          {
+            path : 'challengeBoardDetail',
+            component :()=> import("./views/app/board/challengeBoardDetail") ,
+            props: true
+          },
+        ]
+      },
+
     ]
   },
   // sessions
@@ -84,12 +148,10 @@ const routes = [
         path: "signUp",
         component: () => import("./views/app/sessions/signUp")
       },
-      {
-        path: "forgot",
-        component: () => import("./views/app/sessions/forgot")
-      }
     ]
   },
+
+
 ];
 
 const router = new Router({
@@ -97,7 +159,7 @@ const router = new Router({
   linkActiveClass: "open",
   routes,
   scrollBehavior(to, from, savedPosition) {
-    return {x: 0, y: 0};
+    return { x: 0, y: 0 };
   }
 });
 
