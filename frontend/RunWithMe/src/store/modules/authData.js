@@ -19,6 +19,9 @@ export default {
     isLogin:state =>state.isLogin,
   },
   mutations: {
+    mutateProfile(state, profile){
+      state.userInfo.profile = profile
+    },
     mutateIsLogin(state, isLogin) {
       state.isLogin = isLogin
     },
@@ -57,14 +60,23 @@ export default {
     }
   },
   actions: {
+     makeVariantToast(variant = null) {
+      this.$bvToast.toast("Toast body content", {
+        title: `Variant ${variant || "default"}`,
+        variant: variant,
+        solid: true
+      });
+    },
       login(context, { userEmail, userPw }) {
         context.commit("clearError");
         context.commit("setLoading", true);
         console.log("login on")
+        var _this = this
         http.post(`users/signin`,{
           userEmail:userEmail,
           userPw:userPw        
         }).then(res => {
+            _this.makeVariantToast('warning')
             context.commit('mutateUserInfo', res.data.data)
             context.commit('mutateAuth',res.headers.auth)
             localStorage.setItem("auth",res.headers.auth)
