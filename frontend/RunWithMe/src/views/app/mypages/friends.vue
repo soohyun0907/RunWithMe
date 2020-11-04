@@ -113,7 +113,7 @@ export default {
       rows: [
          {
           id: 1,
-          avatar: require("@/assets/images/faces/1.jpg"),
+          avatar: require("@/assets/images/faces/3.jpg"),
           name: "택택",
           email: "hyungtaik@gmail.com",
           span: '<span class="badge badge-danger">Pro</span>',
@@ -122,7 +122,7 @@ export default {
         },
         {
           id: 2,
-          avatar: require("@/assets/images/faces/3.jpg"),
+          avatar: require("@/assets/images/faces/4.jpg"),
           name: "수니",
           email: "sooni0110@gmail.com",
           span: '<span class="badge badge-primary">Beginner</span>',
@@ -131,7 +131,7 @@ export default {
         },
         {
           id: 3,
-          avatar: require("@/assets/images/faces/2.jpg"),
+          avatar: require("@/assets/images/faces/5.jpg"),
           name: "두현",
           email: "hyuns@gmail.com",
           span: '<span class="badge badge-success">Runner</span>',

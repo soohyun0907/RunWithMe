@@ -57,7 +57,7 @@
                 </b-form-group>
                 <b-row>
                   <b-col md="8" class=" mb-30">
-                   <b-card title="주 활동지역 선택">
+                   <b-card class="h-100" title="주 활동지역 선택">
 
                     <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
                       <div v-for="(sido, index) in sidos" v-bind:key="index">
@@ -91,7 +91,7 @@
                     <span class="checkmark"></span>
                   </label>
 
-                  <label class="radio radio-reverse radio-success">
+               9   <label class="radio radio-reverse radio-success">
                     <input
                       type="radio"
                       name="orderStatus"
