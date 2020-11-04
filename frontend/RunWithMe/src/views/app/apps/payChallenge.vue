@@ -96,11 +96,52 @@ export default {
     },
     onSubmit(el) {
       let x = el.preventDefault();
+      http
+        .post("/challenges/runners",{
+          challengeId: this.challengeId,
+          donation: this.donateAmount
+        })
+        .then(({data}) => {
+          if(data.status == 200){
+            this.makePayment();
+          } else {
+            alert("챌린지 참여 중 오류가 발생하였습니다.");
+            return;
+          }
+        })
     },
     onReset(evt) {
       evt.preventDefault();
       // Reset our form values
       this.donateAmount = 0;
+    },
+    makePayment() {
+      http
+        .get("payment/"+this.donateAmount)
+        .then(({data}) => {
+          alert("결제완료");
+        })
+        .catch((error) => {
+          this.cancelChallenge();
+          console.log(error);
+          return;
+        })
+    },
+    cancelChallenge() {
+      http
+        .delete("challenges/runners", {
+          challengeId: this.challengeId,
+          donation: this.donateAmount
+        })
+        .then(({data}) => {
+          if(data.status == 200){
+            alert("챌린지 참여 중 오류가 발생하였습니다.");
+            return;
+          } else {
+            alert("챌린지 참여 중 오류가 발생하였습니다.");
+            return;
+          }
+        })
     }
   }
 };

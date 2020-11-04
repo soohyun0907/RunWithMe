@@ -13,7 +13,7 @@ const routes = [
   {
     path: "/",
     component: () => import("./views/app"), //webpackChunkName app
-    // beforeEnter: authenticate,
+    beforeEnter: authenticate,
     redirect: "/app/dashboards/main",
 
     children: [
