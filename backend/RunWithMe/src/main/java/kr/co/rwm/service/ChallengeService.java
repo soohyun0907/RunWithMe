@@ -70,9 +70,10 @@ public interface ChallengeService {
 	/**
 	 * 챌린지 참여
 	 * @param challengeId
+	 * @param donation
 	 * @param userId
 	 */
-	public ChallengeUser participateChallenge(int challengeId, int userId);
+	public ChallengeUser participateChallenge(int challengeId, int donation, int userId);
 	
 	/**
 	 * 유저가 참여하고 있는 챌린지 아이디 가져오기
