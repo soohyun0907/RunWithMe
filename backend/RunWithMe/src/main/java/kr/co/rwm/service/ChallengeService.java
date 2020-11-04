@@ -5,10 +5,11 @@ import java.util.List;
 
 import kr.co.rwm.entity.Challenge;
 import kr.co.rwm.entity.ChallengeUser;
+import kr.co.rwm.entity.User;
 
 public interface ChallengeService {
 
-	public void saveChallenge(Challenge challenge);
+	public Challenge saveChallenge(Challenge challenge);
 	
 	public List<Challenge> findAllChallenge();
 	
@@ -46,14 +47,21 @@ public interface ChallengeService {
 	public Challenge updateChallengeDonate(int challengeId, long donate);
 	
 	/**
-	 * endTime보다(어떤 날짜가 들어오는지에 따라 다름) 종료 날짜가 나중인 챌린지
+	 * endTime보다(어떤 날짜가 들어오는지에 따라 다름) 종료 날짜가 나중인 챌린지 - 진행중
 	 * @param endTime
 	 * @return
 	 */
 	public List<Challenge> findAllChallengeGraterThanEndTime(LocalDateTime endTime);
 	
 	/**
-	 * endTime보다(어떤 날짜가 들어오는지에 따라 다름) 종료 날짜가 이전인 챌린지
+	 * startTime보다 시작 시간이 나중인 챌린지 - 예정
+	 * @param startTime
+	 * @return
+	 */
+	public List<Challenge> findAllChallengeGraterThanStartTime(LocalDateTime startTime);
+	
+	/**
+	 * endTime보다(어떤 날짜가 들어오는지에 따라 다름) 종료 날짜가 이전인 챌린지 - 종료
 	 * @param endTime
 	 * @return
 	 */
@@ -62,9 +70,10 @@ public interface ChallengeService {
 	/**
 	 * 챌린지 참여
 	 * @param challengeId
+	 * @param donation
 	 * @param userId
 	 */
-	public ChallengeUser participateChallenge(int challengeId, int userId);
+	public ChallengeUser participateChallenge(int challengeId, int donation, int userId);
 	
 	/**
 	 * 유저가 참여하고 있는 챌린지 아이디 가져오기
@@ -72,4 +81,48 @@ public interface ChallengeService {
 	 * @return
 	 */
 	public List<Integer> findByChallengeUserList(int userId);
+
+	/**
+	 * 유저가 참여하고 있는 모든 챌린지 누적 거리 업데이트 시키기
+	 * @param loginUser
+	 * @param accDistance
+	 */
+	public void updateAccDistance(User user, double accDistance);
+
+	/**
+	 * 오늘 이전 날짜 확인
+	 * @param today
+	 * @return
+	 */
+	public List<User> findAllChallengeEqualDate();
+
+	/**
+	 * 챌린지와 유저 pk로 유저가 해당 챌린지를 참여하는지 확인
+	 * @param userId
+	 * @param challenge
+	 * @return
+	 */
+	public ChallengeUser findChallengeUserByUserIdAndChallengeId(int userId, Challenge challenge);
+
+	/**
+	 * 유저의 참가 챌린지 목록
+	 * @param userId
+	 * @return
+	 */
+	public List<ChallengeUser> findAllChallengeUserByUserIdIng(int userId);
+	
+	/**
+	 * 유저의 참가 예정 챌린지 목록
+	 * @param userId
+	 * @return
+	 */
+	public List<ChallengeUser> findAllChallengeUserByUserIdComingSoon(int userId);
+	
+	/**
+	 * 유저의 종료 챌린지 목록
+	 * @param userId
+	 * @return
+	 */
+	public List<ChallengeUser> findAllChallengeUserByUserIdEnd(int userId);
+
 }

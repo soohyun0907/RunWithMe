@@ -70,9 +70,9 @@ export default {
             localStorage.setItem("auth",res.headers.auth)
             localStorage.setItem("userInfo",JSON.stringify(res.data.data))
             console.log("로그인 성공")
-            console.log(res.data)
-            console.log("토큰 받아오기" + res.headers.auth)// 토큰얻기
-            console.log(localStorage.getItem("auth"))
+            console.log(res.data.data)
+            console.log(res.headers.auth)// 토큰얻기
+            console.log(localStorage.getItem("auth"))// 토큰얻기
             router.push('/')
         })
         .catch(function(error) {

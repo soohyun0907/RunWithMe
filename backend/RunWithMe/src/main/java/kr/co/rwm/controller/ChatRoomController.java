@@ -69,13 +69,23 @@ public class ChatRoomController {
 
     @GetMapping("/user")
     @ResponseBody
-    public LoginInfo getUserInfo() {
+    public String getUserInfo() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) auth.getPrincipal();
         Integer userId = user.getUserId();
         
         String name = auth.getName();
-        System.out.println(name);
-        return LoginInfo.builder().name(name).token(jwtTokenProvider.generateToken(userId, name, null)).build();
+        return name;
     }
+//    @GetMapping("/user")
+//    @ResponseBody
+//    public LoginInfo getUserInfo() {
+//    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//    	User user = (User) auth.getPrincipal();
+//    	Integer userId = user.getUserId();
+//    	
+//    	String name = auth.getName();
+//    	System.out.println("[TEST:2020-11-02] "+name);
+//    	return LoginInfo.builder().name(name).token(jwtTokenProvider.generateToken(userId, name, null)).build();
+//    }
 }

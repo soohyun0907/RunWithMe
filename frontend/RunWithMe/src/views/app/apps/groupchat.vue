@@ -97,7 +97,7 @@
           <!-- START 채팅 방 이름 -->
           <div class="d-flex align-items-center">
             <img
-              :src="getSelectedUser.avatar"
+              src="@/assets/images/faces/3.jpg"
               alt=""
               class="avatar-sm rounded-circle mr-2"
             />
@@ -111,6 +111,7 @@
         <vue-perfect-scrollbar
           :settings="{ suppressScrollX: true, wheelPropagation: false }"
           class="chat-content perfect-scrollbar rtl-ps-none ps scroll"
+          ref='messageDisplay'
         >
           <div>
             <div onscroll="chat_on_scroll()"
@@ -123,10 +124,7 @@
               </div>
 
               <!-- START 나의 채팅 메시지 -->
-              <div
-                class="d-flex mb-30"
-                v-if="testUserId === message.sender"
-              >
+              <div class="d-flex mb-30" v-if="testUserId === message.sender">
                 <div class="message flex-grow-1">
                   <div class="d-flex">
                     <p class="mb-1 text-title text-16 flex-grow-1">
@@ -134,10 +132,10 @@
                     </p>
                     <!-- <span class="text-small text-muted">25 min ago</span> -->
                   </div>
-                  <p class="m-0" style="width:100px" >{{message.message}}</p>
+                  <p class="m-0" style="width: 100px">{{ message.message }}</p>
                 </div>
                 <img
-                  :src="getSelectedUser.avatar"
+                  src="@/assets/images/faces/2.jpg"
                   alt=""
                   class="avatar-sm rounded-circle ml-3"
                 />
@@ -169,7 +167,7 @@
         <!-- START 메시지 보내기 -->
         <div class="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
           <form class="inputForm">
-            <div class="form-group">
+            <!-- <div class="form-group">
               <input
                 type="text"
                 class="form-control form-control-rounded"
@@ -182,6 +180,19 @@
                 v-model="message"
                 v-on:keypress.enter="sendMessage('TALK')"
               />
+            </div> -->
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control form-control-rounded"
+                placeholder="Type your message"
+                name="message"
+                id="message"
+                cols="30"
+                rows="3"
+                spellcheck="false"
+                v-model="message"
+              />
             </div>
             <div class="d-flex">
               <div class="flex-grow-1"></div>
@@ -191,12 +202,6 @@
                 @click="sendMessage('TALK')"
               >
                 <i class="i-Paper-Plane"></i>
-              </button>
-              <button
-                class="btn btn-icon btn-rounded btn-outline-primary"
-                type="button"
-              >
-                <i class="i-Add-File"></i>
               </button>
             </div>
           </form>
@@ -241,6 +246,8 @@ export default {
       back: "[알림]",
       sock: null,
       ws: null,
+      flag:true,
+      diffScroll:0,
     };
   },
   methods: {
@@ -258,10 +265,20 @@ export default {
         console.log(store.state.chatrooms);
       });
     },
+    chatScroll() {
+      console.log("chatScroll")
+      var objDiv = document.getElementById("chatList");
+      if(this.flag){
+        objDiv.scrollTop = objDiv.scrollHeight
+      }
 
+    },
     choice(roomId) {
+      if(this.ws)
+        this.ws.disconnect();
       this.selectOneGroupChat(roomId);
       this.isMobile = false;
+      this.messages = [];
       setTimeout(() => {
         this.chat();
       }, 500);
@@ -278,18 +295,18 @@ export default {
       console.log(this.getSelectedChatroom.roomId);
       console.log("------------");
       var data = {
-          type: type,
-          roomId: this.getSelectedChatroom.roomId,
-          message: this.message,
-        } 
-      var header =  { 
-        'AUTH' : this.token,
-        'Content-Type':'application/json',
-      }
-      console.log(header)
-      this.ws.send(
-        "/pub/chat/message",JSON.stringify(data),{"AUTH":this.token}
-      );
+        type: type,
+        roomId: this.getSelectedChatroom.roomId,
+        message: this.message,
+      };
+      var header = {
+        AUTH: this.token,
+        "Content-Type": "application/json",
+      };
+      console.log(header);
+      this.ws.send("/pub/chat/message", JSON.stringify(data), {
+        AUTH: this.token,
+      });
       this.message = "";
     },
     recvMessage: function (recv) {
@@ -301,29 +318,27 @@ export default {
         sender: recv.sender,
         message: recv.message,
       });
+      var obj = document.getElementById("chatList");
+      obj.scrollTop = obj.scrollHeight;
     },
 
     chat() {
       http.get("/chat/user").then((response) => {
         this.sock = new SockJS("http://localhost:8080/ws-stomp");
         var _ws = Stomp.over(this.sock);
-        console.log(response.data);
-        console.log("------------------------");
-        
+
         var _this = this;
-        // this.testUserId="change"
         this.testUserId = response.data;
-        // this.token = this.auth
-        var _userName = this.testUserId
+        var _userName = this.testUserId;
         _ws.connect(
-          { "AUTH": this.token },
+          { AUTH: this.token },
           function (frame) {
             _ws.subscribe(
               "/sub/chat/room/" + _this.getSelectedChatroom.roomId,
               function (message) {
                 console.log("!!!!! ")
                 var recv = JSON.parse(message.body);
-                recv.get
+                recv.get;
                 console.log("RECV Sender");
                 console.log(recv);
                 _this.recvMessage(recv);
@@ -337,6 +352,27 @@ export default {
         );
         this.ws = _ws;
       });
+
+      var pre_diffHeight = 0;
+      var bottom_flag = true;
+      var chat_on_scroll = function () {
+        var objDiv = document.getElementById("chatList");
+
+        if (objDiv.scrollTop + objDiv.clientHeight == objDiv.scrollHeight) {
+          // 채팅창 전체높이 + 스크롤높이가 스크롤 전체높이와 같다면
+          // 이는 스크롤이 바닥을 향해있다는것이므로
+          // 스크롤 바닥을 유지하도록 플래그 설정
+          bottom_flag = true;
+        }
+
+        if (pre_diffHeight > objDiv.scrollTop + objDiv.clientHeight) {
+          // 스크롤이 한번이라도 바닥이 아닌 위로 상승하는 액션이 발생할 경우
+          // 스크롤 바닥유지 플래그 해제
+          bottom_flag = false;
+        }
+        //
+        pre_diffHeight = objDiv.scrollTop + objDiv.clientHeight;
+      };
     },
     // connect() {
     // const serverURL = "http://localhost:8080/ws-stomp"
@@ -378,13 +414,12 @@ export default {
       "userInfo",
       "auth",
     ]),
-
   },
 
   mounted: function () {
-    this.token = this.auth
-    console.log("here mount") 
-    console.log(this.token) 
+    this.token = this.auth;
+    console.log("here mount");
+    console.log(this.token);
     setTimeout(() => {
       this.selectAllGroupChat();
     }, 100);
