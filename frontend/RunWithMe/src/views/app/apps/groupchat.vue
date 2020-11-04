@@ -36,13 +36,15 @@
                 그룹 채팅 목록
               </div>
               <div
-                class="p-3 d-flex border-bottom align-items-center"
+                
                 v-for="chatroom in this.getChatRoom"
                 :key="chatroom.roomId"
               >
-                <h6 @click="choice(chatroom.roomId)" class="">
-                  {{ chatroom.name }}
-                </h6>
+                <div class="p-3 d-flex border-bottom align-items-center" v-if="chatroom.name.includes(search)">
+                  <h6 @click="choice(chatroom.roomId)" class="">
+                    {{ chatroom.name }}
+                  </h6>
+                </div>
               </div>
               <!-- <div
                 class="p-3 d-flex border-bottom align-items-center contact"
@@ -132,17 +134,17 @@
 
               <!-- START 나의 채팅 메시지 -->
               <div class="d-flex mb-20" v-if="testUserId === message.sender">
-                <div class="message flex-grow-1">
+                <div class="message flex-grow-1" style="width: 70%">
                   <div class="d-flex">
                     <p class="mb-1 text-title text-16 flex-grow-1">
                       {{ message.sender }}
                     </p>
                     <!-- <span class="text-small text-muted">25 min ago</span> -->
                   </div>
-                  <p class="m-0" style="width: 100px">{{ message.message }}</p>
+                  <p class="m-0" >{{ message.message }}</p>
                 </div>
                 <img
-                  src="@/assets/images/faces/2.jpg"
+                  :src="message.img"
                   alt=""
                   class="avatar-sm rounded-circle ml-3"
                 />
@@ -154,18 +156,18 @@
                 v-if="testUserId != message.sender && back != message.sender"
               >
                 <img
-                  src="@/assets/images/faces/1.jpg"
+                  :src="message.img"
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
                 />
-                <div class="message flex-grow-1">
+                <div class="message flex-grow-1" style="width: 70%">
                   <div class="d-flex">
                     <p class="mb-1 text-title text-16 flex-grow-1">
                       {{ message.sender }}
                     </p>
                     <!-- <span class="text-small text-muted">24 min ago</span> -->
                   </div>
-                  <p class="m-0" style="width: 100px">{{ message.message }}</p>
+                  <p class="m-0">{{ message.message }}</p>
                 </div>
               </div>
               <!-- END 상대방의 메시지 -->
@@ -175,7 +177,7 @@
 
         <!-- START 메시지 보내기 -->
         <div class="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
-          <form class="inputForm">
+          <form class="inputForm" onsubmit="return false">
             <!-- <div class="form-group">
               <input
                 type="text"
@@ -197,10 +199,8 @@
                 placeholder="메세지를 입력하세요"
                 name="message"
                 id="message"
-                cols="30"
-                rows="3"
-                spellcheck="false"
                 v-model="message"
+                v-on:keypress.enter="sendMessage('TALK')"
               />
             </div>
             <div class="d-flex">
@@ -210,7 +210,6 @@
                 type="button"
                 @click="sendMessage('TALK')"
               >
-                <i class="i-Paper-Plane"></i>
               </button>
             </div>
           </form>
@@ -311,11 +310,18 @@ export default {
       }
     },
     recvMessage: function (recv) {
+      console.log("*****************************");
+      console.log(recv);
+      console.log("*****************************");
+      if(recv.imgUrl == null){
+        recv.imgUrl = require("@/assets/images/faces/profile.jpg")
+      }
       this.userCount = recv.userCount;
       this.messages.push({
         type: recv.type,
         sender: recv.sender,
         message: recv.message,
+        img: recv.imgUrl,
       });
     },
 
