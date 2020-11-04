@@ -47,8 +47,16 @@ const routes = [
             component: () => import("./views/app/apps/challenges")
           },
           {
+            path: "createChallenge",
+            component: () => import("./views/app/apps/createChallenge")
+          },
+          {
             path: "payment",
             component: () => import("./views/app/apps/payment")
+          },
+          {
+            path: "paymentDone",
+            component: () => import("./views/app/apps/paymentDone")
           },
         ]
       },
@@ -80,18 +88,41 @@ const routes = [
       {
         path: "/app/mypages",
         component: () => import("./views/app/mypages"),
-        redirect: "/app/mypages/byarea",
+        redirect: "/app/mypages/mypageTab",
         children: [
           {
-            path: "byarea",
-            component: () => import("./views/app/mypages/byarea")
+            path: "mypageTab",
+            component: () => import("./views/app/mypages/mypageTab")
           },
           {
             path: "friends",
             component: () => import("./views/app/mypages/friends")
           },
+          {
+            path: "myChallenges",
+            component: () => import("./views/app/mypages/myChallenges")
+          },
         ]
       },
+
+      // challengeBoard
+      {
+        path: "/app/board",
+        component: () => import("./views/app/board"),
+        redirect: "/app/board/challengeBoard",
+        children: [
+          {
+            path: "challengeBoard",
+            component: () => import("./views/app/board/challengeBoard")
+          },
+          {
+            path : 'challengeBoardDetail',
+            component :()=> import("./views/app/board/challengeBoardDetail") ,
+            props: true
+          },
+        ]
+      },
+
     ]
   },
   // sessions

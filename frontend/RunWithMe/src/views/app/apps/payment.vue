@@ -16,17 +16,17 @@
 </template>
 
 <script>
+import { mobileModel } from 'mobile-device-detect';
 export default {
     methods: {
         chargeKakao() {
             var IMP = window.IMP;
-            IMP.init('imp42556076');
+            IMP.init("imp42556076");
             var money = $('input[name="cp_item"]:checked').val();
-            console.log(money);
+            // console.log(money);
             
-
             IMP.request_pay({
-                pg: 'kakao',
+                pg: 'kakaopay',
                 pay_method : 'card',
                 merchant_uid: 'merchant_' + new Date().getTime(),
                 name: '주문명 : 주문명 설정',
@@ -46,20 +46,20 @@ export default {
                     msg += '카드 승인번호 : ' + rsp.apply_num;
                     jQuery.ajax({
                         type: "GET", 
-                        url: "http://6a713d4e015f.ngrok.io/payment/charge/", //충전 금액값을 보낼 url 설정
-                        data: {
-                            "money" : money
-                        },
+                        url: "http://localhost:8080/payment/charge/"+money, //충전 금액값을 보낼 url 설정
                         headers: {
                             "AUTH":localStorage.getItem("auth")
                         }
                     });
+                    alert(msg);
+                    // document.location.href="/app/apps/payment";
+                    document.location.href="/app/apps/paymentDone"; //챌린지 참여 목록으로 이동?
                 } else {
                     var msg = '결제에 실패하였습니다.';
                     msg += '에러내용 : ' + rsp.error_msg;
+                    alert(msg);
+                    document.location.href="/app/apps/payment";
                 }
-                alert(msg);
-                // document.location.href="/app/apps/payment"; //alert창 확인 후 이동할 url 설정
             });
         }
     }
