@@ -40,4 +40,7 @@ public class ChallengeUser {
 	
 	@Column(name = "success")
 	private boolean success;
+	
+	@Column(name = "donation")
+	private Integer donation;
 }
