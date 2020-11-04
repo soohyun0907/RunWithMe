@@ -142,7 +142,7 @@
                   <p class="m-0" style="width: 100px">{{ message.message }}</p>
                 </div>
                 <img
-                  src="@/assets/images/faces/2.jpg"
+                  :src= message.img
                   alt=""
                   class="avatar-sm rounded-circle ml-3"
                 />
@@ -154,7 +154,7 @@
                 v-if="testUserId != message.sender && back != message.sender"
               >
                 <img
-                  src="@/assets/images/faces/1.jpg"
+                  :src= message.img
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
                 />
@@ -311,11 +311,16 @@ export default {
       }
     },
     recvMessage: function (recv) {
+      console.log("*****************************")
+      console.log(recv)
+      console.log("*****************************")
       this.userCount = recv.userCount;
       this.messages.push({
         type: recv.type,
         sender: recv.sender,
         message: recv.message,
+        ////////////////////////////////////////////////////////
+        img: recv.imgUrl
       });
     },
 
