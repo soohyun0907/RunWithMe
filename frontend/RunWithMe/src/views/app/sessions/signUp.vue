@@ -57,7 +57,7 @@
                 </b-form-group>
                 <b-row>
                   <b-col md="8" class=" mb-30">
-                   <b-card class="h-100" title="주 활동지역 선택">
+                   <b-card title="주 활동지역 선택">
 
                     <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
                       <div v-for="(sido, index) in sidos" v-bind:key="index">
@@ -185,7 +185,7 @@ export default {
       password: "",
       repeatPassword: "",
       emailAuth: false,
-      bgImage: require("@/assets/images/photo-wide-4.jpg"),
+      bgImage: require("@/assets/images/signin/loginpage1.png"),
       logo: require("@/assets/images/logo.png"),
       signInImage: require("@/assets/images/photo-long-3.jpg"),
       submitStatus: null,
