@@ -144,10 +144,6 @@ const routes = [
         path: "signUp",
         component: () => import("./views/app/sessions/signUp")
       },
-      {
-        path: "forgot",
-        component: () => import("./views/app/sessions/forgot")
-      }
     ]
   },
 
