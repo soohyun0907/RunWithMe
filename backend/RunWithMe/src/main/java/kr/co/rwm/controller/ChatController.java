@@ -36,7 +36,6 @@ public class ChatController {
     	System.out.println(message.getMessage());
     	System.out.println("****************************");
 //    	String token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ0ZXN0NCIsImlhdCI6MTYwMzM3NzIzOSwiZXhwIjoxNjAzMzgwODM5fQ.mWC-X7UtaQ87EuWW_pcwbMt8tL2-naiShegDfW3t090";
-    	System.out.println(token);
         String email = jwtTokenProvider.getUserEmailFromJwt(token.toString());
         String nickname = userService.findByUserEmail(email).get().getUsername();
         // 로그인 회원 정보로 대화명 설정
