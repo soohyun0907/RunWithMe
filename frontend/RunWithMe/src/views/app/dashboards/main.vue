@@ -10,29 +10,44 @@
           :opacity="opacity"
           :blur="blur"
           rounded="sm">
-            <img :src="slide.img" />
+            <img :src="slide.challengeImg" />
             <template #overlay>
               <div class="text-center">
                 <h3>{{slide.title}}</h3>
-                <h5>StartDate ~ EndDate</h5>
+                <h5>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h5>
               </div>
             </template>
           </b-overlay>
-          <h3 v-if="slidesOverlayShow">title</h3>
         </div>
       </slide>
     </carousel-3d>
     <!-- <vueper-slides
       class="no-shadow"
-      :visible-slides="2.5"
+      :visible-slides="1.7"
       :arrows="false"
       :slide-ratio="1 / 4"
       :gap="3"
       :dragging-distance="0"
-      fixedHeight="150px"
+      fixedHeight="250px"
       prevent-y-scroll>
       <vueper-slide v-for="(slide, i) in slides" :index="i" :key="i"
-        :image="slide.img" />
+        :image="slide.challengeImg" >
+        <div @click="toggleOverlay">
+          <b-overlay 
+          :show="slidesOverlayShow" 
+          :variant="variant"
+          :opacity="opacity"
+          :blur="blur"
+          rounded="sm">
+            <template #overlay>
+              <div class="text-center">
+                <h3>{{slide.title}}</h3>
+                <h5>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h5>
+              </div>
+            </template>
+          </b-overlay>
+        </div>
+      </vueper-slide>
     </vueper-slides> -->
     <hr>
     <b-card style="margin-bottom:15px;">
@@ -43,12 +58,11 @@
       </div>
       <div class="ul-widget__body">
         <div class="ul-widget1">
-          <div class="ul-widget__item ul-widget4__users" v-for="ranker in rankList" :key="ranker.id">
-            <!-- <div > -->
-              <h5 style="margin-right:5px;">{{ ranker.id }} </h5>
+          <div class="ul-widget__item ul-widget4__users" v-for="ranker in rankList" :key="ranker.rankId">
+            <h5 style="margin-right:5px;">{{ ranker.rankId }} </h5>
               <div class="ul-widget4__img">
                 <img
-                  :src="ranker.imgUrl"
+                  :src="ranker.userId.profile"
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
@@ -56,21 +70,26 @@
               </div>
               <div class="ul-widget2__info ul-widget4__users-info">
                 <router-link :to="`/app/runnings/friendsDetail`">
-                <!-- <a href="#" class="ul-widget2__title"> -->
-                  {{ranker.nickname}}
+                  {{ranker.userId.username}}
                 </router-link>
-                <!-- </a> -->
               </div>
               <span class="ul-widget4__number t-font-boldest text-success">
                 {{ranker.totalExp}} p
               </span>
-            <!-- </div> -->
           </div>
         </div>
       </div>
     </b-card>
     <hr>
     <h3>친구 피드 시작</h3>
+    <div v-if="!haveFriends">
+      <br>
+      <span>아직 친구가 없어요. 친구를 등록해주세요!</span>
+      <router-link tag="a" class to="/app/runnings/neighborhoodList">
+        <b-button variant="outline-dark m-1">주변에 사는 러너들 구경하러 가기</b-button>
+      </router-link>
+      <br>
+    </div>
     <div
       ref="rowView"
       class="row "
@@ -83,7 +102,7 @@
         }"
         class="list-item "
         :key="index"
-        v-for="(item, index) in items"
+        v-for="(item, index) in friendsFeed"
         transition="list"
       >
         <router-link :to="`/app/runnings/runningResult`">
@@ -142,7 +161,6 @@ export default {
   },
   data() {
     return {
-      // items: items,
       isListView: false,
       // overlay data
       variant: 'white',
@@ -151,16 +169,17 @@ export default {
       slidesOverlayShow: false,
       slides: [],
       rankList : [],
-      items: [],
+      friendsFeed: [],
+      haveFriends: true,
     };
   },
   created() {
-    this.getChallenges();
     this.getTopRankers();
     this.getFriendsRunning();
   },
   mounted() {
-    console.log("Smain hihi")
+    this.getChallengesIng();
+    this.getChallengesCommingSoon();
   },
   methods: {
     convertToTime(origin) {
@@ -175,76 +194,82 @@ export default {
       else
         this.slidesOverlayShow = true;
     },
-    getChallenges() {
+    getChallengesIng() {
       http
-        .get(`challenges/ing`, {
-          headers: {
-            "Content-type": "application/json",
-          },
-        })
-        .then(res => {
-          console.log(res)
-          console.log(res.data.data.length)
-          let obj;
-          for(var i=0; i<res.data.data.length; i++) {
-            obj = new Object();
-            obj.title = res.data.data[i].title;
-            obj.img = res.data.data[i].challengeImg;
-            this.slides.push(obj);
+        .get("challenges/ing")
+        .then(({data}) => {
+          if(data.status==200){
+            this.slides = data.data;
           }
-          console.log(this.slides);
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        });
+    },
+    getChallengesCommingSoon(){
+      http
+        .get("challenges/comingsoon")
+        .then(({data}) => {
+          if(data.status==200){
+            let obj;
+            data.data.forEach(element => {
+              obj = new Object();
+              obj.title = element.title;
+              obj.challengeImg = element.challengeImg;
+              obj.startTime = element.startTime;
+              obj.endTime = element.endTime;
+              this.slides.push(obj);
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
         });
     },
     getTopRankers() {
       http
-        .get(`ranks/top/total`, {
-          headers: {
-            "Content-type": "application/json",
-          },
-        })
-        .then(res => {
-          console.log(res)
-          let obj;
-          for(var i=0; i<res.data.data.length; i++) {
-            obj = new Object();
-            obj.id = i+1;
-            obj.userId = res.data.data[i].userId.userId;
-            obj.nickname = res.data.data[i].userId.userEmail;
-            obj.imgUrl = res.data.data[i].userId.imgUrl;
-            obj.totalExp = res.data.data[i].totalExp;
-            this.rankList.push(obj);
+        .get(`ranks/top/total`)
+        .then(({data}) => {
+          if(data.status == 200){
+            this.rankList = data.data;
           }
-          console.log(this.rankList);
-
-        });
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        })
     },
     getFriendsRunning() {
       http
-        .get(`runnings/friends`, {
-          headers: {
-            "Content-type": "application/json",
-          },
-        })
-        .then(res => {
-          console.log(res)
-          let obj;
-          for(var i=0; i<res.data.data.friends.length; i++) {
-            obj = new Object();
-            if(res.data.data.runnings[i] == null) {
-              obj.total_distance = "기록이 없습니다";
-            }else {
-              obj.runningId = res.data.data.runnings[i].runningId;
-              obj.total_distance = res.data.data.runnings[i].accDistance;
-              obj.accumulcated_time = res.data.data.runnings[i].accTime;
-              obj.running_avg_pace = obj.accumulcated_distance / obj.total_distance;
+        .get(`runnings/friends`)
+        .then(({data}) => {
+          if(data.status == 200){
+            let obj;
+            for(var i=0; i<data.data.friends.length; i++) {
+              obj = new Object();
+              if(data.data.runnings[i] == null) {
+                obj.total_distance = "기록이 없습니다";
+              }else {
+                obj.runningId = data.data.runnings[i].runningId;
+                obj.total_distance = data.data.runnings[i].accDistance;
+                obj.accumulcated_time = data.data.runnings[i].accTime;
+                obj.running_avg_pace = obj.accumulcated_distance / obj.total_distance;
+              }
+              obj.userId = data.data.friends[i].userId;
+              obj.img = data.data.friends[i].profile;
+              obj.title = data.data.friends[i].username;
+              this.friendsFeed.push(obj);
             }
-            obj.userId = res.data.data.friends[i].userId;
-            obj.img = res.data.data.friends[i].profile;
-            obj.title = res.data.data.friends[i].username;
-            this.items.push(obj);
+            if(this.friendsFeed.length == 0)
+              this.haveFriends = false;
           }
-          console.log(this.items);
-        });
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        })
     }
   }
 };
