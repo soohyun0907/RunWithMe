@@ -13,7 +13,7 @@ const routes = [
   {
     path: "/",
     component: () => import("./views/app"), //webpackChunkName app
-    // beforeEnter: authenticate,
+    beforeEnter: authenticate,
     redirect: "/app/dashboards/main",
 
     children: [
@@ -49,6 +49,10 @@ const routes = [
           {
             path: "createChallenge",
             component: () => import("./views/app/apps/createChallenge")
+          },
+          {
+            path: "payChallenge",
+            component: () => import("./views/app/apps/payChallenge")
           },
           {
             path: "payment",

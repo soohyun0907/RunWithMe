@@ -8,44 +8,42 @@
                     <b-spinner type="grow" small></b-spinner>
                     <strong>진행 중</strong>
                 </template>
-                <b-row v-for="(challenge, index) in challenges" :key="index">
+                <div v-if="!haveChallengesIng">
+                    <p>진행 중인 챌린지가 없습니다.</p>
+                    <p>조금만 기다려주세요!</p>
+                </div>
+                <b-row v-for="challenge in challengesIng" :key="challenge.challengeId">
                     <b-col lg="4" class="mb-30">
                         <b-card class="ul-border__bottom">
                             <div class="text-center">
                                 <h5 class="card-title text-primary">
-                                    {{challenge.title}}
+                                    {{ challenge.title }}
                                 </h5>
-                                <!-- <p>기간: 2020.10.26 ~ 2020.11.13</p> -->
-                                <a class="text-default collapsed" v-b-toggle="'collapse-'+index">
+                                <a class="text-default collapsed" v-b-toggle="'collapse-'+challenge.challengeId">
                                     <i class="i-Arrow-Down-2 t-font-boldest text-primary"></i>
                                 </a>
                             </div>
-                            <b-collapse :id="'collapse-'+index" class="mt-3 text-center">
+                            <b-collapse :id="'collapse-'+challenge.challengeId" class="mt-3 text-center">
                                 <img :src="challenge.img" />
-                                <p>기간: 2020.10.26 ~ 2020.11.13</p>
-                                <p>불쌍한 복순이를 위해 모금에 함께해주세요!</p>
-                                <h6>모인 금액</h6>
+                                <p> 기간: {{ challenge.startTime }} ~ {{ challenge.endTime }} </p>
+                                <p> 설명: {{ challenge.content }} </p>
+                                <p> 현재 참여 인원: {{ challenge.participant }} </p>
+                                <p> 개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM </p>
+                                <h6>모인 금액 {{ challenge.donateCurrent }} / {{ challenge.donateGoal }} 원</h6>
                                 <b-progress class="mb-3"
                                     variant="success"
-                                    :max="challenge.max"
-                                    :value="challenge.value.toFixed(2)"
+                                    :max="challenge.donateGoal"
+                                    :value="challenge.donateCurrent"
                                     animated show-progress>
                                 </b-progress>
-                                <h6>전체 달성률</h6>
+                                <h6>전체 달성률 {{ challenge.distanceCurrent }} / {{ challenge.distanceGoal }} KM</h6>
                                 <b-progress class="mb-3"
                                     variant="warning"
-                                    :max="challenge.max"
-                                    :value="challenge.value.toFixed(2)"
+                                    :max="challenge.distanceGoal"
+                                    :value="challenge.distanceCurrent"
                                     animated show-progress>
                                 </b-progress>
-                                <h6>개인 달성률</h6>
-                                <b-progress class="mb-3"
-                                    variant="danger"
-                                    :max="challenge.max"
-                                    :value="challenge.value.toFixed(2)"
-                                    animated show-progress>
-                                </b-progress>
-                                <b-button variant="info ripple m-1">신청하기</b-button>
+                                <b-button variant="info ripple m-1" @click="showConfirmModal(challenge.challengeId, challenge.title, challenge.personalDistanceGoal)">신청하기</b-button>
                             </b-collapse>
                         </b-card>
                     </b-col>
@@ -57,7 +55,44 @@
                     <b-spinner type="border" small></b-spinner>
                     진행 예정
                 </template>
-                <p class="p-3">준비중입니다.</p>
+                <div v-if="!haveChallengesSoon">
+                    <p>진행 예정인 챌린지가 없습니다.</p>
+                    <p>조금만 기다려주세요!</p>
+                </div>
+                <b-row v-for="challenge in challengesSoon" :key="challenge.challengeId">
+                    <b-col lg="4" class="mb-30">
+                        <b-card class="ul-border__bottom">
+                            <div class="text-center">
+                                <h5 class="card-title text-primary">
+                                    {{ challenge.title }}
+                                </h5>
+                                <a class="text-default collapsed" v-b-toggle="'collapse-'+challenge.challengeId">
+                                    <i class="i-Arrow-Down-2 t-font-boldest text-primary"></i>
+                                </a>
+                            </div>
+                            <b-collapse :id="'collapse-'+challenge.challengeId" class="mt-3 text-center">
+                                <img :src="challenge.img" />
+                                <p> 기간: {{ challenge.startTime }} ~ {{ challenge.endTime }} </p>
+                                <p> {{ challenge.content }} </p>
+                                <h6>모인 금액 {{ challenge.donateCurrent }} / {{ challenge.donateGoal }} 원</h6>
+                                <b-progress class="mb-3"
+                                    variant="success"
+                                    :max="challenge.donateGoal"
+                                    :value="challenge.donateCurrent"
+                                    animated show-progress>
+                                </b-progress>
+                                <h6>전체 달성률 {{ challenge.distanceCurrent }} / {{ challenge.distanceGoal }} KM</h6>
+                                <b-progress class="mb-3"
+                                    variant="warning"
+                                    :max="challenge.distanceGoal"
+                                    :value="challenge.distanceCurrent"
+                                    animated show-progress>
+                                </b-progress>
+                                <b-button variant="info ripple m-1" @click="showConfirmModal(challenge.challengeId, challenge.title, challenge.personalDistanceGoal)">신청하기</b-button>
+                            </b-collapse>
+                        </b-card>
+                    </b-col>
+                </b-row>
             </b-tab>
 
             <b-tab>
@@ -65,67 +100,187 @@
                     <b-spinner type="border" small></b-spinner>
                     진행 종료
                 </template>
-                <p class="p-3">다음에 참여해주세요.</p>
+                <div v-if="!haveChallengesDone">
+                    <p>진행 종료된 챌린지가 없습니다.</p>
+                    <p>조금만 기다려주세요!</p>
+                </div>
+                <b-row v-for="challenge in challengesDone" :key="challenge.challengeId">
+                    <b-col lg="4" class="mb-30">
+                        <b-card class="ul-border__bottom">
+                            <div class="text-center">
+                                <h5 class="card-title text-primary">
+                                    {{ challenge.title }}
+                                </h5>
+                                <a class="text-default collapsed" v-b-toggle="'collapse-'+challenge.challengeId">
+                                    <i class="i-Arrow-Down-2 t-font-boldest text-primary"></i>
+                                </a>
+                            </div>
+                            <b-collapse :id="'collapse-'+challenge.challengeId" class="mt-3 text-center">
+                                <img :src="challenge.img" />
+                                <p> 기간: {{ challenge.startTime }} ~ {{ challenge.endTime }} </p>
+                                <p> {{ challenge.content }} </p>
+                                <h6>모인 금액</h6>
+                                <b-progress class="mb-3"
+                                    variant="success"
+                                    :max="challenge.donateGoal"
+                                    :value="challenge.donateCurrent"
+                                    animated show-progress>
+                                </b-progress>
+                                <h6>전체 달성률</h6>
+                                <b-progress class="mb-3"
+                                    variant="warning"
+                                    :max="challenge.distanceGoal"
+                                    :value="challenge.distanceCurrent"
+                                    animated show-progress>
+                                </b-progress>
+                            </b-collapse>
+                        </b-card>
+                    </b-col>
+                </b-row>
             </b-tab>
         </b-tabs>
     </div>
 </template>
 
 <script>
+import http from "@/utils/http-common";
+
 export default {
     name: 'challenges',
     data() {
         return {
-            challenges: [
-                {
-                    title : "복순이 살리기",
-                    img : require('@/assets/images/photo-long-1.jpg'),
-                    value: 75,
-                    max: 100
-                },
-                {
-                    title : "동해 앞바다 정화하기",
-                    img : require('@/assets/images/photo-long-2.jpg'),
-                    value: 75,
-                    max: 100
-                },
-                {
-                    title : "커플 마라톤",
-                    img : require('@/assets/images/photo-long-3.jpg'),
-                    value: 75,
-                    max: 100
-                },
-                {
-                    title : "세계 소녀의 달",
-                    img : require('@/assets/images/photo-long-4.jpg'),
-                    value: 75,
-                    max: 100
-                },
-                {
-                    title : "challenge 5",
-                    img : require('@/assets/images/photo-long-1.jpg'),
-                    value: 75,
-                    max: 100
-                },
-                {
-                    title : "challenge 6",
-                    img : require('@/assets/images/photo-long-2.jpg'),
-                    value: 75,
-                    max: 100
-                },
-                {
-                    title : "challenge 7",
-                    img : require('@/assets/images/photo-long-3.jpg'),
-                    value: 75,
-                    max: 100
-                },
-                {
-                    title : "challenge 8",
-                    img : require('@/assets/images/photo-long-4.jpg'),
-                    value: 75,
-                    max: 100
-                },
-            ]
+            challengesIng: [],
+            challengesSoon: [],
+            challengesDone: [],
+            haveChallengesIng: true,
+            haveChallengesSoon: true,
+            haveChallengesDone: true,
+            // confirm-message-modal
+            confirmModal: ""
+        }
+    },
+    created() {
+        this.getChallengesIng();
+        this.getChallengesCommingSoon();
+        this.getChallengesDone();
+    },
+    methods: {
+        showConfirmModal(challengeId, challengeTitle, personalDistanceGoal){
+            this.confirmModal = "";
+            this.$bvModal
+                .msgBoxConfirm( challengeTitle + " 챌린지에 " + personalDistanceGoal + "KM 목표로 참여하시겠습니까?", {
+                title: "참여하시겠습니까?",
+                size: "sm",
+                buttonSize: "sm",
+                okVariant: "danger",
+                okTitle: "YES",
+                cancelTitle: "NO",
+                footerClass: "p-2",
+                hideHeaderClose: false,
+                centered: true
+            })
+            .then(value => {
+                this.confirmModal = value;
+                if(this.confirmModal)
+                    this.$router.push("/app/apps/payChallenge?no=" + challengeId);
+            })
+            .catch(err => {
+                // An error occurred
+                console.log(error);
+            });
+        },
+        getChallengesIng() {
+            http
+                .get("challenges/ing")
+                .then(({data}) => {
+                    if(data.status==200){
+                        let obj;
+                        data.data.forEach(element => {
+                            obj = new Object();
+                            obj.challengeId = element.challengeId;
+                            obj.title = element.title;
+                            obj.content = element.content;
+                            obj.img = element.challengeImg;
+                            obj.startTime = element.startTime.substring(0,10);
+                            obj.endTime = element.endTime.substring(0,10);
+                            obj.distanceGoal = element.distanceGoal;
+                            obj.distanceCurrent = element.distanceCurrent;
+                            obj.donateGoal = element.donateGoal;
+                            obj.donateCurrent = element.donateCurrent;
+                            obj.personalDistanceGoal = element.personalDistanceGoal;
+                            obj.participant = element.participant;
+                            this.challengesIng.push(obj);
+                        });
+                        if(this.challengesIng.length == 0)
+                            this.haveChallengesIng = false;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return;
+                });
+        },
+        getChallengesCommingSoon(){
+            http
+                .get("challenges/comingsoon")
+                .then(({data}) => {
+                    if(data.status==200){
+                        let obj;
+                        data.data.forEach(element => {
+                            obj = new Object();
+                            obj.challengeId = element.challengeId;
+                            obj.title = element.title;
+                            obj.content = element.content;
+                            obj.img = element.challengeImg;
+                            obj.startTime = element.startTime.substring(0,10);
+                            obj.endTime = element.endTime.substring(0,10);
+                            obj.distanceGoal = element.distanceGoal;
+                            obj.distanceCurrent = element.distanceCurrent;
+                            obj.donateGoal = element.donateGoal;
+                            obj.donateCurrent = element.donateCurrent;
+                            obj.personalDistanceGoal = element.personalDistanceGoal;
+                            obj.participant = element.participant;
+                            this.challengesSoon.push(obj);
+                        });
+                        if(this.challengesSoon.length == 0)
+                            this.haveChallengesSoon = false;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return;
+                });
+        },
+        getChallengesDone(){
+            http
+                .get("challenges/end")
+                .then(({data}) => {
+                    if(data.status==200){
+                        let obj;
+                        data.data.forEach(element => {
+                            obj = new Object();
+                            obj.challengeId = element.challengeId;
+                            obj.title = element.title;
+                            obj.content = element.content;
+                            obj.img = element.challengeImg;
+                            obj.startTime = element.startTime.substring(0,10);
+                            obj.endTime = element.endTime.substring(0,10);
+                            obj.distanceGoal = element.distanceGoal;
+                            obj.distanceCurrent = element.distanceCurrent;
+                            obj.donateGoal = element.donateGoal;
+                            obj.donateCurrent = element.donateCurrent;
+                            obj.personalDistanceGoal = element.personalDistanceGoal;
+                            obj.participant = element.participant;
+                            this.challengesDone.push(obj);
+                        });
+                        if(this.challengesDone.length == 0)
+                            this.haveChallengesDone = false;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return;
+                });
         }
     }
 }
