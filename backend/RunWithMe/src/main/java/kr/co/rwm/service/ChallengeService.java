@@ -76,6 +76,14 @@ public interface ChallengeService {
 	public ChallengeUser participateChallenge(int challengeId, int donation, int userId);
 	
 	/**
+	 * 챌린지 참여 취소
+	 * @param challengeId
+	 * @param donation
+	 * @param userId
+	 */
+	public Challenge cancelChallenge(int challengeId, int donation, int userId);
+	
+	/**
 	 * 유저가 참여하고 있는 챌린지 아이디 가져오기
 	 * @param userId
 	 * @return
