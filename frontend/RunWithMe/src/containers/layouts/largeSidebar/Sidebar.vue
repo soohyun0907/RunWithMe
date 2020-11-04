@@ -67,12 +67,12 @@
           data-parent="apps"
           :class="{ 'd-block': selectedParentMenu == 'apps' }"
         >
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/apps/chat">
               <i class="nav-icon i-Speach-Bubble-3"></i>
               <span class="item-name">Chat</span>
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link tag="a" class to="/app/apps/groupchat">
               <i class="nav-icon i-Speach-Bubble-3"></i>

@@ -169,7 +169,7 @@
         <!-- START 메시지 보내기 -->
         <div class="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
           <form class="inputForm">
-            <div class="form-group">
+            <!-- <div class="form-group">
               <input
                 type="text"
                 class="form-control form-control-rounded"
@@ -181,6 +181,19 @@
                 spellcheck="false"
                 v-model="message"
                 v-on:keypress.enter="sendMessage('TALK')"
+              />
+            </div> -->
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control form-control-rounded"
+                placeholder="Type your message"
+                name="message"
+                id="message"
+                cols="30"
+                rows="3"
+                spellcheck="false"
+                v-model="message"
               />
             </div>
             <div class="d-flex">
@@ -263,8 +276,11 @@ export default {
 
     },
     choice(roomId) {
+      if(this.ws)
+        this.ws.disconnect();
       this.selectOneGroupChat(roomId);
       this.isMobile = false;
+      this.messages = [];
       setTimeout(() => {
         this.chat();
       }, 500);
