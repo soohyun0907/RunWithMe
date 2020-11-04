@@ -247,15 +247,17 @@ public class ChallengeController {
 	 * @return
 	 */
 	@ApiOperation(value = "챌린지 참여", response = ResponseEntity.class)
-	@PostMapping("/runners/{challengeId}")
-	public ResponseEntity participateChallenge(@PathVariable int challengeId, HttpServletRequest request) {
+	@PostMapping("/runners")
+	public ResponseEntity participateChallenge(@RequestBody HashMap<String, Integer> map, HttpServletRequest request) {
 		System.out.println("/challenges/participate - 유저가 챌린지에 참여합니다.");
 		String token = request.getHeader("AUTH");
 		int userId = 0;
 		if (jwtTokenProvider.validateToken(token)) {
 			userId = jwtTokenProvider.getUserIdFromJwt(token);
 		}
-		ChallengeUser challengeUser = challengeService.participateChallenge(challengeId, userId);
+		int challengeId = map.get("challengeId");
+		int donation = map.get("donation");
+		ChallengeUser challengeUser = challengeService.participateChallenge(challengeId, donation, userId);
 
 		return new ResponseEntity<Response>(
 				new Response(StatusCode.OK, ResponseMessage.CHALLENGE_PARTICIPATE_SUCCESS, challengeUser),
