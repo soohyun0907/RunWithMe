@@ -254,6 +254,8 @@ export default {
 
     choice: function(uid){
       // this.createAndSelectChatroomAction(uid);
+      if(this.ws)
+        this.ws.disconnect();
       this.isMobile = false;
       this.messages = []
       console.log(this.auth);
