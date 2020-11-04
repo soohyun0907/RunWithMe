@@ -51,6 +51,10 @@ const routes = [
             component: () => import("./views/app/apps/createChallenge")
           },
           {
+            path: "payChallenge",
+            component: () => import("./views/app/apps/payChallenge")
+          },
+          {
             path: "payment",
             component: () => import("./views/app/apps/payment")
           },
