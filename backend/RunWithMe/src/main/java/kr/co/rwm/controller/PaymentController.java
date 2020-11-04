@@ -45,7 +45,7 @@ public class PaymentController {
 	public ResponseEntity payment(@PathVariable int money, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		if (jwtTokenProvider.validateToken(token)) {
-			long uid = jwtTokenProvider.getUserIdFromJwt(token);
+			int uid = jwtTokenProvider.getUserIdFromJwt(token);
 			if(userService.pay(uid, money)) {
 				return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.PAY_SUCCESS),
 						HttpStatus.OK);
