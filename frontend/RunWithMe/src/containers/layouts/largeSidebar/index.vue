@@ -14,6 +14,7 @@
         </transition>
         </div>
         <div  class="flex-grow-1"></div>
+        <appFooter />
       </div>
     </main>
   </div>
@@ -22,12 +23,14 @@
 <script>
 import Sidebar from "./Sidebar";
 import TopNav from "./TopNav";
+import appFooter from "./footer";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
     Sidebar,
     TopNav,
+    appFooter
   },
   data() {
     return {};

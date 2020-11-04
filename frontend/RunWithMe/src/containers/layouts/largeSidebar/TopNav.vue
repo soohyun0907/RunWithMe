@@ -34,7 +34,7 @@
           variant="link"
         >
           <template slot="button-content">
-            <span class="badge badge-primary">3</span>
+            <span class="badge badge-primary">1</span>
             <i class="i-Bell text-muted header-icon"></i>
           </template>
           <!-- Notification dropdown -->
@@ -51,26 +51,24 @@
               </div>
               <div class="notification-details flex-grow-1">
                 <p class="m-0 d-flex align-items-center">
-                  <span>새로운 채팅</span>
+                  <!-- <span>New message</span> -->
                   <!-- <span class="badge badge-pill badge-primary ml-1 mr-1">new</span> -->
-                  <span class="flex-grow-1"></span>
-                  <span class="text-small text-muted ml-auto">10분전</span>
+                  <!-- <span class="flex-grow-1"></span>
+                  <span class="text-small text-muted ml-auto">10 sec ago</span> -->
                 </p>
                 <p class="text-small text-muted m-0">
-                  명택 : 오늘 뛰었음?
+                  서비스 준비 중 입니다.
                 </p>
               </div>
             </div>
-
-
-            <div class="dropdown-item d-flex">
+            <!-- <div class="dropdown-item d-flex">
               <div class="notification-icon">
                 <i class="i-Receipt-3 text-success mr-1"></i>
               </div>
               <div class="notification-details flex-grow-1">
                 <p class="m-0 d-flex align-items-center">
-                  <span>친구 추가 신청</span>
-                  <!-- <span class="badge badge-pill badge-success ml-1 mr-1">new</span> -->
+                  <span>New order received</span>
+                  <span class="badge badge-pill badge-success ml-1 mr-1">new</span>
                   <span class="flex-grow-1"></span>
                   <span class="text-small text-muted ml-auto">2시간 전</span>
                 </p>
@@ -84,8 +82,8 @@
               </div>
               <div class="notification-details flex-grow-1">
                 <p class="m-0 d-flex align-items-center">
-                  <span>새로운 채팅</span>
-                  <!-- <span class="badge badge-pill badge-primary ml-1 mr-1">new</span> -->
+                  <span>Product out of stock</span>
+                  <span class="badge badge-pill badge-danger ml-1 mr-1">3</span>
                   <span class="flex-grow-1"></span>
                   <span class="text-small text-muted ml-auto">20분전</span>
                 </p>
@@ -101,8 +99,8 @@
               </div>
               <div class="notification-details flex-grow-1">
                 <p class="m-0 d-flex align-items-center">
-                  <span>친구 추가 성공!</span>
-                  <!-- <span class="badge badge-pill badge-danger ml-1 mr-1">3</span> -->
+                  <span>Server Up!</span>
+                  <span class="badge badge-pill badge-success ml-1 mr-1">3</span>
                   <span class="flex-grow-1"></span>
                   <span class="text-small text-muted ml-auto"
                     >10시간 전</span>
@@ -111,8 +109,7 @@
                   용용님이 친구추가를 수락했습니다!
                 </p>
               </div>
-            </div>
-            
+            </div> -->
             <!-- </div> -->
           </vue-perfect-scrollbar>
         </b-dropdown>
@@ -144,26 +141,24 @@
             <div class="dropdown-header">
               <i class="i-Lock-User mr-1"></i> {{userInfo.username}}님
             </div>
-            <a class="dropdown-item">Account settings</a>
-            <a class="dropdown-item">Billing history</a>
-            <a class="dropdown-item" href="#" @click.prevent="logoutUser"
-              >Sign out</a
-            >
+            <!-- <a class="dropdown-item">Account settings</a>
+            <a class="dropdown-item">Billing history</a> -->
+            <a class="dropdown-item" href="#" @click.prevent="logoutUser">Sign out</a>
           </div>
         </b-dropdown>
       </div>
     </div>
-    <search-component
+    <!-- <search-component
       :isSearchOpen.sync="isSearchOpen"
       @closeSearch="toggleSearch"
-    ></search-component>
+    ></search-component> -->
 
     <infinite-slide-bar duration="20s" :barStyle="{ padding: '5px 0' }">
       <div class="items">
-        <div v-for="ranker in rankList" :key="ranker.id" style="margin-right:50px;">
-          <img class="profile-picture rounded-circle avatar-sm" :src="ranker.imgUrl">
-          {{ranker.id}}. {{ranker.nickname}}
-          {{ranker.accumulcated_distance}} KM
+        <div v-for="ranker in rankList" :key="ranker.rankId" style="margin-right:50px;">
+          <img class="profile-picture rounded-circle avatar-sm" :src="ranker.userId.profile">
+          {{ranker.rankId}}. {{ranker.userId.username}}
+          {{ranker.totalExp}} p
         </div>
       </div>
     </infinite-slide-bar>
@@ -174,17 +169,16 @@
 <script>
 import Util from "@/utils";
 import Sidebar from "./Sidebar";
-import searchComponent from "../common/search";
 import { isMobile } from "mobile-device-detect";
 import { mapGetters, mapActions } from "vuex";
 import { mixin as clickaway } from "vue-clickaway";
 import InfiniteSlideBar from 'vue-infinite-slide-bar';
+import http from "@/utils/http-common";
 
 export default {
   mixins: [clickaway],
   components: {
     Sidebar,
-    searchComponent,
     InfiniteSlideBar
   },
 
@@ -192,45 +186,15 @@ export default {
     return {
       isDisplay: true,
       isStyle: true,
-      isSearchOpen: false,
+      // isSearchOpen: false,
       isMouseOnMegaMenu: true,
       isMegaMenuOpen: false,
-      rankList : [
-        {
-          id: 1,
-          nickname: "Timothy Carlson",
-          imgUrl: "/img/1.jpg",
-          accumulcated_distance: 120,
-        },
-        {
-          id: 2,
-          nickname: "Jaret Leto",
-          imgUrl: "/img/2.jpg",
-          accumulcated_distance: 100,
-        },
-        {
-          id: 3,
-          nickname: "Kim",
-          imgUrl: "/img/3.jpg",
-          accumulcated_distance: 95,
-        },
-        {
-          id: 4,
-          nickname: "Lee",
-          imgUrl: "/img/4.jpg",
-          accumulcated_distance: 80,
-        },
-        {
-          id: 5,
-          nickname: "Lee",
-          imgUrl: "/img/4.jpg",
-          accumulcated_distance: 80,
-        },
-      ]
+      rankList : []
     };
   },
   mounted() {
     // document.addEventListener("click", this.closeMegaMenu);
+    this.getTopRankers();
   },
   computed: {
     ...mapGetters(["getSideBarToggleProperties","userInfo"])
@@ -239,7 +203,6 @@ export default {
   methods: {
     ...mapActions([
       "changeSecondarySidebarProperties",
-
       "changeSidebarProperties",
       "changeThemeMode",
       "signOut"
@@ -249,24 +212,14 @@ export default {
     },
     logoutUser() {
       this.signOut();
-
       this.$router.push("/app/sessions/signIn");
     },
-
     closeMegaMenu() {
       this.isMegaMenuOpen = false;
-      // console.log(this.isMouseOnMegaMenu);
-      // if (!this.isMouseOnMegaMenu) {
-      //   this.isMegaMenuOpen = !this.isMegaMenuOpen;
-      // }
     },
     toggleMegaMenu() {
       this.isMegaMenuOpen = !this.isMegaMenuOpen;
     },
-    toggleSearch() {
-      this.isSearchOpen = !this.isSearchOpen;
-    },
-
     sideBarToggle(el) {
       if (
         this.getSideBarToggleProperties.isSideNavOpen &&
@@ -295,7 +248,20 @@ export default {
         this.changeSidebarProperties();
         this.changeSecondarySidebarProperties();
       }
-    }
+    },
+    getTopRankers() {
+      http
+        .get(`ranks/top/total`)
+        .then(({data}) => {
+          if(data.status == 200){
+            this.rankList = data.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        })
+    },
   }
 };
 </script>
