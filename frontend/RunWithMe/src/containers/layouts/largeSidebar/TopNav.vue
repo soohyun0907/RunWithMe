@@ -12,12 +12,12 @@
       <div></div>
     </div>
 
-    <div class="d-flex align-items-center">
+    <!-- <div class="d-flex align-items-center">
       <div class="search-bar" @click="toggleSearch">
         <input type="text" placeholder="Search" />
         <i class="search-icon text-muted i-Magnifi-Glass1"></i>
       </div>
-    </div>
+    </div> -->
 
     <div style="margin: auto"></div>
 
@@ -146,26 +146,24 @@
             <div class="dropdown-header">
               <i class="i-Lock-User mr-1"></i> {{userInfo.username}}님
             </div>
-            <a class="dropdown-item">Account settings</a>
-            <a class="dropdown-item">Billing history</a>
-            <a class="dropdown-item" href="#" @click.prevent="logoutUser"
-              >Sign out</a
-            >
+            <!-- <a class="dropdown-item">Account settings</a>
+            <a class="dropdown-item">Billing history</a> -->
+            <a class="dropdown-item" href="#" @click.prevent="logoutUser">Sign out</a>
           </div>
         </b-dropdown>
       </div>
     </div>
-    <search-component
+    <!-- <search-component
       :isSearchOpen.sync="isSearchOpen"
       @closeSearch="toggleSearch"
-    ></search-component>
+    ></search-component> -->
 
     <infinite-slide-bar duration="20s" :barStyle="{ padding: '5px 0' }">
       <div class="items">
-        <div v-for="ranker in rankList" :key="ranker.id" style="margin-right:50px;">
-          <img class="profile-picture rounded-circle avatar-sm" :src="ranker.imgUrl">
-          {{ranker.id}}. {{ranker.nickname}}
-          {{ranker.accumulcated_distance}} KM
+        <div v-for="ranker in rankList" :key="ranker.rankId" style="margin-right:50px;">
+          <img class="profile-picture rounded-circle avatar-sm" :src="ranker.userId.profile">
+          {{ranker.rankId}}. {{ranker.userId.username}}
+          {{ranker.totalExp}} p
         </div>
       </div>
     </infinite-slide-bar>
@@ -176,17 +174,16 @@
 <script>
 import Util from "@/utils";
 import Sidebar from "./Sidebar";
-import searchComponent from "../common/search";
 import { isMobile } from "mobile-device-detect";
 import { mapGetters, mapActions } from "vuex";
 import { mixin as clickaway } from "vue-clickaway";
 import InfiniteSlideBar from 'vue-infinite-slide-bar';
+import http from "@/utils/http-common";
 
 export default {
   mixins: [clickaway],
   components: {
     Sidebar,
-    searchComponent,
     InfiniteSlideBar
   },
 
@@ -194,45 +191,15 @@ export default {
     return {
       isDisplay: true,
       isStyle: true,
-      isSearchOpen: false,
+      // isSearchOpen: false,
       isMouseOnMegaMenu: true,
       isMegaMenuOpen: false,
-      rankList : [
-        {
-          id: 1,
-          nickname: "Timothy Carlson",
-          imgUrl: "/img/1.jpg",
-          accumulcated_distance: 120,
-        },
-        {
-          id: 2,
-          nickname: "Jaret Leto",
-          imgUrl: "/img/2.jpg",
-          accumulcated_distance: 100,
-        },
-        {
-          id: 3,
-          nickname: "Kim",
-          imgUrl: "/img/3.jpg",
-          accumulcated_distance: 95,
-        },
-        {
-          id: 4,
-          nickname: "Lee",
-          imgUrl: "/img/4.jpg",
-          accumulcated_distance: 80,
-        },
-        {
-          id: 5,
-          nickname: "Lee",
-          imgUrl: "/img/4.jpg",
-          accumulcated_distance: 80,
-        },
-      ]
+      rankList : []
     };
   },
   mounted() {
     // document.addEventListener("click", this.closeMegaMenu);
+    this.getTopRankers();
   },
   computed: {
     ...mapGetters(["getSideBarToggleProperties","userInfo"])
@@ -241,7 +208,6 @@ export default {
   methods: {
     ...mapActions([
       "changeSecondarySidebarProperties",
-
       "changeSidebarProperties",
       "changeThemeMode",
       "signOut"
@@ -251,24 +217,14 @@ export default {
     },
     logoutUser() {
       this.signOut();
-
       this.$router.push("/app/sessions/signIn");
     },
-
     closeMegaMenu() {
       this.isMegaMenuOpen = false;
-      // console.log(this.isMouseOnMegaMenu);
-      // if (!this.isMouseOnMegaMenu) {
-      //   this.isMegaMenuOpen = !this.isMegaMenuOpen;
-      // }
     },
     toggleMegaMenu() {
       this.isMegaMenuOpen = !this.isMegaMenuOpen;
     },
-    toggleSearch() {
-      this.isSearchOpen = !this.isSearchOpen;
-    },
-
     sideBarToggle(el) {
       if (
         this.getSideBarToggleProperties.isSideNavOpen &&
@@ -297,7 +253,20 @@ export default {
         this.changeSidebarProperties();
         this.changeSecondarySidebarProperties();
       }
-    }
+    },
+    getTopRankers() {
+      http
+        .get(`ranks/top/total`)
+        .then(({data}) => {
+          if(data.status == 200){
+            this.rankList = data.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        })
+    },
   }
 };
 </script>
