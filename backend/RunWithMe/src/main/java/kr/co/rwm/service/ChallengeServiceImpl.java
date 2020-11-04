@@ -127,6 +127,21 @@ public class ChallengeServiceImpl implements ChallengeService {
 		return challengeUserRepository.save(challengeUser);
 	}
 
+	@Transactional
+	@Override
+	public Challenge cancelChallenge(int challengeId, int donation, int userId) {
+		User user = userRepository.findByUserId(userId).get();
+		
+		Challenge challenge = challengeRepository.findByChallengeId(challengeId).get();
+		challenge.setParticipant(challenge.getParticipant()-1);
+		challenge.setDonateCurrent(challenge.getDonateCurrent()-donation);
+		challengeRepository.save(challenge);
+		
+		ChallengeUser challengeUser = challengeUserRepository.findByUserIdAndChallengeId(user, challenge);
+		challengeUserRepository.delete(challengeUser);
+		return challenge;
+	}
+
 	@Override
 	public List<Integer> findByChallengeUserList(int userId) {
 		User user = userRepository.findByUserId(userId).get();
