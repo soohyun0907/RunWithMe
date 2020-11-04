@@ -75,7 +75,6 @@ public class ChatRoomController {
         Integer userId = user.getUserId();
         
         String name = auth.getName();
-        System.out.println("[TEST:2020-11-02] "+name);
         return name;
     }
 //    @GetMapping("/user")
