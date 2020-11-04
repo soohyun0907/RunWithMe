@@ -250,6 +250,7 @@ export default {
       const script = document.createElement("script");
       script.onload = () => google.maps.load(this.initMap);
     }
+    console.log(this.userInfo);
   },
   methods: {
     initMap() {

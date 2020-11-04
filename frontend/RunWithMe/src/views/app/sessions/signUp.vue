@@ -84,7 +84,7 @@
                     <input
                       type="radio"
                       name="orderStatus"
-                      value=1
+                      value=2
                       v-model="gender"
                     />
                     <span>여자</span>
@@ -95,7 +95,7 @@
                     <input
                       type="radio"
                       name="orderStatus"
-                      value=2
+                      value=1
                       v-model="gender"
                     />
                     <span>남자</span>
@@ -293,16 +293,18 @@ export default {
         .then((res) => {
           console.log("이메일 인증 시도 성공");
           if (res.data.data == true) {
-            console.log("회원 가입 가능한 이메일입니다!");
+            alert("회원 가입 가능한 이메일입니다!");
             this.emailAuth = true;
           } else {
-            console.log("중복된 이메일입니다.");
+            this.email = "";
+            alert("중복된 이메일입니다.");
             console.log(res);
           }
         })
         .catch((error) => {
+          alert("중복된 이메일입니다. 다른 이메일을 입력해주세요.");
+          this.email = "";
           console.log("이메일 인증 실패");
-          console.log(error);
           this.emailAuth = false;
         });
     },

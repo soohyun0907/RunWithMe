@@ -175,6 +175,12 @@
               <span class="item-name">회원 정보 관리</span>
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/mypages/myChallenges">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">나의 챌린지</span>
+            </router-link>
+          </li>
         </ul>
 
         <ul
@@ -192,12 +198,6 @@
             <router-link tag="a" class to="/app/board/challengeBoardDetail">
               <i class="nav-icon i-Stopwatch"></i>
               <span class="item-name">챌린지 제안 상세</span>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/mypages/myChallenges">
-              <i class="nav-icon i-Stopwatch"></i>
-              <span class="item-name">나의 챌린지</span>
             </router-link>
           </li>
         </ul>
