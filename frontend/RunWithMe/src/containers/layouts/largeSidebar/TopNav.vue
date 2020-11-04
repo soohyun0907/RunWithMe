@@ -128,9 +128,8 @@
         >
           <template slot="button-content">
             <img
-              src="@/assets/images/faces/1.jpg"
+              :src="userInfo.profile"
               id="userDropdown"
-              alt
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
