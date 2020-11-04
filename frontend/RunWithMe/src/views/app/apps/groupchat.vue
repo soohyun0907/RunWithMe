@@ -36,13 +36,15 @@
                 그룹 채팅 목록
               </div>
               <div
-                class="p-3 d-flex border-bottom align-items-center"
+                
                 v-for="chatroom in this.getChatRoom"
                 :key="chatroom.roomId"
               >
-                <h6 @click="choice(chatroom.roomId)" class="">
-                  {{ chatroom.name }}
-                </h6>
+                <div class="p-3 d-flex border-bottom align-items-center" v-if="chatroom.name.includes(search)">
+                  <h6 @click="choice(chatroom.roomId)" class="">
+                    {{ chatroom.name }}
+                  </h6>
+                </div>
               </div>
               <!-- <div
                 class="p-3 d-flex border-bottom align-items-center contact"
@@ -142,7 +144,7 @@
                   <p class="m-0" style="width: 100px">{{ message.message }}</p>
                 </div>
                 <img
-                  :src= message.img
+                  :src="message.img"
                   alt=""
                   class="avatar-sm rounded-circle ml-3"
                 />
@@ -154,7 +156,7 @@
                 v-if="testUserId != message.sender && back != message.sender"
               >
                 <img
-                  :src= message.img
+                  :src="message.img"
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
                 />
@@ -311,16 +313,16 @@ export default {
       }
     },
     recvMessage: function (recv) {
-      console.log("*****************************")
-      console.log(recv)
-      console.log("*****************************")
+      console.log("*****************************");
+      console.log(recv);
+      console.log("*****************************");
       this.userCount = recv.userCount;
       this.messages.push({
         type: recv.type,
         sender: recv.sender,
         message: recv.message,
         ////////////////////////////////////////////////////////
-        img: recv.imgUrl
+        img: recv.imgUrl,
       });
     },
 
