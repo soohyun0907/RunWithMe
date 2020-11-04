@@ -1,5 +1,6 @@
 package kr.co.rwm.config;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -17,9 +18,9 @@ public class CorsFilter implements Filter {
    @Override
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
          throws IOException, ServletException {
-      HttpServletResponse res = (HttpServletResponse) response;
+        HttpServletResponse res = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
-
+       
 //        res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
         res.setHeader("Access-Control-Allow-Credentials", "true");
