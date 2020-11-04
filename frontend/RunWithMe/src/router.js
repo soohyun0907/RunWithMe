@@ -110,7 +110,10 @@ const routes = [
             path: "myUserInfo",
             component: () => import("./views/app/mypages/myUserInfo")
           },
-          
+          {
+            path: "myUserInfoEdit",
+            component: () => import("./views/app/mypages/myUserInfoEdit")
+          },
         ]
       },
 
