@@ -102,6 +102,11 @@ const routes = [
             path: "myChallenges",
             component: () => import("./views/app/mypages/myChallenges")
           },
+          {
+            path: "myUserInfo",
+            component: () => import("./views/app/mypages/myUserInfo")
+          },
+          
         ]
       },
 
