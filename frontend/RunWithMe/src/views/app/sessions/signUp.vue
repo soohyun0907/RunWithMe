@@ -55,8 +55,9 @@
                     입력해주세요.</b-alert
                   >
                 </b-form-group>
-
-                  <b-card class="h-100" title="주 활동지역 선택">
+                <b-row>
+                  <b-col md="8" class=" mb-30">
+                   <b-card class="h-100" title="주 활동지역 선택">
 
                     <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
                       <div v-for="(sido, index) in sidos" v-bind:key="index">
@@ -66,7 +67,7 @@
                       </div>
                     </b-dropdown>
 
-                    <b-dropdown id="dropdown-2" text="구군 선택" class="">
+                    <b-dropdown variant="primary" id="dropdown-2" text="구군 선택" class="mb-2">
                       <div v-for="(gugun, index) in guguns" v-bind:key="index">
                         <b-dropdown-item @click="gugunSelected(gugun)">{{
                           gugun.gugunName
@@ -74,7 +75,33 @@
                       </div>
                     </b-dropdown>
                   </b-card>
+                  </b-col>
+                </b-row>
 
+              <label class="d-block text-12 text-muted">성별</label>
+                <div class="col-md-6 offset-md-6 pr-0 mb-30">
+                  <label class="radio radio-reverse radio-danger">
+                    <input
+                      type="radio"
+                      name="orderStatus"
+                      value=1
+                      v-model="gender"
+                    />
+                    <span>여자</span>
+                    <span class="checkmark"></span>
+                  </label>
+
+                  <label class="radio radio-reverse radio-success">
+                    <input
+                      type="radio"
+                      name="orderStatus"
+                      value=2
+                      v-model="gender"
+                    />
+                    <span>남자</span>
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
                 <b-form-group label="Password">
                   <b-form-input
                     class="form-control form-control-rounded"
@@ -165,6 +192,7 @@ export default {
       sidos: [],
       guguns:[],
       selectedgugun:"",
+      gender:0,
     };
   },
   components: {
@@ -248,14 +276,15 @@ export default {
           userName: this.fName,
           emailAuth: this.emailAuth,
           gugunId: jsonGugunId,
+          gender:this.gender,
         };
         console.log(data);
         this.signUserUp({ data });
         this.submitStatus = "PENDING";
         setTimeout(() => {
           this.submitStatus = "OK";
-        }, 1000);
-        this.$router.push('/')
+        }, 500);
+        this.$router.push('/app/sessions/signIn')
       }
     },
     emailDuplicate() {

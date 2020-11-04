@@ -17,60 +17,30 @@
         styleClass="tableOne vgt-table"
         :rows="rows"
       >
-        <div slot="table-actions" class="mb-3">
-          <b-button variant="primary" class="btn-rounded d-none d-sm-block" v-b-modal.modal-1
-            ><i class="i-Add-User text-white mr-2"> </i>Add Contact
-          </b-button>
+       <div slot="table-actions" class="mb-3">
+                    <b-button variant="primary" class="btn-rounded d-none d-sm-block" v-b-modal.modal-1
+                      ><i class="i-Add-User text-white mr-2"> </i>친구 추가
+                    </b-button>
 
-          <b-modal id="modal-1" title="BootstrapVue">
-            <b-form>
-              <b-form-group
-                id="input-group-1"
-                label="Email address:"
-                label-for="input-1"
-                description="We'll never share your email with anyone else."
-              >
-                <b-form-input
-                  id="input-1"
-                  type="email"
-                  required
-                  placeholder="Enter email"
-                ></b-form-input>
-              </b-form-group>
+                    <b-modal id="modal-1" title="Email로 친구 추가">
+                      <b-form>
+                        <b-form-group
+                          id="input-group-1"
+                          label="Email address:"
+                          label-for="input-1"
+                          description="친구의 이메일로 친구추가를 할수있어요."
+                        >
+                          <b-form-input
+                            id="input-1"
+                            type="email"
+                            required
+                            placeholder="Email을 입력하세요"
+                          ></b-form-input>
+                        </b-form-group>
+                      </b-form>
+                    </b-modal>
+                  </div>
 
-              <b-form-group
-                id="input-group-2"
-                label="Your Name:"
-                label-for="input-2"
-              >
-                <b-form-input
-                  id="input-2"
-                  required
-                  placeholder="Enter name"
-                ></b-form-input>
-              </b-form-group>
-
-              <b-form-group
-                id="input-group-3"
-                label="Food:"
-                label-for="input-3"
-              >
-                <b-form-select
-                  id="input-3"
-                  :options="foods"
-                  required
-                ></b-form-select>
-              </b-form-group>
-
-              <b-form-group id="input-group-4">
-                <b-form-checkbox-group id="checkboxes-4">
-                  <b-form-checkbox value="me">Check me out</b-form-checkbox>
-                  <b-form-checkbox value="that">Check that out</b-form-checkbox>
-                </b-form-checkbox-group>
-              </b-form-group>
-            </b-form>
-          </b-modal>
-        </div>
 
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'">
@@ -112,35 +82,26 @@ export default {
       foods: ["apple", "orrange"],
       columns: [
         {
-          label: "Name",
+          label: "이름",
           field: "name"
         },
         {
           label: "Email",
           field: "email"
         },
-        // {
-        //   label: "Phone",
-        //   field: "phone"
-        // },
         {
-          label: "Span",
+          label: "등급",
           field: "span",
           html: true
         },
-
         {
-          label: "Age",
+          label: "나이",
           field: "age"
         },
         {
-          label: "Joining Date",
-          field: "join"
+          label: "성별",
+          field: "gender"
         },
-        // {
-        //   label: "Salary",
-        //   field: "salary"
-        // },
         {
           label: "Button",
           field: "button",
@@ -150,27 +111,32 @@ export default {
         }
       ],
       rows: [
-        {
+         {
           id: 1,
           avatar: require("@/assets/images/faces/1.jpg"),
-          name: "daeyong",
-          email: "kim940813@gmail.com",
-          phone: "+88012378478",
-          span: '<span class="badge badge-primary">Primary</span>',
-          join: "April 25, 2019",
-          age: "35 ",
-          salary: "$320,800"
+          name: "택택",
+          email: "hyungtaik@gmail.com",
+          span: '<span class="badge badge-danger">Pro</span>',
+          age:"27",
+          gender:"남성",
         },
         {
           id: 2,
           avatar: require("@/assets/images/faces/3.jpg"),
-          name: "Jane",
-          email: "jameswann@gmail.com",
-          phone: "+88012378478",
-          span: '<span class="badge badge-danger">Primary</span>',
-          join: "April 34, 2019",
-          age: "31",
-          salary: "$320,800"
+          name: "수니",
+          email: "sooni0110@gmail.com",
+          span: '<span class="badge badge-primary">Beginner</span>',
+          age:"28",
+          gender:"여성",
+        },
+        {
+          id: 3,
+          avatar: require("@/assets/images/faces/2.jpg"),
+          name: "두현",
+          email: "hyuns@gmail.com",
+          span: '<span class="badge badge-success">Runner</span>',
+          age:"27",
+          gender:"여성",
         },
       ]
     };

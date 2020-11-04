@@ -35,7 +35,7 @@
           >
             <a class="nav-item-hold" href="#">
               <i class="nav-icon i-Computer-Secure"></i>
-              <span class="nav-text">Apps</span>
+              <span class="nav-text">Community</span>
             </a>
             <div class="triangle"></div>
           </li>
@@ -67,20 +67,6 @@
             <div class="triangle"></div>
           </li>
 
-
-          <li
-            @mouseenter="toggleSubMenu"
-            class="nav-item"
-            :class="{ active: selectedParentMenu == 'sessions' }"
-            data-item="sessions"
-            :data-submenu="true"
-          >
-            <a class="nav-item-hold" href="#">
-              <i class="nav-icon i-Administrator"></i>
-              <span class="nav-text">Sessions</span>
-            </a>
-            <div class="triangle"></div>
-          </li>
 
         
         </ul>
@@ -138,30 +124,6 @@
             <router-link tag="a" class to="/app/apps/payment">
               <i class="nav-icon i-Speach-Bubble-3"></i>
               <span class="item-name">Payment</span>
-            </router-link>
-          </li>
-        </ul>
-        <ul
-          class="childNav d-none"
-          data-parent="sessions"
-          :class="{ 'd-block': selectedParentMenu == 'sessions' }"
-        >
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/sessions/signIn">
-              <i class="nav-icon i-Checked-User"></i>
-              <span class="item-name">Sign in</span>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/sessions/signUp">
-              <i class="nav-icon i-Add-User"></i>
-              <span class="item-name">Sign up</span>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/sessions/forgot">
-              <i class="nav-icon i-Find-User"></i>
-              <span class="item-name">Forgot</span>
             </router-link>
           </li>
         </ul>
