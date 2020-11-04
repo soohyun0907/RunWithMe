@@ -2,9 +2,6 @@
   <div
     class="auth-layout-wrap"
     :style="{ backgroundImage: 'url(' + bgImage + ')' }">
-  <!-- <div
-    class="auth-layout-wrap"
-    style="backgroundColor:white"> -->
     <div class="auth-content">
       <div class="card o-hidden">
         <div class="row">
@@ -58,13 +55,6 @@
             </div>
           </div>
 
-          <b-col
-            md="6"
-            class="text-center"
-            style="backgroundsize: cover"
-            :style="{ backgroundImage: 'url(' + signInImage + ')' }"
-          >
-          </b-col>
         </div>
       </div>
     </div>
@@ -142,5 +132,12 @@ export default {
 .spinner.sm {
   height: 2em;
   width: 2em;
+}
+@media (min-width: 768px){
+  .col-md-6 {
+      -webkit-box-flex: 0;
+      flex: auto !important;
+      max-width: 100% !important;
+  }
 }
 </style>
