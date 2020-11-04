@@ -30,7 +30,13 @@
                                     </div>
                                     <div class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i>성별</p>
-                                        <span>{{userInfo.gender}}남자</span>
+                                        <div v-if="userInfo.gender=='1'">
+                                            <span>남자</span>
+                                        </div>
+
+                                        <div v-if="userInfo.gender=='2'">
+                                            <span>여자</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-6">
