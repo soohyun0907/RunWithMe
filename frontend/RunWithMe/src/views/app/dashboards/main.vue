@@ -2,7 +2,7 @@
   <div class="main-content">
     <h3>기부/이벤트</h3>
     <carousel-3d :width="180" :height="250">
-      <slide v-for="(slide, i) in slides" :index="i" :key="i" style="border: 0px;">
+      <slide v-for="slide in slides" :key="slide.id" style="border: 0px;">
         <div @click="toggleOverlay">
           <b-overlay 
           :show="slidesOverlayShow" 
@@ -27,7 +27,7 @@
       :arrows="false"
       :slide-ratio="1 / 4"
       :gap="3"
-      :dragging-distance="0"
+      :dragging-distance="70"
       fixedHeight="250px"
       prevent-y-scroll>
       <vueper-slide v-for="(slide, i) in slides" :index="i" :key="i"
@@ -174,12 +174,12 @@ export default {
     };
   },
   created() {
+    this.getChallengesIng();
+    this.getChallengesCommingSoon();
     this.getTopRankers();
     this.getFriendsRunning();
   },
   mounted() {
-    this.getChallengesIng();
-    this.getChallengesCommingSoon();
   },
   methods: {
     convertToTime(origin) {
@@ -199,8 +199,18 @@ export default {
         .get("challenges/ing")
         .then(({data}) => {
           if(data.status==200){
-            this.slides = data.data;
+            let obj;
+            data.data.forEach(element => {
+              obj = new Object();
+              obj.id = element.challengeId;
+              obj.title = element.title;
+              obj.challengeImg = element.challengeImg;
+              obj.startTime = element.startTime;
+              obj.endTime = element.endTime;
+              this.slides.push(obj);
+            });
           }
+          console.log(this.slides);
         })
         .catch((error) => {
           console.log(error);
@@ -215,6 +225,7 @@ export default {
             let obj;
             data.data.forEach(element => {
               obj = new Object();
+              obj.id = element.challengeId;
               obj.title = element.title;
               obj.challengeImg = element.challengeImg;
               obj.startTime = element.startTime;
