@@ -6,7 +6,8 @@
         <div class="card user-profile o-hidden mb-30">
             <div class="header-cover" style="background-image: url(http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-5.jpeg"></div>
                 <div class="user-info">
-                    <img class="profile-picture avatar-lg mb-2" src="http://gull-html-laravel.ui-lib.com/assets/images/faces/1.jpg" alt="">
+                    <img class="profile-picture avatar-lg mb-2" :src="userInfo.profile">
+                        <b-button variant="outline-info m-1" @click="goUserInfoEdit()">수정하기</b-button>
                         <p class="m-0 text-24">{{userInfo.username}}</p>
                         <p class="text-muted m-0">{{userInfo.userEmail}}</p>
             </div>
@@ -109,8 +110,13 @@ export default {
   methods: {
       memberOut(userInfo){
           alert(userInfo.username)
+      },
+      goUserInfoEdit() {
+          this.$router.push("/app/mypages/myUserInfoEdit");
       }
   },
 }
 </script>
+<style scoped>
 
+</style>
