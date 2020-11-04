@@ -1,5 +1,11 @@
 package kr.co.rwm.controller;
 
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import kr.co.rwm.entity.User;
 import kr.co.rwm.model.ChatMessage;
 import kr.co.rwm.repo.ChatRoomRepository;
 import kr.co.rwm.service.ChatService;
@@ -7,13 +13,6 @@ import kr.co.rwm.service.JwtTokenProvider;
 import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,11 +36,14 @@ public class ChatController {
     	System.out.println("****************************");
 //    	String token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJ0ZXN0NCIsImlhdCI6MTYwMzM3NzIzOSwiZXhwIjoxNjAzMzgwODM5fQ.mWC-X7UtaQ87EuWW_pcwbMt8tL2-naiShegDfW3t090";
         String email = jwtTokenProvider.getUserEmailFromJwt(token.toString());
-        String nickname = userService.findByUserEmail(email).get().getUsername();
+        User user = userService.findByUserEmail(email).get();
+        String nickname = user.getUsername();
         // 로그인 회원 정보로 대화명 설정
         message.setSender(nickname); 
         // 채팅방 인원수 세팅 
         message.setUserCount(chatRoomRepository.getUserCount(message.getRoomId()));
+        String imgUrl = user.getProfile();
+        message.setImgUrl(imgUrl);
         // Websocket에 발행된 메시지를 redis로 발행(publish)
         chatService.sendChatMessage(message);
     }
