@@ -1,8 +1,17 @@
 <template>
   <div class="main-content">
     <h3>기부/이벤트</h3>
-    <carousel-3d :width="180" :height="250">
-      <slide v-for="slide in slides" :key="slide.id" style="border: 0px;">
+
+    <div v-if="slides.length==0">
+        <h3 class="mt-5" style="text-align: center;">현재 진행중인 이벤트가 없어요!</h3>
+    </div>
+
+  <div v-else> 
+    <!-- <carousel-3d :width="180" :height="250"> -->
+    <carousel-3d :width="150" :height="150"
+     :controls-visible="true" >
+      <!-- <slide v-for="(slide,index) in slides" :key="index" style="border: 0px;"> -->
+      <slide v-for="slide in slides" :index="slide.id-1" :key="slide.id" style="border: 0px;">
         <div @click="toggleOverlay">
           <b-overlay 
           :show="slidesOverlayShow" 
@@ -13,7 +22,7 @@
             <img :src="slide.challengeImg" />
             <template #overlay>
               <div class="text-center">
-                <h3>{{slide.title}}</h3>
+                <h3 style="overflow:hidden;">{{slide.title}}</h3>
                 <h5>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h5>
               </div>
             </template>
@@ -21,6 +30,7 @@
         </div>
       </slide>
     </carousel-3d>
+  </div>
     <!-- <vueper-slides
       class="no-shadow"
       :visible-slides="1.7"
@@ -171,15 +181,17 @@ export default {
       rankList : [],
       friendsFeed: [],
       haveFriends: true,
+      events:[],
     };
   },
   created() {
+   
+  },
+  mounted() {
     this.getChallengesIng();
     this.getChallengesCommingSoon();
     this.getTopRankers();
     this.getFriendsRunning();
-  },
-  mounted() {
   },
   methods: {
     convertToTime(origin) {
@@ -200,14 +212,11 @@ export default {
         .then(({data}) => {
           if(data.status==200){
             let obj;
+            var slides = this.slides
             data.data.forEach(element => {
-              obj = new Object();
-              obj.id = element.challengeId;
-              obj.title = element.title;
-              obj.challengeImg = element.challengeImg;
-              obj.startTime = element.startTime;
-              obj.endTime = element.endTime;
-              this.slides.push(obj);
+              console.log(data)
+              obj = element
+              slides.push(obj);
             });
           }
           console.log(this.slides);
@@ -217,6 +226,18 @@ export default {
           return;
         });
     },
+    // getChallengesIng() {
+    //   http
+    //     .get("challenges/ing")
+    //     .then((data) => {
+    //       console.log(data)
+    //       this.events = data
+    //       this.slides.push(this.events);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
     getChallengesCommingSoon(){
       http
         .get("challenges/comingsoon")
