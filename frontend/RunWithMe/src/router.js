@@ -106,6 +106,10 @@ const routes = [
             path: "myUserInfoEdit",
             component: () => import("./views/app/mypages/myUserInfoEdit")
           },
+          {
+            path: "myUserInfosEdit",
+            component: () => import("./views/app/mypages/myUserInfosEdit")
+          },
         ]
       },
 
