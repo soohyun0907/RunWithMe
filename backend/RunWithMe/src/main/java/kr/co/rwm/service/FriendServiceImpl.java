@@ -46,6 +46,16 @@ public class FriendServiceImpl implements FriendService {
 		User user = userRepository.findByUserId(friendInfo.get("friendId"));
 		relation.setUser(user);
 		Friend result = friendRepository.save(relation);	 
+		
+		
+		Friend relation2 = Friend.builder()
+				.userId(friendInfo.get("friendId"))
+				.build();
+		User diff = userRepository.findByUserId(uid).get();
+		relation2.setUser(diff);
+		
+		friendRepository.save(relation2);	 
+		
 		return result;
 	}
 

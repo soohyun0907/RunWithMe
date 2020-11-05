@@ -32,6 +32,7 @@ public class ResponseMessage {
     public static final String RUNNING_DELETE_RECORD = "런닝 삭제";
     public static final String RECORD_REDIS_INSERT_SUCCESS = "레디스에 레코드 저장";
     public static final String RECORD_REDIS_LIST_SUCCESS = "레디스에서 레코드 목록 조회";
+    public static final String USER_SUMMARY_RUNNING_SUCCESS = "유저의 요약 런닝 정보 조회";
     
     public static final String CHALLENGE_INSERT_SUCCESS = "챌린지 등록 성공";
     public static final String CHALLENGE_IMG_INSERT_SUCCESS = "챌린지 이미지 등록 성공";
@@ -50,6 +51,7 @@ public class ResponseMessage {
     public static final String CHALLENGE_SEARCH_FAIL = "챌린지 상세 조회 실패";
     public static final String CHALLENGE_ACCESS_FORBIDDEN = "권한 없음";
     public static final String CHALLENGE_PARTICIPATE_SUCCESS = "챌린지 참여 성공";
+    public static final String CHALLENGE_PARTICIPATE_CANCEL_SUCCESS = "챌린지 참여 취소 성공";
     public static final String CHALLENGE_USER_SEARCH_ING = "유저 참여중 챌린지 조회 성공";
     public static final String CHALLENGE_USER_SEARCH_COMINGSOON = "유저 참여 예정 챌린지 조회 성공";
     public static final String CHALLENGE_USER_SEARCH_END = "유저 참여 종료 챌린지 조회 성공";
