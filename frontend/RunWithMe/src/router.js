@@ -43,14 +43,6 @@ const routes = [
             component: () => import("./views/app/apps/groupchat")
           },
           {
-            path: "challenges",
-            component: () => import("./views/app/apps/challenges")
-          },
-          {
-            path: "createChallenge",
-            component: () => import("./views/app/apps/createChallenge")
-          },
-          {
             path: "payChallenge",
             component: () => import("./views/app/apps/payChallenge")
           },
@@ -110,7 +102,10 @@ const routes = [
             path: "myUserInfo",
             component: () => import("./views/app/mypages/myUserInfo")
           },
-          
+          {
+            path: "myUserInfoEdit",
+            component: () => import("./views/app/mypages/myUserInfoEdit")
+          },
         ]
       },
 
@@ -128,6 +123,14 @@ const routes = [
             path : 'challengeBoardDetail',
             component :()=> import("./views/app/board/challengeBoardDetail") ,
             props: true
+          },
+          {
+            path: "challenges",
+            component: () => import("./views/app/board/challenges")
+          },
+          {
+            path: "createChallenge",
+            component: () => import("./views/app/board/createChallenge")
           },
         ]
       },
