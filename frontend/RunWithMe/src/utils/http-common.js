@@ -6,6 +6,9 @@ export default axios.create({
   // baseURL: "http://localhost:8080/",
     headers: {
       AUTH:localStorage.getItem("auth")
+    },
+    xhrFields: {
+      withCredentials: true
     }
 });
 
