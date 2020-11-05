@@ -11,3 +11,11 @@ export default axios.create({
       withCredentials: true
     }
 });
+
+// export default function ({ $axios, app, store }) {
+//   $axios.onRequest(config => {
+//     if (store.state.auth!="") {
+//       config.headers.common['AUTH'] = store.state.auth
+//     }
+//   })
+// }
