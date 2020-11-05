@@ -19,12 +19,13 @@ public class ChatService {
      * destination정보에서 roomId 추출
      */
     public String getRoomId(String destination) {
-        int lastIndex = destination.lastIndexOf('/');
+    	int lastIndex = destination.lastIndexOf('/');
         if (lastIndex != -1)
-            return destination.substring(lastIndex + 1);
+            return destination.substring(lastIndex+1);
         else
             return "";
     }
+    
 
     /**
      * 채팅방에 메시지 발송
@@ -38,7 +39,11 @@ public class ChatService {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender("[알림]");
         }
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(chatMessage);
+        System.out.println(channelTopic.getTopic());
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!");
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
     }
-
+    
 }

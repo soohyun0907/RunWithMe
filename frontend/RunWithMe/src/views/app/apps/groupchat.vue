@@ -19,7 +19,7 @@
                 class="form-control form-control-rounded"
                 id="search"
                 v-model="search"
-                placeholder="Search Group Name"
+                placeholder="서비스 준비중"
               />
             </div>
           </div>
@@ -36,13 +36,15 @@
                 그룹 채팅 목록
               </div>
               <div
-                class="p-3 d-flex border-bottom align-items-center contact"
+                
                 v-for="chatroom in this.getChatRoom"
                 :key="chatroom.roomId"
               >
-                <h6 @click="choice(chatroom.roomId)" class="">
-                  {{ chatroom.name }}
-                </h6>
+                <div class="p-3 d-flex border-bottom align-items-center" v-if="chatroom.name.includes(search)">
+                  <h6 @click="choice(chatroom.roomId)" class="">
+                    {{ chatroom.name }}
+                  </h6>
+                </div>
               </div>
               <!-- <div
                 class="p-3 d-flex border-bottom align-items-center contact"
@@ -62,16 +64,16 @@
               <div
                 class="mt-3 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
               >
-                인기있는 그룹 채팅
+                서비스 준비중입니다.....
               </div>
 
-              <div
+              <!-- <div
                 class="p-3 d-flex border-bottom align-items-center contact"
                 v-for="chatroom2 in this.getChatRoom"
                 :key="chatroom2.roomID"
               >
                 <h6>{{ chatroom2.name }}</h6>
-              </div>
+              </div> -->
               <!-- :class="contact.status"
               > -->
               <!-- @click="changeSelectedUser(contact.id)"
@@ -97,13 +99,20 @@
           <!-- START 채팅 방 이름 -->
           <div class="d-flex align-items-center">
             <img
-              :src="getSelectedUser.avatar"
+              src="@/assets/images/faces/chatRoom.jpg"
               alt=""
               class="avatar-sm rounded-circle mr-2"
             />
-            <p class="m-0 text-title text-16 flex-grow-1">
-              {{ this.getSelectedChatroom.name }}
-            </p>
+            <div class="init1" v-if="flag">
+              <p class="m-0 text-title text-16 flex-grow-1">
+                <span style="font-size: 0.8em"> 채팅방을 선택해 주세요 </span>
+              </p>
+            </div>
+            <div class="init2" v-if="!flag">
+              <p class="m-0 text-title text-16 flex-grow-1">
+                {{ this.getSelectedChatroom.name }}
+              </p>
+            </div>
           </div>
           <!-- END 채팅방 이름 -->
         </div>
@@ -111,6 +120,7 @@
         <vue-perfect-scrollbar
           :settings="{ suppressScrollX: true, wheelPropagation: false }"
           class="chat-content perfect-scrollbar rtl-ps-none ps scroll"
+          id="chatContainer"
         >
           <div>
             <div onscroll="chat_on_scroll()"
@@ -123,21 +133,18 @@
               </div>
 
               <!-- START 나의 채팅 메시지 -->
-              <div
-                class="d-flex mb-30"
-                v-if="testUserId === message.sender"
-              >
-                <div class="message flex-grow-1">
+              <div class="d-flex mb-20" v-if="testUserId === message.sender">
+                <div class="message flex-grow-1" style="width: 70%">
                   <div class="d-flex">
                     <p class="mb-1 text-title text-16 flex-grow-1">
                       {{ message.sender }}
                     </p>
                     <!-- <span class="text-small text-muted">25 min ago</span> -->
                   </div>
-                  <p class="m-0" style="width:100px" >{{message.message}}</p>
+                  <p class="m-0" >{{ message.message }}</p>
                 </div>
                 <img
-                  :src="getSelectedUser.avatar"
+                  :src="message.img"
                   alt=""
                   class="avatar-sm rounded-circle ml-3"
                 />
@@ -149,16 +156,16 @@
                 v-if="testUserId != message.sender && back != message.sender"
               >
                 <img
-                  src="@/assets/images/faces/1.jpg"
+                  :src="message.img"
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
                 />
-                <div class="message flex-grow-1">
+                <div class="message flex-grow-1" style="width: 70%">
                   <div class="d-flex">
                     <p class="mb-1 text-title text-16 flex-grow-1">{{message.sender}}</p>
                     <!-- <span class="text-small text-muted">24 min ago</span> -->
                   </div>
-                  <p class="m-0" style="width:100px">{{message.message}}</p>
+                  <p class="m-0">{{ message.message }}</p>
                 </div>
               </div>
               <!-- END 상대방의 메시지 -->
@@ -168,8 +175,8 @@
 
         <!-- START 메시지 보내기 -->
         <div class="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
-          <form class="inputForm">
-            <div class="form-group">
+          <form class="inputForm" onsubmit="return false">
+            <!-- <div class="form-group">
               <input
                 type="text"
                 class="form-control form-control-rounded"
@@ -181,6 +188,17 @@
                 spellcheck="false"
                 v-model="message"
               />
+            </div> -->
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control form-control-rounded"
+                placeholder="메세지를 입력하세요"
+                name="message"
+                id="message"
+                v-model="message"
+                v-on:keypress.enter="sendMessage('TALK')"
+              />
             </div>
             <div class="d-flex">
               <div class="flex-grow-1"></div>
@@ -189,13 +207,6 @@
                 type="button"
                 @click="sendMessage('TALK')"
               >
-                <i class="i-Paper-Plane"></i>
-              </button>
-              <button
-                class="btn btn-icon btn-rounded btn-outline-primary"
-                type="button"
-              >
-                <i class="i-Add-File"></i>
               </button>
             </div>
           </form>
@@ -240,6 +251,8 @@ export default {
       back: "[알림]",
       sock: null,
       ws: null,
+      flag: true,
+      diffScroll: 0,
     };
   },
   methods: {
@@ -257,10 +270,19 @@ export default {
         console.log(store.state.chatrooms);
       });
     },
-
+    chatScroll() {
+      console.log("chatScroll");
+      var objDiv = document.getElementById("chatList");
+      if (this.flag) {
+        objDiv.scrollTop = objDiv.scrollHeight;
+      }
+    },
     choice(roomId) {
+      this.flag = false;
+      if (this.ws) this.ws.disconnect();
       this.selectOneGroupChat(roomId);
       this.isMobile = false;
+      this.messages = [];
       setTimeout(() => {
         this.chat();
       }, 500);
@@ -271,34 +293,37 @@ export default {
       console.log("hihi")
     },
     sendMessage: function (type) {
-      console.log("[TEST]");
-      console.log(type);
-      console.log(this.message);
-      console.log(this.getSelectedChatroom.roomId);
-      console.log("------------");
-      var data = {
+      if (this.flag) {
+        alert("채팅방을 선택해주세요");
+      } else {
+        var data = {
           type: type,
           roomId: this.getSelectedChatroom.roomId,
           message: this.message,
-        } 
-      var header =  { 
-        'AUTH' : this.token,
-        'Content-Type':'application/json',
+        };
+        var header = {
+          AUTH: this.token,
+          "Content-Type": "application/json",
+        };
+        this.ws.send("/pub/chat/message", JSON.stringify(data), {
+          AUTH: this.token,
+        });
+        this.message = "";
       }
-      console.log(header)
-      this.ws.send(
-        "/pub/chat/message",JSON.stringify(data),{"AUTH":this.token}
-      );
-      this.message = "";
     },
     recvMessage: function (recv) {
-      console.log("들어옴 " + this.testUserId + "**********");
-      console.log("들어옴 " + recv.sender + "**********");
+      console.log("*****************************");
+      console.log(recv);
+      console.log("*****************************");
+      if(recv.imgUrl == null){
+        recv.imgUrl = require("@/assets/images/faces/profile.jpg")
+      }
       this.userCount = recv.userCount;
       this.messages.push({
         type: recv.type,
         sender: recv.sender,
         message: recv.message,
+        img: recv.imgUrl,
       });
     },
 
@@ -306,23 +331,19 @@ export default {
       http.get("/chat/user").then((response) => {
         this.sock = new SockJS("http://localhost:8080/ws-stomp");
         var _ws = Stomp.over(this.sock);
-        console.log(response.data);
-        console.log("------------------------");
-        
+
         var _this = this;
-        // this.testUserId="change"
         this.testUserId = response.data;
-        // this.token = this.auth
-        var _userName = this.testUserId
+        var _userName = this.testUserId;
         _ws.connect(
-          { "AUTH": this.token },
+          { AUTH: this.token },
           function (frame) {
             _ws.subscribe(
               "/sub/chat/room/" + _this.getSelectedChatroom.roomId,
               function (message) {
                 console.log("!!!!! ")
                 var recv = JSON.parse(message.body);
-                recv.get
+                recv.get;
                 console.log("RECV Sender");
                 console.log(recv);
                 _this.recvMessage(recv);
@@ -337,33 +358,6 @@ export default {
         this.ws = _ws;
       });
     },
-    // connect() {
-    // const serverURL = "http://localhost:8080/ws-stomp"
-    // let socket = new SockJS(serverURL);
-    // this.stompClient = Stomp.over(socket);
-    //   console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
-    //   this.stompClient.connect(
-    //     {},
-    //     frame => {
-    //       // 소켓 연결 성공
-    //       this.connected = true;
-    //       console.log('소켓 연결 성공', frame);
-    //       // 서버의 메시지 전송 endpoint를 구독합니다.
-    //       // 이런형태를 pub sub 구조라고 합니다.
-    //       this.stompClient.subscribe("/send", res => {
-    //         console.log('구독으로 받은 메시지 입니다.', res.body);
-
-    //         // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-    //         this.recvList.push(JSON.parse(res.body))
-    //       });
-    //     },
-    //     error => {
-    //       // 소켓 연결 실패
-    //       console.log('소켓 연결 실패', error);
-    //       this.connected = false;
-    //     }
-    //   );
-    // }
   },
 
   computed: {
@@ -377,22 +371,20 @@ export default {
       "userInfo",
       "auth",
     ]),
-
   },
 
   mounted: function () {
-    this.token = this.auth
-    console.log("here mount") 
-    console.log(this.token) 
+    this.token = this.auth;
     setTimeout(() => {
       this.selectAllGroupChat();
     }, 100);
   },
 
-  created: function () {
-    // this.connect();
-    // 현재 채팅방
-    // this.getSelectedChatroom
+  created: function () {},
+
+  updated: function () {
+    var obj = document.getElementById("chatContainer");
+    obj.scrollTop = obj.scrollHeight;
   },
 };
 </script>

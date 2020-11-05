@@ -10,7 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import kr.co.rwm.entity.Payment;
 import kr.co.rwm.entity.User;
+import kr.co.rwm.repo.PaymentRepository;
 import kr.co.rwm.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class UserService implements UserDetailsService {
 
 	private final UserRepository userRepository;
-
+	private final PaymentRepository payRepository;
+	private final int INIT_MILEAGE = 0;
 	@Override
 	public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
 		System.out.println(userEmail);
@@ -32,9 +35,9 @@ public class UserService implements UserDetailsService {
 		return userRepository.findByUserEmail(userEmail);
 	}
 
-	public void join(User user, String password) {
-		userRepository.save(User.builder().gugunId(user.getGugunId()).userEmail(user.getUserEmail())
-				.userName(user.getUsername()).userPw(password).roles(Collections.singletonList("USER")).build());
+	public User join(User user, String password) {
+		return userRepository.save(User.builder().gugunId(user.getGugunId()).gender(user.getGender()).userEmail(user.getUserEmail())
+				.userName(user.getUsername()).userPw(password).mileage(INIT_MILEAGE).roles(Collections.singletonList("USER")).build());
 	}
 
 	public Optional<User> findByUserId(int userId) {
@@ -51,10 +54,37 @@ public class UserService implements UserDetailsService {
 		user.ifPresent(selectUser->{
 			selectUser.setUserId(temp.getUserId());
 			selectUser.setUserPw(changeUser.getChangePw());
+			selectUser.setGender(temp.getGender());
 			selectUser.setUserName(changeUser.getUsername());
 			selectUser.setProfile(changeUser.getProfile());
 			selectUser.setGugunId(changeUser.getGugunId());
 			userRepository.save(selectUser);
 		});
+	}
+	
+	public void charge(int uid,int money) {
+		Optional<User> user = userRepository.findByUserId(uid);
+		int total = user.get().getMileage() + money;
+ 		user.ifPresent(selectUser->{
+			selectUser.setMileage(total);
+			userRepository.save(selectUser);
+		});
+ 		payRepository.save(Payment.builder().chargeMoney(money).userId(user.get()).build());
+	}
+	
+	public boolean pay(int uid,int money) {
+		Optional<User> user = userRepository.findByUserId(uid);
+		if(user.get().getMileage() < money) { // 결제를 할 수 없는 경우
+			return false;
+			
+		}else {
+			int total = user.get().getMileage() - money;
+			user.ifPresent(selectUser->{
+				selectUser.setMileage(total);
+				userRepository.save(selectUser);
+			});
+			payRepository.save(Payment.builder().payMoney(money).userId(user.get()).build());
+			return true;
+		}
 	}
 }

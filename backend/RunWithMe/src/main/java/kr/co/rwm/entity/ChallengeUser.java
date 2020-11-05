@@ -37,4 +37,10 @@ public class ChallengeUser {
 	
 	@Column(name = "accumulated_distance")
 	private double accDistance;
+	
+	@Column(name = "success")
+	private boolean success;
+	
+	@Column(name = "donation")
+	private Integer donation;
 }

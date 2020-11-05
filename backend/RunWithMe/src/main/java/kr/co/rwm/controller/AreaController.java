@@ -10,19 +10,20 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.Gugun;
+import kr.co.rwm.entity.Running;
 import kr.co.rwm.entity.Sido;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.AreaService;
+import kr.co.rwm.service.RecordService;
 import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +35,7 @@ public class AreaController {
 	
 	private final AreaService areaService;
 	private final UserService userService;
+	private final RecordService recordService;
 	
 	@ApiOperation(value = "시도 전체 조회", response = ResponseEntity.class)
 	@GetMapping
@@ -82,24 +84,13 @@ public class AreaController {
 				Response(StatusCode.OK, ResponseMessage.ACTAREA_INSERT_SUCCESS, null), HttpStatus.OK);
 	}
 	
-//	@ApiOperation(value = "유저의 활동 지역 수정", response = ResponseEntity.class)
-//	@PutMapping
-//	public ResponseEntity updateUserArea(@RequestBody Gugun gugun) {
-//		System.out.println("/areas/update");
-//		// Gugun 확인
-//		Gugun saveGugun = areaService.findGugunByGugunId(gugun.getGugunId());
-//		if(saveGugun == null) {
-//			return new ResponseEntity<Response>(new 
-//				Response(StatusCode.NOT_FOUND, ResponseMessage.GUGUN_SEARCH_FAIL, null), HttpStatus.NOT_FOUND);
-//		}
-//		//
-//		Optional<User> loginUser = (Optional<User>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//		User updateUser = loginUser.get();
-//		updateUser.setGugunId(saveGugun);
-//		userService.update(loginUser, updateUser);
-//		
-//		return new ResponseEntity<Response>(new 
-//				Response(StatusCode.OK, ResponseMessage.ACTAREA_UPDATE_SUCCESS, null), HttpStatus.OK);
-//	}
-
+	@ApiOperation(value = "지역에 따른 유저의 달린 경로 보기", response = ResponseEntity.class)
+	@GetMapping("/{gugunId}/{userId}")
+	public ResponseEntity findAllRunningByUserIdAndGugunId(@PathVariable int gugunId, @PathVariable int userId) {
+		List<Running> runnings = recordService.findAllRunningByGugunIdAndUserId(gugunId, userId);
+		
+		return new ResponseEntity<Response>(new 
+				Response(StatusCode.OK, ResponseMessage.AREA_RUNNINGS_SUCCESS, runnings), HttpStatus.OK);
+	}
+	
 }

@@ -127,22 +127,22 @@ export default {
         });
     },
     signOut(context) {
-      context.commit("setLogout");
-      axios.defaults.headers.common['auth'] = ""
-   
-      http.get(`http://localhost:8080/users/signout`, {
-        // headers:{'AUTH':localStorage.getItem("auth")}
-      })
+      http.get(`users/signout`)
       .then(res =>{
         console.log("로그아웃 성공")
         console.log(res)
-       
       })
       .catch(err => {
         console.log(err)
       })
       
-      
+        if(localStorage.getItem("userInfo")){
+          localStorage.removeItem("userInfo")
+        }    
+        if(localStorage.getItem("auth")){
+          localStorage.removeItem("auth")
+        }
+        context.commit("setLogout");
     },
   },
 };
