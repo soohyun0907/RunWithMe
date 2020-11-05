@@ -312,9 +312,6 @@ export default {
       }
     },
     recvMessage: function (recv) {
-      console.log("*****************************");
-      console.log(recv);
-      console.log("*****************************");
       if(recv.imgUrl == null){
         recv.imgUrl = require("@/assets/images/faces/profile.jpg")
       }
@@ -341,7 +338,6 @@ export default {
             _ws.subscribe(
               "/sub/chat/room/" + _this.getSelectedChatroom.roomId,
               function (message) {
-                console.log("!!!!! ")
                 var recv = JSON.parse(message.body);
                 recv.get;
                 console.log("RECV Sender");
@@ -349,7 +345,6 @@ export default {
                 _this.recvMessage(recv);
               }
             );
-            console.log("??????")
           },
           function (error) {
             alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
