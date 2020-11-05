@@ -37,6 +37,7 @@ import kr.co.rwm.service.JwtTokenProvider;
 import kr.co.rwm.service.RanksService;
 import kr.co.rwm.service.RecordService;
 import kr.co.rwm.service.S3Service;
+import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins = "*")
@@ -219,6 +220,37 @@ public class RunningController {
 		
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.AREA_RUNNINGS_SUCCESS, runnings), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "유저의 총 뛴 거리, 횟수 등의 요약 정보", response = ResponseEntity.class)
+	@GetMapping("/summary")
+	public ResponseEntity findAllRunningUser(HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		int userId = 0;
+		if(jwtTokenProvider.validateToken(token)) {
+			userId = jwtTokenProvider.getUserIdFromJwt(token);
+		}
+		
+		RunningUser runningUser = recordService.findRunningUserByUserId(userId);
+		
+		return new ResponseEntity<Response>(new 
+				Response(StatusCode.OK, ResponseMessage.USER_SUMMARY_RUNNING_SUCCESS, runningUser), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "유저의 총 뛴 거리, 횟수 등의 요약 정보", response = ResponseEntity.class)
+	@GetMapping("/summary/region")
+	public ResponseEntity findAllRunningUserByUserId(HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		if(jwtTokenProvider.validateToken(token)) {
+			int userId = jwtTokenProvider.getUserIdFromJwt(token);
+			List<RunningUser> runningUsers = recordService.findRunningUserByUserIdAndUserId(userId);
+			return new ResponseEntity<Response>(new 
+					Response(StatusCode.OK, ResponseMessage.USER_SUMMARY_RUNNING_SUCCESS, runningUsers), HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Response>(new 
+					Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN), HttpStatus.FORBIDDEN);
+		}
+		
 	}
 	
 }
