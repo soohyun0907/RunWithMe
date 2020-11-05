@@ -60,45 +60,37 @@ export default {
     }
   },
   actions: {
-     makeVariantToast(variant = null) {
-      this.$bvToast.toast("Toast body content", {
-        title: `Variant ${variant || "default"}`,
-        variant: variant,
-        solid: true
+   
+    login(context, { userEmail, userPw }) {
+      context.commit("clearError");
+      context.commit("setLoading", true);
+      console.log("login on")
+      http.post(`users/signin`,{
+        userEmail:userEmail,
+        userPw:userPw        
+      }).then(res => {
+          context.commit('mutateUserInfo', res.data.data)
+          context.commit('mutateAuth',res.headers.auth)
+          localStorage.setItem("auth",res.headers.auth)
+          localStorage.setItem("userInfo",JSON.stringify(res.data.data))
+          console.log("로그인 성공")
+          console.log(res.data)
+          console.log("토큰 받아오기" + res.headers.auth)// 토큰얻기
+          console.log(localStorage.getItem("auth"))
+          router.push('/')
+      })
+      .catch(function(error) {
+        // Handle Errors here.
+        console.log(error)
+        context.commit('mutateUserInfo',{})
+        context.commit("setError", error);
+        if(localStorage.getItem("userInfo")){
+          localStorage.removeItem("userInfo")
+        }
+        if(localStorage.getItem("auth")){
+          localStorage.removeItem("auth")
+        }
       });
-    },
-      login(context, { userEmail, userPw }) {
-        context.commit("clearError");
-        context.commit("setLoading", true);
-        console.log("login on")
-        var _this = this
-        http.post(`users/signin`,{
-          userEmail:userEmail,
-          userPw:userPw        
-        }).then(res => {
-            _this.makeVariantToast('warning')
-            context.commit('mutateUserInfo', res.data.data)
-            context.commit('mutateAuth',res.headers.auth)
-            localStorage.setItem("auth",res.headers.auth)
-            localStorage.setItem("userInfo",JSON.stringify(res.data.data))
-            console.log("로그인 성공")
-            console.log(res.data)
-            console.log("토큰 받아오기" + res.headers.auth)// 토큰얻기
-            console.log(localStorage.getItem("auth"))
-            router.push('/')
-        })
-        .catch(function(error) {
-          // Handle Errors here.
-          console.log(error)
-          context.commit('mutateUserInfo',{})
-          context.commit("setError", error);
-          if(localStorage.getItem("userInfo")){
-            localStorage.removeItem("userInfo")
-          }
-          if(localStorage.getItem("auth")){
-            localStorage.removeItem("auth")
-          }
-        });
     },
 
     signUserUp({commit}, data) {

@@ -26,9 +26,9 @@ export default {
   metaInfo() {
     return {
       // if no subcomponents specify a metaInfo.title, this title will be used
-      title: "Gull",
+      title: "RWM",
       // all titles will be injected into this template
-      titleTemplate: "%s | Gull - Vuejs Admin Dashboard Template",
+      titleTemplate: "%s | Run With Me",
       bodyAttrs: {
         class: [this.themeName, "text-left"]
       },
