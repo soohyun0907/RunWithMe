@@ -32,8 +32,8 @@
         </div>
     </div>
 
-    <!-- <img :src="result.thumbnail"/> -->
-    <section ref="map" class="map"> </section>
+    <img :src="result.thumbnail" width="100%" height="300px"/>
+    <!-- <section ref="map" class="map"> </section> -->
     <br>
     <h3>구간</h3>
     <div class = "col">
@@ -71,10 +71,11 @@ export default {
     }
   },
   mounted() {
-      console.log("result")
-      this.result = this.myRunning
-      console.log(this.result)
+    console.log("result")
+    this.result = this.myRunning
+    console.log(this.result)
     this.$store.commit('closeSidebar')
+
     if(window.google && window.google.maps) {
         this.initMap();
     } else {

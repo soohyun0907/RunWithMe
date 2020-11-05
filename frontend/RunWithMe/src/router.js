@@ -63,6 +63,7 @@ const routes = [
         redirect: "/app/runnings/kakaomaptest",
         children: [
           {
+            name: "runningResult",
             path: "runningResult",
             component: () => import("./views/app/runnings/runningResult")
           },
@@ -75,6 +76,7 @@ const routes = [
             component: () => import("./views/app/runnings/neighborhoodList")
           },
           {
+            name: "friendsDetail",
             path: "friendsDetail",
             component: () => import("./views/app/runnings/friendsDetail")
           },

@@ -38,9 +38,7 @@ export default {
    computed: {
     ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
   },
-  mounted() {
-    this.$store.commit('closeSidebar')
-  },
+ 
   methods: {
     ...mapMutations(["mutateProfile","closeSidebar"]),
 

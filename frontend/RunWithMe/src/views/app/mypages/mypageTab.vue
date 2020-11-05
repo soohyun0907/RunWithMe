@@ -73,7 +73,7 @@
               <ul class="timeline clearfix">
                 <b-card title="최근 런닝 기록" class="heading text-primary mb-30">
                   <div role="tablist">
-                    <div v-for="(running,i) in areaRunning" :index="i">
+                    <div v-for="(running,i) in allRunning" :index="i">
                       <b-card no-body class="ul-card__border-radius">
                         <!-- 접혀있을때 보이는 부분 -->
                         <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
@@ -127,6 +127,7 @@ export default {
       map: null,
       map2:null,
       areaRunning:[],
+      allRunning:[],
       defaultImage:require('@/assets/images/runnings/runningEx1.png')
     };
   },
@@ -137,6 +138,7 @@ export default {
 
   mounted() {
     this.getRunningsbyArea()
+    this.getRunnings()
     console.log(this.userInfo)
     if (window.google && window.google.maps) {
       this.initMap();
@@ -152,6 +154,13 @@ export default {
       .then(data => {
         this.areaRunning=data.data.data
         console.log(this.areaRunning)
+      })
+    },
+    getRunnings(){
+      http.get(`runnings/${this.userInfo.userId}`)
+      .then(data => {
+        this.allRunning=data.data.data
+        console.log(this.allRunning)
       })
     },
     initMap() {
