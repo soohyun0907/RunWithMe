@@ -84,7 +84,7 @@ export default {
       avgSpeed:0,
       gugun: ["광명시"],
       currentCity: "",
-
+      thumbnail:"",
       //스톱워치 변수
       clock: "00:00:00",
       timeBegan: null,
@@ -159,7 +159,7 @@ export default {
     },
 
     resetLocations() {
-      this.startTime = "";
+      
       this.endTime = "";
       this.clock = "00:00:00";
       this.timeBegan = null;
@@ -321,8 +321,8 @@ export default {
         staticM_URL +="|"+this.linePath[i].lat()+","+this.linePath[i].lng()
       }
 
-
-      window.open(staticM_URL);
+	 this.thumbnail = staticM_URL
+      //window.open(staticM_URL);
     },
     stopLocationUpdates() {
       this.isPause = true;
@@ -382,6 +382,7 @@ export default {
         accDistance: this.accumulated_distance,
         accTime: this.accumulated_time,
         gugun:this.gugun,
+	thumbnail:this.thumbnail,
       };
       http.post(`runnings/`, runningData);
     },
