@@ -7,8 +7,8 @@
             <div class="header-cover" style="background-image: url(http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-5.jpeg"></div>
                 <div class="user-info">
                     <img class="profile-picture avatar-lg mb-2" :src="userInfo.profile">
-                        <b-button variant="outline-info m-1" @click="goUserInfoEdit()">수정하기</b-button>
-                        <p class="m-0 text-24">{{userInfo.username}}</p>
+                        <b-button variant="outline-info" style="padding:0.2em" @click="goUserInfoEdit()">프로필 변경</b-button>
+                        <p class="m-0 text-24">{{userInfo.username}} 님</p>
                         <p class="text-muted m-0">{{userInfo.userEmail}}</p>
             </div>
             <div class="card-body">
@@ -74,7 +74,7 @@
                                     title="Popover Title"
                                     >회원 탈퇴하기
                                     </b-button>
-                                    <b-popover target="popover-out-check" triggers="hover" placement="right">
+                                    <b-popover target="popover-out-check" triggers="hover" placement="bottom">
                                     <template #title> 정말 탈퇴하시겠습니까? </template>
                                     <b>다시 되돌릴수 없습니다.</b>
                                     <br>
@@ -109,7 +109,8 @@ export default {
   },
   methods: {
       memberOut(userInfo){
-          alert(userInfo.username)
+          
+        http.delete()
       },
       goUserInfoEdit() {
           this.$router.push("/app/mypages/myUserInfoEdit");

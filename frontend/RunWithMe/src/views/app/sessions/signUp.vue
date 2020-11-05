@@ -6,20 +6,13 @@
     <div class="auth-content">
       <div class="card o-hidden">
         <div class="row">
-          <div
-            class="col-md-6 text-center"
-            style="background-size: cover"
-            :style="{ backgroundImage: 'url(' + logo + ')' }"
-          >
-            <div class="pl-3 auth-right">
-              <div class="flex-grow-1"></div>
-              <div class="w-100 mb-30"></div>
-              <div class="flex-grow-1"></div>
-            </div>
-          </div>
-
-          <b-col md="6">
+          <div class="col-md-6" >
             <div class="p-4">
+              <div class="auth-logo text-center mb-30">
+                <img :src="logo" style="height:auto"/>
+              </div>
+              <h1 style="text-align:center" class="mb-3 text-18"><code class="mb-3 text-18">R</code>un <code class="mb-3 text-18">W</code>ith <code class="mb-3 text-18">M</code>e</h1>
+             
               <h1 class="mb-3 text-18">회원가입</h1>
               <b-form @submit.prevent="submit">
                 <b-form-group label="Email">
@@ -55,11 +48,12 @@
                     입력해주세요.</b-alert
                   >
                 </b-form-group>
+
                 <b-row>
                   <b-col md="8" class=" mb-30">
-                   <b-card title="주 활동지역 선택">
+                   <b-card class="h-100" title="주 활동지역 선택">
 
-                    <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
+                    <b-dropdown size="sm" variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
                       <div v-for="(sido, index) in sidos" v-bind:key="index">
                         <b-dropdown-item @click="sidoSelected(sido)">{{
                           sido.sidoName
@@ -67,7 +61,7 @@
                       </div>
                     </b-dropdown>
 
-                    <b-dropdown variant="primary" id="dropdown-2" text="구군 선택" class="mb-2">
+                    <b-dropdown size="sm" variant="primary" id="dropdown-2" text="구군 선택" class="mb-2">
                       <div v-for="(gugun, index) in guguns" v-bind:key="index">
                         <b-dropdown-item @click="gugunSelected(gugun)">{{
                           gugun.gugunName
@@ -161,7 +155,7 @@
                 </div>
               </b-form>
             </div>
-          </b-col>
+          </div>
         </div>
       </div>
     </div>
@@ -186,7 +180,7 @@ export default {
       repeatPassword: "",
       emailAuth: false,
       bgImage: require("@/assets/images/signin/loginpage1.png"),
-      logo: require("@/assets/images/logo.png"),
+      logo: require("@/assets/images/runnings/loading.gif"),
       signInImage: require("@/assets/images/photo-long-3.jpg"),
       submitStatus: null,
       sidos: [],
@@ -297,7 +291,7 @@ export default {
             this.emailAuth = true;
           } else {
             this.email = "";
-            alert("중복된 이메일입니다.");
+            alert("서버 연결 상태를 확인해주세요.");
             console.log(res);
           }
         })
@@ -334,6 +328,15 @@ export default {
   height: 2em;
   width: 2em;
 }
+@media (min-width: 768px){
+  .col-md-6 {
+      -webkit-box-flex: 0;
+      flex: auto !important;
+      max-width: 100% !important;
+  }
+  .offset-md-6 {
+    margin-left: 0% !important;
+}
+}
 </style>
 
-ㅌ
