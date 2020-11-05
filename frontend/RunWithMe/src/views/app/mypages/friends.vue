@@ -17,7 +17,7 @@
         styleClass="tableOne vgt-table"
         :rows="rows"
       >
-       <div slot="table-actions" class="mb-3">
+       <!-- <div slot="table-actions" class="mb-3">
                     <b-button variant="primary" class="btn-rounded d-none d-sm-block" v-b-modal.modal-1
                       ><i class="i-Add-User text-white mr-2"> </i>친구 추가
                     </b-button>
@@ -39,16 +39,16 @@
                         </b-form-group>
                       </b-form>
                     </b-modal>
-                  </div>
+                  </div> -->
 
 
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'">
-            <a href="">
+            <a href="" @click="chatFriend(props.row.userId);">
               <i class="i-Speach-Bubble-8 text-25 text-success mr-2"></i>
               {{ props.row.button }}</a
             >
-            <a href="">
+            <a href="" @click="deleteFriend(props.row.userId);">
               <i class="i-Close-Window text-25 text-danger"></i>
               {{ props.row.button }}</a
             >
@@ -127,6 +127,16 @@ export default {
     this.getFriendList()
   },
   methods: {
+    chatFriend(friendId){
+      alert(friendId+"친구와 채팅합니다")
+    },
+    deleteFriend(friendId){
+      http.delete(`friends/friend/${friendId}`, {
+      })
+      .then(data => {
+        alert('친구가 삭제되었습니다!')
+      })
+    },
     getFriendList(){
       console.log(this.userInfo.userId)
       // http.get(`friends/contacts/${this.userInfo.userId}`)
