@@ -39,9 +39,11 @@ export default {
     ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
   },
   mounted() {
+    this.$store.commit('closeSidebar')
   },
   methods: {
-    ...mapMutations(["mutateProfile"]),
+    ...mapMutations(["mutateProfile","closeSidebar"]),
+
     handleFileUpload() {
         this.file = this.$refs.files.files;
     },
