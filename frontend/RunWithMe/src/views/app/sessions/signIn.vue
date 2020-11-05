@@ -83,9 +83,11 @@ export default {
      this.$store.subscribe((mutation,state) =>{
       if(mutation.type =="mutateAuth"){
         console.log("바껴써용")
+	
         setTimeout(() => {
           this.$router.go(0)
-        }, 100);
+        },400);
+	
       }
      })
   },

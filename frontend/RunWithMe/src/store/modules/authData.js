@@ -77,7 +77,7 @@ export default {
           console.log(res.data)
           console.log("토큰 받아오기" + res.headers.auth)// 토큰얻기
           console.log(localStorage.getItem("auth"))
-          router.push("/app/dashboards/main")
+          router.push("/")
       })
       .catch(function(error) {
         // Handle Errors here.
