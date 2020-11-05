@@ -1,6 +1,7 @@
 import http from "@/utils/http-common";
 import router from "@/router.js"
 import axios from "axios";
+import { setTimeout } from "core-js";
 
 
 export default {
@@ -10,6 +11,7 @@ export default {
     isLogin:false,
     auth:"",
     userInfo:{},
+    myRunning:{},
   },
   getters: {
     loading: state => state.loading,
@@ -17,8 +19,12 @@ export default {
     userInfo: state => state.userInfo,
     auth: state => state.auth,
     isLogin:state =>state.isLogin,
+    myRunning:state=>state.myRunning,
   },
   mutations: {
+    mutateMyRunning(state,myRunning){
+      state.myRunning = myRunning
+    },
     mutateProfile(state, profile){
       state.userInfo.profile = profile
     },

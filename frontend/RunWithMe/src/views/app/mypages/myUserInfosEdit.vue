@@ -3,12 +3,31 @@
         <breadcumb :page="'프로필 수정'" :folder="'My Page'" />
         
          <div class="card user-profile o-hidden mb-30">
-       
-          <div class="header-cover" style="background-image: url(http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-5.jpeg"></div>
-            <div class="user-info">
-                <img class="profile-picture avatar-lg mb-2" :src="userInfo.profile">
-                   
-                   <b-form-group label="이름">
+        
+          <div class="header-cover" 
+          :style="{ backgroundImage: 'url(' + signInImage + ')' }">
+          </div>
+          
+          <div class="card-body">
+                          <h1 class="mb-3 text-18">회원가입</h1>
+              <b-form @submit.prevent="submit">
+                <b-form-group label="Email">
+                  <b-form-input
+                    class="form-control form-control-rounded"
+                    label="Name"
+                    type="email"
+                    v-model="email"
+                  >
+                  </b-form-input>
+                  <b-button
+                    @click="emailDuplicate"
+                    pill
+                    variant="primary ripple m-1"
+                    >이메일 중복체크</b-button
+                  >
+                </b-form-group>
+
+                <b-form-group label="이름">
                   <b-form-input
                     class="form-control form-control-rounded"
                     label="Name"
@@ -25,12 +44,11 @@
                     입력해주세요.</b-alert
                   >
                 </b-form-group>
-
                 <b-row>
                   <b-col md="8" class=" mb-30">
-                   <b-card class="h-100" title="주 활동지역 선택">
+                   <b-card title="주 활동지역 선택">
 
-                    <b-dropdown size="sm" variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
+                    <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
                       <div v-for="(sido, index) in sidos" v-bind:key="index">
                         <b-dropdown-item @click="sidoSelected(sido)">{{
                           sido.sidoName
@@ -38,7 +56,7 @@
                       </div>
                     </b-dropdown>
 
-                    <b-dropdown size="sm" variant="primary" id="dropdown-2" text="구군 선택" class="mb-2">
+                    <b-dropdown variant="primary" id="dropdown-2" text="구군 선택" class="mb-2">
                       <div v-for="(gugun, index) in guguns" v-bind:key="index">
                         <b-dropdown-item @click="gugunSelected(gugun)">{{
                           gugun.gugunName
@@ -55,7 +73,7 @@
                     <input
                       type="radio"
                       name="orderStatus"
-                      value=2
+                      value=1
                       v-model="gender"
                     />
                     <span>여자</span>
@@ -66,7 +84,7 @@
                     <input
                       type="radio"
                       name="orderStatus"
-                      value=1
+                      value=2
                       v-model="gender"
                     />
                     <span>남자</span>
@@ -93,7 +111,46 @@
                   >
                 </b-form-group>
 
-            </div>
+                <b-form-group label="Password 확인">
+                  <b-form-input
+                    class="form-control form-control-rounded"
+                    label="Name"
+                    type="password"
+                    v-model.trim="$v.repeatPassword.$model"
+                  >
+                  </b-form-input>
+
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error col mt-1"
+                    v-if="!$v.repeatPassword.sameAsPassword"
+                    >비밀번호가 일치하지 않습니다.</b-alert
+                  >
+                </b-form-group>
+
+                <b-button
+                  type="submit"
+                  block
+                  variant="primary"
+                  :disabled="submitStatus === 'PENDING' || $v.$invalid"
+                  class="btn-rounded"
+                  >Sign Up</b-button>
+
+                <p v-once class="typo__p" v-if="submitStatus === 'OK'">
+                  {{ makeToastTwo("success") }}
+                  {{ this.$router.push("/") }}
+                </p>
+                <p v-once class="typo__p" v-if="submitStatus === 'ERROR'">
+                  {{ makeToast("danger") }}
+                </p>
+                <div v-once class="typo__p" v-if="submitStatus === 'PENDING'">
+                  <div class="spinner sm spinner-primary mt-3"></div>
+                </div>
+              </b-form>
+            
+          </div>
+          
         </div>
     </div>
 </template>
@@ -107,13 +164,44 @@ export default {
     // if no subcomponents specify a metaInfo.title, this title will be used
     title: "Profile"
   },
+  data() {
+    return {
+      inputPass: "",
+      }
+  },
    computed: {
     ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
   },
   mounted() {
   },
   methods: {
+    ...mapActions(["signOut"]),
     ...mapMutations(["mutateProfile"]),
+    handleFileUpload() {
+        this.file = this.$refs.files.files;
+    },
+    submitFile(userInfo){
+      let formData = new FormData();
+      formData.append('profile', this.file[0]);
+      http
+        .put('users/'+ userInfo.userId + '/profile', formData, 
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        })
+        .then(({ data }) => {
+          if(data.status == 200){
+            console.log(data)
+            this.$store.commit('mutateProfile',data.data.profile)
+            console.log(data.data.profile)
+            this.$router.go(0)
+          } else {
+            alert("오류가 발생하였습니다.");
+            return;
+          }
+        })
+    },
   },
 }
 </script>
