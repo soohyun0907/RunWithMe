@@ -38,12 +38,14 @@ public interface RecordService {
 	
 	public void join(User user);
 	
-	public RunningUser findRunningUserByUserId(User user);
+	public RunningUser findRunningUserByUserId(int userId);
 	
 	public List<RunningUser> findAllRunningUserByUserId(List<User> users);
 	
 	public RunningUser updateRunningUser(User user, Running running);
 
 	public List<Running> findAllRunningByActivityArea(int userId);
+
+	public List<RunningUser> findRunningUserByUserIdAndUserId(int userId);
 
 }

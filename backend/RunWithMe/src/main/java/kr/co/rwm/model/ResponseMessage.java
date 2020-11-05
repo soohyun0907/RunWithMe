@@ -32,6 +32,7 @@ public class ResponseMessage {
     public static final String RUNNING_DELETE_RECORD = "런닝 삭제";
     public static final String RECORD_REDIS_INSERT_SUCCESS = "레디스에 레코드 저장";
     public static final String RECORD_REDIS_LIST_SUCCESS = "레디스에서 레코드 목록 조회";
+    public static final String USER_SUMMARY_RUNNING_SUCCESS = "유저의 요약 런닝 정보 조회";
     
     public static final String CHALLENGE_INSERT_SUCCESS = "챌린지 등록 성공";
     public static final String CHALLENGE_IMG_INSERT_SUCCESS = "챌린지 이미지 등록 성공";
