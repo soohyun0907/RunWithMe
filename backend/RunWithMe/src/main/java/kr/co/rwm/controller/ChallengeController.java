@@ -272,16 +272,16 @@ public class ChallengeController {
 	 * @return
 	 */
 	@ApiOperation(value = "챌린지 참여 취소", response = ResponseEntity.class)
-	@DeleteMapping("/runners")
-	public ResponseEntity cancelChallenge(@RequestBody HashMap<String, Integer> map, HttpServletRequest request) {
+	@DeleteMapping("/runners/{challengeId}/{donation}")
+	public ResponseEntity cancelChallenge(@PathVariable int challengeId, @PathVariable int donation, HttpServletRequest request) {
 		System.out.println("/challenges/participate - 유저가 챌린지 참여를 취소합니다.");
 		String token = request.getHeader("AUTH");
 		int userId = 0;
 		if (jwtTokenProvider.validateToken(token)) {
 			userId = jwtTokenProvider.getUserIdFromJwt(token);
 		}
-		int challengeId = map.get("challengeId");
-		int donation = map.get("donation");
+//		int challengeId = map.get("challengeId");
+//		int donation = map.get("donation");
 		Challenge challenge = challengeService.cancelChallenge(challengeId, donation, userId);
 
 		return new ResponseEntity<Response>(
