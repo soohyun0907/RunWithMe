@@ -1,0 +1,51 @@
+.ul-contact-detail__info-1 {
+  margin: 15px 0;
+}
+.ul-contact-detail__info .ul-contact-detail__info-1 {
+  margin: 15px 0;
+  border-bottom: 1px solid $gray-300;
+  padding-bottom: 10px;
+}
+.ul-contact-detail__social-1 {
+  display: flex;
+  align-items: center;
+}
+.ul-contact-detail__social {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+span.ul-contact-detail__followers {
+  font-size: 25px;
+}
+.ul-contact-detail__timeline-image img {
+  width: 30%;
+  height: 70%;
+}
+.ul-contact-detail__timeline-image {
+  display: flex;
+  // height: 200px;
+  justify-content: space-between;
+}
+.ul-contact-detail__timeline-row {
+  margin: 20px 0;
+}
+.ul-contact-detail__timeline-image-2 img {
+  width: 20%;
+}
+.ul-contact-detail__timeline-image-info {
+  margin-left: 15px;
+}
+.ul-contact-detail__timeline-image-2.mt-3 {
+  display: flex;
+  // height: 150px;
+  /* align-items: center; */
+  align-items: center;
+}
+
+.ul-contact-detail__profile {
+  display: flex;
+  justify-content: space-between;
+  margin: 25px 0;
+}

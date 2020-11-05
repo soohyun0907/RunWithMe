@@ -1,0 +1,22 @@
+#todo_wrap {
+    ul {
+        padding: 0;
+        text-align: left;
+        list-style: none;
+    }
+    hr {
+        border-bottom: 0;
+        margin: 15px 0;
+    }
+    input[type="checkbox"] {
+        width: 30px;
+        float: left;
+    }
+    .remove {
+        float: right;
+        cursor: pointer;
+    }
+    .completed {
+        text-decoration: line-through;
+    }
+}

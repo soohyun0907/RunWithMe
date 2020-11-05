@@ -1,0 +1,95 @@
+{
+  "name": "gull-vue",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@johmun/vue-tags-input": "^2.1.0",
+    "apexcharts": "^3.8.0",
+    "babel-polyfill": "^6.26.0",
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.0-rc.22",
+    "chart.js": "^2.8.0",
+    "core-js": "^2.6.5",
+    "echarts": "^4.2.1",
+    "es6-promise": "^4.2.8",
+    "firebase": "^6.4.0",
+    "font-awesome": "^4.7.0",
+    "mobile-device-detect": "^0.2.3",
+    "nprogress": "^0.2.0",
+    "v-calendar": "^1.0.0-beta.14",
+    "v2-datepicker": "^3.1.1",
+    "vue": "^2.6.10",
+    "vue-apexcharts": "^1.4.0",
+    "vue-chartjs": "^3.4.2",
+    "vue-clickaway": "^2.2.2",
+    "vue-cropperjs": "^4.0.0",
+    "vue-echarts": "^4.0.3",
+    "vue-flag-icon": "^1.0.6",
+    "vue-fontawesome-icon": "^1.3.0",
+    "vue-form-wizard": "^0.8.4",
+    "vue-good-table": "^2.16.5",
+    "vue-i18n": "^8.14.0",
+    "vue-instantsearch": "^2.6.0",
+    "vue-jstree": "^2.1.6",
+    "vue-lazyload": "^1.2.6",
+    "vue-meta": "^2.2.1",
+    "vue-perfect-scrollbar": "^0.1.0",
+    "vue-router": "^3.0.6",
+    "vue-simple-calendar": "^4.2.2",
+    "vue-slider-component": "^3.0.33",
+    "vue-star-rating": "^1.6.1",
+    "vue-sweetalert2": "^2.1.0",
+    "vue-the-mask": "^0.11.1",
+    "vue-tour": "^1.1.0",
+    "vue2-daterange-picker": "^0.4.4",
+    "vue2-editor": "^2.9.1",
+    "vuedraggable": "^2.23.1",
+    "vuejs-smart-table": "0.0.5",
+    "vuelidate": "^0.7.4",
+    "vuetable-2": "^1.7.5",
+    "vuex": "^3.1.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.8.0",
+    "@vue/cli-plugin-eslint": "^3.8.0",
+    "@vue/cli-service": "^3.8.0",
+    "@vue/eslint-config-prettier": "^4.0.1",
+    "babel-eslint": "^10.0.1",
+    "copy-webpack-plugin": "^5.0.4",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
+    "vue-loader": "^15.7.1",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}
