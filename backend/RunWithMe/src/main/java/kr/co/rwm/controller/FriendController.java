@@ -43,9 +43,11 @@ public class FriendController {
 		System.out.println("token: " + token);
 		if(jwtTokenProvider.validateToken(token)) {
 			uid = jwtTokenProvider.getUserIdFromJwt(token);
+			List<User> list = friendService.list(uid);
+			return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_FRIENDLIST_SUCCESS, list), HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Response> (new Response(StatusCode.FORBIDDEN,ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}
-		List<User> list = friendService.list(uid);
-		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_FRIENDLIST_SUCCESS, list), HttpStatus.OK);
 	}
 	
 	@PostMapping("/friend")
