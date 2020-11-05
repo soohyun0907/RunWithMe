@@ -159,7 +159,8 @@ public class RecordServiceImpl implements RecordService {
 	}
 
 	@Override
-	public RunningUser findRunningUserByUserId(User user) {
+	public RunningUser findRunningUserByUserId(int userId) {
+		User user = userRepository.findByUserId(userId).get();
 		return runningUserRepository.findByUserId(user);
 	}
 
@@ -195,6 +196,21 @@ public class RecordServiceImpl implements RecordService {
 		}
 		
 		return runningList;
+	}
+
+	@Override
+	public List<RunningUser> findRunningUserByUserIdAndUserId(int userId) {
+		User user = userRepository.findByUserId(userId).get();
+		int gugunId = user.getGugunId().getGugunId();
+		List<RunningUser> runningUsers = new ArrayList<RunningUser>();
+		
+		List<RunningUser> runningUserList = runningUserRepository.findAll();
+		for(RunningUser ru: runningUserList) {
+			if(ru.getUserId().getGugunId().getGugunId()==gugunId) {
+				runningUsers.add(ru);
+			}
+		}
+		return runningUsers;
 	}
 	
 }
