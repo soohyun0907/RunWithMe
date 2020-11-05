@@ -68,8 +68,8 @@
       </div>
       <div class="ul-widget__body">
         <div class="ul-widget1">
-          <div class="ul-widget__item ul-widget4__users" v-for="ranker in rankList" :key="ranker.rankId">
-            <h5 style="margin-right:5px;">{{ ranker.rankId }} </h5>
+          <div class="ul-widget__item ul-widget4__users" v-for="(ranker,index) in rankList" :index="index" :key="ranker.rankerId">
+            <h5 style="margin-right:5px;">{{ index+1 }} </h5>
               <div class="ul-widget4__img">
                 <img
                   :src="ranker.userId.profile"
@@ -79,12 +79,12 @@
                 />
               </div>
               <div class="ul-widget2__info ul-widget4__users-info">
-                <router-link :to="`/app/runnings/friendsDetail`">
+                 <router-link :to="{name:'friendsDetail', query:{friendId:ranker.userId.userId}}">
                   {{ranker.userId.username}}
                 </router-link>
               </div>
               <span class="ul-widget4__number t-font-boldest text-success">
-                {{ranker.totalExp}} p
+                {{ranker.totalExp}}
               </span>
           </div>
         </div>
@@ -115,7 +115,7 @@
         v-for="(item, index) in friendsFeed"
         transition="list"
       >
-        <router-link :to="`/app/runnings/runningResult`">
+        <router-link :to="{name:'runningResult', query:{friendId:item.userId.userId}}">
         <div
           class="card o-hidden mb-30 d-flex "
           :class="{ 'flex-column': isListView, 'flex-row': !isListView }"
