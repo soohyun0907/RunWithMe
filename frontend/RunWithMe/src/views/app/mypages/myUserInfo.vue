@@ -6,8 +6,9 @@
         <div class="card user-profile o-hidden mb-30">
             <div class="header-cover" style="background-image: url(http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-5.jpeg"></div>
                 <div class="user-info">
-                    <img class="profile-picture avatar-lg mb-2" src="http://gull-html-laravel.ui-lib.com/assets/images/faces/1.jpg" alt="">
-                        <p class="m-0 text-24">{{userInfo.username}}</p>
+                    <img class="profile-picture avatar-lg mb-2" :src="userInfo.profile">
+                        <b-button variant="outline-info" style="padding:0.2em" @click="goUserInfoEdit()">프로필 변경</b-button>
+                        <p class="m-0 text-24">{{userInfo.username}} 님</p>
                         <p class="text-muted m-0">{{userInfo.userEmail}}</p>
             </div>
             <div class="card-body">
@@ -20,15 +21,15 @@
 
                             <div class="row">
                                 <div class="col-md-4 col-6">
-                                    <div class=" mb-30">
+                                    <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Calendar text-16 mr-1"></i>이름</p>
                                         <span>{{userInfo.username}}</span>
                                     </div>
-                                    <div class=" mb-30">
+                                    <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Edit-Map text-16 mr-1"></i>Email</p>
-                                        <span>{{userInfo.userEmail}}</span>
+                                        <span style="white-space:nowrap;">{{userInfo.userEmail}}</span>
                                     </div>
-                                    <div class=" mb-30">
+                                    <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i>성별</p>
                                         <div v-if="userInfo.gender=='1'">
                                             <span>남자</span>
@@ -38,32 +39,36 @@
                                             <span>여자</span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4 col-6">
-                                    <div class=" mb-30">
-                                        <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i> 도시 </p>
-                                        <span>{{userInfo.gugunId.sidoId.sidoName}} {{userInfo.gugunId.gugunName}}</span>
-                                    </div>
-                                    <div class=" mb-30">
-                                        <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i>누적 거리</p>
-                                        <span>512km</span>
-                                    </div>
-                                    <div class=" mb-30">
-                                        <p class="text-primary mb-1"><i class="i-Cloud-Weather text-16 mr-1"></i> 누적 런닝</p>
-                                        <span>62회</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-6">
-                                    <div class=" mb-30">
-                                        <p class="text-primary mb-1"><i class="i-Face-Style-4 text-16 mr-1"></i>누적 시간</p>
-                                        <span>589시간</span>
-                                    </div>
-                                    <div class=" mb-30">
+                                    <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Professor text-16 mr-1"></i>등급</p>
                                         <span><span class="badge badge-danger">Pro</span></span>
                                     </div>
                                 </div>
+                                <div class="col-md-4 col-6">
+                                    <div style="text-align:center" class=" mb-30">
+                                        <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i> 도시 </p>
+                                        <span>{{userInfo.gugunId.sidoId.sidoName}} {{userInfo.gugunId.gugunName}}</span>
+                                    </div>
+                                    <div style="text-align:center" class=" mb-30">
+                                        <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i>누적 거리</p>
+                                        <span>512km</span>
+                                    </div>
+                                    <div style="text-align:center" class=" mb-30">
+                                        <p class="text-primary mb-1"><i class="i-Cloud-Weather text-16 mr-1"></i> 누적 런닝</p>
+                                        <span>62회</span>
+                                    </div>
+                                    <div style="text-align:center" class=" mb-30">
+                                        <p class="text-primary mb-1"><i class="i-Face-Style-4 text-16 mr-1"></i>누적 시간</p>
+                                        <span>589시간</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-6">
+                                    
+                                    
+                                </div>
                             </div>
+                             <b-button variant="outline-info" style="padding:0.2em" @click="goUserInfosEdit()">회원 정보 수정</b-button>
+                       
 
                         </b-tab>
                        <b-tab title="회원 탈퇴" >
@@ -73,7 +78,7 @@
                                     title="Popover Title"
                                     >회원 탈퇴하기
                                     </b-button>
-                                    <b-popover target="popover-out-check" triggers="hover" placement="right">
+                                    <b-popover target="popover-out-check" triggers="hover" placement="bottom">
                                     <template #title> 정말 탈퇴하시겠습니까? </template>
                                     <b>다시 되돌릴수 없습니다.</b>
                                     <br>
@@ -108,9 +113,18 @@ export default {
   },
   methods: {
       memberOut(userInfo){
-          alert(userInfo.username)
-      }
+          
+        http.delete()
+      },
+      goUserInfoEdit() {
+          this.$router.push("/app/mypages/myUserInfoEdit");
+      },
+      goUserInfosEdit(){
+          this.$router.push("/app/mypages/myUserInfosEdit");
+      },
   },
 }
 </script>
+<style scoped>
 
+</style>

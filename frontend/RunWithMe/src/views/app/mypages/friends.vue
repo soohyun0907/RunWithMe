@@ -17,7 +17,7 @@
         styleClass="tableOne vgt-table"
         :rows="rows"
       >
-       <div slot="table-actions" class="mb-3">
+       <!-- <div slot="table-actions" class="mb-3">
                     <b-button variant="primary" class="btn-rounded d-none d-sm-block" v-b-modal.modal-1
                       ><i class="i-Add-User text-white mr-2"> </i>친구 추가
                     </b-button>
@@ -39,29 +39,36 @@
                         </b-form-group>
                       </b-form>
                     </b-modal>
-                  </div>
+                  </div> -->
 
 
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'">
-            <a href="">
-              <i class="i-Eraser-2 text-25 text-success mr-2"></i>
+            <a href="" @click="chatFriend(props.row.userId);">
+              <i class="i-Speach-Bubble-8 text-25 text-success mr-2"></i>
               {{ props.row.button }}</a
             >
-            <a href="">
+            <a href="" @click="deleteFriend(props.row.userId);">
               <i class="i-Close-Window text-25 text-danger"></i>
               {{ props.row.button }}</a
             >
           </span>
-          <span v-else-if="props.column.field == 'name'">
+          <span v-else-if="props.column.field == 'gender'">
+            <div v-if="props.row.gender=='1'">
+              남자
+            </div>
+            <div v-else>
+              여자
+            </div>
+          </span>
+          <span v-else-if="props.column.field == 'username'">
             <a href="">
               <div class="ul-widget-app__profile-pic">
                 <img
                   class="profile-picture avatar-sm mb-2 rounded-circle img-fluid"
-                  :src="props.row.avatar"
-                  alt=""
-                />
-                {{ props.row.name }}
+                  :src="props.row.profile"
+                  alt=""/>
+                {{ props.row.username }}
               </div>
             </a>
           </span>
@@ -72,78 +79,72 @@
 </template>
 
 <script>
+import http from "@/utils/http-common";
+import { mapGetters } from "vuex";
+
 export default {
   metaInfo: {
-    // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Task Manager"
+    title: "친구 목록"
   },
   data() {
     return {
-      foods: ["apple", "orrange"],
       columns: [
         {
           label: "이름",
-          field: "name"
+          field: "username"
         },
         {
           label: "Email",
-          field: "email"
+          field: "userEmail"
         },
-        {
-          label: "등급",
-          field: "span",
-          html: true
-        },
-        {
-          label: "나이",
-          field: "age"
-        },
+        // {
+        //   label: "등급",
+        //   field: "span",
+        //   html: true
+        // },
         {
           label: "성별",
           field: "gender"
         },
         {
-          label: "Button",
+          label: "지역",
+          field: "gugunId.gugunName"
+        },
+        {
           field: "button",
           html: true,
           tdClass: "text-right",
           thClass: "text-right"
         }
       ],
-      rows: [
-         {
-          id: 1,
-          avatar: require("@/assets/images/faces/1.jpg"),
-          name: "택택",
-          email: "hyungtaik@gmail.com",
-          span: '<span class="badge badge-danger">Pro</span>',
-          age:"27",
-          gender:"남성",
-        },
-        {
-          id: 2,
-          avatar: require("@/assets/images/faces/3.jpg"),
-          name: "수니",
-          email: "sooni0110@gmail.com",
-          span: '<span class="badge badge-primary">Beginner</span>',
-          age:"28",
-          gender:"여성",
-        },
-        {
-          id: 3,
-          avatar: require("@/assets/images/faces/2.jpg"),
-          name: "두현",
-          email: "hyuns@gmail.com",
-          span: '<span class="badge badge-success">Runner</span>',
-          age:"27",
-          gender:"여성",
-        },
-      ]
+      rows: []
     };
   },
+  computed: {
+    ...mapGetters(["userInfo"]),
+  },
+  mounted() {
+    this.getFriendList()
+  },
   methods: {
-    addFile() {
-      console.log("hello");
+    chatFriend(friendId){
+      alert(friendId+"친구와 채팅합니다")
+    },
+    deleteFriend(friendId){
+      http.delete(`friends/friend/${friendId}`, {
+      })
+      .then(data => {
+        alert('친구가 삭제되었습니다!')
+      })
+    },
+    getFriendList(){
+      console.log(this.userInfo.userId)
+      // http.get(`friends/contacts/${this.userInfo.userId}`)
+      http.get(`friends/contacts`)
+      .then((res) => {
+        console.log(res.data.data);
+        this.rows = res.data.data
+    });
     }
   }
 };

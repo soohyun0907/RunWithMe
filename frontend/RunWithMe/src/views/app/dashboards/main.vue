@@ -1,8 +1,17 @@
 <template>
   <div class="main-content">
     <h3>기부/이벤트</h3>
-    <carousel-3d :width="180" :height="250">
-      <slide v-for="slide in slides" :key="slide.id" style="border: 0px;">
+
+    <div v-if="slides.length==0">
+        <h3 class="mt-5" style="text-align: center;">현재 진행중인 이벤트가 없어요!</h3>
+    </div>
+
+  <div v-else> 
+    <!-- <carousel-3d :width="180" :height="250"> -->
+    <carousel-3d :width="150" :height="150"
+     :controls-visible="true" >
+      <!-- <slide v-for="(slide,index) in slides" :key="index" style="border: 0px;"> -->
+      <slide v-for="slide in slides" :index="slide.id-1" :key="slide.id" style="border: 0px;">
         <div @click="toggleOverlay">
           <b-overlay 
           :show="slidesOverlayShow" 
@@ -13,7 +22,7 @@
             <img :src="slide.challengeImg" />
             <template #overlay>
               <div class="text-center">
-                <h3>{{slide.title}}</h3>
+                <h3 style="overflow:hidden;">{{slide.title}}</h3>
                 <h5>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h5>
               </div>
             </template>
@@ -21,6 +30,7 @@
         </div>
       </slide>
     </carousel-3d>
+  </div>
     <!-- <vueper-slides
       class="no-shadow"
       :visible-slides="1.7"
@@ -111,7 +121,7 @@
           :class="{ 'flex-column': isListView, 'flex-row': !isListView }"
         >
           <div class="list-thumb d-flex">
-            <img :src="item.img" />
+            <img :src="item.mapImg" />
           </div>
           <div
             class="flex-grow-1 "
@@ -123,7 +133,7 @@
             >
               <a class="w-40 w-sm-100" href="">
                 <div class="item-title">
-                  <b-avatar class="mr-2" variant="info" src="/img/2.jpg"></b-avatar>
+                  <b-avatar class="mr-2" variant="info" :src="item.profileImg"></b-avatar>
                     {{ item.title }}
                 </div>
               </a>
@@ -171,15 +181,17 @@ export default {
       rankList : [],
       friendsFeed: [],
       haveFriends: true,
+      events:[],
     };
   },
   created() {
+   
+  },
+  mounted() {
     this.getChallengesIng();
     this.getChallengesCommingSoon();
     this.getTopRankers();
     this.getFriendsRunning();
-  },
-  mounted() {
   },
   methods: {
     convertToTime(origin) {
@@ -200,14 +212,11 @@ export default {
         .then(({data}) => {
           if(data.status==200){
             let obj;
+            var slides = this.slides
             data.data.forEach(element => {
-              obj = new Object();
-              obj.id = element.challengeId;
-              obj.title = element.title;
-              obj.challengeImg = element.challengeImg;
-              obj.startTime = element.startTime;
-              obj.endTime = element.endTime;
-              this.slides.push(obj);
+              console.log(data)
+              obj = element
+              slides.push(obj);
             });
           }
           console.log(this.slides);
@@ -217,6 +226,18 @@ export default {
           return;
         });
     },
+    // getChallengesIng() {
+    //   http
+    //     .get("challenges/ing")
+    //     .then((data) => {
+    //       console.log(data)
+    //       this.events = data
+    //       this.slides.push(this.events);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
     getChallengesCommingSoon(){
       http
         .get("challenges/comingsoon")
@@ -260,16 +281,20 @@ export default {
             let obj;
             for(var i=0; i<data.data.friends.length; i++) {
               obj = new Object();
-              if(data.data.runnings[i] == null) {
+              if(data.data.runnings[0] == null) {
                 obj.total_distance = "기록이 없습니다";
+                obj.runningId = "";
+                obj.total_distance = "";
+                obj.mapImg = "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png";
               }else {
-                obj.runningId = data.data.runnings[i].runningId;
-                obj.total_distance = data.data.runnings[i].accDistance;
-                obj.accumulcated_time = data.data.runnings[i].accTime;
+                obj.runningId = data.data.runnings.runningId;
+                obj.total_distance = data.data.runnings.accDistance;
+                obj.accumulcated_time = data.data.runnings.accTime;
                 obj.running_avg_pace = obj.accumulcated_distance / obj.total_distance;
+                obj.mapImg = data.data.runnings.thumbnail;
               }
               obj.userId = data.data.friends[i].userId;
-              obj.img = data.data.friends[i].profile;
+              obj.profileImg = data.data.friends[i].profile;
               obj.title = data.data.friends[i].username;
               this.friendsFeed.push(obj);
             }

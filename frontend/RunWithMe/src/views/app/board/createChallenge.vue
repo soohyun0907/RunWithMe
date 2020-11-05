@@ -91,10 +91,11 @@
         </b-card>
       </b-col>
     </b-row>
-
-    <input type="file" id="files" ref="files" v-on:change="handleFileUpload()"
-      accept="image/*" />
-    <button v-on:click="submitFile()">Submit</button>
+    <div v-if="updateChallengeImg">
+      <input type="file" id="files" ref="files" v-on:change="handleFileUpload()"
+        accept="image/*" />
+      <button v-on:click="submitFile()">Submit</button>
+    </div>
   </div>
 </template>
 <script>
@@ -112,6 +113,8 @@ export default {
   components: { DateRangePicker },
   data() {
     return {
+      challengeId: "",
+      updateChallengeImg: false,
       file: [],
       form: {
         cName: "",
@@ -141,7 +144,9 @@ export default {
         })
         .then(({ data }) => {
           if(data.status == 200){
-            alert("챌린지 생성 완료 이미지 등록으로 이동");
+            alert("챌린지 생성 완료 이미지를 등록해주세요.");
+            this.challengeId = data.data.challengeId;
+            this.updateChallengeImg = true;
           } else {
             alert("오류가 발생하였습니다.");
             return;
@@ -163,7 +168,7 @@ export default {
       formData.append('files', this.file[0]);
       console.log(this.file[0]);
       http
-        .post('/challenges/images/', formData, 
+        .post('/challenges/images/'+this.challengeId, formData, 
         {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -172,6 +177,7 @@ export default {
         .then(({ data }) => {
           if(data.status == 200){
             alert(data.message);
+            this.$router.push("/app/board/challenges");
           } else {
             alert("오류가 발생하였습니다.");
             return;

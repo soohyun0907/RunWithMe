@@ -100,31 +100,6 @@
             @click.prevent="toggleSidebarDropdwon($event)"
             class="nav-item dropdown-sidemenu"
           >
-            <a href="#">
-              <i class="nav-icon i-Speach-Bubble-3"></i>
-              <span class="item-name">Challenges</span>
-              <i class="dd-arrow i-Arrow-Down"></i>
-            </a>
-            <ul class="submenu">
-              <li>
-                <router-link tag="a" class to="/app/apps/challenges">
-                  <i class="nav-icon i-Speach-Bubble-3"></i>
-                  <span class="item-name">Challenge List</span>
-                </router-link>
-              </li>
-              <li>
-                <router-link tag="a" class to="/app/apps/createChallenge">
-                  <i class="nav-icon i-Speach-Bubble-3"></i>
-                  <span class="item-name">Challenge Creation Form</span>
-                </router-link>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/apps/payment">
-              <i class="nav-icon i-Speach-Bubble-3"></i>
-              <span class="item-name">Payment</span>
-            </router-link>
           </li>
         </ul>
         <ul
@@ -135,15 +110,15 @@
           <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/neighborhoodList">
               <i class="nav-icon i-File-CSV"></i>
-              <span class="item-name">Neighborhood List</span>
+              <span class="item-name">주변 러너 보기</span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/runningResult">
               <i class="nav-icon i-File-Chart"></i>
               <span class="item-name">RunningResult</span>
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/running">
               <i class="nav-icon i-Stopwatch"></i>
@@ -175,6 +150,18 @@
               <span class="item-name">회원 정보 관리</span>
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/mypages/myChallenges">
+              <i class="nav-icon i-Stopwatch"></i>
+              <span class="item-name">나의 챌린지</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/apps/payment">
+              <i class="nav-icon i-Speach-Bubble-3"></i>
+              <span class="item-name">결제하기(충전하기)</span>
+            </router-link>
+          </li>
         </ul>
 
         <ul
@@ -182,6 +169,12 @@
           data-parent="challengeBoard"
           :class="{ 'd-block': selectedParentMenu == 'challengeBoard' }"
         >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/board/challenges">
+              <i class="nav-icon i-Speach-Bubble-3"></i>
+              <span class="item-name">전체 챌린지 보기</span>
+            </router-link>
+          </li>
           <li class="nav-item">
             <router-link tag="a" class to="/app/board/challengeBoard">
               <i class="nav-icon i-Stopwatch"></i>
@@ -195,9 +188,9 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link tag="a" class to="/app/mypages/myChallenges">
-              <i class="nav-icon i-Stopwatch"></i>
-              <span class="item-name">나의 챌린지</span>
+            <router-link tag="a" class to="/app/board/createChallenge">
+              <i class="nav-icon i-Speach-Bubble-3"></i>
+              <span class="item-name">챌린지 생성</span>
             </router-link>
           </li>
         </ul>
