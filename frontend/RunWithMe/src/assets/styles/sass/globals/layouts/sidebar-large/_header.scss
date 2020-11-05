@@ -194,3 +194,14 @@
     }
   }
 }
+
+@media (max-width: 670px) {
+  .layout-sidebar-large {
+    .main-header {
+      justify-content: space-around;
+      .menu-toggle {
+        margin: 0;
+      }
+    }
+  }
+}

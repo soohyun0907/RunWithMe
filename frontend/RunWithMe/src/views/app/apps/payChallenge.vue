@@ -60,7 +60,8 @@ export default {
         challengeId: "",
         challengeInfo: {},
         donateAmount: 0,
-        mileage: 0
+        mileage: 0,
+        movePayment: "",
     };
   },
   created() {
@@ -76,7 +77,7 @@ export default {
             if(data.status==200){
                 this.challengeInfo = data.data.challengeId;
             }
-            console.log(this.challengeInfo);
+            // console.log(this.challengeInfo);
         })
         .catch((error) => {
             console.log(error);
@@ -88,6 +89,8 @@ export default {
         .get('/users')
         .then(({data}) => {
             this.mileage = data.data.mileage;
+            if(this.mileage == 0)
+              this.showMovepaymentModal();
         })
         .catch((error) => {
             console.log(error);
@@ -120,7 +123,6 @@ export default {
         .get("payment/"+this.donateAmount)
         .then(({data}) => {
           alert("결제완료");
-          this.cancelChallenge();
         })
         .catch((error) => {
           this.cancelChallenge();
@@ -129,21 +131,47 @@ export default {
         })
     },
     cancelChallenge() {
+      console.log(this.challengeId+" "+this.donateAmount);
       http
-        .delete("challenges/runners", {
-          challengeId: this.challengeId,
-          donation: this.donateAmount
-        })
+        .delete("/challenges/runners/"+this.challengeId+"/"+this.donateAmount)
         .then(({data}) => {
           if(data.status == 200){
             alert("챌린지 참여 중 오류가 발생하였습니다.");
-            return;
           } else {
             alert("챌린지 참여 중 오류가 발생하였습니다.");
             return;
           }
         })
-    }
+        .catch((error) => {
+          // this.cancelChallenge();
+          console.log(error);
+          return;
+        })
+    },
+    showMovepaymentModal(){
+      this.movePayment = "";
+      this.$bvModal
+        .msgBoxConfirm("현재 마일리지가 부족합니다. 충전 페이지로 이동하시겠습니까?", {
+          title: "충전 페이지로 이동하시겠습니까?",
+          size: "sm",
+          buttonSize: "sm",
+          okVariant: "danger",
+          okTitle: "YES",
+          cancelTitle: "NO",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          this.movePayment = value;
+          if(this.movePayment)
+            this.$router.push("/app/apps/payment");
+          })
+        .catch(err => {
+          // An error occurred
+          console.log(error);
+        });
+    },
   }
 };
 </script>

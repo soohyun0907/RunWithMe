@@ -101,12 +101,6 @@
             class="nav-item dropdown-sidemenu"
           >
           </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/apps/payment">
-              <i class="nav-icon i-Speach-Bubble-3"></i>
-              <span class="item-name">Payment</span>
-            </router-link>
-          </li>
         </ul>
         <ul
           class="childNav d-none"
@@ -116,15 +110,15 @@
           <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/neighborhoodList">
               <i class="nav-icon i-File-CSV"></i>
-              <span class="item-name">Neighborhood List</span>
+              <span class="item-name">주변 러너 보기</span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/runningResult">
               <i class="nav-icon i-File-Chart"></i>
               <span class="item-name">RunningResult</span>
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/running">
               <i class="nav-icon i-Stopwatch"></i>
@@ -162,6 +156,12 @@
               <span class="item-name">나의 챌린지</span>
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/apps/payment">
+              <i class="nav-icon i-Speach-Bubble-3"></i>
+              <span class="item-name">결제하기(충전하기)</span>
+            </router-link>
+          </li>
         </ul>
 
         <ul
@@ -169,6 +169,12 @@
           data-parent="challengeBoard"
           :class="{ 'd-block': selectedParentMenu == 'challengeBoard' }"
         >
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/board/challenges">
+              <i class="nav-icon i-Speach-Bubble-3"></i>
+              <span class="item-name">전체 챌린지 보기</span>
+            </router-link>
+          </li>
           <li class="nav-item">
             <router-link tag="a" class to="/app/board/challengeBoard">
               <i class="nav-icon i-Stopwatch"></i>
@@ -179,12 +185,6 @@
             <router-link tag="a" class to="/app/board/challengeBoardDetail">
               <i class="nav-icon i-Stopwatch"></i>
               <span class="item-name">챌린지 제안 상세</span>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/board/challenges">
-              <i class="nav-icon i-Speach-Bubble-3"></i>
-              <span class="item-name">전체 챌린지 보기</span>
             </router-link>
           </li>
           <li class="nav-item">

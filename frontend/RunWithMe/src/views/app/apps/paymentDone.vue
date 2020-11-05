@@ -14,7 +14,7 @@
             </b-col>
         </b-row>
 
-        <router-link :to="`/app/apps/challenges`">
+        <router-link :to="`/app/board/challenges`">
             <b-button block variant="primary">챌린지 구경하러 가기</b-button>
         </router-link>
     </div>
