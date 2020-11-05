@@ -187,7 +187,6 @@
                 rows="3"
                 spellcheck="false"
                 v-model="message"
-                v-on:keypress.enter="sendMessage('TALK')"
               />
             </div> -->
             <div class="form-group">

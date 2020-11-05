@@ -128,9 +128,8 @@
         >
           <template slot="button-content">
             <img
-              src="@/assets/images/faces/1.jpg"
+              :src="userInfo.profile"
               id="userDropdown"
-              alt
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
@@ -141,9 +140,8 @@
             <div class="dropdown-header">
               <i class="i-Lock-User mr-1"></i> {{userInfo.username}}님
             </div>
-            <!-- <a class="dropdown-item">Account settings</a>
-            <a class="dropdown-item">Billing history</a> -->
-            <a class="dropdown-item" href="#" @click.prevent="logoutUser">Sign out</a>
+            <a class="dropdown-item" href="/app/mypages/myUserInfo">회원정보</a>
+            <a class="dropdown-item" href="#" @click.prevent="logoutUser">로그아웃</a>
           </div>
         </b-dropdown>
       </div>

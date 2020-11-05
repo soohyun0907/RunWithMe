@@ -1,17 +1,16 @@
 <template>
   <div
     class="auth-layout-wrap"
-    :style="{ backgroundImage: 'url(' + bgImage + ')' }"
-  >
+    :style="{ backgroundImage: 'url(' + bgImage + ')' }">
     <div class="auth-content">
       <div class="card o-hidden">
         <div class="row">
           <div class="col-md-6">
             <div class="p-4">
               <div class="auth-logo text-center mb-30">
-                <img :src="logo" />
+                <img :src="logo"/>
               </div>
-              <h1 class="mb-3 text-18">Sign In</h1>
+              <h1 style="text-align:center" class="mb-3 text-18"><code class="mb-3 text-18">R</code>un <code class="mb-3 text-18">W</code>ith <code class="mb-3 text-18">M</code>e</h1>
               <b-form @submit.prevent="formSubmit">
                 <b-form-group label="Email Address" class="text-12">
                   <b-form-input
@@ -39,9 +38,8 @@
                   tag="button"
                   class="btn-rounded btn-block mt-2"
                   variant="primary mt-2"
-                  :disabled="loading"
-                >
-                  SignIn
+                  :disabled="loading">
+                  로그인
                 </b-button>
                 <div v-once class="typo__p" v-if="loading">
                   <div class="spinner sm spinner-primary mt-3"></div>
@@ -51,25 +49,12 @@
                   block
                   variant="primary mt-2"
                   class="btn-rounded"
-                  >Create an account</b-button
-                >
+                  >회원가입</b-button>
               </b-form>
 
-              <div class="mt-3 text-center">
-                <router-link to="forgot" tag="a" class="text-muted">
-                  <u>Forgot Password?</u>
-                </router-link>
-              </div>
             </div>
           </div>
 
-          <b-col
-            md="6"
-            class="text-center"
-            style="backgroundsize: cover"
-            :style="{ backgroundImage: 'url(' + signInImage + ')' }"
-          >
-          </b-col>
         </div>
       </div>
     </div>
@@ -84,11 +69,11 @@ export default {
   },
   data() {
     return {
-      userEmail: "123",
-      userPw: "123",
+      userEmail: "",
+      userPw: "",
       userId: "",
-      bgImage: require("@/assets/images/photo-wide-4.jpg"),
-      logo: require("@/assets/images/logo.png"),
+      bgImage: require("@/assets/images/signin/loginpage1.png"),
+      logo: require("@/assets/images/runnings/loading2.gif"),
       signInImage: require("@/assets/images/photo-long-3.jpg"),
     };
   },
@@ -128,7 +113,7 @@ export default {
   watch: {
     checkUserInfo(val) {
       console.log("checking,,,")
-      if (this.userInfo != {}) {
+      if (this.auth != {}) {
         this.makeToast("success", "Successfully Logged In");
       } else {
         this.makeToast("Success", "Successfully Logged out");
@@ -147,5 +132,12 @@ export default {
 .spinner.sm {
   height: 2em;
   width: 2em;
+}
+@media (min-width: 768px){
+  .col-md-6 {
+      -webkit-box-flex: 0;
+      flex: auto !important;
+      max-width: 100% !important;
+  }
 }
 </style>
