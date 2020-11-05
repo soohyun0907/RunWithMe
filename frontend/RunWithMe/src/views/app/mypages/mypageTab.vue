@@ -12,7 +12,7 @@
       <div class="user-info">
         <img
           class="profile-picture avatar-lg mb-2"
-          src="@/assets/images/faces/3.jpg"
+          :src="userInfo.profile"
           alt=""
         />
         <p class="m-0 text-24">{{ userInfo.username }}</p>
@@ -30,88 +30,34 @@
 
               <ul class="timeline clearfix">
                 <b-card title="최근 런닝 기록" class="heading text-primary mb-30">
-
                   <div role="tablist">
-
-                    <b-card no-body class="ul-card__border-radius">
-                      <!-- 접혀있을때 보이는 부분 -->
-                      <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
-                        <b-button class="card-title mb-0" block href="#" v-b-toggle.accordion-2-1 variant="transparent" style="font-size:1em">
-                          <span>
-                            <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=30px height=30px style="margin-left:-10px;"/>
-                          </span>
-                          2020.11.03 13:33 런닝기록
-                          
-                        </b-button>
-                      </b-card-header>
-                      
-                      <b-collapse id="accordion-2-1" accordion="my-accordion" role="tabpanel">
-                        <b-card-body>
-                          <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=100% height=150px/>
-                          <b-card-text>
-                             <h5><code>2020.11.03</code> 런닝 기록.</h5>
-                          </b-card-text>
-                          <b-card-text>총 런닝 시간 : <strong>58:20</strong></b-card-text>
-                          <b-card-text>총 런닝 거리 : <strong>6.01 km</strong></b-card-text>
-                          <b-card-text>시작 시간 : <strong>12:20</strong> </b-card-text>
-                          <b-card-text>종료 시간 : <strong>13:33</strong> </b-card-text>
-                        </b-card-body>
-                      </b-collapse>
-                    </b-card>
-
-                    
-                     <b-card no-body class="ul-card__border-radius">
-                      <!-- 접혀있을때 보이는 부분 -->
-                      <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
-                        <b-button class="card-title mb-0" block href="#" v-b-toggle.accordion-2-2 variant="transparent" style="font-size:1em">
-                          <span>
-                            <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=30px height=30px style="margin-left:-10px;"/>
-                          </span>
-                          2020.11.02 11:33 런닝기록
-                          
-                        </b-button>
-                      </b-card-header>
-                      
-                      <b-collapse id="accordion-2-2" accordion="my-accordion" role="tabpanel">
-                        <b-card-body>
-                          <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=100% height=150px/>
-                          <b-card-text>
-                             <h5><code>2020.11.02</code> 런닝 기록.</h5>
-                          </b-card-text>
-                          <b-card-text>총 런닝 시간 : <strong>58:20</strong></b-card-text>
-                          <b-card-text>총 런닝 거리 : <strong>6.01 km</strong></b-card-text>
-                          <b-card-text>시작 시간 : <strong>10:20</strong> </b-card-text>
-                          <b-card-text>종료 시간 : <strong>11:33</strong> </b-card-text>
-                        </b-card-body>
-                      </b-collapse>
-                    </b-card> 
-                    
-                    <b-card no-body class="ul-card__border-radius">
-                      <!-- 접혀있을때 보이는 부분 -->
-                      <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
-                        <b-button class="card-title mb-0" block href="#" v-b-toggle.accordion-2-3 variant="transparent" style="font-size:1em">
-                          <span>
-                            <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=30px height=30px style="margin-left:-10px;"/>
-                          </span>
-                          2020.11.01 17:33 런닝기록
-                          
-                        </b-button>
-                      </b-card-header>
-                      
-                      <b-collapse id="accordion-2-3" accordion="my-accordion" role="tabpanel">
-                        <b-card-body>
-                          <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=100% height=150px/>
-                          <b-card-text>
-                             <h5><code>2020.11.01</code> 런닝 기록.</h5>
-                          </b-card-text>
-                          <b-card-text>총 런닝 시간 : <strong>58:20</strong></b-card-text>
-                          <b-card-text>총 런닝 거리 : <strong>6.01 km</strong></b-card-text>
-                          <b-card-text>시작 시간 : <strong>16:20</strong> </b-card-text>
-                          <b-card-text>종료 시간 : <strong>17:33</strong> </b-card-text>
-                        </b-card-body>
-                      </b-collapse>
-                    </b-card>
-
+                    <div v-for="(running,i) in areaRunning" :index="i">
+                      <b-card no-body class="ul-card__border-radius">
+                        <!-- 접혀있을때 보이는 부분 -->
+                        <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
+                          <b-button class="card-title mb-0" block href="#" v-b-toggle="'accordion-'+i" variant="transparent" style="font-size:1em">
+                            <span>
+                              <img class="rounded mb-2" :src="running.thumbnail" @error="defaultImage" alt="썸넬" width=30px height=30px style="margin-left:-10px;"/>
+                            </span>
+                            {{running.endTime}} 런닝
+                            
+                          </b-button>
+                        </b-card-header>
+                        
+                        <b-collapse v-bind:id="'accordion-'+i" accordion="my-accordion" role="tabpanel">
+                          <b-card-body>
+                            <img class="rounded mb-2" :src="running.thumbnail" alt="running Path" width=100% height=150px/>
+                            <b-card-text>
+                              <h5><code>{{running.endTime}}</code> 런닝 기록.</h5>
+                            </b-card-text>
+                            <b-card-text>총 런닝 시간 : <strong>{{running.accTime}}초</strong></b-card-text>
+                            <b-card-text>총 런닝 거리 : <strong>{{running.accDistance}} km</strong></b-card-text>
+                            <b-card-text>시작 시간 : <strong>{{running.startTime}}</strong> </b-card-text>
+                            <b-card-text>종료 시간 : <strong>{{running.endTime}}</strong> </b-card-text>
+                          </b-card-body>
+                        </b-collapse>
+                      </b-card>
+                    </div>
                   </div>
                 </b-card>
               </ul>
@@ -126,94 +72,38 @@
 
               <ul class="timeline clearfix">
                 <b-card title="최근 런닝 기록" class="heading text-primary mb-30">
-
                   <div role="tablist">
-
-                    <b-card no-body class="ul-card__border-radius">
-                      <!-- 접혀있을때 보이는 부분 -->
-                      <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
-                        <b-button class="card-title mb-0" block href="#" v-b-toggle.accordion-2-1 variant="transparent" style="font-size:1em">
-                          <span>
-                            <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=30px height=30px style="margin-left:-10px;"/>
-                          </span>
-                          2020.11.03 13:33 런닝기록
-                          
-                        </b-button>
-                      </b-card-header>
-                      
-                      <b-collapse id="accordion-2-1" accordion="my-accordion" role="tabpanel">
-                        <b-card-body>
-                          <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=100% height=150px/>
-                          <b-card-text>
-                             <h5><code>2020.11.03</code> 런닝 기록.</h5>
-                          </b-card-text>
-                          <b-card-text>총 런닝 시간 : <strong>58:20</strong></b-card-text>
-                          <b-card-text>총 런닝 거리 : <strong>6.01 km</strong></b-card-text>
-                          <b-card-text>시작 시간 : <strong>12:20</strong> </b-card-text>
-                          <b-card-text>종료 시간 : <strong>13:33</strong> </b-card-text>
-                        </b-card-body>
-                      </b-collapse>
-                    </b-card>
-
-                    
-                     <b-card no-body class="ul-card__border-radius">
-                      <!-- 접혀있을때 보이는 부분 -->
-                      <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
-                        <b-button class="card-title mb-0" block href="#" v-b-toggle.accordion-2-2 variant="transparent" style="font-size:1em">
-                          <span>
-                            <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=30px height=30px style="margin-left:-10px;"/>
-                          </span>
-                          2020.11.02 11:33 런닝기록
-                          
-                        </b-button>
-                      </b-card-header>
-                      
-                      <b-collapse id="accordion-2-2" accordion="my-accordion" role="tabpanel">
-                        <b-card-body>
-                          <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=100% height=150px/>
-                          <b-card-text>
-                             <h5><code>2020.11.02</code> 런닝 기록.</h5>
-                          </b-card-text>
-                          <b-card-text>총 런닝 시간 : <strong>58:20</strong></b-card-text>
-                          <b-card-text>총 런닝 거리 : <strong>6.01 km</strong></b-card-text>
-                          <b-card-text>시작 시간 : <strong>10:20</strong> </b-card-text>
-                          <b-card-text>종료 시간 : <strong>11:33</strong> </b-card-text>
-                        </b-card-body>
-                      </b-collapse>
-                    </b-card> 
-                    
-                    <b-card no-body class="ul-card__border-radius">
-                      <!-- 접혀있을때 보이는 부분 -->
-                      <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
-                        <b-button class="card-title mb-0" block href="#" v-b-toggle.accordion-2-3 variant="transparent" style="font-size:1em">
-                          <span>
-                            <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=30px height=30px style="margin-left:-10px;"/>
-                          </span>
-                          2020.11.01 17:33 런닝기록
-                          
-                        </b-button>
-                      </b-card-header>
-                      
-                      <b-collapse id="accordion-2-3" accordion="my-accordion" role="tabpanel">
-                        <b-card-body>
-                          <img class="rounded mb-2" src="@/assets/images/runnings/runningEx1.png" alt="running Path" width=100% height=150px/>
-                          <b-card-text>
-                             <h5><code>2020.11.01</code> 런닝 기록.</h5>
-                          </b-card-text>
-                          <b-card-text>총 런닝 시간 : <strong>58:20</strong></b-card-text>
-                          <b-card-text>총 런닝 거리 : <strong>6.01 km</strong></b-card-text>
-                          <b-card-text>시작 시간 : <strong>16:20</strong> </b-card-text>
-                          <b-card-text>종료 시간 : <strong>17:33</strong> </b-card-text>
-                        </b-card-body>
-                      </b-collapse>
-                    </b-card>
-
+                    <div v-for="(running,i) in areaRunning" :index="i">
+                      <b-card no-body class="ul-card__border-radius">
+                        <!-- 접혀있을때 보이는 부분 -->
+                        <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
+                          <b-button class="card-title mb-0" block href="#" v-b-toggle="'accordion-'+i" variant="transparent" style="font-size:1em">
+                            <span>
+                              <img class="rounded mb-2" :src="running.thumbnail" @error="defaultImage" alt="썸넬" width=30px height=30px style="margin-left:-10px;"/>
+                            </span>
+                            {{running.endTime}} 런닝
+                            
+                          </b-button>
+                        </b-card-header>
+                        
+                        <b-collapse v-bind:id="'accordion-'+i" accordion="my-accordion" role="tabpanel">
+                          <b-card-body>
+                            <img class="rounded mb-2" :src="running.thumbnail" alt="running Path" width=100% height=150px/>
+                            <b-card-text>
+                              <h5><code>{{running.endTime}}</code> 런닝 기록.</h5>
+                            </b-card-text>
+                            <b-card-text>총 런닝 시간 : <strong>{{running.accTime}}초</strong></b-card-text>
+                            <b-card-text>총 런닝 거리 : <strong>{{running.accDistance}} km</strong></b-card-text>
+                            <b-card-text>시작 시간 : <strong>{{running.startTime}}</strong> </b-card-text>
+                            <b-card-text>종료 시간 : <strong>{{running.endTime}}</strong> </b-card-text>
+                          </b-card-body>
+                        </b-collapse>
+                      </b-card>
+                    </div>
                   </div>
                 </b-card>
               </ul>
-
             </b-tab>
-
           </b-tabs>
         </div>
       </div>
@@ -236,6 +126,8 @@ export default {
       watchPositionId: null,
       map: null,
       map2:null,
+      areaRunning:[],
+      defaultImage:require('@/assets/images/runnings/runningEx1.png')
     };
   },
 
@@ -244,6 +136,7 @@ export default {
   },
 
   mounted() {
+    this.getRunningsbyArea()
     console.log(this.userInfo)
     if (window.google && window.google.maps) {
       this.initMap();
@@ -254,6 +147,13 @@ export default {
     console.log(this.userInfo);
   },
   methods: {
+    getRunningsbyArea(){
+      http.get(`runnings/areas`)
+      .then(data => {
+        this.areaRunning=data.data.data
+        console.log(this.areaRunning)
+      })
+    },
     initMap() {
       navigator.geolocation.getCurrentPosition((position) => {
         this.current.lat = position.coords.latitude;
