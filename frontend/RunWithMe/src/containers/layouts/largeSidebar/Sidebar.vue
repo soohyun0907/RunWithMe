@@ -284,6 +284,7 @@ export default {
 
       if (currentParentUrl !== undefined || currentParentUrl !== null) {
         this.selectedParentMenu = currentParentUrl.toLowerCase();
+        //this.selectedParentMenu = "runnings";
       } else {
         this.selectedParentMenu = "runnings";
       }
