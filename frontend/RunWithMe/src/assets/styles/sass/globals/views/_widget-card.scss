@@ -1,0 +1,156 @@
+.ul-widget-card__info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ul-widget-card__info span p:first-child {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.ul-widget-card__info span p:last-child {
+    font-size: 17px;
+    margin: 0;
+}
+
+.ul-widget-card__progress-rate {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    margin-bottom: 5px;
+}
+
+.ul-widget-card__progress-rate span {
+    font-weight: 700;
+}
+
+.ul-widget-card__progress-rate span:last-child {
+    font-weight: 700;
+    color: $gray-400;
+}
+
+.progress--height {
+    height: 10px;
+}
+
+.ul-widget-card__user-info {
+    text-align: center;
+}
+
+.ul-widget-card--line {
+    border-bottom: 1px solid $gray-300;
+    padding-bottom: 20px;
+}
+
+.ul-widget-card--line:last-child {
+    border-bottom: none;
+}
+
+.ul-widget-card__rate-icon {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+    &.--version-2 {
+        justify-content: flex-start;
+    }
+}
+
+.ul-widget-card__rate-icon.--version-2 span {
+    margin-right: 18px;
+}
+
+.ul-widget-card__rate-icon span i {
+    font-size: 14px;
+}
+
+.ul-widget-card__rate-icon span {
+    font-size: 15px;
+}
+
+.ul-widget-card__rate-icon span i {
+    font-size: 16px;
+    font-weight: 600;
+    margin-right: 2px;
+}
+
+.ul-widget-card__full-status {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ul-widget-card__status1 {
+    display: grid;
+    text-align: -webkit-center;
+    text-align: center;
+}
+
+.ul-widget-card__status1 span:first-child {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.ul-widget6__dot.ul-widget-card__dot-xl {
+    padding: 1.35rem;
+}
+
+.ul-widget-s6__badge .ul-widget-card__dot {
+    position: relative;
+}
+
+.ul-widget6__dot.ul-widget-card__dot-xl i {
+    position: absolute;
+    top: 35%;
+    content: "";
+    left: 35%;
+}
+
+.ul-widget-s6__items.ul-widget-card__position {}
+
+.ul-widget-s6__items.ul-widget-card__position:before {
+    left: 20px;
+    top: 0;
+}
+
+.ul-widget-card__item {
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.ul-widget-card__info-v2 {
+    display: grid;
+    /* margin-right: 2px; */
+    margin-left: 20px;
+}
+
+.ul-widget-card__img-bg {
+    background: url('../../../../assets/images/products/watch-2.jpg');
+    // background:url('../../../../../../../public/assets/images/products/watch-2.jpg');
+    background-size: cover;
+    height: 500px;
+    background-repeat: no-repeat, repeat;
+}
+
+.ul-widget-card__cloud .ul-widget-card__head h1 {
+    color: $white;
+}
+
+.ul-widget-card__cloud .ul-widget-card__head i {
+    color: $white!important;
+}
+
+.ul-widget-card__head {
+    display: flex;
+    justify-content: space-around;
+    margin: 60px 0;
+    align-items: center;
+}
+
+.ul-widget-card__weather-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+    margin: 45px 0;
+}

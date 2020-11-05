@@ -1,0 +1,13 @@
+@each $name,
+$value in $theme-colors {
+    .toast-#{$name} {
+        background-color: $value !important;
+    }
+}
+
+// .toast-info {
+//     background-color: #3BAFDA;
+// }
+// .toast-success {
+//     background-color: #3BAFDA;
+// }

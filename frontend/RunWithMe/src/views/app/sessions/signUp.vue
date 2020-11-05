@@ -1,0 +1,342 @@
+<template>
+  <div
+    class="auth-layout-wrap"
+    :style="{ backgroundImage: 'url(' + bgImage + ')' }"
+  >
+    <div class="auth-content">
+      <div class="card o-hidden">
+        <div class="row">
+          <div class="col-md-6" >
+            <div class="p-4">
+              <div class="auth-logo text-center mb-30">
+                <img :src="logo" style="height:auto"/>
+              </div>
+              <h1 style="text-align:center" class="mb-3 text-18"><code class="mb-3 text-18">R</code>un <code class="mb-3 text-18">W</code>ith <code class="mb-3 text-18">M</code>e</h1>
+             
+              <h1 class="mb-3 text-18">회원가입</h1>
+              <b-form @submit.prevent="submit">
+                <b-form-group label="Email">
+                  <b-form-input
+                    class="form-control form-control-rounded"
+                    label="Name"
+                    type="email"
+                    v-model="email"
+                  >
+                  </b-form-input>
+                  <b-button
+                    @click="emailDuplicate"
+                    pill
+                    variant="primary ripple m-1"
+                    >이메일 중복체크</b-button
+                  >
+                </b-form-group>
+
+                <b-form-group label="이름">
+                  <b-form-input
+                    class="form-control form-control-rounded"
+                    label="Name"
+                    v-model.trim="$v.fName.$model"
+                  >
+                  </b-form-input>
+
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error col mt-1"
+                    v-if="!$v.fName.minLength"
+                    >이름을 {{ $v.fName.$params.minLength.min }}글자 이상
+                    입력해주세요.</b-alert
+                  >
+                </b-form-group>
+
+                <b-row>
+                  <b-col md="8" class=" mb-30">
+                   <b-card class="h-100" title="주 활동지역 선택">
+
+                    <b-dropdown size="sm" variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
+                      <div v-for="(sido, index) in sidos" v-bind:key="index">
+                        <b-dropdown-item @click="sidoSelected(sido)">{{
+                          sido.sidoName
+                        }}</b-dropdown-item>
+                      </div>
+                    </b-dropdown>
+
+                    <b-dropdown size="sm" variant="primary" id="dropdown-2" text="구군 선택" class="mb-2">
+                      <div v-for="(gugun, index) in guguns" v-bind:key="index">
+                        <b-dropdown-item @click="gugunSelected(gugun)">{{
+                          gugun.gugunName
+                        }}</b-dropdown-item>
+                      </div>
+                    </b-dropdown>
+                  </b-card>
+                  </b-col>
+                </b-row>
+
+              <label class="d-block text-12 text-muted">성별</label>
+                <div class="col-md-6 offset-md-6 pr-0 mb-30">
+                  <label class="radio radio-reverse radio-danger">
+                    <input
+                      type="radio"
+                      name="orderStatus"
+                      value=2
+                      v-model="gender"
+                    />
+                    <span>여자</span>
+                    <span class="checkmark"></span>
+                  </label>
+
+                  <label class="radio radio-reverse radio-success">
+                    <input
+                      type="radio"
+                      name="orderStatus"
+                      value=1
+                      v-model="gender"
+                    />
+                    <span>남자</span>
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+                <b-form-group label="Password">
+                  <b-form-input
+                    class="form-control form-control-rounded"
+                    label="Name"
+                    type="password"
+                    v-model.trim="$v.password.$model"
+                  >
+                  </b-form-input>
+
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error col mt-1"
+                    v-if="!$v.password.minLength"
+                    >비밀번호는
+                    {{ $v.password.$params.minLength.min }} 이상이어야
+                    합니다.</b-alert
+                  >
+                </b-form-group>
+
+                <b-form-group label="Password 확인">
+                  <b-form-input
+                    class="form-control form-control-rounded"
+                    label="Name"
+                    type="password"
+                    v-model.trim="$v.repeatPassword.$model"
+                  >
+                  </b-form-input>
+
+                  <b-alert
+                    show
+                    variant="danger"
+                    class="error col mt-1"
+                    v-if="!$v.repeatPassword.sameAsPassword"
+                    >비밀번호가 일치하지 않습니다.</b-alert
+                  >
+                </b-form-group>
+
+                <b-button
+                  type="submit"
+                  block
+                  variant="primary"
+                  :disabled="submitStatus === 'PENDING' || $v.$invalid"
+                  class="btn-rounded"
+                  >Sign Up</b-button
+                >
+
+                <p v-once class="typo__p" v-if="submitStatus === 'OK'">
+                  {{ makeToastTwo("success") }}
+                  {{ this.$router.push("/") }}
+                </p>
+                <p v-once class="typo__p" v-if="submitStatus === 'ERROR'">
+                  {{ makeToast("danger") }}
+                </p>
+                <div v-once class="typo__p" v-if="submitStatus === 'PENDING'">
+                  <div class="spinner sm spinner-primary mt-3"></div>
+                </div>
+              </b-form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import { required, sameAs, minLength } from "vuelidate/lib/validators";
+import { mapGetters, mapActions } from "vuex";
+import http from "@/utils/http-common";
+import dropdown from "vue-dropdowns";
+export default {
+  metaInfo: {
+    // if no subcomponents specify a metaInfo.title, this title will be used
+    title: "SignUp",
+  },
+
+  data() {
+    return {
+      fName: "",
+      email: "",
+      password: "",
+      repeatPassword: "",
+      emailAuth: false,
+      bgImage: require("@/assets/images/signin/loginpage1.png"),
+      logo: require("@/assets/images/runnings/loading.gif"),
+      signInImage: require("@/assets/images/photo-long-3.jpg"),
+      submitStatus: null,
+      sidos: [],
+      guguns:[],
+      selectedgugun:"",
+      gender:0,
+    };
+  },
+  components: {
+    dropdown: dropdown,
+  },
+
+  validations: {
+    fName: {
+      required,
+      minLength: minLength(2),
+    },
+
+    password: {
+      required,
+      minLength: minLength(8),
+    },
+    repeatPassword: {
+      sameAsPassword: sameAs("password"),
+    },
+    // emailAuth:{
+    //   emailAuthValidate(emailAuth){
+    //       if(emailAuth==false)
+    //         return false;
+    //   }
+    // }
+
+    // add input
+    // peopleAdd: {
+    //   required,
+    //   minLength: minLength(3),
+    //   $each: {
+    //     multipleName: {
+    //       required,
+    //       minLength: minLength(5)
+    //     }
+    //   }
+    // },
+    // validationsGroup:['peopleAdd.multipleName']
+  },
+  mounted: function () {
+    http.get(`areas`).then((res) => {
+      console.log(JSON.stringify(res.data.data));
+      this.sidos = res.data.data;
+      console.log(this.sidos[0].sidoName);
+    });
+  },
+
+  computed: {
+    ...mapGetters(["loggedInUser", "loading", "error"]),
+  },
+
+  methods: {
+    ...mapActions(["signUserUp"]),
+    //   validate form
+    sidoSelected(sido) {
+      console.log(sido.sidoId)
+      http.get(`areas/`+sido.sidoId).then((res) =>{
+        this.guguns= res.data.data
+        console.log(this.guguns)
+      })
+      document.getElementById('dropdown-1').innerText=sido.sidoName
+    },
+    gugunSelected(gugun){
+      this.selectedgugun = gugun.gugunId
+      console.log(this.selectedgugun)
+      document.getElementById('dropdown-2').innerText=gugun.gugunName
+    },
+    submit() {
+      console.log("회원가입 데이터 전송중..");
+
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = "ERROR";
+      } else {
+        var gugunId = new Object();
+        gugunId.gugunId = this.selectedgugun
+        var jsonGugunId = gugunId
+        var data = {
+          userEmail: this.email,
+          userPw: this.password,
+          userName: this.fName,
+          emailAuth: this.emailAuth,
+          gugunId: jsonGugunId,
+          gender:this.gender,
+        };
+        console.log(data);
+        this.signUserUp({ data });
+        this.submitStatus = "PENDING";
+        setTimeout(() => {
+          this.submitStatus = "OK";
+        }, 500);
+        this.$router.push('/app/sessions/signIn')
+      }
+    },
+    emailDuplicate() {
+      http
+        .get(`/users/check/${this.email}`)
+        .then((res) => {
+          console.log("이메일 인증 시도 성공");
+          if (res.data.data == true) {
+            alert("회원 가입 가능한 이메일입니다!");
+            this.emailAuth = true;
+          } else {
+            this.email = "";
+            alert("서버 연결 상태를 확인해주세요.");
+            console.log(res);
+          }
+        })
+        .catch((error) => {
+          alert("중복된 이메일입니다. 다른 이메일을 입력해주세요.");
+          this.email = "";
+          console.log("이메일 인증 실패");
+          this.emailAuth = false;
+        });
+    },
+    makeToast(variant = null) {
+      this.$bvToast.toast("Please fill the form correctly.", {
+        title: `Variant ${variant || "default"}`,
+        variant: variant,
+        solid: true,
+      });
+    },
+    makeToastTwo(variant = null) {
+      this.$bvToast.toast("Successfully Created Account", {
+        title: `Variant ${variant || "default"}`,
+        variant: variant,
+        solid: true,
+      });
+    },
+
+    inputSubmit() {
+      console.log("submitted");
+    },
+  },
+};
+</script>
+<style>
+.spinner.sm {
+  height: 2em;
+  width: 2em;
+}
+@media (min-width: 768px){
+  .col-md-6 {
+      -webkit-box-flex: 0;
+      flex: auto !important;
+      max-width: 100% !important;
+  }
+  .offset-md-6 {
+    margin-left: 0% !important;
+}
+}
+</style>
+
