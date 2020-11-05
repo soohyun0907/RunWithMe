@@ -72,8 +72,8 @@ public class UserService implements UserDetailsService {
  		payRepository.save(Payment.builder().chargeMoney(money).userId(user.get()).build());
 	}
 	
-	public boolean pay(long uid,int money) {
-		Optional<User> user = userRepository.findById(uid);
+	public boolean pay(int uid,int money) {
+		Optional<User> user = userRepository.findByUserId(uid);
 		if(user.get().getMileage() < money) { // 결제를 할 수 없는 경우
 			return false;
 			
