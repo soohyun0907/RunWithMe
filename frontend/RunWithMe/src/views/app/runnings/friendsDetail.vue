@@ -3,10 +3,10 @@
         <div class="user-profile-img">
             <img class="profile-picture mb-2" src="/img/1.jpg" />
         </div>
-        <p class="m-0 text-24" style="text-align:center;">Timothy Carlson</p>
+        <p class="m-0 text-24" style="text-align:center;">기명택</p>
         <div class="col" style="text-align:center;">
             총 킬로미터
-            <h2>100KM</h2>
+            <h2>112KM</h2>
         </div>
         <br>
         <div
@@ -60,24 +60,24 @@
 const items = [
   {
     img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
-    title: "Nickname",
+    title: "기명택",
     total_distance: "8",
     running_avg_pace : 325,
-    accumulcated_time: "38:11"
+    accumulcated_time: "51:11"
   },
   {
     img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
-    title: "Nickname",
+    title: "기명택",
     total_distance: "10",
-    running_avg_pace : 325,
-    accumulcated_time: "38:11"
+    running_avg_pace : 305,
+    accumulcated_time: "60:11"
   },
   {
     img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
-    title: "Nickname",
+    title: "기명택",
     total_distance: "5",
-    running_avg_pace : 325,
-    accumulcated_time: "38:11"
+    running_avg_pace : 365,
+    accumulcated_time: "30:11"
   },
 ];
 

@@ -1,6 +1,7 @@
 import http from "@/utils/http-common";
 import router from "@/router.js"
 import axios from "axios";
+import { setTimeout } from "core-js";
 
 
 export default {

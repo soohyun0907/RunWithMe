@@ -85,7 +85,7 @@ export default {
         console.log("바껴써용")
         setTimeout(() => {
           this.$router.go(0)
-        }, 400);
+        }, 100);
       }
      })
   },
