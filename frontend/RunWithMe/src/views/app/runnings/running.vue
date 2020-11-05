@@ -312,7 +312,7 @@ export default {
       //google static map url
       var staticM_URL = "https://maps.googleapis.com/maps/api/staticmap?";
       staticM_URL += "&size=520x650"; //Set the Google Map Size.
-      staticM_URL += "&zoom=11"; //Set the Google Map Zoom.
+      staticM_URL += "&zoom=16"; //Set the Google Map Zoom.
       staticM_URL +=
         "&maptype=roadmap&key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
       staticM_URL +="path=color:0xff0000ff|weight:3"

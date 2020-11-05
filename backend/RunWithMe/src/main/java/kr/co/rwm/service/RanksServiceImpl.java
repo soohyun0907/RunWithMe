@@ -76,8 +76,8 @@ public class RanksServiceImpl implements RanksService{
 			selectUser.setRankId(temp.getRankId());
 			selectUser.setUserId(temp.getUserId());
 			selectUser.setDonateExp(temp.getDonateExp());
-			selectUser.setTotalExp(total);
-			selectUser.setRaceExp(result);
+			selectUser.setTotalExp(Math.round(total*10)/10.0);
+			selectUser.setRaceExp(Math.round(result*10)/10.0);
 			selectUser.setTier(tier);
 			rankRepository.save(selectUser);
 		});

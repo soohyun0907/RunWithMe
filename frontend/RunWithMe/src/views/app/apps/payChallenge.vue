@@ -49,6 +49,7 @@
 </template>
 <script>
 import http from "@/utils/http-common";
+import { mapGetters,mapMutations } from "vuex";
 
 export default {
   metaInfo: {
@@ -69,7 +70,11 @@ export default {
     this.getChallengeInfo();
     this.getUserInfo();
   },
+  mounted() {
+    this.$store.commit('closeSidebar')
+  },
   methods: {
+    ...mapMutations(["mutateMyRunning","closeSidebar"]),
     getChallengeInfo(){
         http
         .get("challenges/"+this.challengeId)
