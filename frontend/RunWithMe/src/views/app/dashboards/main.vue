@@ -11,7 +11,7 @@
     <carousel-3d :width="150" :height="150"
      :controls-visible="true" >
       <!-- <slide v-for="(slide,index) in slides" :key="index" style="border: 0px;"> -->
-      <slide v-for="slide in slides" :index="slide.id-1" :key="slide.id" style="border: 0px;">
+      <slide v-for="(slide,i) in slides" :index="i" :key="slide.id" style="border: 0px;">
         <div @click="toggleOverlay">
           <b-overlay 
           :show="slidesOverlayShow" 
@@ -22,8 +22,8 @@
             <img :src="slide.challengeImg" />
             <template #overlay>
               <div class="text-center">
-                <h3 style="overflow:hidden;">{{slide.title}}</h3>
-                <h5>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h5>
+                <h5 style="overflow:hidden;">{{slide.title}}</h5>
+                <h6>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h6>
               </div>
             </template>
           </b-overlay>
