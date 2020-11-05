@@ -113,7 +113,7 @@ export default {
   watch: {
     checkUserInfo(val) {
       console.log("checking,,,")
-      if (this.userInfo != {}) {
+      if (this.auth != {}) {
         this.makeToast("success", "Successfully Logged In");
       } else {
         this.makeToast("Success", "Successfully Logged out");

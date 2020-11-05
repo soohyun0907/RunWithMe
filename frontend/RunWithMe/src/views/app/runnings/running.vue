@@ -5,11 +5,18 @@
       <h4>Run With Me?</h4>
     </section>
 
+<div >
     <span id="acc_dis" > {{ show_distance }}</span>
     <div id="run_desc distance">누적 거리</div>
+</div>
+<div>
     <span id="acc_time">{{ speed }}</span>
-    <div id="run_desc time">현재 속도</div>
-
+    <div id="run_desc speed">현재 속도</div>
+</div>
+<div>
+      <span id="time">{{ clock }}</span>
+      <div id="run_desc time">누적 시간</div>
+</div>
     <section ref="map" class="map"></section>
 
     <div class="btn_container">
@@ -42,9 +49,7 @@
         </section>
       </div>
     </div>
-    <div id="clock">
-      <span id="time">{{ clock }}</span>
-    </div>
+    
     <textarea id="encoded-polyline"></textarea>
   </div>
 </template>
@@ -76,6 +81,7 @@ export default {
       startTime: "",
       endTime: "",
       speed: 0,
+      avgSpeed:0,
       gugun: ["광명시"],
       currentCity: "",
 
@@ -266,6 +272,7 @@ export default {
               this.show_distance = Math.round(this.accumulated_distance * 100) /100
               this.checkOneKm = this.accumulated_distance;
               this.checkSecond = this.accumulated_time;
+
 
               var currentLatLng = new google.maps.LatLng(
                 this.current.lat,
@@ -481,16 +488,8 @@ export default {
 }
 /* 스톱워치 디자인 */
 @import url("https://fonts.googleapis.com/css?family=Share+Tech+Mono");
-#clock {
-
-  order: 0;
-  flex: 0 1 auto;
-  align-self: center;
-
-  color: rgb(200, 200, 200);
-}
 #time {
-  font-size: 5em;
+  font-size: 2em;
 }
 #acc_time {
   font-size: 2em;
