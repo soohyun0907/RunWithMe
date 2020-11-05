@@ -1,219 +1,155 @@
 <template>
   <div class="main-content">
     <h3>기부/이벤트</h3>
-    <vueper-slides
+    <carousel-3d :width="180" :height="250">
+      <slide v-for="slide in slides" :key="slide.id" style="border: 0px;">
+        <div @click="toggleOverlay">
+          <b-overlay 
+          :show="slidesOverlayShow" 
+          :variant="variant"
+          :opacity="opacity"
+          :blur="blur"
+          rounded="sm">
+            <img :src="slide.challengeImg" />
+            <template #overlay>
+              <div class="text-center">
+                <h3>{{slide.title}}</h3>
+                <h5>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h5>
+              </div>
+            </template>
+          </b-overlay>
+        </div>
+      </slide>
+    </carousel-3d>
+    <!-- <vueper-slides
       class="no-shadow"
-      :visible-slides="2.5"
+      :visible-slides="1.7"
       :arrows="false"
       :slide-ratio="1 / 4"
       :gap="3"
-      :dragging-distance="0"
-      fixedHeight="150px"
+      :dragging-distance="70"
+      fixedHeight="250px"
       prevent-y-scroll>
       <vueper-slide v-for="(slide, i) in slides" :index="i" :key="i"
-        :image="slide.img" />
-    </vueper-slides>
-    <h3>TOP RANK</h3>
-    <carousel-3d :width="150" :height="200">
-      <slide v-for="(slide, i) in slides" :index="i" :key="i">
-        <img :src="slide.img" />
-        <!-- <span class="title">You know</span>
-        <p>You know, being a test pilot isn't always the healthiest business in the world.</p> -->
-      </slide>
-    </carousel-3d>
-    <b-col lg="6" xl="6" md="12" class="mb-30">
-      <b-card class>
-        <div class="card-title">Top Authors</div>
-        <div
-          class="d-flex flex-column flex-md-row text-center text-md-left text-lg-left flex-lg-row align-items-center border-bottom-dotted-dim pb-3 mb-3"
-        >
-          <img class="avatar-md rounded mr-md-3 mb-2" src="@/assets/images/faces/2.jpg" alt />
-            <div class="flex-grow-1">
-              <h6 class="m-0">David Hopkins</h6>
-              <p class="m-0 text-small text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-            </div>
-            <div>
-              <button class="btn btn-outline-primary btn-rounded btn-sm mt-md-0 mt-2">Follow</button>
-            </div>
+        :image="slide.challengeImg" >
+        <div @click="toggleOverlay">
+          <b-overlay 
+          :show="slidesOverlayShow" 
+          :variant="variant"
+          :opacity="opacity"
+          :blur="blur"
+          rounded="sm">
+            <template #overlay>
+              <div class="text-center">
+                <h3>{{slide.title}}</h3>
+                <h5>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h5>
+              </div>
+            </template>
+          </b-overlay>
         </div>
-        <div
-          class="d-flex flex-column flex-md-row text-center text-md-left text-lg-left flex-lg-row align-items-center border-bottom-dotted-dim pb-3 mb-3"
-        >
-          <img class="avatar-md rounded mr-md-3 mb-2" src="@/assets/images/faces/3.jpg" alt />
-            <div class="flex-grow-1">
-              <h6 class="m-0">James Mitchell</h6>
-              <p class="m-0 text-small text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-            </div>
-            <div>
-              <button class="btn btn-outline-primary btn-rounded btn-sm mt-md-0 mt-2">Follow</button>
-            </div>
-        </div>
-        <div
-          class="d-flex flex-column flex-md-row text-center text-md-left text-lg-left flex-lg-row align-items-center border-bottom-dotted-dim mb-3"
-        >
-          <img class="avatar-md rounded mr-md-3 mb-2" src="@/assets/images/faces/4.jpg" alt />
-            <div class="flex-grow-1">
-              <h6 class="m-0">Jessica Mitchell</h6>
-              <p class="m-0 text-small text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-            </div>
-            <div>
-              <button class="btn btn-outline-primary btn-rounded btn-sm mt-md-0 mt-2">Follow</button>
-            </div>
-        </div>
-      </b-card>
-    </b-col>
-    <b-col xl="8" lg="8" class="mb-30">
-        <b-card
-          border-variant="primary"
-          header="Developers"
-          header-bg-variant="primary"
-          header-text-variant="white"
-          align="center"
-        >
-          <div class="ul-widget5">
-            <div class="ul-widget-s5__item mb-5">
-              <div class="ul-widget-s5__content">
-                <div class="ul-widget-s5__pic">
-                  <img
-                    src="@/assets/images/faces/1.jpg"
-                    id="userDropdown"
-                    alt=""
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  />
-                </div>
-                <div class="ul-widget-s5__section">
-                  <a href="#" class="ul-widget4__title ">
-                    Great Logo Designn
-                  </a>
-                  <p class="ul-widget-s5__desc">
-                    UI LIb admin themes.
-                  </p>
-                </div>
+      </vueper-slide>
+    </vueper-slides> -->
+    <hr>
+    <b-card style="margin-bottom:15px;">
+      <div class="d-flex justify-content-between">
+        <h3 class="ul-widget__head-title">
+          TOP RANK
+        </h3>
+      </div>
+      <div class="ul-widget__body">
+        <div class="ul-widget1">
+          <div class="ul-widget__item ul-widget4__users" v-for="ranker in rankList" :key="ranker.rankId">
+            <h5 style="margin-right:5px;">{{ ranker.rankId }} </h5>
+              <div class="ul-widget4__img">
+                <img
+                  :src="ranker.userId.profile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
               </div>
-              <div class="ul-widget-s5__content">
-                <div class="ul-widget-s5__progress">
-                  <div class="ul-widget-s5__stats">
-                    <span>50%</span>
-                    <span>London</span>
-                  </div>
-                  <b-progress
-                    :value="25"
-                    show-value
-                    variant="success"
-                    striped
-                    animated
-                  ></b-progress>
-                </div>
-                <b-button variant="outline-primary">
-                  Follow
-                </b-button>
+              <div class="ul-widget2__info ul-widget4__users-info">
+                <router-link :to="`/app/runnings/friendsDetail`">
+                  {{ranker.userId.username}}
+                </router-link>
               </div>
-            </div>
-            <div class="ul-widget-s5__item mb-5">
-              <div class="ul-widget-s5__content">
-                <div class="ul-widget-s5__pic">
-                  <img
-                    src="@/assets/images/faces/2.jpg"
-                    id="userDropdown"
-                    alt=""
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  />
-                </div>
-                <div class="ul-widget-s5__section">
-                  <a href="#" class="ul-widget4__title ">
-                    Great Logo Designn
-                  </a>
-                  <p class="ul-widget-s5__desc">
-                    UI LIb admin themes.
-                  </p>
-                </div>
-              </div>
-              <div class="ul-widget-s5__content">
-                <div class="ul-widget-s5__progress">
-                  <div class="ul-widget-s5__stats">
-                    <span>75%</span>
-                    <span>U.S</span>
-                  </div>
-                  <b-progress
-                    :value="75"
-                    show-value
-                    variant="danger"
-                    striped
-                    animated
-                  ></b-progress>
-                </div>
-                <b-button variant="outline-success">
-                  Follow
-                </b-button>
-              </div>
-            </div>
-            <div class="ul-widget-s5__item mb-5">
-              <div class="ul-widget-s5__content">
-                <div class="ul-widget-s5__pic">
-                  <img
-                    src="@/assets/images/faces/3.jpg"
-                    id="userDropdown"
-                    alt=""
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  />
-                </div>
-                <div class="ul-widget-s5__section">
-                  <a href="#" class="ul-widget4__title ">
-                    Frontend Developer
-                  </a>
-                  <p class="ul-widget-s5__desc">
-                    UI LIb admin themes.
-                  </p>
-                </div>
-              </div>
-              <div class="ul-widget-s5__content">
-                <div class="ul-widget-s5__progress">
-                  <div class="ul-widget-s5__stats">
-                    <span>30%</span>
-                    <span>Finland</span>
-                  </div>
-                  <b-progress
-                    :value="30"
-                    show-value
-                    variant="warning"
-                    striped
-                    animated
-                  ></b-progress>
-                </div>
-
-                <b-button variant="outline-danger">
-                  Follow
-                </b-button>
-              </div>
-            </div>
+              <span class="ul-widget4__number t-font-boldest text-success">
+                {{ranker.totalExp}} p
+              </span>
           </div>
-        </b-card>
-      </b-col>
+        </div>
+      </div>
+    </b-card>
+    <hr>
     <h3>친구 피드 시작</h3>
-    <b-col xl="3" md="6" sm="6">
-        <b-card
-          class="card-icon-bg card-icon-bg-primary o-hidden mb-30 text-center"
+    <div v-if="!haveFriends">
+      <br>
+      <span>아직 친구가 없어요. 친구를 등록해주세요!</span>
+      <router-link tag="a" class to="/app/runnings/neighborhoodList">
+        <b-button variant="outline-dark m-1">주변에 사는 러너들 구경하러 가기</b-button>
+      </router-link>
+      <br>
+    </div>
+    <div
+      ref="rowView"
+      class="row "
+      :class="{ 'list-grid': isListView, 'list-horizontal': !isListView }"
+    >
+      <div
+        :class="{
+          'col-md-6  col-lg-4 col-xl-3': isListView,
+          'col-md-12': !isListView
+        }"
+        class="list-item "
+        :key="index"
+        v-for="(item, index) in friendsFeed"
+        transition="list"
+      >
+        <router-link :to="`/app/runnings/runningResult`">
+        <div
+          class="card o-hidden mb-30 d-flex "
+          :class="{ 'flex-column': isListView, 'flex-row': !isListView }"
         >
-          <img src="https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png" />
-          <div class="content">
-            <b-avatar class="mr-2" variant="primary" text="BV"></b-avatar>
-            <p class="text-muted mt-2 mb-0">New Leads</p>
-            <p class="text-primary text-24 line-height-1 mb-2">205</p>
+          <div class="list-thumb d-flex">
+            <img :src="item.img" />
           </div>
-        </b-card>
-      </b-col>
+          <div
+            class="flex-grow-1 "
+            :class="{ 'd-bock': isListView, 'pl-2 d-flex': !isListView }"
+          >
+            <div
+              class="card-body align-self-center d-flex flex-column justify-content-between align-items-lg-center"
+              :class="{ 'flex-lg-row': !isListView }"
+            >
+              <a class="w-40 w-sm-100" href="">
+                <div class="item-title">
+                  <b-avatar class="mr-2" variant="info" src="/img/2.jpg"></b-avatar>
+                    {{ item.title }}
+                </div>
+              </a>
+              <br>
+              <!-- <p class="m-0 text-muted text-small w-15 w-sm-100">
+                총 킬로미터 평균페이스 총 런닝 시간
+              </p> -->
+              <p class="m-0 text-muted text-small w-15 w-sm-100">
+                {{ item.total_distance }}KM /
+                {{convertToTime(item.running_avg_pace)}} /
+                {{item.accumulcated_time}}
+              </p>
+            </div>
+          </div>
+        </div>
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import { Carousel3d, Slide } from 'vue-carousel-3d'
 import { VueperSlides, VueperSlide } from 'vueperslides'
 import 'vueperslides/dist/vueperslides.css'
+import http from "@/utils/http-common";
+import { mapGetters } from "vuex";
 
 export default {
   name: 'mainpage',
@@ -225,30 +161,127 @@ export default {
   },
   data() {
     return {
-      slides: [
-        {
-          img : require('@/assets/images/photo-long-1.jpg'),
-        },
-        {
-          img : require('@/assets/images/photo-long-2.jpg'),
-        },
-        {
-          img : require('@/assets/images/photo-long-3.jpg'),
-        },
-        {
-          img : require('@/assets/images/photo-long-4.jpg'),
-        },
-      ],
+      isListView: false,
+      // overlay data
+      variant: 'white',
+      opacity: 0.70,
+      blur: '2px',
+      slidesOverlayShow: false,
+      slides: [],
+      rankList : [],
+      friendsFeed: [],
+      haveFriends: true,
     };
   },
   created() {
-
+    this.getChallengesIng();
+    this.getChallengesCommingSoon();
+    this.getTopRankers();
+    this.getFriendsRunning();
   },
   mounted() {
-    
   },
   methods: {
-
+    convertToTime(origin) {
+        var time = "";
+        time += parseInt(origin/60) + "\'";
+        time += origin%60 + "\"";
+        return time;
+    },
+    toggleOverlay() {
+      if(this.slidesOverlayShow)
+        this.slidesOverlayShow = false;
+      else
+        this.slidesOverlayShow = true;
+    },
+    getChallengesIng() {
+      http
+        .get("challenges/ing")
+        .then(({data}) => {
+          if(data.status==200){
+            let obj;
+            data.data.forEach(element => {
+              obj = new Object();
+              obj.id = element.challengeId;
+              obj.title = element.title;
+              obj.challengeImg = element.challengeImg;
+              obj.startTime = element.startTime;
+              obj.endTime = element.endTime;
+              this.slides.push(obj);
+            });
+          }
+          console.log(this.slides);
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        });
+    },
+    getChallengesCommingSoon(){
+      http
+        .get("challenges/comingsoon")
+        .then(({data}) => {
+          if(data.status==200){
+            let obj;
+            data.data.forEach(element => {
+              obj = new Object();
+              obj.id = element.challengeId;
+              obj.title = element.title;
+              obj.challengeImg = element.challengeImg;
+              obj.startTime = element.startTime;
+              obj.endTime = element.endTime;
+              this.slides.push(obj);
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        });
+    },
+    getTopRankers() {
+      http
+        .get(`ranks/top/total`)
+        .then(({data}) => {
+          if(data.status == 200){
+            this.rankList = data.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        })
+    },
+    getFriendsRunning() {
+      http
+        .get(`runnings/friends`)
+        .then(({data}) => {
+          if(data.status == 200){
+            let obj;
+            for(var i=0; i<data.data.friends.length; i++) {
+              obj = new Object();
+              if(data.data.runnings[i] == null) {
+                obj.total_distance = "기록이 없습니다";
+              }else {
+                obj.runningId = data.data.runnings[i].runningId;
+                obj.total_distance = data.data.runnings[i].accDistance;
+                obj.accumulcated_time = data.data.runnings[i].accTime;
+                obj.running_avg_pace = obj.accumulcated_distance / obj.total_distance;
+              }
+              obj.userId = data.data.friends[i].userId;
+              obj.img = data.data.friends[i].profile;
+              obj.title = data.data.friends[i].username;
+              this.friendsFeed.push(obj);
+            }
+            if(this.friendsFeed.length == 0)
+              this.haveFriends = false;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        })
+    }
   }
 };
 </script>

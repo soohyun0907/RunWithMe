@@ -123,7 +123,7 @@
           id="chatContainer"
         >
           <div>
-            <div
+            <div onscroll="chat_on_scroll()"
               class="list-group-item"
               v-for="(message, index) in messages"
               :key="index"
@@ -162,9 +162,7 @@
                 />
                 <div class="message flex-grow-1" style="width: 70%">
                   <div class="d-flex">
-                    <p class="mb-1 text-title text-16 flex-grow-1">
-                      {{ message.sender }}
-                    </p>
+                    <p class="mb-1 text-title text-16 flex-grow-1">{{message.sender}}</p>
                     <!-- <span class="text-small text-muted">24 min ago</span> -->
                   </div>
                   <p class="m-0">{{ message.message }}</p>
@@ -290,6 +288,11 @@ export default {
         this.chat();
       }, 500);
     },
+    chat_on_scroll(){
+      var obj = document.getElementById("chatList")
+      obj.scrollTop = obj.scroolHeight
+      console.log("hihi")
+    },
     sendMessage: function (type) {
       if (this.flag) {
         alert("채팅방을 선택해주세요");
@@ -339,6 +342,7 @@ export default {
             _ws.subscribe(
               "/sub/chat/room/" + _this.getSelectedChatroom.roomId,
               function (message) {
+                console.log("!!!!! ")
                 var recv = JSON.parse(message.body);
                 recv.get;
                 console.log("RECV Sender");
@@ -346,6 +350,7 @@ export default {
                 _this.recvMessage(recv);
               }
             );
+            console.log("??????")
           },
           function (error) {
             alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
