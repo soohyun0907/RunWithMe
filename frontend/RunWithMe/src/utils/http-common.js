@@ -2,7 +2,7 @@ import axios from "axios";
 
 // axios 객체 생성
 export default axios.create({
-  // baseURL: "https://636003b78f7a.ngrok.io",
+  // baseURL: "https://k3a303.p.ssafy.io:8080/",
   baseURL: "http://localhost:8080/",
     headers: {
       AUTH:localStorage.getItem("auth")

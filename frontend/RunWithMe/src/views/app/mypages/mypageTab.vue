@@ -12,7 +12,7 @@
       <div class="user-info">
         <img
           class="profile-picture avatar-lg mb-2"
-          src="http://gull-html-laravel.ui-lib.com/assets/images/faces/1.jpg"
+          src="@/assets/images/faces/3.jpg"
           alt=""
         />
         <p class="m-0 text-24">{{ userInfo.username }}</p>
@@ -244,6 +244,7 @@ export default {
   },
 
   mounted() {
+    console.log(this.userInfo)
     if (window.google && window.google.maps) {
       this.initMap();
     } else {
