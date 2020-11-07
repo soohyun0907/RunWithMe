@@ -81,8 +81,9 @@
                                     <b-popover target="popover-out-check" triggers="hover" placement="bottom">
                                     <template #title> 정말 탈퇴하시겠습니까? </template>
                                     <b>다시 되돌릴수 없습니다.</b>
+                                    <input type="password" v-model="inputPass" placeholder="비밀번호를 입력하세요"/>
                                     <br>
-                                    <b-button @click="memberOut(userInfo)" variant="danger ripple m-1">탈퇴 확인</b-button>
+                                    <b-button @click="memberOut()" variant="danger ripple m-1">탈퇴 확인</b-button>
 
                                     </b-popover> 
                                 </div>
@@ -98,12 +99,17 @@
 
 <script>
 import http from "@/utils/http-common";
-import { mapGetters } from "vuex";
+import { mapGetters,mapActions } from "vuex";
 
 export default {
      metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
     title: "Profile"
+  },
+  data() {
+    return {
+      inputPass: "",
+      }
   },
    computed: {
     ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
@@ -112,9 +118,16 @@ export default {
   mounted() {
   },
   methods: {
-      memberOut(userInfo){
-          
-        http.delete()
+    ...mapActions(["signOut"]),
+    memberOut(){
+        var data = this.userInfo 
+        data["user_pw"] = this.inputPass
+        console.log(data)
+        http.delete(`users`,data)  
+        .then(data => {
+            this.signOut();
+            console.log("i'm gone..")
+        })
       },
       goUserInfoEdit() {
           this.$router.push("/app/mypages/myUserInfoEdit");

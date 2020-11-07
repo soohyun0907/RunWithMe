@@ -1,32 +1,39 @@
 <template>
   <div class="main-content">
-    <breadcumbcustom :title="'Running Result'" :date=date.toLocaleString() />
+    <breadcumbcustom :title="'Running Result'"/>
     <div class="simpleResult">
-        <h1>{{result.accumulcated_distance}} km</h1>
         <div class="col">
             <div class="row">
                 <div class="col">
-                    평균페이스
-                    <h3>{{convertToTime(result.running_avg_pace)}}</h3>
-                </div>
-                <div class="col">
-                    시간
-                    <h3>{{result.accumulcated_time}}</h3>
+                    런닝 종료 시간
+                    <h3>{{result.endTime}}</h3>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    최소페이스
-                    <h3>{{convertToTime(result.running_min_pace)}}</h3>
+                    총 런닝 거리
+                    <h3>{{result.accDistance}} km</h3>
                 </div>
                 <div class="col">
-                    최대페이스
-                    <h3>{{convertToTime(result.running_max_pace)}}</h3>
+                    총 런닝 시간
+                    <h3>{{result.accTime}}초</h3>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col">
+                    평균 속도
+                    <h3>{{result.accDistance/result.accTime}} m/s</h3>
+                </div>
+                <div class="col">
+                    최대 속력
+                    <h3>{{result.accDistance/result.accTime}}</h3>
                 </div>
             </div>
         </div>
     </div>
-    <section ref="map" class="map"></section>
+
+    <!-- <img :src="result.thumbnail"/> -->
+    <section ref="map" class="map"> </section>
     <br>
     <h3>구간</h3>
     <div class = "col">
@@ -51,9 +58,23 @@
   </div>
 </template>
 <script>
+import http from "@/utils/http-common";
+import { mapGetters,mapMutations } from "vuex";
+
 export default {
   name: 'runningResult',
+  data() {
+    return {
+        date: new Date(),
+        map : null,
+        result: {},
+    }
+  },
   mounted() {
+      console.log("result")
+      this.result = this.myRunning
+      console.log(this.result)
+    this.$store.commit('closeSidebar')
     if(window.google && window.google.maps) {
         this.initMap();
     } else {
@@ -61,43 +82,11 @@ export default {
         script.onload = () => google.maps.load(this.initMap);
     }
   },
-  data() {
-    return {
-        date: new Date(),
-        map : null,
-        result: {
-            polyline : "invcFia`fWOdOdDKh@hANl@zA?t@r@lABBaBlACj@Yg@aCqAwDSeBSiAi@_C`CqA`CmAfCw@kC{@e@oAg@Fi@a@q@`@NjA}An@aALsAMuAKE~B",
-            accumulcated_distance: 7.06,
-            accumulcated_time: "38:11",
-            running_avg_pace : 325,
-            running_min_pace : 300,
-            running_max_pace : 420,
-            records : [
-                {
-                    accumulcated_distance: 1,
-                    accumulcated_time : 300
-                },
-                {
-                    accumulcated_distance: 2,
-                    accumulcated_time : 300
-                },
-                {
-                    accumulcated_distance: 3,
-                    accumulcated_time : 300
-                },
-                {
-                    accumulcated_distance: 4,
-                    accumulcated_time : 300
-                },
-                {
-                    accumulcated_distance: 5,
-                    accumulcated_time : 300
-                },
-            ]
-        },
-    }
+  computed: {
+    ...mapGetters(["myRunning"]),
   },
   methods: {
+    ...mapMutations(["mutateMyRunning","closeSidebar"]),
     initMap(){
         var map = new google.maps.Map(this.$refs["map"], {
               zoom: 15,

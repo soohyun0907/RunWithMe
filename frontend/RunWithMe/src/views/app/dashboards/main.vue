@@ -11,7 +11,7 @@
     <carousel-3d :width="150" :height="150"
      :controls-visible="true" >
       <!-- <slide v-for="(slide,index) in slides" :key="index" style="border: 0px;"> -->
-      <slide v-for="slide in slides" :index="slide.id-1" :key="slide.id" style="border: 0px;">
+      <slide v-for="(slide,i) in slides" :index="i" :key="slide.id" style="border: 0px;">
         <div @click="toggleOverlay">
           <b-overlay 
           :show="slidesOverlayShow" 
@@ -22,8 +22,8 @@
             <img :src="slide.challengeImg" />
             <template #overlay>
               <div class="text-center">
-                <h3 style="overflow:hidden;">{{slide.title}}</h3>
-                <h5>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h5>
+                <h5 style="overflow:hidden;">{{slide.title}}</h5>
+                <h6>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h6>
               </div>
             </template>
           </b-overlay>
@@ -68,8 +68,8 @@
       </div>
       <div class="ul-widget__body">
         <div class="ul-widget1">
-          <div class="ul-widget__item ul-widget4__users" v-for="ranker in rankList" :key="ranker.rankId">
-            <h5 style="margin-right:5px;">{{ ranker.rankId }} </h5>
+          <div class="ul-widget__item ul-widget4__users" v-for="(ranker,index) in rankList" :index="index" :key="ranker.rankerId">
+            <h5 style="margin-right:5px;">{{ index+1 }} </h5>
               <div class="ul-widget4__img">
                 <img
                   :src="ranker.userId.profile"
@@ -79,12 +79,12 @@
                 />
               </div>
               <div class="ul-widget2__info ul-widget4__users-info">
-                <router-link :to="`/app/runnings/friendsDetail`">
+                 <router-link :to="{name:'friendsDetail', query:{friendId:ranker.userId.userId}}">
                   {{ranker.userId.username}}
                 </router-link>
               </div>
               <span class="ul-widget4__number t-font-boldest text-success">
-                {{ranker.totalExp}} p
+                {{ranker.totalExp}}
               </span>
           </div>
         </div>
@@ -115,7 +115,7 @@
         v-for="(item, index) in friendsFeed"
         transition="list"
       >
-        <router-link :to="`/app/runnings/runningResult`">
+        <router-link :to="{name:'runningResult', query:{friendId:item.userId.userId}}">
         <div
           class="card o-hidden mb-30 d-flex "
           :class="{ 'flex-column': isListView, 'flex-row': !isListView }"
@@ -159,7 +159,7 @@ import { Carousel3d, Slide } from 'vue-carousel-3d'
 import { VueperSlides, VueperSlide } from 'vueperslides'
 import 'vueperslides/dist/vueperslides.css'
 import http from "@/utils/http-common";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: 'mainpage',
@@ -188,12 +188,14 @@ export default {
    
   },
   mounted() {
+    this.$store.commit('closeSidebar')
     this.getChallengesIng();
     this.getChallengesCommingSoon();
     this.getTopRankers();
     this.getFriendsRunning();
   },
   methods: {
+    ...mapMutations(["mutateMyRunning","closeSidebar"]),
     convertToTime(origin) {
         var time = "";
         time += parseInt(origin/60) + "\'";

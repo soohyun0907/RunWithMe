@@ -153,9 +153,9 @@
 
     <infinite-slide-bar duration="20s" :barStyle="{ padding: '5px 0' }">
       <div class="items">
-        <div v-for="ranker in rankList" :key="ranker.rankId" style="margin-right:50px;">
+	 <div v-for="(ranker,index) in rankList" :index="index" :key="ranker.rankId" style="margin-right:50px;">
           <img class="profile-picture rounded-circle avatar-sm" :src="ranker.userId.profile">
-          {{ranker.rankId}}. {{ranker.userId.username}}
+          {{index+1}}. {{ranker.userId.username}}
           {{ranker.totalExp}} p
         </div>
       </div>

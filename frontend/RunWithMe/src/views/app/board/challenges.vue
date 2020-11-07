@@ -144,6 +144,7 @@
 
 <script>
 import http from "@/utils/http-common";
+import { mapGetters,mapMutations } from "vuex";
 
 export default {
     name: 'challenges',
@@ -164,7 +165,11 @@ export default {
         this.getChallengesCommingSoon();
         this.getChallengesDone();
     },
+    mounted() {
+      this.$store.commit('closeSidebar')
+    },
     methods: {
+    ...mapMutations(["mutateMyRunning","closeSidebar"]),
         showConfirmModal(challengeId, challengeTitle, personalDistanceGoal){
             this.confirmModal = "";
             this.$bvModal

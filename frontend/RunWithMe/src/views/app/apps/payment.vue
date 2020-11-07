@@ -17,8 +17,16 @@
 
 <script>
 import { mobileModel } from 'mobile-device-detect';
+import { mapGetters,mapMutations } from "vuex";
+import http from "@/utils/http-common";
+
 export default {
+
+    mounted() {
+      this.$store.commit('closeSidebar')
+    },
     methods: {
+    ...mapMutations(["mutateMyRunning","closeSidebar"]),
         chargeKakao() {
             var IMP = window.IMP;
             IMP.init("imp42556076");
@@ -44,14 +52,12 @@ export default {
                     msg += '상점 거래ID : ' + rsp.merchant_uid;
                     msg += '결제 금액 : ' + rsp.paid_amount;
                     msg += '카드 승인번호 : ' + rsp.apply_num;
-                    jQuery.ajax({
-                        type: "GET", 
-                        url: "http://localhost:8080/payment/charge/"+money, //충전 금액값을 보낼 url 설정
-                        headers: {
-                            "AUTH":localStorage.getItem("auth")
-                        }
-                    });
-                    alert(msg);
+               
+		http.get(`payment/charge/${money}`)
+	            .then(data => {
+        		console.log(data);
+     	            });
+    		    alert(msg);
                     // document.location.href="/app/apps/payment";
                     document.location.href="/app/apps/paymentDone"; //챌린지 참여 목록으로 이동?
                 } else {
