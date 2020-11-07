@@ -277,11 +277,14 @@ export default {
     },
     toggleSelectedParentMenu() {
       const currentParentUrl = this.$route.path
+      
         .split("/")
         .filter(x => x !== "")[1];
+          console.log(currentParentUrl);
 
       if (currentParentUrl !== undefined || currentParentUrl !== null) {
         this.selectedParentMenu = currentParentUrl.toLowerCase();
+        //this.selectedParentMenu = "runnings";
       } else {
         this.selectedParentMenu = "runnings";
       }

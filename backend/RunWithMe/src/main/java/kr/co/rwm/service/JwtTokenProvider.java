@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
-
+ 
 	@Value("${spring.jwt.secret}")
 	private String secretKey;
 	private final RedisTemplate<String, String> logoutRedis;

@@ -61,6 +61,8 @@ public class RecordServiceImpl implements RecordService {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 		Running running = Running.builder()
 								.userId(userId)
+								.polyline(String.valueOf(runningInfo.get("polyline")))
+								.thumbnail(String.valueOf(runningInfo.get("thumbnail")))
 								.accDistance((double) runningInfo.get("accDistance"))
 								.accTime(((Number) runningInfo.get("accTime")).longValue())
 								.startTime(LocalDateTime.parse((CharSequence) runningInfo.get("startTime"), formatter))

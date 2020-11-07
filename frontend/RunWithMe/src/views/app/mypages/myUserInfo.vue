@@ -116,6 +116,7 @@ export default {
   },
 
   mounted() {
+      console.log(this.userInfo)
   },
   methods: {
     ...mapActions(["signOut"]),
