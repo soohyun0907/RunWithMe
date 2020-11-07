@@ -1,12 +1,14 @@
 <template>
     <div class="main-content">
         <div class="user-profile-img">
-            <img class="profile-picture mb-2" src="/img/1.jpg" />
+            <img class="profile-picture mb-2" :src="friendInfo.userId.profile" width="200px" height="170px"/>
         </div>
-        <p class="m-0 text-24" style="text-align:center;">Timothy Carlson</p>
+        <div style="margin-top:50px">
+        <p class="m-0 text-24" style="text-align:center;">{{friendInfo.userId.username}}</p>
         <div class="col" style="text-align:center;">
-            총 킬로미터
-            <h2>100KM</h2>
+            {{friendInfo.userId.gugunId.sidoId.sidoName}} {{friendInfo.userId.gugunId.gugunName}}
+            <h5>총 경험치 : <code>{{friendInfo.totalExp}}</code> </h5>
+        </div>
         </div>
         <br>
         <div
@@ -56,28 +58,32 @@
         </div>
     </div>
 </template>
+
 <script>
+
+import http from "@/utils/http-common";
+import { mapGetters } from "vuex";
 const items = [
   {
     img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
-    title: "Nickname",
+    title: "기명택",
     total_distance: "8",
     running_avg_pace : 325,
-    accumulcated_time: "38:11"
+    accumulcated_time: "51:11"
   },
   {
     img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
-    title: "Nickname",
+    title: "기명택",
     total_distance: "10",
-    running_avg_pace : 325,
-    accumulcated_time: "38:11"
+    running_avg_pace : 305,
+    accumulcated_time: "60:11"
   },
   {
     img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
-    title: "Nickname",
+    title: "기명택",
     total_distance: "5",
-    running_avg_pace : 325,
-    accumulcated_time: "38:11"
+    running_avg_pace : 365,
+    accumulcated_time: "30:11"
   },
 ];
 
@@ -87,6 +93,8 @@ export default {
         return {
             items: items,
             isListView: false,
+            friendInfo:{},
+
             records : [
                 {
                     runningDate: new Date(),
@@ -118,7 +126,19 @@ export default {
             time += origin%60 + "\"";
             return time;
         },
-    }
+    },
+    mounted() {
+        http.post(`ranks/search`,{
+            userId:this.$route.query.friendId
+        })
+        .then(data =>{
+            this.friendInfo= data.data.data[0]
+            console.log(this.friendInfo)
+
+        })
+        console.log(this.$route.query.friendId)
+        this.$store.commit('closeSidebar')
+ },
 }
 </script>
 <style scoped>

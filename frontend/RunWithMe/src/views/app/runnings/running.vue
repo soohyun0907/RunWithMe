@@ -2,21 +2,22 @@
   <div class="main-content">
     <section class="top-bar">
       <breadcumb :page="'Record Running'" :folder="'Runnings'" />
-      <h4>Run With Me?</h4>
+      <h4 style="margin-top:5px;">Run With Me?</h4>
     </section>
-
-<div >
-    <span id="acc_dis" > {{ show_distance }}</span>
-    <div id="run_desc distance">누적 거리</div>
-</div>
-<div>
-    <span id="acc_time">{{ speed }}</span>
-    <div id="run_desc speed">현재 속도</div>
-</div>
-<div>
-      <span id="time">{{ clock }}</span>
-      <div id="run_desc time">누적 시간</div>
-</div>
+    <div style="text-align:center; margin-top:40px;">
+      <div style="float:left;"  >
+          <div id="run_desc distance">누적 거리</div>
+          <span id="acc_dis" > {{ show_distance }}km     </span>
+      </div>
+      <div style="margin-left:50px; float:left;">
+          <div id="run_desc speed">현재 속도</div>
+          <span id="acc_time">{{ speed }}m/s</span>
+      </div>
+      <div style=" margin-left:50px; float:left;">
+            <div id="run_desc time">누적 시간</div>
+            <span id="time">{{ clock }}</span>
+      </div>
+    </div>
     <section ref="map" class="map"></section>
 
     <div class="btn_container">
@@ -55,7 +56,7 @@
 </template>
 <script>
 import http from "@/utils/http-common";
-import { mapGetters } from "vuex";
+import { mapGetters,mapMutations } from "vuex";
 
 export default {
   metaInfo: {
@@ -68,7 +69,7 @@ export default {
       previous: { lat: 0, lng: 0 },
       watchPositionId: null,
       map: null,
-      accumulated_distance: 0.949595,
+      accumulated_distance: 0,
       accumulated_time: 0,
       show_distance:0,
       show_speed:0,
@@ -84,7 +85,7 @@ export default {
       avgSpeed:0,
       gugun: ["광명시"],
       currentCity: "",
-
+      thumbnail:"",
       //스톱워치 변수
       clock: "00:00:00",
       timeBegan: null,
@@ -107,6 +108,7 @@ export default {
     ...mapGetters(["userInfo"]),
   },
   methods: {
+    ...mapMutations(["mutateMyRunning"]),
     initMap() {
       navigator.geolocation.getCurrentPosition((position) => {
         this.current.lat = position.coords.latitude;
@@ -145,7 +147,6 @@ export default {
           icon: runningMarker,
         });
 
-        this.linePath.push(new google.maps.LatLng(37.331777, 127.129347));
         this.map = map;
         this.marker = marker;
       });
@@ -159,7 +160,7 @@ export default {
     },
 
     resetLocations() {
-      this.startTime = "";
+      
       this.endTime = "";
       this.clock = "00:00:00";
       this.timeBegan = null;
@@ -243,7 +244,6 @@ export default {
             //이제 런닝 시작이면
             this.previous.lat = this.current.lat;
             this.previous.lng = this.current.lng;
-            this.savePosition(position);
 
             this.poly = new google.maps.Polyline({
               strokeColor: "#000000",
@@ -312,7 +312,7 @@ export default {
       //google static map url
       var staticM_URL = "https://maps.googleapis.com/maps/api/staticmap?";
       staticM_URL += "&size=520x650"; //Set the Google Map Size.
-      staticM_URL += "&zoom=11"; //Set the Google Map Zoom.
+      staticM_URL += "&zoom=16"; //Set the Google Map Zoom.
       staticM_URL +=
         "&maptype=roadmap&key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
       staticM_URL +="path=color:0xff0000ff|weight:3"
@@ -321,8 +321,8 @@ export default {
         staticM_URL +="|"+this.linePath[i].lat()+","+this.linePath[i].lng()
       }
 
-
-      window.open(staticM_URL);
+	 this.thumbnail = staticM_URL
+      //window.open(staticM_URL);
     },
     stopLocationUpdates() {
       this.isPause = true;
@@ -337,7 +337,7 @@ export default {
     savePosition(position) {
       let data = {
         userId: this.userInfo.userId,
-        accDistance: this.accumulated_distance,
+        accDistance: this.accumulated_distance+0.0001,
         accTime: this.accumulated_time,
         speed: this.speed,
       };
@@ -379,11 +379,18 @@ export default {
         polyline: this.encode_polyline,
         startTime: this.startTime,
         endTime: this.endTime,
-        accDistance: this.accumulated_distance,
+        accDistance: this.accumulated_distance+0.0001,
         accTime: this.accumulated_time,
         gugun:this.gugun,
+	      thumbnail:this.thumbnail,
       };
-      http.post(`runnings/`, runningData);
+      http.post(`runnings/`, runningData)
+      .then(data => {
+        console.log("런닝 기록 저장 완료.")
+        console.log(runningData)
+        this.$store.commit('mutateMyRunning',runningData)
+        this.$router.push('/app/runnings/runningResult')
+      })
     },
     clockRunning() {
       var currentTime = new Date();
@@ -489,13 +496,13 @@ export default {
 /* 스톱워치 디자인 */
 @import url("https://fonts.googleapis.com/css?family=Share+Tech+Mono");
 #time {
-  font-size: 2em;
+  font-size: 1.5em;
 }
 #acc_time {
-  font-size: 2em;
+  font-size: 1.5em;
 }
 #acc_dis {
-  font-size: 2em;
+  font-size: 1.5em;
 }
 .btn-container {
   display: flex;

@@ -55,6 +55,7 @@
 </template>
 <script>
 import http from "@/utils/http-common";
+import { mapGetters,mapActions } from "vuex";
 
 export default {
     name: 'contactList',
@@ -62,32 +63,32 @@ export default {
         return {
             contactlist : [
                 {
-                    nickname: "Timothy Carlson",
-                    imgUrl: "/img/1.jpg",
+                    nickname: "기명택",
+                    imgUrl: require("@/assets/images/faces/4.jpg"),
                     accumulcated_distance: 100,
                     running_cnt: 10,
                     avg_pace : 325,
                     avg_distance: 10
                 },
                 {
-                    nickname: "Jaret Leto",
-                    imgUrl: "/img/2.jpg",
-                    accumulcated_distance: 100,
+                    nickname: "현두",
+                     imgUrl: require("@/assets/images/faces/3.jpg"),
+                   ccumulcated_distance: 100,
                     running_cnt: 10,
                     avg_pace : 325,
                     avg_distance: 10
                 },
                 {
-                    nickname: "Kim",
-                    imgUrl: "/img/3.jpg",
-                    accumulcated_distance: 100,
+                    nickname: "이프로",
+                    imgUrl: require("@/assets/images/faces/5.jpg"),
+                   accumulcated_distance: 100,
                     running_cnt: 10,
                     avg_pace : 325,
                     avg_distance: 10
                 },
                 {
-                    nickname: "Lee",
-                    imgUrl: "/img/4.jpg",
+                    nickname: "비니",
+                    imgUrl: require("@/assets/images/faces/6.jpg"),
                     accumulcated_distance: 100,
                     running_cnt: 10,
                     avg_pace : 325,
@@ -96,13 +97,22 @@ export default {
             ]
         }
     },
+    computed: {
+        ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
+    },
     methods: {
         convertToTime(origin){
             var time = "";
             time += parseInt(origin/60) + "\'";
             time += origin%60 + "\"";
             return time;
-        }
+        },
+        getRunners(){
+            http.get(`runnings/summary/region`)
+            .then(data =>{
+
+            })
+        },
     }
 }
 </script>
