@@ -329,7 +329,7 @@ export default {
 
     chat() {
       http.get("/chat/user").then((response) => {
-        this.sock = new SockJS("http://localhost:8080/ws-stomp");
+        this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
         var _ws = Stomp.over(this.sock);
 
         var _this = this;
@@ -374,6 +374,7 @@ export default {
   },
 
   mounted: function () {
+    localStorage.clear();
     this.token = this.auth;
     setTimeout(() => {
       this.selectAllGroupChat();

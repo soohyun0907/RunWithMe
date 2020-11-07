@@ -1,12 +1,14 @@
 <template>
     <div class="main-content">
         <div class="user-profile-img">
-            <img class="profile-picture mb-2" src="/img/1.jpg" />
+            <img class="profile-picture mb-2" :src="friendInfo.userId.profile" width="200px" height="170px"/>
         </div>
-        <p class="m-0 text-24" style="text-align:center;">기명택</p>
+        <div style="margin-top:50px">
+        <p class="m-0 text-24" style="text-align:center;">{{friendInfo.userId.username}}</p>
         <div class="col" style="text-align:center;">
-            총 킬로미터
-            <h2>112KM</h2>
+            {{friendInfo.userId.gugunId.sidoId.sidoName}} {{friendInfo.userId.gugunId.gugunName}}
+            <h5>총 경험치 : <code>{{friendInfo.totalExp}}</code> </h5>
+        </div>
         </div>
         <br>
         <div
@@ -56,7 +58,11 @@
         </div>
     </div>
 </template>
+
 <script>
+
+import http from "@/utils/http-common";
+import { mapGetters } from "vuex";
 const items = [
   {
     img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
@@ -87,6 +93,8 @@ export default {
         return {
             items: items,
             isListView: false,
+            friendInfo:{},
+
             records : [
                 {
                     runningDate: new Date(),
@@ -118,7 +126,19 @@ export default {
             time += origin%60 + "\"";
             return time;
         },
-    }
+    },
+    mounted() {
+        http.post(`ranks/search`,{
+            userId:this.$route.query.friendId
+        })
+        .then(data =>{
+            this.friendInfo= data.data.data[0]
+            console.log(this.friendInfo)
+
+        })
+        console.log(this.$route.query.friendId)
+        this.$store.commit('closeSidebar')
+ },
 }
 </script>
 <style scoped>
