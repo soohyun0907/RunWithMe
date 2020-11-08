@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.Gugun;
+import kr.co.rwm.entity.RunningUser;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
@@ -42,7 +43,7 @@ import lombok.RequiredArgsConstructor;
  * UserController
  * <pre>
  * <b> History:</b>
- *			김순빈, ver.0.3 , 2020-10-28 : join, update - 활동지역 등록 및 수정 (참고-User Entity: dongId->gugunId)
+ *			김순빈, ver.0.4 , 2020-11-08 : /users/{userId}, /users 요청시 등급, 누적 거리, 누적 런닝, 누적 시간 필요
  * </pre>
  * 
  * @author 김형택
@@ -173,12 +174,12 @@ public class UserController {
 	// 회원 정보 조회 (다른 사람)
 	@GetMapping(path="/{userId}")
 	public ResponseEntity userInfo(@PathVariable int userId) {
-		User member = userService.findByUserId(userId).orElse(null);
+		RunningUser member = recordService.findRunningUserByUserId(userId);
 		if(member == null) {
 			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.USERINFO_SEARCH_FAIL),
 					HttpStatus.OK);
 		}
-		return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.USERINFO_SEARCH_SUCCESS,member),HttpStatus.OK);
+		return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.USERINFO_SEARCH_SUCCESS, member),HttpStatus.OK);
 	}
 	
 	// 회원 정보 조회 (해당 사용자)
@@ -186,11 +187,11 @@ public class UserController {
 	public ResponseEntity myUserInfo(HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
-			String userEmail = jwtTokenProvider.getUserEmailFromJwt(token);
+			int userId = jwtTokenProvider.getUserIdFromJwt(token);
 			
 			// 토큰 유효성 검사를 걸쳤기 때문에 무조건 정보가 존재한다.
-			User member = userService.findByUserEmail(userEmail).get(); 
-			return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.USERINFO_SEARCH_SUCCESS,member),HttpStatus.OK);
+			RunningUser member = recordService.findRunningUserByUserId(userId);
+			return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.USERINFO_SEARCH_SUCCESS, member),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
 					HttpStatus.FORBIDDEN);
