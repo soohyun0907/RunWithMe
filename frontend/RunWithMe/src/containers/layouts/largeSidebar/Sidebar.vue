@@ -280,7 +280,6 @@ export default {
       
         .split("/")
         .filter(x => x !== "")[1];
-          console.log(currentParentUrl);
 
       if (currentParentUrl !== undefined || currentParentUrl !== null) {
         this.selectedParentMenu = currentParentUrl.toLowerCase();

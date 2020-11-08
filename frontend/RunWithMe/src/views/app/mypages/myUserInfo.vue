@@ -121,21 +121,20 @@ export default {
   methods: {
     ...mapActions(["signOut"]),
     memberOut(){
-        var data = this.userInfo 
+        var data = this.userInfo
         data["user_pw"] = this.inputPass
-        console.log(data)
-        http.delete(`users`,data)  
+        http.post(`users/checkPw`,data)
         .then(data => {
             this.signOut();
             console.log("i'm gone..")
         })
-      },
-      goUserInfoEdit() {
-          this.$router.push("/app/mypages/myUserInfoEdit");
-      },
-      goUserInfosEdit(){
-          this.$router.push("/app/mypages/myUserInfosEdit");
-      },
+    },
+    goUserInfoEdit() {
+        this.$router.push("/app/mypages/myUserInfoEdit");
+    },
+    goUserInfosEdit(){
+        this.$router.push("/app/mypages/myUserInfosEdit");
+    },
   },
 }
 </script>

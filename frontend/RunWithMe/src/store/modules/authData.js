@@ -12,6 +12,7 @@ export default {
     auth:"",
     userInfo:{},
     myRunning:{},
+    defaultProfile:require('@/assets/images/faces/defaultProfile.png')
   },
   getters: {
     loading: state => state.loading,
@@ -20,6 +21,7 @@ export default {
     auth: state => state.auth,
     isLogin:state =>state.isLogin,
     myRunning:state=>state.myRunning,
+    defaultProfile:state=>state.defaultProfile,
   },
   mutations: {
     mutateMyRunning(state,myRunning){
@@ -66,7 +68,7 @@ export default {
     }
   },
   actions: {
-   
+ 
     login(context, { userEmail, userPw }) {
       context.commit("clearError");
       context.commit("setLoading", true);
@@ -83,7 +85,7 @@ export default {
           console.log(res.data)
           console.log("토큰 받아오기" + res.headers.auth)// 토큰얻기
           console.log(localStorage.getItem("auth"))
-          router.push("/")
+          router.push("/app/dashboards/main")
       })
       .catch(function(error) {
         // Handle Errors here.

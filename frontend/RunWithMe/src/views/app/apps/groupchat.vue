@@ -2,7 +2,10 @@
   <div class="main-content">
     <breadcumb :page="'Group Chat'" :folder="'apps'" />
 
-    <div class="card chat-sidebar-container sidebar-container">
+    <div
+      class="card chat-sidebar-container sidebar-container"
+      style="height: 400px"
+    >
       <div class="chat-sidebar-wrap sidebar" :class="{ 'ml-0': isMobile }">
         <div class="border-right">
           <div
@@ -19,7 +22,7 @@
                 class="form-control form-control-rounded"
                 id="search"
                 v-model="search"
-                placeholder="서비스 준비중"
+                placeholder="채팅방 이름을 입력하세요"
               />
             </div>
           </div>
@@ -35,12 +38,11 @@
               >
                 그룹 채팅 목록
               </div>
-              <div
-                
-                v-for="chatroom in this.getChatRoom"
-                :key="chatroom.roomId"
-              >
-                <div class="p-3 d-flex border-bottom align-items-center" v-if="chatroom.name.includes(search)">
+              <div v-for="chatroom in this.getChatRoom" :key="chatroom.roomId">
+                <div
+                  class="p-3 d-flex border-bottom align-items-center"
+                  v-if="chatroom.name.includes(search)"
+                >
                   <h6 @click="choice(chatroom.roomId)" class="">
                     {{ chatroom.name }}
                   </h6>
@@ -121,9 +123,11 @@
           :settings="{ suppressScrollX: true, wheelPropagation: false }"
           class="chat-content perfect-scrollbar rtl-ps-none ps scroll"
           id="chatContainer"
+          style="height: 45vh"
         >
           <div>
-            <div onscroll="chat_on_scroll()"
+            <div
+              onscroll="chat_on_scroll()"
               class="list-group-item"
               v-for="(message, index) in messages"
               :key="index"
@@ -141,7 +145,7 @@
                     </p>
                     <!-- <span class="text-small text-muted">25 min ago</span> -->
                   </div>
-                  <p class="m-0" >{{ message.message }}</p>
+                  <p class="m-0">{{ message.message }}</p>
                 </div>
                 <img
                   :src="message.img"
@@ -162,7 +166,9 @@
                 />
                 <div class="message flex-grow-1" style="width: 70%">
                   <div class="d-flex">
-                    <p class="mb-1 text-title text-16 flex-grow-1">{{message.sender}}</p>
+                    <p class="mb-1 text-title text-16 flex-grow-1">
+                      {{ message.sender }}
+                    </p>
                     <!-- <span class="text-small text-muted">24 min ago</span> -->
                   </div>
                   <p class="m-0">{{ message.message }}</p>
@@ -189,8 +195,9 @@
                 v-model="message"
               />
             </div> -->
-            <div class="form-group">
+            <div class="form-group" style="height:5vh; width:45vh;">
               <input
+                style="float: left; width: 34vh"
                 type="text"
                 class="form-control form-control-rounded"
                 placeholder="메세지를 입력하세요"
@@ -199,15 +206,17 @@
                 v-model="message"
                 v-on:keypress.enter="sendMessage('TALK')"
               />
-            </div>
-            <div class="d-flex">
-              <div class="flex-grow-1"></div>
-              <button
-                class="btn btn-icon btn-rounded btn-primary mr-2"
-                type="button"
-                @click="sendMessage('TALK')"
-              >
-              </button>
+
+              <div class="d-flex" style="padding-left: 30px; float: right; width: 11vh">
+                <div class="flex-grow-1"></div>
+                <button
+                  class="btn btn-icon btn-rounded btn-primary mr-2"
+                  type="button"
+                  @click="sendMessage('TALK')"
+                >
+                  <i class="i-Paper-Plane"></i>
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -238,7 +247,7 @@ export default {
     return {
       recentContacts: [],
       search: "",
-      isMobile: false,
+      isMobile: true,
       currentChatroom: {},
       chatrooms: [],
       isMe: false /* 내가 보낸 메세지: true | 상대방이 보낸 메시지: false */,
@@ -287,10 +296,10 @@ export default {
         this.chat();
       }, 500);
     },
-    chat_on_scroll(){
-      var obj = document.getElementById("chatList")
-      obj.scrollTop = obj.scroolHeight
-      console.log("hihi")
+    chat_on_scroll() {
+      var obj = document.getElementById("chatList");
+      obj.scrollTop = obj.scroolHeight;
+      console.log("hihi");
     },
     sendMessage: function (type) {
       if (this.flag) {
@@ -315,8 +324,8 @@ export default {
       console.log("*****************************");
       console.log(recv);
       console.log("*****************************");
-      if(recv.imgUrl == null){
-        recv.imgUrl = require("@/assets/images/faces/profile.jpg")
+      if (recv.imgUrl == null) {
+        recv.imgUrl = require("@/assets/images/faces/profile.jpg");
       }
       this.userCount = recv.userCount;
       this.messages.push({
@@ -329,7 +338,8 @@ export default {
 
     chat() {
       http.get("/chat/user").then((response) => {
-        this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
+        // this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
+        this.sock = new SockJS("http://localhost:8080/ws-stomp");
         var _ws = Stomp.over(this.sock);
 
         var _this = this;
@@ -341,7 +351,7 @@ export default {
             _ws.subscribe(
               "/sub/chat/room/" + _this.getSelectedChatroom.roomId,
               function (message) {
-                console.log("!!!!! ")
+                console.log("!!!!! ");
                 var recv = JSON.parse(message.body);
                 recv.get;
                 console.log("RECV Sender");
@@ -349,7 +359,7 @@ export default {
                 _this.recvMessage(recv);
               }
             );
-            console.log("??????")
+            console.log("??????");
           },
           function (error) {
             alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
@@ -374,7 +384,7 @@ export default {
   },
 
   mounted: function () {
-    localStorage.clear();
+    // localStorage.clear();
     this.token = this.auth;
     setTimeout(() => {
       this.selectAllGroupChat();
