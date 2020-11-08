@@ -114,6 +114,7 @@ export default {
         }
     },
     methods: {
+    ...mapMutations(["mutateProfile","closeSidebar"]),
         getRunningTime(startTime, endTime) {
             var runningTime = "";
             runningTime += parseInt(endTime.hour() - startTime.hour()) + ":";
