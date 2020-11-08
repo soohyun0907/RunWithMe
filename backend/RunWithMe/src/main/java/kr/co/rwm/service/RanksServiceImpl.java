@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import kr.co.rwm.entity.Ranks;
@@ -15,6 +17,7 @@ import kr.co.rwm.entity.User;
 import kr.co.rwm.repo.RanksRepository;
 import kr.co.rwm.repo.RecordRepository;
 import kr.co.rwm.repo.RunningRepository;
+import kr.co.rwm.repo.RunningUserRepository;
 import kr.co.rwm.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +27,7 @@ public class RanksServiceImpl implements RanksService{
 	private final RanksRepository rankRepository;
 	private final RecordRepository recordRepository;
 	private final RunningRepository runningRepository;
+	private final RunningUserRepository runningUserRepository;
 	private final UserRepository userRepository;
 	
 	private final int DEFAULT_EXP = 0;
@@ -170,6 +174,14 @@ public class RanksServiceImpl implements RanksService{
 			}
 		}
 		return list;
+	}
+	
+	@Override
+	@Transactional
+	public void deleteByUserId(User userId) {
+		System.out.println(userId+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		runningUserRepository.deleteByUserId(userId);
+		rankRepository.deleteByUserId(userId);
 	}
 
 }
