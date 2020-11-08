@@ -54,7 +54,7 @@ public class BoardController {
 
 	@Autowired BoardService boardService;
 
-	@GetMapping("/")
+	@GetMapping("")
 	public ResponseEntity allBoardList(){
 		List<Board> list = boardService.allBoardList();
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_BOARDLIST_SUCCESS, list), HttpStatus.OK);
