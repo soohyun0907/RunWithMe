@@ -128,6 +128,7 @@ export default {
         .get("payment/"+this.donateAmount)
         .then(({data}) => {
           alert("결제완료");
+          this.$router.push("/app/board/challenges");
         })
         .catch((error) => {
           this.cancelChallenge();
