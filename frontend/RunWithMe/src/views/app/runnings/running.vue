@@ -5,15 +5,15 @@
       <h4 style="margin-top:5px;">Run With Me?</h4>
     </section>
     <div style="text-align:center; margin-top:40px;">
-      <div style="float:left;"  >
+      <div class="myRecord"  >
           <div id="run_desc distance">누적 거리</div>
           <span id="acc_dis" > {{ show_distance }}km     </span>
       </div>
-      <div style="margin-left:50px; float:left;">
+      <div class="myRecord" >
           <div id="run_desc speed">현재 속도</div>
           <span id="acc_time">{{ speed }}m/s</span>
       </div>
-      <div style=" margin-left:50px; float:left;">
+      <div class="myRecord">
             <div id="run_desc time">누적 시간</div>
             <span id="time">{{ clock }}</span>
       </div>
@@ -32,6 +32,9 @@
              <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
              <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
             </button>
+              <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
+             <span class="ul-btn__icon"> <i style="font-size:3em;ㅇ" class="i-Stop-2"></i></span>
+          </button>
 
           </div>
         </section>
@@ -50,8 +53,6 @@
         </section>
       </div>
     </div>
-    
-    <textarea id="encoded-polyline"></textarea>
   </div>
 </template>
 <script>
@@ -160,7 +161,6 @@ export default {
     },
 
     resetLocations() {
-      
       this.endTime = "";
       this.clock = "00:00:00";
       this.timeBegan = null;
@@ -169,7 +169,6 @@ export default {
       this.started = null;
       this.checkSecond = 0;
       this.checkOneKm = 0;
-      this.speed = 0;
       this.current.lat = 0;
       this.current.lng = 0;
       this.previous.lat = 0;
@@ -263,7 +262,7 @@ export default {
             var distance = this.computeDistance(this.previous, this.current);
             console.log("watchposition 이동거리" + distance);
             console.log("watchposition 걸린시간" + this.accumulated_time);
-            var threshold = 0.01;
+            var threshold = 0.001;
             if (distance > threshold) {
               // 일정속도 이상으로 뛸때만 기록.
               this.previous.lat = this.current.lat;
@@ -273,7 +272,6 @@ export default {
               this.checkOneKm = this.accumulated_distance;
               this.checkSecond = this.accumulated_time;
 
-
               var currentLatLng = new google.maps.LatLng(
                 this.current.lat,
                 this.current.lng
@@ -281,6 +279,7 @@ export default {
               this.linePath.push(currentLatLng);
               this.encode_polyline(currentLatLng, this.poly);
             }
+            // if (this.checkOneKm >= 1) {
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
               this.speed = (this.checkOneKm * 1000) / this.checkSecond;
@@ -299,8 +298,8 @@ export default {
         {
           timeout: 5000,
           maximumAge: 0,
-          // enableHighAccuracy:true,
-          // distanceFilter:40,          
+          enableHighAccuracy:true,
+          distanceFilter:40,          
         }
       );
       this.map = map;
@@ -336,11 +335,11 @@ export default {
     },
     savePosition(position) {
       let data = {
-        userId: this.userInfo.userId,
         accDistance: this.accumulated_distance+0.0001,
-        accTime: this.accumulated_time,
-        speed: this.speed,
+        accTime: this.accumulated_time+0.0001,
+        speed: this.speed+0.0001,
       };
+      console.log(data)
       http
         .post(`runnings/temp`, JSON.stringify(data), {
           headers: {
@@ -442,7 +441,7 @@ export default {
       console.log("here!!!")
       console.log(path)
       console.log(this.encode_polyline)
-      document.getElementById("encoded-polyline").value = this.encode_polyline;
+      // document.getElementById("encoded-polyline").value = this.encode_polyline;
  
     },
     
@@ -507,6 +506,10 @@ export default {
 .btn-container {
   display: flex;
   margin-top: 15px;
+}
+.myRecord {
+  width:30vw; 
+  float:left;
 }
 .running button {
   text-align: center;
