@@ -162,7 +162,9 @@ import http from "@/utils/http-common";
 import { mapGetters, mapMutations } from "vuex";
 
 export default {
-  name: 'mainpage',
+  metaInfo: {
+    title: "Mainpage",
+  },
   components: {
     VueperSlides,
     VueperSlide,
@@ -190,8 +192,8 @@ export default {
     ...mapGetters(["events"])
   },
   created() {
-    this.getChallengesIng();
     this.getChallengesCommingSoon();
+    this.getChallengesIng();
     this.getTopRankers();
     this.getFriendsRunning();
   },
@@ -227,12 +229,17 @@ export default {
               obj.endTime = element.endTime;
               this.tmp1.push(obj);
             });
+            this.slides = [
+              ...this.tmp1,
+              ...this.tmp2
+            ];
           }
         })
         .catch((error) => {
           console.log(error);
           return;
         });
+      
     },
     getChallengesCommingSoon(){
       http
@@ -249,10 +256,6 @@ export default {
               obj.endTime = element.endTime;
               this.tmp2.push(obj);
             });
-            this.slides = [
-              ...this.tmp1,
-              ...this.tmp2
-            ];
           }
         })
         .catch((error) => {

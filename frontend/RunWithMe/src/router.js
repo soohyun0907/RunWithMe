@@ -77,7 +77,7 @@ const routes = [
           },
           {
             path: "friendsDetail",
-	    name: "friendsDetail",
+	          name: "friendsDetail",
             component: () => import("./views/app/runnings/friendsDetail")
           },
         ]
@@ -126,7 +126,12 @@ const routes = [
             component: () => import("./views/app/board/challengeBoard")
           },
           {
+            path: "challengeBoardWrite",
+            component: () => import("./views/app/board/challengeBoardWrite")
+          },
+          {
             path : 'challengeBoardDetail',
+            name : 'challengeBoardDetail',
             component :()=> import("./views/app/board/challengeBoardDetail") ,
             props: true
           },
