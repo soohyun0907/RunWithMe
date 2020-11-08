@@ -245,7 +245,7 @@ public class RunningController {
 			int userId = jwtTokenProvider.getUserIdFromJwt(token);
 			List<RunningUser> runningUsers = recordService.findRunningUserByUserIdAndUserId(userId);
 			return new ResponseEntity<Response>(new 
-					Response(StatusCode.OK, ResponseMessage.USER_SUMMARY_RUNNING_SUCCESS, runningUsers), HttpStatus.OK);
+					Response(StatusCode.OK, ResponseMessage.REGION_SUMMARY_RUNNING_SUCCESS, runningUsers), HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new 
 					Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN), HttpStatus.FORBIDDEN);
