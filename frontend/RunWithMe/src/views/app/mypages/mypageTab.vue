@@ -40,7 +40,7 @@
               <ul class="timeline clearfix">
                 <b-card title="최근 런닝 기록" class="heading text-primary mb-30">
                   <div role="tablist">
-                    <div v-for="(running,i) in areaRunning" :index="i">
+                    <div v-for="(running,i) in areaRunning" :index="i"  :key="running.id">
                       <b-card no-body class="ul-card__border-radius">
                         <!-- 접혀있을때 보이는 부분 -->
                         <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
@@ -82,7 +82,7 @@
               <ul class="timeline clearfix">
                 <b-card title="최근 런닝 기록" class="heading text-primary mb-30">
                   <div role="tablist">
-                    <div v-for="(running,i) in allRunning" :index="i">
+                    <div v-for="(running,i) in allRunning" :index="i" :key="running.id">
                       <b-card no-body class="ul-card__border-radius">
                         <!-- 접혀있을때 보이는 부분 -->
                         <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">

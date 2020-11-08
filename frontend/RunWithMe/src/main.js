@@ -22,11 +22,9 @@ import "font-awesome/css/font-awesome.min.css";
 import vueMoment from 'vue-moment' 
 Vue.use(vueMoment)
 
-//swipes
-
-import { Swipe, SwipeItem } from 'vue-swipe';
-Vue.component('swipe', Swipe);
-Vue.component('swipe-item', SwipeItem);
+//vueSplide
+import VueSplide from '@splidejs/vue-splide';
+Vue.use( VueSplide );
 
 //dropdown
 import VueDropdown from 'vue-dynamic-dropdown'
