@@ -209,7 +209,8 @@ public class RecordServiceImpl implements RecordService {
 		
 		List<RunningUser> runningUserList = runningUserRepository.findAll();
 		for(RunningUser ru: runningUserList) {
-			if(ru.getUserId().getGugunId().getGugunId()==gugunId) {
+			if(ru.getUserId().getGugunId().getGugunId() == gugunId) {
+				if(ru.getUserId().getUserId() == userId) continue;
 				runningUsers.add(ru);
 			}
 		}
