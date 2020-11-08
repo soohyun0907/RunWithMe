@@ -4,65 +4,104 @@
       <breadcumb :page="'Record Running'" :folder="'Runnings'" />
       <h4 style="margin-top:5px;">Run With Me?</h4>
     </section>
-    <div style="text-align:center; margin-top:40px;">
-      <div class="myRecord"  >
-          <div id="run_desc distance">누적 거리</div>
-          <span id="acc_dis" > {{ show_distance }}km     </span>
-      </div>
-      <div class="myRecord" >
-          <div id="run_desc speed">현재 속도</div>
-          <span id="acc_time">{{ speed }}m/s</span>
-      </div>
-      <div class="myRecord">
-            <div id="run_desc time">누적 시간</div>
-            <span id="time">{{ clock }}</span>
-      </div>
-    </div>
-    <section ref="map" class="map"></section>
 
-    <div class="btn_container">
-      <div v-if="!running">
-        <section class="bottom-bar">
-          <div v-if="!isPause">
-            <button type="button" @click="startLocationUpdates" class="btn round btn btn-success btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
-            </button>
+  <splide
+      :options="options"
+      >
+        <splide-slide>
+        <div style="text-align:center; margin-top:40px;">
+          <div class="myRecord"  >
+              <div id="run_desc distance">누적 거리</div>
+            <span id="acc_dis" > {{ show_distance }}km </span>
           </div>
-          <div v-if="isPause">
-             <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
-            </button>
+          <div class="myRecord" >
+              <div id="run_desc speed">현재 속도</div>
+              <span id="acc_time">{{ speed }}m/s</span>
+          </div>
+          <div class="myRecord">
+                <div id="run_desc time">누적 시간</div>
+                <span id="time">{{ clock }}</span>
+          </div>
+        </div>
+        <div style="text-align:center">
+          <section style="display:inline-block" ref="map" class="map"></section>
+        </div>
+        <div class="btn_container">
+          <div v-if="!running">
+            <section class="bottom-bar">
+              <div v-if="!isPause">
+                <button type="button" @click="startLocationUpdates" class="btn round btn btn-success btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
+                </button>
+              </div>
+              <div v-if="isPause">
+                <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
+                </button>
+                  <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:3em;ㅇ" class="i-Stop-2"></i></span>
+              </button>
+
+              </div>
+            </section>
+          </div>
+          <div v-if="running">
+            <section class="bottom-bar">
+
+              <button type="button" @click="stopLocationUpdates" class="btn round btn btn-danger btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Pause"></i></span>
+              </button>
+
               <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em;ㅇ" class="i-Stop-2"></i></span>
-          </button>
+                <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Stop-2"></i></span>
+              </button>
 
+            </section>
           </div>
-        </section>
-      </div>
-      <div v-if="running">
-        <section class="bottom-bar">
-
-          <button type="button" @click="stopLocationUpdates" class="btn round btn btn-danger btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Pause"></i></span>
-          </button>
-
-          <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Stop-2"></i></span>
-          </button>
-
-        </section>
-      </div>
-    </div>
+        </div>
+    
+        </splide-slide>
+        <splide-slide>
+          <div style="margin-top:10vh">
+            <h4 style="text-align:center">구간별 페이스</h4>
+              <div class = "col" >
+                <div class="row">
+                  <div class = "col">
+                    <h5>구간</h5>
+                  </div>
+                  <div class = "col">
+                    <h4>평균 페이스</h4>
+                  </div>
+                </div>
+                <div class="row" v-for="(record,index) in records" :key="index">
+                  <div class = "col">
+                    <h4>{{record.accDistance}}</h4>
+                  </div>
+                  <div class = "col">
+                    <h4>{{convertToTime(record.accTime)}}</h4>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </splide-slide>
+     </splide>
   </div>
 </template>
+<script src="path-to-the-file/splide.min.js"></script>
 <script>
 import http from "@/utils/http-common";
 import { mapGetters,mapMutations } from "vuex";
+import { Splide, SplideSlide } from '@splidejs/vue-splide';
+import '@splidejs/splide/dist/css/themes/splide-default.min.css';
 
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
     title: "Running",
+  },
+  components:{
+    Splide,
+    SplideSlide,
   },
   data() {
     return {
@@ -95,9 +134,36 @@ export default {
       started: null,
       running: false,
       isPause: false,
+      //splide options
+      options: {
+          rewind : true,
+          perPage:1,
+          width  : 400,
+          gap    : '1rem',
+        },
+        records:[
+            {"userId": 1,
+            "accDistance": 1.012,
+            "accTime": 305,
+            },
+            {"userId": 1,
+            "accDistance": 2.112,
+            "accTime": 360,
+            },
+            {"userId": 1,
+            "accDistance": 3.001,
+            "accTime": 368,
+            },
+            {"userId": 1,
+            "accDistance": 3.123,
+            "accTime": 412,
+            }
+        ],
     };
   },
   mounted() {
+    this.$store.commit('closeSidebar')
+    this.getTempRuns()
     if (window.google && window.google.maps) {
       this.initMap();
     } else {
@@ -109,7 +175,25 @@ export default {
     ...mapGetters(["userInfo"]),
   },
   methods: {
-    ...mapMutations(["mutateMyRunning"]),
+    ...mapMutations(["mutateMyRunning","closeSidebar"]),
+    getTempRuns(){
+        http.get(`runnings/temp/`)
+            .then((res) => {
+                console.log("임시 저장 데이터")
+                console.log(res.data);
+                this.records= res.data
+            })
+            .catch((err) => {
+                console.log("1Km이상 뛰지 않았어요")
+                console.log(this.records)
+            });
+    },
+     convertToTime(origin){
+        var time = "";
+        time += parseInt(origin/60) + "\'";
+        time += origin%60 + "\"";
+        return time;
+    },
     initMap() {
       navigator.geolocation.getCurrentPosition((position) => {
         this.current.lat = position.coords.latitude;
@@ -484,8 +568,8 @@ export default {
 }
 .map {
   flex-grow: 1;
-  width: 100%;
-  height: 400px;
+  width: 95%;
+  height: 47vh;
 }
 .bottom-bar {
   height: 100px;

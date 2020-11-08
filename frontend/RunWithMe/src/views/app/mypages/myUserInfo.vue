@@ -6,7 +6,12 @@
         <div class="card user-profile o-hidden mb-30">
             <div class="header-cover" style="background-image: url(http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-5.jpeg"></div>
                 <div class="user-info">
-                    <img class="profile-picture avatar-lg mb-2" :src="userInfo.profile">
+                    <div>
+                        <img class="profile-picture avatar-lg mb-2" :src="userInfo.profile">
+                    </div>
+                    <div>
+                        <img class="profile-picture avatar-lg mb-2" :src="userInfo.profile">
+                    </div> 
                         <b-button variant="outline-info" style="padding:0.2em" @click="goUserInfoEdit()">프로필 변경</b-button>
                         <p class="m-0 text-24">{{userInfo.username}} 님</p>
                         <p class="text-muted m-0">{{userInfo.userEmail}}</p>
@@ -121,12 +126,18 @@ export default {
   methods: {
     ...mapActions(["signOut"]),
     memberOut(){
-        var data = this.userInfo
-        data["user_pw"] = this.inputPass
+        var data = {
+            userPw:this.inputPass
+        }
         http.post(`users/checkPw`,data)
         .then(data => {
-            this.signOut();
             console.log("i'm gone..")
+            http.delete(`users`)
+            .then(data=>{
+                console.log(data)
+                this.signOut();
+                this.$router.push('/app/sessions/signIn')   
+            })
         })
     },
     goUserInfoEdit() {

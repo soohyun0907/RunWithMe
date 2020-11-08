@@ -77,7 +77,11 @@ export default {
             "accTime": 360,
             },
             {"userId": 1,
-            "accDistance": 3.022,
+            "accDistance": 3.001,
+            "accTime": 368,
+            },
+            {"userId": 1,
+            "accDistance": 3.123,
             "accTime": 412,
             }
         ],
@@ -117,6 +121,7 @@ export default {
             .then((res) => {
                 console.log("임시 저장 데이터")
                 console.log(res.data);
+                this.records=res.data
             })
             .catch((err) => {
                 console.log("1Km이상 뛰지 않았어요")
