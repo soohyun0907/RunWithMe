@@ -55,6 +55,9 @@ public class ResponseMessage {
     public static final String CHALLENGE_USER_SEARCH_ING = "유저 참여중 챌린지 조회 성공";
     public static final String CHALLENGE_USER_SEARCH_COMINGSOON = "유저 참여 예정 챌린지 조회 성공";
     public static final String CHALLENGE_USER_SEARCH_END = "유저 참여 종료 챌린지 조회 성공";
+    public static final String BOARD_IMAGE_NO_CONTENT = "등록할 챌린지 제안 이미지 없음";
+    public static final String INSERT_BOARD_IMAGE_SUCCESS = "챌린지 제안 이미지 저장 성공";
+    public static final String BOARD_NOT_FOUND = "해당 챌린지 제안 없음";
     
     public static final String RACE_TOP_RANKING_OK = "레이스 랭킹 Top 10 조회 성공";
     public static final String DONATE_TOP_RANKING_OK = "기부 랭킹 Top 10 조회 성공";

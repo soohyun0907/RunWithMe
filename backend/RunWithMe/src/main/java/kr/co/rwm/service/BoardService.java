@@ -16,5 +16,7 @@ public interface BoardService {
 	Long delete(int board_id);
 
 	Board detail(int board_id, int uid);
+	
+	Board saveImage(int board_id, String url);
 
 }
