@@ -35,7 +35,7 @@ export default {
     // if no subcomponents specify a metaInfo.title, this title will be used
     title: "Profile"
   },
-   computed: {
+  computed: {
     ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
   },
   mounted() {
