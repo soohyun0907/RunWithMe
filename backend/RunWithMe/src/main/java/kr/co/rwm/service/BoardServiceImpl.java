@@ -76,8 +76,19 @@ public class BoardServiceImpl implements BoardService{
 		System.out.println(board.get().getWriterId());
 		return board.get();
 	}
-	
-	
+
+	@Override
+	public Board saveImage(int board_id, String url) {
+		
+		Optional<Board> board = boardRepository.findByBoardId(board_id);
+		if(!board.isPresent()) {
+			return null;
+		}
+		
+		board.get().setBoardImage(url);
+		return boardRepository.save(board.get());
+
+	}
 	
 
 }
