@@ -23,8 +23,11 @@ public class MatchRoomRepository {
     public static final String USER_COUNT = "USER_COUNT"; // 채팅룸에 입장한 클라이언트수 저장
     public static final String ENTER_INFO = "ENTER_INFO"; // 채팅룸에 입장한 클라이언트의 sessionId와 채팅룸 id를 맵핑한 정보 저장
 
+
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, ChatRoom> hashOpsChatRoom;
+    @Resource(name = "redisTemplate")
+    private HashOperations<String, String, ChatRoom> hashOpsMatchRoom;
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, String> hashOpsEnterInfo;
     @Resource(name = "redisTemplate")
@@ -37,12 +40,12 @@ public class MatchRoomRepository {
     
     // 모든 채팅방 조회
     public List<ChatRoom> findAllRoom() {
-        return hashOpsChatRoom.values(CHAT_ROOMS);
+        return hashOpsMatchRoom.values(CHAT_ROOMS);
     }
 
     // 특정 채팅방 조회
     public ChatRoom findRoomById(String id) {
-        return hashOpsChatRoom.get(CHAT_ROOMS, id);
+        return hashOpsMatchRoom.get(CHAT_ROOMS, id);
     }
 
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
@@ -54,7 +57,7 @@ public class MatchRoomRepository {
     	if(matching.isPresent()) // 이미 방이 존재하다면,
     	{
     		System.out.println("있음");
-    		ChatRoom result =  hashOpsChatRoom.get(CHAT_ROOMS, matching.get().getRoomId());
+    		ChatRoom result =  hashOpsMatchRoom.get(matching.get().getRoomId(), CHAT_ROOMS);
     		System.out.println(matching.get().getRoomId());
     		System.out.println(matching.get().getMasterId());
     		 
@@ -64,7 +67,7 @@ public class MatchRoomRepository {
     	{
     		String friendName = userRepository.findByUserId(idInfo.get("guestId")).getUsername();
         	ChatRoom chatRoom = ChatRoom.create(friendName); 
-        	hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+        	hashOpsMatchRoom.put(chatRoom.getRoomId(), CHAT_ROOMS, chatRoom);
         	
         	Matching match = Matching.builder().masterId(uid).guestId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
         	matchRepository.save(match);
