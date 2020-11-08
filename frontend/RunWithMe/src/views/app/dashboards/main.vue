@@ -162,7 +162,9 @@ import http from "@/utils/http-common";
 import { mapGetters, mapMutations } from "vuex";
 
 export default {
-  name: 'mainpage',
+  metaInfo: {
+    title: "Mainpage",
+  },
   components: {
     VueperSlides,
     VueperSlide,
@@ -178,21 +180,25 @@ export default {
       blur: '2px',
       slidesOverlayShow: false,
       slides: [],
+      tmp1: [],
+      tmp2 : [],
       rankList : [],
       friendsFeed: [],
       haveFriends: true,
-      events:[],
+      // events:[],
     };
   },
+  computed: {
+    ...mapGetters(["events"])
+  },
   created() {
-   
+    this.getChallengesCommingSoon();
+    this.getChallengesIng();
+    this.getTopRankers();
+    this.getFriendsRunning();
   },
   mounted() {
     this.$store.commit('closeSidebar')
-    this.getChallengesIng();
-    this.getChallengesCommingSoon();
-    this.getTopRankers();
-    this.getFriendsRunning();
   },
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
@@ -214,32 +220,27 @@ export default {
         .then(({data}) => {
           if(data.status==200){
             let obj;
-            var slides = this.slides
             data.data.forEach(element => {
-              console.log(data)
-              obj = element
-              slides.push(obj);
+              obj = new Object();
+              obj.id = element.challengeId;
+              obj.title = element.title;
+              obj.challengeImg = element.challengeImg;
+              obj.startTime = element.startTime;
+              obj.endTime = element.endTime;
+              this.tmp1.push(obj);
             });
+            this.slides = [
+              ...this.tmp1,
+              ...this.tmp2
+            ];
           }
-          console.log(this.slides);
         })
         .catch((error) => {
           console.log(error);
           return;
         });
+      
     },
-    // getChallengesIng() {
-    //   http
-    //     .get("challenges/ing")
-    //     .then((data) => {
-    //       console.log(data)
-    //       this.events = data
-    //       this.slides.push(this.events);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
     getChallengesCommingSoon(){
       http
         .get("challenges/comingsoon")
@@ -253,7 +254,7 @@ export default {
               obj.challengeImg = element.challengeImg;
               obj.startTime = element.startTime;
               obj.endTime = element.endTime;
-              this.slides.push(obj);
+              this.tmp2.push(obj);
             });
           }
         })
