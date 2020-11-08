@@ -12,4 +12,6 @@ public interface FriendService {
 	Friend insert(int uid, Map<String, Integer> friendInfo);
 
 	Long delete(int uid, Map<String, Integer> friendInfo);
+
+	List<User> match(int uid, String gender);
 }

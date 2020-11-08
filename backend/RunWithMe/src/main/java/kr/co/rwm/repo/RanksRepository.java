@@ -15,5 +15,6 @@ public interface RanksRepository extends JpaRepository<Ranks, Long>{
 	List<Ranks> findTop10ByOrderByDonateExpDesc();
 	List<Ranks> findTop10ByOrderByTotalExpDesc();
 	List<Ranks> findAllByOrderByTotalExpDesc();
+	List<Ranks> findByTier(int tier);
 	
 }

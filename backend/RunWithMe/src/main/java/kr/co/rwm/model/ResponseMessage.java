@@ -86,6 +86,7 @@ public class ResponseMessage {
     public static final String CREATE_CHATROOM_SUCCESS = "매칭 채팅방 생성 성공";
 
     public static final String READ_FRIENDLIST_SUCCESS = "친구목록 조회 성공";
+    public static final String READ_MATCHLIST_SUCCESS = "매칭목록 조회 성공";
     public static final String INSERT_FRIEND_SUCCESS = "친구 추가 성공";
     public static final String DELETE_FRIEND_SUCCESS = "친구 삭제 성공";
     
