@@ -93,7 +93,7 @@
           <li class="nav-item">
             <router-link tag="a" class to="/app/apps/groupchat">
               <i class="nav-icon i-Speach-Bubble-3"></i>
-              <span class="item-name">Group-Chat</span>
+              <span class="item-name">지역별 채팅</span>
             </router-link>
           </li>
           <li
