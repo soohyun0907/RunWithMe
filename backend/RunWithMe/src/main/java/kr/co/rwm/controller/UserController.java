@@ -222,6 +222,9 @@ public class UserController {
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
 			String userEmail = jwtTokenProvider.getUserEmailFromJwt(token);
+			User userId = userService.findByUserEmail(userEmail).get();
+			rankService.deleteByUserId(userId);
+			System.out.println("?????????????????????????");
 			userService.delete(userEmail);
 			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT,ResponseMessage.USER_DELETE_SUCCESS),HttpStatus.OK);
 			
