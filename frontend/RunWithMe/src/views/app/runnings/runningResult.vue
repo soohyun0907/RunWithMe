@@ -22,35 +22,34 @@
             <div class="row">
                 <div class="col">
                     평균 속도
-                    <h3>{{result.accDistance/result.accTime}} m/s</h3>
+                    <h3>{{avgSpeed}} m/s</h3>
                 </div>
                 <div class="col">
                     최대 속력
-                    <h3>{{result.accDistance/result.accTime}}</h3>
+                    <h3>{{avgSpeed}}</h3>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- <img :src="result.thumbnail"/> -->
-    <section ref="map" class="map"> </section>
+    <img :src="result.thumbnail" style="width:100%;height:45vh"/>
     <br>
-    <h3>구간</h3>
-    <div class = "col">
+    <h4 style="text-align:center">구간</h4>
+    <div class = "col" >
         <div class="row">
             <div class = "col">
-                <h4>Km</h4>
+                <h5>구간</h5>
             </div>
             <div class = "col">
-                <h4>평균페이스</h4>
+                <h4>평균 페이스</h4>
             </div>
         </div>
-        <div class="row" v-for="(record,index) in result.records" :key="index">
+        <div class="row" v-for="(record,index) in records" :key="index">
             <div class = "col">
-                <h4>{{record.accumulcated_distance}}</h4>
+                <h4>{{record.accDistance}}</h4>
             </div>
             <div class = "col">
-                <h4>{{convertToTime(record.accumulcated_time)}}</h4>
+                <h4>{{convertToTime(record.accTime)}}</h4>
             </div>
         </div>
     </div>
@@ -66,59 +65,102 @@ export default {
   data() {
     return {
         date: new Date(),
-        map : null,
         result: {},
+        avgSpeed:0,
+        records:[
+            {"userId": 1,
+            "accDistance": 1.012,
+            "accTime": 305,
+            },
+            {"userId": 1,
+            "accDistance": 2.112,
+            "accTime": 360,
+            },
+            {"userId": 1,
+            "accDistance": 3.001,
+            "accTime": 368,
+            },
+            {"userId": 1,
+            "accDistance": 3.123,
+            "accTime": 412,
+            }
+        ],
     }
   },
   mounted() {
-      console.log("result")
-      this.result = this.myRunning
-      console.log(this.result)
     this.$store.commit('closeSidebar')
-    if(window.google && window.google.maps) {
-        this.initMap();
-    } else {
-        const script = document.createElement('script');
-        script.onload = () => google.maps.load(this.initMap);
+    this.result = this.myRunning
+
+    this.result.accDistance=parseFloat(parseFloat(this.myRunning.accDistance).toFixed(2))
+    if(this.result.accDistance!=0.00 ||this.result.accTime!=0.00 ||this.result.accDistance!=0 || this.result.accTime!=0){
+        this.avgSpeed=0;
+    }else {
+        this.avgSpeed = this.avgSpeed.toFixed(2)
     }
+
+    console.log(this.result)
+
+    this.getTempRuns()
+    for(var i=0; i<this.records.length; i++){
+        if(i!=this.records.length-1)  {
+            this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
+        }
+            this.records[i].accDistance+=" km"
+    }
+
+    
+
   },
   computed: {
     ...mapGetters(["myRunning"]),
   },
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
-    initMap(){
-        var map = new google.maps.Map(this.$refs["map"], {
-              zoom: 15,
-              center: new google.maps.LatLng(37.331777, 127.129347),
-              mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-
-        this.map = map;
-        this.decodePolyline();
+    getTempRuns(){
+        http.get(`runnings/temp/`)
+            .then((res) => {
+                console.log("임시 저장 데이터")
+                console.log(res.data);
+                this.records=res.data
+            })
+            .catch((err) => {
+                console.log("1Km이상 뛰지 않았어요")
+                console.log(this.records)
+            });
     },
-    decodePolyline() {
-        const decodePolylines = require('decode-google-map-polyline');
-        this.drawLines(decodePolylines(this.result.polyline));
-    },
-    drawLines(positions) {
-        var runningPathCoordinates = [];
 
-        for(var i=0; i<positions.length; i++){
-          // console.log(positions[i].lat);
-          runningPathCoordinates.push(new google.maps.LatLng(positions[i].lat, positions[i].lng));
-        }
+    // initMap(){
+    //     var map = new google.maps.Map(this.$refs["map"], {
+    //           zoom: 15,
+    //           center: new google.maps.LatLng(37.331777, 127.129347),
+    //           mapTypeId: google.maps.MapTypeId.ROADMAP
+    //     });
 
-        const runningPath = new google.maps.Polyline({
-          path: runningPathCoordinates,
-          geodesic: true,
-          strokeColor: "#ff0000",
-          strokeOpacity: 1.0,
-          strokeWeight: 2
-        });
-        this.map.setCenter(new google.maps.LatLng(positions[0].lat, positions[0].lng))
-        runningPath.setMap(this.map);
-    },
+    //     this.map = map;
+    //     this.decodePolyline();
+    // },
+    // decodePolyline() {
+    //     const decodePolylines = require('decode-google-map-polyline');
+    //     this.drawLines(decodePolylines(this.result.polyline));
+    // },
+    // drawLines(positions) {
+    //     var runningPathCoordinates = [];
+
+    //     for(var i=0; i<positions.length; i++){
+    //       // console.log(positions[i].lat);
+    //       runningPathCoordinates.push(new google.maps.LatLng(positions[i].lat, positions[i].lng));
+    //     }
+
+    //     const runningPath = new google.maps.Polyline({
+    //       path: runningPathCoordinates,
+    //       geodesic: true,
+    //       strokeColor: "#ff0000",
+    //       strokeOpacity: 1.0,
+    //       strokeWeight: 2
+    //     });
+    //     this.map.setCenter(new google.maps.LatLng(positions[0].lat, positions[0].lng))
+    //     runningPath.setMap(this.map);
+    // },
     convertToTime(origin){
         var time = "";
         time += parseInt(origin/60) + "\'";

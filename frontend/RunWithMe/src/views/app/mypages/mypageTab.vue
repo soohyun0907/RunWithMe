@@ -10,11 +10,20 @@
         "
       ></div>
       <div class="user-info">
-        <img
-          class="profile-picture avatar-lg mb-2"
-          :src="userInfo.profile"
-          alt=""
-        />
+        <div v-if="userInfo.profile!=null || userInfo.profile!=''">
+          <img
+            class="profile-picture avatar-lg mb-2"
+            :src="userInfo.profile"
+            alt=""/>
+        </div>
+
+        <div v-else>
+          <img
+            class="profile-picture avatar-lg mb-2"
+            :src="defaultImage"
+            alt=""/>
+        </div>
+
         <p class="m-0 text-24">{{ userInfo.username }}</p>
         <p class="text-muted m-0">{{ userInfo.userEmail }}</p>
         <p class="text-muted m-0">{{userInfo.gugunId.sidoId.sidoName}} {{ userInfo.gugunId.gugunName }}</p>
@@ -31,7 +40,7 @@
               <ul class="timeline clearfix">
                 <b-card title="최근 런닝 기록" class="heading text-primary mb-30">
                   <div role="tablist">
-                    <div v-for="(running,i) in areaRunning" :index="i">
+                    <div v-for="(running,i) in areaRunning" :index="i"  :key="running.id">
                       <b-card no-body class="ul-card__border-radius">
                         <!-- 접혀있을때 보이는 부분 -->
                         <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
@@ -73,7 +82,7 @@
               <ul class="timeline clearfix">
                 <b-card title="최근 런닝 기록" class="heading text-primary mb-30">
                   <div role="tablist">
-                    <div v-for="(running,i) in allRunning" :index="i">
+                    <div v-for="(running,i) in allRunning" :index="i" :key="running.id">
                       <b-card no-body class="ul-card__border-radius">
                         <!-- 접혀있을때 보이는 부분 -->
                         <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
@@ -133,13 +142,14 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
+    ...mapGetters(["getSideBarToggleProperties", "userInfo","defaultProfile"]),
   },
 
   mounted() {
     this.getRunningsbyArea()
     this.getRunnings()
     console.log(this.userInfo)
+    console.log("머하냐고"+ this.userInfo.profile)
     if (window.google && window.google.maps) {
       this.initMap();
     } else {
