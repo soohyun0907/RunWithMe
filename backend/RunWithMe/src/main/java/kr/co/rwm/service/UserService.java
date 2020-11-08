@@ -46,6 +46,7 @@ public class UserService implements UserDetailsService {
 
 	@Transactional
 	public void delete(String userEmail) {
+		System.out.println(userEmail+"!!!!!!!!!!!!!!!!!!!!!!!");
 		userRepository.deleteByUserEmail(userEmail);
 	}
 
