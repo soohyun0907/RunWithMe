@@ -1,148 +1,54 @@
 <template>
-    <div>
-    <!-- best_sellers -->
+    <div class="main-content">
       <breadcumb :page="'Challenge Board'" :folder="'Board'" />
 
+      <b-button variant="primary ripple btn-icon m-1" @click="goWrite()">
+        <span class="ul-btn__icon"><i class="i-Gear-2"></i></span>
+        <span class="ul-btn__text ml-1">글쓰기</span>
+      </b-button>
       <b-col xl="8" md="12" class=" mb-30">
-        <b-card class="h-100">
-          <b-tabs align="right" content-class=" ul-widget-nav-tabs-line">
-            <b-tab title="챌린지 제안" active>
-              <div class="ul-widget__body">
-                <div class="tab-content">
-                  <div
-                    class="tab-pane active show"
-                    id="ul-widget5-tab1-content"
-                  >
-                    <div class="ul-widget5">
-                      <div class="ul-widget__item ">
-                        <div class="ul-widget5__content">
-                          <div class="ul-widget5__pic">
-                            <img
-                              class=""
-                              src="@/assets/images/gibu/gibu1.png"
-                              alt="Third slide"
-                            />
-                          </div>
-                          <div class="ul-widget5__section">
-                            <a href="#" class="ul-widget4__title">
-                              [챌린지 제안] 사랑의 온도를 올려주세요
-                            </a>
-                            <p class="ul-widget5__desc">
-                              기부 제안... 어쩌구..
-                            </p>
-                            <div class="ul-widget5__info">
-                              <span>Author:</span>
-                              <span class="text-primary">기명택</span>
-                              <span>Released:</span>
-                              <span class="text-primary">23.08.17</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="ul-widget5__content">
-                          <div class="ul-widget5__stats">
-                            <span class="ul-widget5__number">19,200</span>
-                            <span class="ul-widget5__sales text-mute"
-                              >예상 모금액</span
-                            >
-                          </div>
-                          <div class="ul-widget5__stats">
-                            <span class="ul-widget5__number">1046</span>
-                            <span class="ul-widget5__sales text-mute"
-                              >참여 희망</span
-                            >
-                          </div>
-                        </div>
-                      </div>
+        <!-- <b-card class="h-100"> -->
+          <div class="ul-widget5" v-for="board in Boards" :key="board.boardId">
+            <router-link :to="{name:'challengeBoardDetail', query:{boardId:board.boardId}}">
+              <div class="ul-widget__item ">
+                <div class="ul-widget5__content">
+                  <div class="ul-widget5__pic">
+                    <img v-if="board.boardImage != null" :src="board.boardImage" />
+                    <img v-else src="@/assets/images/gibu/gibu1.png" />
+                  </div>
 
-                      <div class="ul-widget__item ">
-                        <div class="ul-widget5__content">
-                          <div class="ul-widget5__pic">
-                            <img
-                              class=""
-                              src="@/assets/images/gibu/gibu2.png"
-                              alt="Third slide"
-                            />
-                          </div>
-                          <div class="ul-widget5__section">
-                            <a href="#" class="ul-widget4__title">
-                              [챌린지 제안] 워킹스루 기부 캠페인
-                            </a>
-                            <p class="ul-widget5__desc">
-                              이거 해보실?
-                            </p>
-                            <div class="ul-widget5__info">
-                              <span>Author:</span>
-                              <span class="text-primary">수니</span>
-                              <span>Released:</span>
-                              <span class="text-primary">23.08.17</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="ul-widget5__content">
-                          <div class="ul-widget5__stats">
-                            <span class="ul-widget5__number">29,200</span>
-                            <span class="ul-widget5__sales text-mute"
-                              >예상 모금액</span
-                            >
-                          </div>
-                          <div class="ul-widget5__stats">
-                            <span class="ul-widget5__number">4500</span>
-                            <span class="ul-widget5__sales text-mute"
-                              >참여 희망</span
-                            >
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="ul-widget__item ">
-                        <div class="ul-widget5__content">
-                          <div class="ul-widget5__pic">
-                            <img
-                              class=""
-                              src="@/assets/images/gibu/gibu3.png"
-                              alt="Third slide"
-                            />
-                          </div>
-                          <div class="ul-widget5__section">
-                            <a href="#" class="ul-widget4__title">
-                              [챌린지 제안] 이런것도 하나요
-                            </a>
-                            <p class="ul-widget5__desc">
-                              UI lib admin themes.
-                            </p>
-                            <div class="ul-widget5__info">
-                              <span>Author:</span>
-                              <span class="text-primary">두현</span>
-                              <span>Released:</span>
-                              <span class="text-primary">23.08.17</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="ul-widget5__content">
-                          <div class="ul-widget5__stats">
-                            <span class="ul-widget5__number">23,200</span>
-                            <span class="ul-widget5__sales text-mute"
-                              >예상 모금액</span
-                            >
-                          </div>
-                          <div class="ul-widget5__stats">
-                            <span class="ul-widget5__number">2046</span>
-                            <span class="ul-widget5__sales text-mute"
-                              >참여 희망</span
-                            >
-                          </div>
-                        </div>
-                      </div>
+                  <div class="ul-widget5__section">
+                    <div class="ul-widget4__title">
+                      [챌린지 제안] {{ board.boardTitle }}
+                    </div>
+                    <div class="ul-widget5__info">
+                      <span>Author:</span>
+                      <span class="text-primary"> {{ board.writerId}} </span> <br>
+                      <span>Released:</span>
+                      <span class="text-primary">{{ board.boardEditdate.substring(0,10) }}</span>
                     </div>
                   </div>
                 </div>
+
+                <div class="ul-widget5__content">
+                  <div class="ul-widget5__stats">
+                    <span class="ul-widget5__number">{{ board.readCount }}</span>
+                    <span class="ul-widget5__sales text-mute">
+                      조회 수
+                    </span>
+                  </div>
+                  <div class="ul-widget5__stats">
+                    <span class="ul-widget5__number"> 0 </span>
+                    <span class="ul-widget5__sales text-mute">
+                      댓글 수
+                    </span>
+                  </div>
+                </div>
               </div>
-            </b-tab>
-            <b-tab title="게시판">
-             
-            </b-tab>
-          </b-tabs>
-        </b-card>
+              <br>
+            </router-link>
+          </div>
+        <!-- </b-card> -->
       </b-col>
     </div>
 </template>
@@ -157,8 +63,32 @@ export default {
   },
   data() {
     return {
+      Boards : [],
     }
-  }
+  },
+  mounted() {
+    this.$store.commit('closeSidebar')
+  },
+  created() {
+    this.getBoards();
+  },
+  methods: {
+    getBoards() {
+      http
+        .get("boards")
+        .then(({data}) => {
+          this.Boards = data.data;
+          this.Boards = this.Boards.reverse();
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        });
+    },
+    goWrite() {
+      this.$router.push("/app/board/challengeBoardWrite");
+    }
+  },
 };
 
 </script>
