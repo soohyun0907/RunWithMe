@@ -61,10 +61,10 @@ public class S3ServiceImpl implements S3Service {
 	}
 	
 	@Override
-	public String challengeImgUpload(MultipartFile file) {
+	public String challengeImgUpload(MultipartFile file, String fileName) {
 		try {
 			
-			String uploadpath = "challenges";
+			String uploadpath = fileName;	//"challenges";
 			S3Util s3 = new S3Util(accessKey, secretKey);
 			String img_path = FileUpload.uploadFile(uploadpath, file.getOriginalFilename(), file.getBytes(), bucketName, accessKey, secretKey);
 			String img_url = img_path;
