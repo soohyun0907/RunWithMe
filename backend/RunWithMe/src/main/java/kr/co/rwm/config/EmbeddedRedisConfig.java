@@ -3,13 +3,7 @@ package kr.co.rwm.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.util.StringUtils;
-
 import redis.embedded.RedisServer;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -27,8 +21,7 @@ public class EmbeddedRedisConfig {
     private RedisServer redisServer;
 
     @PostConstruct
-    public void redisServer() throws IOException {
-//        int port = isRedisRunning()? findAvailablePort() : redisPort;
+    public void redisServer() {
         redisServer = new RedisServer(redisPort);
         redisServer.start();
     }
@@ -39,10 +32,54 @@ public class EmbeddedRedisConfig {
             redisServer.stop();
         }
     }
+}
 
-    /**
-     * Embedded Redis가 현재 실행중인지 확인
-     */
+// 배포버전
+//package kr.co.rwm.config;
+//
+//import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.context.annotation.Profile;
+//import org.springframework.util.StringUtils;
+//
+//import redis.embedded.RedisServer;
+//
+//import java.io.BufferedReader;
+//import java.io.IOException;
+//import java.io.InputStreamReader;
+//
+//import javax.annotation.PostConstruct;
+//import javax.annotation.PreDestroy;
+//
+///**
+// * 로컬 환경일경우 내장 레디스가 실행된다.
+// */
+//@Profile("local")
+//@Configuration
+//public class EmbeddedRedisConfig {
+//
+//    @Value("${spring.redis.port}")
+//    private int redisPort;
+//
+//    private RedisServer redisServer;
+//
+//    @PostConstruct
+//    public void redisServer() throws IOException {
+//        int port = isRedisRunning()? findAvailablePort() : redisPort;
+//        redisServer = new RedisServer(port);
+//        redisServer.start();
+//    }
+//
+//    @PreDestroy
+//    public void stopRedis() {
+//        if (redisServer != null) {
+//            redisServer.stop();
+//        }
+//    }
+//
+//    /**
+//     * Embedded Redis가 현재 실행중인지 확인
+//     */
 //    private boolean isRedisRunning() throws IOException {
 //        return isRunning(executeGrepProcessCommand(redisPort));
 //    }
@@ -89,4 +126,4 @@ public class EmbeddedRedisConfig {
 //
 //        return !StringUtils.isEmpty(pidInfo.toString());
 //    }
-}
+//}
