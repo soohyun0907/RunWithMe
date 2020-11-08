@@ -178,21 +178,25 @@ export default {
       blur: '2px',
       slidesOverlayShow: false,
       slides: [],
+      tmp1: [],
+      tmp2 : [],
       rankList : [],
       friendsFeed: [],
       haveFriends: true,
-      events:[],
+      // events:[],
     };
   },
-  created() {
-   
+  computed: {
+    ...mapGetters(["events"])
   },
-  mounted() {
-    this.$store.commit('closeSidebar')
+  created() {
     this.getChallengesIng();
     this.getChallengesCommingSoon();
     this.getTopRankers();
     this.getFriendsRunning();
+  },
+  mounted() {
+    this.$store.commit('closeSidebar')
   },
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
@@ -214,32 +218,22 @@ export default {
         .then(({data}) => {
           if(data.status==200){
             let obj;
-            var slides = this.slides
             data.data.forEach(element => {
-              console.log(data)
-              obj = element
-              slides.push(obj);
+              obj = new Object();
+              obj.id = element.challengeId;
+              obj.title = element.title;
+              obj.challengeImg = element.challengeImg;
+              obj.startTime = element.startTime;
+              obj.endTime = element.endTime;
+              this.tmp1.push(obj);
             });
           }
-          console.log(this.slides);
         })
         .catch((error) => {
           console.log(error);
           return;
         });
     },
-    // getChallengesIng() {
-    //   http
-    //     .get("challenges/ing")
-    //     .then((data) => {
-    //       console.log(data)
-    //       this.events = data
-    //       this.slides.push(this.events);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
     getChallengesCommingSoon(){
       http
         .get("challenges/comingsoon")
@@ -253,8 +247,12 @@ export default {
               obj.challengeImg = element.challengeImg;
               obj.startTime = element.startTime;
               obj.endTime = element.endTime;
-              this.slides.push(obj);
+              this.tmp2.push(obj);
             });
+            this.slides = [
+              ...this.tmp1,
+              ...this.tmp2
+            ];
           }
         })
         .catch((error) => {
