@@ -162,7 +162,8 @@ public class RecordServiceImpl implements RecordService {
 
 	@Override
 	public RunningUser findRunningUserByUserId(int userId) {
-		User user = userRepository.findByUserId(userId).get();
+		User user = userRepository.findByUserId(userId).orElse(null);
+		if(user==null) return null;
 		return runningUserRepository.findByUserId(user);
 	}
 
