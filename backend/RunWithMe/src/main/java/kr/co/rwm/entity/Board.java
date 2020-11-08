@@ -43,6 +43,8 @@ public class Board {
    
    @Column(name = "read_count", nullable = false)
    private Integer readCount;
-
+   
+   @Column(length = 500, name = "board_image")
+   private String boardImage;
    
 }
