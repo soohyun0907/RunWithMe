@@ -68,7 +68,7 @@ export default {
             console.log(data)
             this.$store.commit('mutateProfile',data.data.profile)
             console.log(data.data.profile)
-            this.$router.go(0)
+            this.$router.go(-1)
           } else {
             alert("오류가 발생하였습니다.");
             return;
