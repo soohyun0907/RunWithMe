@@ -302,7 +302,8 @@ export default {
               console.log(response.data);
               this.testUserId = response.data;
 
-              _this.sock = new SockJS("http://localhost:8080/ws-stomp");
+              // _this.sock = new SockJS("http://localhost:8080/ws-stomp");
+              _this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp"); 
               _this.ws = Stomp.over(_this.sock);
               console.log("들어는 오냐")
               console.log(this.auth);
