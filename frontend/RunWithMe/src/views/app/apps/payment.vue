@@ -72,7 +72,7 @@ export default {
         IMP.init("imp42556076");
         var money = this.money;
         // console.log(money);
-
+        money = parseInt(money);
         IMP.request_pay(
           {
             pg: "kakaopay",
@@ -95,13 +95,17 @@ export default {
               // msg += "결제 금액 : " + rsp.paid_amount;
               // msg += "카드 승인번호 : " + rsp.apply_num;
 
-              http.get(`payment/charge/${money}`).then((data) => {
-                console.log(data);
-                alert(msg);
-                document.location.href = "/app/apps/paymentDone"; //챌린지 참여 목록으로 이동?
-              });
-              alert("결제에 실패하였습니다.");
-              document.location.href = "/app/apps/payment";
+              http
+                .get(`payment/charge/${money}`)
+                .then(({data}) => {
+                  console.log(data);
+                  alert(msg);
+                  document.location.href = "/app/apps/paymentDone"; //챌린지 참여 목록으로 이동?
+                })
+                .catch((error) => {
+                  alert("결제에 실패하였습니다.");
+                  document.location.href = "/app/apps/payment";
+                });
             } else {
               var msg = rsp.error_msg;
               alert(msg);
