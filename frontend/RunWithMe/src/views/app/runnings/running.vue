@@ -31,15 +31,15 @@
             <section class="bottom-bar">
               <div v-if="!isPause">
                 <button type="button" @click="startLocationUpdates" class="btn round btn btn-success btn-icon rounded-circle m-1">
-                <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
+                <span class="ul-btn__icon"> <i style="font-size:2em; margin-left: 10px;" class="i-Start-2"></i></span>
                 </button>
               </div>
               <div v-if="isPause">
                 <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
-                <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
+                <span class="ul-btn__icon"> <i style="font-size:2em; margin-left: 10px;" class="i-Start-2"></i></span>
                 </button>
                   <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
-                <span class="ul-btn__icon"> <i style="font-size:3em;ㅇ" class="i-Stop-2"></i></span>
+                <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Stop-2"></i></span>
               </button>
 
               </div>
@@ -49,11 +49,11 @@
             <section class="bottom-bar">
 
               <button type="button" @click="stopLocationUpdates" class="btn round btn btn-danger btn-icon rounded-circle m-1">
-                <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Pause"></i></span>
+                <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Pause"></i></span>
               </button>
 
               <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
-                <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Stop-2"></i></span>
+                <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Stop-2"></i></span>
               </button>
 
             </section>
@@ -62,27 +62,35 @@
     
         </splide-slide>
         <splide-slide>
-          <div style="margin-top:10vh">
-            <h4 style="text-align:center">구간별 페이스</h4>
-              <div class = "col" >
-                <div class="row">
-                  <div class = "col">
-                    <h5>구간</h5>
-                  </div>
-                  <div class = "col">
-                    <h4>평균 페이스</h4>
-                  </div>
+          <div class="card mb-30">
+          <div class="card-body p-0">
+            <div class="card-title  d-flex align-items-center mb-2 pb-0 p-3">
+              <span>구간별 기록</span>
+            </div>
+            <div class="d-flex border-bottom justify-content-between  p-3 ">
+              <div class="flex-grow-1">
+                <h5 class="m-0">구간</h5>
+              </div>
+              <div class="flex-grow-1">
+                <h5 class="m-0">도달 시간</h5>
+              </div>
+            </div>
+              <div v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
+                <div class="flex-grow-1">
+                  <h5 class="m-0">{{record.accDistance}}</h5>
                 </div>
-                <div class="row" v-for="(record,index) in records" :key="index">
-                  <div class = "col">
-                    <h4>{{record.accDistance}}</h4>
-                  </div>
-                  <div class = "col">
-                    <h4>{{convertToTime(record.accTime)}}</h4>
-                  </div>
+                <div class="flex-grow-1">
+                  <h5 class="m-0">{{convertToTime(record.accTime)}}</h5>
                 </div>
             </div>
           </div>
+        </div>
+         <b-card class="h-100">
+          <h4 class="card-title m-0">시간대별 속도</h4>
+          <div class="chart-wrapper" style="height: 300px ; width:100%">
+            <v-chart :options="echart4" :autoresize="true"></v-chart>
+          </div>
+        </b-card>
         </splide-slide>
      </splide>
   </div>
@@ -136,34 +144,104 @@ export default {
       isPause: false,
       //splide options
       options: {
-          rewind : true,
-          perPage:1,
-          width  : 400,
-          gap    : '1rem',
+        rewind : true,
+        perPage:1,
+        width  : 400,
+        gap    : '1rem',
+      },
+      records:[
+        {"userId": 1,
+        "accDistance": 1.012,
+        "accTime": 305,
         },
-        records:[
-            {"userId": 1,
-            "accDistance": 1.012,
-            "accTime": 305,
-            },
-            {"userId": 1,
-            "accDistance": 2.112,
-            "accTime": 360,
-            },
-            {"userId": 1,
-            "accDistance": 3.001,
-            "accTime": 368,
-            },
-            {"userId": 1,
-            "accDistance": 3.123,
-            "accTime": 412,
+        {"userId": 1,
+        "accDistance": 2.112,
+        "accTime": 360,
+        },
+        {"userId": 1,
+        "accDistance": 3.001,
+        "accTime": 368,
+        },
+        {"userId": 1,
+        "accDistance": 3.123,
+        "accTime": 412,
+        }
+      ],
+
+      //chart
+     echart4 : {
+        tooltip: {
+          show: true,
+          // trigger: 'axis',
+          axisPointer: {
+            type: "line",
+            animation: true
+          }
+        },
+        grid: {
+          top: "10%",
+          left: "0",
+          right: "0",
+          bottom: "0"
+        },
+        xAxis: {
+          type: "category",
+          data: [],
+          axisLine: {
+            show: true
+          },
+          axisLabel: {
+            show: true
+          },
+          axisTick: {
+            show: true
+          }
+        },
+        yAxis: {
+          type: "value",
+          axisLine: {
+            show: false
+          },
+          axisLabel: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          splitLine: {
+            show: true
+          }
+        },
+        label: {show: true, color: "#212121"},
+        series: [
+          {
+            data: [],
+            type: "line",
+            showSymbol: true,
+            smooth: true,
+            color: "#639",
+            lineStyle: {
+              opacity: 1,
+              width: 2
             }
-        ],
+          }
+        ]
+     }
     };
   },
   mounted() {
     this.$store.commit('closeSidebar')
     this.getTempRuns()
+    for(var i=0; i<this.records.length; i++){
+        if(i!=this.records.length-1)  {
+            this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
+        }
+        this.records[i].accDistance+=" km"
+        console.log(this.echart4)
+        this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+        this.echart4.xAxis.data.push(this.records[i].accDistance)
+    }
+
     if (window.google && window.google.maps) {
       this.initMap();
     } else {
@@ -172,7 +250,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(["userInfo","defaultProfile"]),
   },
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
@@ -438,8 +516,13 @@ export default {
         })
         .catch((err) => {
           console.log("savePosition Error")
-          console.log(err);
         });
+        
+        http.get(`runnings/get/${this.userInfo.userId}`)
+        .then(data =>{
+          this.records = data.data
+          console.log(data.data)
+        })
     },
 
     endLocationUpdates() {
@@ -556,6 +639,10 @@ export default {
 </script>
 
 <style>
+.flex-grow-1{
+  width:30vw;
+  text-align:center;
+}
 .driver-view {
   display: flex;
   flex-direction: column;
@@ -594,6 +681,10 @@ export default {
 .myRecord {
   width:30vw; 
   float:left;
+}
+.btn-icon{
+  width:60px !important;
+  height:60px !important;
 }
 .running button {
   text-align: center;
