@@ -1,6 +1,7 @@
 package kr.co.rwm.entity;
 
-import javax.persistence.CascadeType;
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,15 +23,20 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class RunningUser {
+public class RunningUser implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="running_user_id")
 	private Integer runningUserId;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name="user_id",referencedColumnName = "user_id")
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="user_id", referencedColumnName = "user_id")
 	private User userId;
 
 	@Column(name = "total_distance", nullable = false)
@@ -40,6 +46,6 @@ public class RunningUser {
 	private Long totalTime;
 	
 	@Column(name = "total_count")
-	private Integer totalCount;
+	private Integer totalCount; 
 	
 }

@@ -14,6 +14,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+import javax.persistence.JoinColumn;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -58,7 +61,12 @@ public class Running {
 	private String thumbnail;
 	
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	@OneToMany(mappedBy = "running", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RunningArea> runningArea = new ArrayList<>();
+	@OneToMany(mappedBy = "running", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RunningArea> runningArea;
+	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "running_id")
+    private List<Record> record;
 	
 }
