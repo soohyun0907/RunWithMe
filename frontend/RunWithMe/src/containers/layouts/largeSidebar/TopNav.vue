@@ -169,7 +169,7 @@
             {{ranker.totalExp}}p
           </div>
           <div v-else>
-            <img class="profile-picture rounded-circle avatar-sm" src="@/assets/images/faces/defaultProfile.png">
+            <img class="profile-picture rounded-circle avatar-sm" :src="defaultProfile">
             {{index+1}}. {{ranker.userId.username}}
           {{ranker.totalExp}}p
           </div>

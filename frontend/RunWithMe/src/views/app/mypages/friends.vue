@@ -64,10 +64,16 @@
           <span v-else-if="props.column.field == 'username'">
             <a href="">
               <div class="ul-widget-app__profile-pic">
-                <img
-                  class="profile-picture avatar-sm mb-2 rounded-circle img-fluid"
-                  :src="props.row.profile"
-                  alt=""/>
+                <div v-if="props.row.profile!=null">
+                  <img
+                    class="profile-picture avatar-sm mb-2 rounded-circle img-fluid"
+                    :src="props.row.profile" alt=""/>
+                </div>
+                <div v-else>
+                  <img
+                    class="profile-picture avatar-sm mb-2 rounded-circle img-fluid"
+                    :src="defaultProfile" alt=""/>
+                </div>
                 {{ props.row.username }}
               </div>
             </a>
@@ -121,7 +127,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(["userInfo","defaultProfile"]),
   },
   mounted() {
     this.getFriendList()
