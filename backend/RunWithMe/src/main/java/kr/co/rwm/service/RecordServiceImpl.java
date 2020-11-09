@@ -94,7 +94,7 @@ public class RecordServiceImpl implements RecordService {
 		Running running = runningRepository.findByRunningId(runningId).get();
 		RunningUser runningUser = runningUserRepository.findByUserId(user);
 		runningUser.setTotalCount(runningUser.getTotalCount()-1);
-		runningUser.setTotalDistane(runningUser.getTotalDistane()-running.getAccDistance());
+		runningUser.setTotalDistance(runningUser.getTotalDistance()-running.getAccDistance());
 		runningUser.setTotalTime(runningUser.getTotalTime()-running.getAccTime());
 		runningUserRepository.save(runningUser);
 		
@@ -152,7 +152,7 @@ public class RecordServiceImpl implements RecordService {
 	public void join(User user) {
 		RunningUser runningUser = RunningUser.builder()
 											.userId(user)
-											.totalDistane(0)
+											.totalDistance(0)
 											.totalTime(0L)
 											.totalCount(0)
 											.build();
@@ -180,7 +180,7 @@ public class RecordServiceImpl implements RecordService {
 	public RunningUser updateRunningUser(User user, Running running) {
 		RunningUser runningUser = runningUserRepository.findByUserId(user);
 		runningUser.setTotalCount(runningUser.getTotalCount()+1);
-		runningUser.setTotalDistane(runningUser.getTotalDistane()+running.getAccDistance());
+		runningUser.setTotalDistance(runningUser.getTotalDistance()+running.getAccDistance());
 		runningUser.setTotalTime(runningUser.getTotalTime()+running.getAccTime());
 		
 		return runningUserRepository.save(runningUser);
