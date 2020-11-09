@@ -255,4 +255,22 @@ public class ChallengeServiceImpl implements ChallengeService {
 		return challengeUsers;
 	}
 
+	@Override
+	public void deleteAllChallengeUserByUserEmail(String userEmail) {
+		User user = userRepository.findByUserEmail(userEmail).get();
+		List<ChallengeUser> challengeUserList = challengeUserRepository.findAllByUserId(user);
+		
+		LocalDateTime today = LocalDateTime.now();
+		today = today.withHour(23).withMinute(59).withSecond(59).withNano(0);
+		for(ChallengeUser cu: challengeUserList) {
+			Challenge challenge = challengeRepository.findByChallengeId(cu.getChallengeId().getChallengeId()).get();
+			if (challenge.getEndTime().isAfter(today)) continue;
+			
+			challenge.setParticipant(challenge.getParticipant()-1);
+			challenge.setDistanceCurrent(challenge.getDistanceCurrent()-cu.getAccDistance());
+			challengeRepository.save(challenge);
+		}
+		
+	}
+
 }
