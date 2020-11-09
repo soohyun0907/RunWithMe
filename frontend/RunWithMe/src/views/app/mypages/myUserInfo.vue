@@ -56,15 +56,15 @@
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i>누적 거리</p>
-                                        <span>512km</span>
+                                        <span>{{userInfo.totalDistane}}</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Cloud-Weather text-16 mr-1"></i> 누적 런닝</p>
-                                        <span>62회</span>
+                                        <span>{{userInfo.totalTime}}</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Face-Style-4 text-16 mr-1"></i>누적 시간</p>
-                                        <span>589시간</span>
+                                        <span>{{userInfo.totalCount}}</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-6">
@@ -104,7 +104,7 @@
 
 <script>
 import http from "@/utils/http-common";
-import { mapGetters,mapActions } from "vuex";
+import { mapGetters,mapActions, mapMutations } from "vuex";
 
 export default {
      metaInfo: {
@@ -122,9 +122,11 @@ export default {
 
   mounted() {
       console.log(this.userInfo)
+       this.$store.commit('closeSidebar')
   },
   methods: {
     ...mapActions(["signOut"]),
+    ...mapMutations(["closeSidebar"]),
     memberOut(){
         var data = {
             userPw:this.inputPass

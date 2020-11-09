@@ -86,7 +86,7 @@
           </div>
         </div>
          <b-card class="h-100">
-          <h4 class="card-title m-0">Last Month Profit</h4>
+          <h4 class="card-title m-0">시간대별 속도</h4>
           <div class="chart-wrapper" style="height: 300px ; width:100%">
             <v-chart :options="echart4" :autoresize="true"></v-chart>
           </div>
