@@ -44,7 +44,7 @@ public class Record implements Serializable {
 
    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
    @ManyToOne(fetch = FetchType.LAZY)
-   @JoinColumn(name = "user_id")
+   @JoinColumn(name = "user_id", nullable = true)
    private User userId;
    
    @Column(name = "accumulated_distance", nullable = false)
