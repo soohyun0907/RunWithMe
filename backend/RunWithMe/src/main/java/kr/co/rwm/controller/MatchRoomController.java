@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.rwm.entity.User;
 import kr.co.rwm.model.ChatRoom;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
@@ -59,23 +62,15 @@ public class MatchRoomController {
 				Response(StatusCode.OK, ResponseMessage.CREATE_CHATROOM_SUCCESS, result), HttpStatus.OK);
     }
 
-//    @GetMapping("/room/enter/{roomId}")
-//    public String roomDetail(Model model, @PathVariable String roomId) {
-//        model.addAttribute("roomId", roomId);
-//        return "/chat/roomdetail";
-//    }
-//
-//    @GetMapping("/room/{roomId}")
-//    @ResponseBody
-//    public ChatRoom roomInfo(@PathVariable String roomId) {
-//        return chatRoomRepository.findRoomById(roomId);
-//    }
-//
-//    @GetMapping("/user")
-//    @ResponseBody
-//    public LoginInfo getUserInfo() {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        String name = auth.getName();
-//        return LoginInfo.builder().name(name).token(jwtTokenProvider.generateToken(name)).build();
-//    }
+    @GetMapping("/user")
+    @ResponseBody
+    public String getUserInfo() {
+    	System.out.println("유저유저");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        Integer userId = user.getUserId();
+        
+        String name = auth.getName();
+        return name;
+    }
 }

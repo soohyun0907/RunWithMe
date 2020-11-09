@@ -1,7 +1,12 @@
 <template>
     <div class="main-content">
         <div class="user-profile-img">
-            <img class="profile-picture mb-2" :src="friendInfo.userId.profile" width="200px" height="170px"/>
+            <div v-if="friendInfo.userId.profile!=null" >
+                <img class="profile-picture mb-2" :src="friendInfo.userId.profile"  height="100vw"/>
+            </div>
+            <div v-else>
+                <img class="profile-picture mb-2" :src="defaultProfile" height="100vw"/>
+            </div>
         </div>
         <div style="margin-top:50px">
         <p class="m-0 text-24" style="text-align:center;">{{friendInfo.userId.username}}</p>
@@ -60,9 +65,9 @@
 </template>
 
 <script>
-
 import http from "@/utils/http-common";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
+
 const items = [
   {
     img: "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png",
@@ -88,7 +93,9 @@ const items = [
 ];
 
 export default {
-    name: 'userDetail',
+    metaInfo: {
+        title: "Board",
+    },
     data() {
         return {
             items: items,
@@ -114,6 +121,7 @@ export default {
         }
     },
     methods: {
+        ...mapMutations(["mutateProfile","closeSidebar","defaultProfile"]),
         getRunningTime(startTime, endTime) {
             var runningTime = "";
             runningTime += parseInt(endTime.hour() - startTime.hour()) + ":";

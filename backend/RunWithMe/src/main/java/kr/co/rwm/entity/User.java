@@ -30,8 +30,8 @@ public class User implements UserDetails {
 	@Column(name = "user_id")
 	private Integer userId;
 
-	@OneToOne
-	@JoinColumn(name = "gugunId")
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "gugunId", nullable = true)
 	private Gugun gugunId;
 
 	@Column(name = "user_email", nullable = false)
@@ -57,10 +57,29 @@ public class User implements UserDetails {
 	@Column(name = "mileage", columnDefinition = "Integer default 0")
 	private Integer mileage;
 	
-//	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-//	@OneToOne(fetch = FetchType.LAZY, mappedBy="userId", cascade = CascadeType.ALL)
-//	private Ranks rank;
-
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@OneToOne(fetch = FetchType.LAZY, mappedBy="userId", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Ranks rank;
+	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@OneToOne(mappedBy="userId", orphanRemoval = true)
+	private RunningUser runningUser;
+	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "user_id")
+	private List<Record> record;
+	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "user_id")
+	private List<Running> running;
+	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "user_id")
+	private List<ChallengeUser> challengeUser;
+	
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String changePw;
 

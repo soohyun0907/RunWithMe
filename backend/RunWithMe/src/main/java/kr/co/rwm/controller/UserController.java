@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +24,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.Gugun;
+import kr.co.rwm.entity.RunningUser;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.RestException;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.AreaService;
+import kr.co.rwm.service.ChallengeService;
 import kr.co.rwm.service.JwtTokenProvider;
 import kr.co.rwm.service.RanksService;
 import kr.co.rwm.service.RecordService;
@@ -42,7 +43,7 @@ import lombok.RequiredArgsConstructor;
  * UserController
  * <pre>
  * <b> History:</b>
- *			김순빈, ver.0.3 , 2020-10-28 : join, update - 활동지역 등록 및 수정 (참고-User Entity: dongId->gugunId)
+ *			김순빈, ver.0.4 , 2020-11-08 : /users/{userId}, /users 요청시 등급, 누적 거리, 누적 런닝, 누적 시간 필요
  * </pre>
  * 
  * @author 김형택
@@ -66,6 +67,7 @@ public class UserController {
 	private final UserService userService;
 	private final RanksService rankService;
 	private final RecordService recordService;
+	private final ChallengeService challengeService;
 	
 	/**
 	 * 회원가입 - 이메일 중복 여부 True/False를 판단하고, True일 경우 JSON 객체 기반으로 회원가입을 진행한다.
@@ -173,12 +175,12 @@ public class UserController {
 	// 회원 정보 조회 (다른 사람)
 	@GetMapping(path="/{userId}")
 	public ResponseEntity userInfo(@PathVariable int userId) {
-		User member = userService.findByUserId(userId).orElse(null);
+		RunningUser member = recordService.findRunningUserByUserId(userId);
 		if(member == null) {
 			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.USERINFO_SEARCH_FAIL),
 					HttpStatus.OK);
 		}
-		return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.USERINFO_SEARCH_SUCCESS,member),HttpStatus.OK);
+		return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.USERINFO_SEARCH_SUCCESS, member),HttpStatus.OK);
 	}
 	
 	// 회원 정보 조회 (해당 사용자)
@@ -186,28 +188,44 @@ public class UserController {
 	public ResponseEntity myUserInfo(HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
-			String userEmail = jwtTokenProvider.getUserEmailFromJwt(token);
+			int userId = jwtTokenProvider.getUserIdFromJwt(token);
 			
 			// 토큰 유효성 검사를 걸쳤기 때문에 무조건 정보가 존재한다.
-			User member = userService.findByUserEmail(userEmail).get(); 
-			return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.USERINFO_SEARCH_SUCCESS,member),HttpStatus.OK);
+			RunningUser member = recordService.findRunningUserByUserId(userId);
+			return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.USERINFO_SEARCH_SUCCESS, member),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
 					HttpStatus.FORBIDDEN);
 		}
 	}
 	
-	// 회원 탈퇴
-	@DeleteMapping(path="")
-	public ResponseEntity deleteUser(@RequestBody User user, HttpServletRequest request) {
+	// 회원 탈퇴 유효성 검사
+	@PostMapping(path="/checkPw")
+	public ResponseEntity deleteCheckUser(@RequestBody User user, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
 			String userEmail = jwtTokenProvider.getUserEmailFromJwt(token);
 			String pw = userService.findByUserEmail(userEmail).get().getPassword();
 			if (!passwordEncoder.matches(user.getPassword(), pw)) {
-				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.USER_DELETE_FAIL),
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.USER_DELETE_FAIL,false),
 						HttpStatus.FORBIDDEN);
 			}
+			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT,ResponseMessage.USER_DELETE_SUCCESS,true),HttpStatus.OK);
+			
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED,false),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	// 회원 탈퇴
+	@DeleteMapping(path="")
+	public ResponseEntity deleteUser(HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		if(jwtTokenProvider.validateToken(token)) {
+			String userEmail = jwtTokenProvider.getUserEmailFromJwt(token);
+			User userId = userService.findByUserEmail(userEmail).get();
+			challengeService.deleteAllChallengeUserByUserEmail(userEmail);
 			userService.delete(userEmail);
 			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT,ResponseMessage.USER_DELETE_SUCCESS),HttpStatus.OK);
 			

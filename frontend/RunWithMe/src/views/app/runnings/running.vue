@@ -4,64 +4,112 @@
       <breadcumb :page="'Record Running'" :folder="'Runnings'" />
       <h4 style="margin-top:5px;">Run With Me?</h4>
     </section>
-    <div style="text-align:center; margin-top:40px;">
-      <div style="float:left;"  >
-          <div id="run_desc distance">누적 거리</div>
-          <span id="acc_dis" > {{ show_distance }}km     </span>
-      </div>
-      <div style="margin-left:50px; float:left;">
-          <div id="run_desc speed">현재 속도</div>
-          <span id="acc_time">{{ speed }}m/s</span>
-      </div>
-      <div style=" margin-left:50px; float:left;">
-            <div id="run_desc time">누적 시간</div>
-            <span id="time">{{ clock }}</span>
-      </div>
-    </div>
-    <section ref="map" class="map"></section>
 
-    <div class="btn_container">
-      <div v-if="!running">
-        <section class="bottom-bar">
-          <div v-if="!isPause">
-            <button type="button" @click="startLocationUpdates" class="btn round btn btn-success btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
-            </button>
+  <splide
+      :options="options"
+      >
+        <splide-slide>
+        <div style="text-align:center; margin-top:40px;">
+          <div class="myRecord"  >
+              <div id="run_desc distance">누적 거리</div>
+            <span id="acc_dis" > {{ show_distance }}km </span>
           </div>
-          <div v-if="isPause">
-             <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
-            </button>
-
+          <div class="myRecord" >
+              <div id="run_desc speed">현재 속도</div>
+              <span id="acc_time">{{ speed }}m/s</span>
           </div>
-        </section>
-      </div>
-      <div v-if="running">
-        <section class="bottom-bar">
+          <div class="myRecord">
+                <div id="run_desc time">누적 시간</div>
+                <span id="time">{{ clock }}</span>
+          </div>
+        </div>
+        <div style="text-align:center">
+          <section style="display:inline-block" ref="map" class="map"></section>
+        </div>
+        <div class="btn_container">
+          <div v-if="!running">
+            <section class="bottom-bar">
+              <div v-if="!isPause">
+                <button type="button" @click="startLocationUpdates" class="btn round btn btn-success btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:2em; margin-left: 10px;" class="i-Start-2"></i></span>
+                </button>
+              </div>
+              <div v-if="isPause">
+                <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:2em; margin-left: 10px;" class="i-Start-2"></i></span>
+                </button>
+                  <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Stop-2"></i></span>
+              </button>
 
-          <button type="button" @click="stopLocationUpdates" class="btn round btn btn-danger btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Pause"></i></span>
-          </button>
+              </div>
+            </section>
+          </div>
+          <div v-if="running">
+            <section class="bottom-bar">
 
-          <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Stop-2"></i></span>
-          </button>
+              <button type="button" @click="stopLocationUpdates" class="btn round btn btn-danger btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Pause"></i></span>
+              </button>
 
-        </section>
-      </div>
-    </div>
+              <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Stop-2"></i></span>
+              </button>
+
+            </section>
+          </div>
+        </div>
     
-    <textarea id="encoded-polyline"></textarea>
+        </splide-slide>
+        <splide-slide>
+          <div class="card mb-30">
+          <div class="card-body p-0">
+            <div class="card-title  d-flex align-items-center mb-2 pb-0 p-3">
+              <span>구간별 기록</span>
+            </div>
+            <div class="d-flex border-bottom justify-content-between  p-3 ">
+              <div class="flex-grow-1">
+                <h5 class="m-0">구간</h5>
+              </div>
+              <div class="flex-grow-1">
+                <h5 class="m-0">도달 시간</h5>
+              </div>
+            </div>
+              <div v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
+                <div class="flex-grow-1">
+                  <h5 class="m-0">{{record.accDistance}}</h5>
+                </div>
+                <div class="flex-grow-1">
+                  <h5 class="m-0">{{convertToTime(record.accTime)}}</h5>
+                </div>
+            </div>
+          </div>
+        </div>
+         <b-card class="h-100">
+          <h4 class="card-title m-0">시간대별 속도</h4>
+          <div class="chart-wrapper" style="height: 300px ; width:100%">
+            <v-chart :options="echart4" :autoresize="true"></v-chart>
+          </div>
+        </b-card>
+        </splide-slide>
+     </splide>
   </div>
 </template>
+<script src="path-to-the-file/splide.min.js"></script>
 <script>
 import http from "@/utils/http-common";
 import { mapGetters,mapMutations } from "vuex";
+import { Splide, SplideSlide } from '@splidejs/vue-splide';
+import '@splidejs/splide/dist/css/themes/splide-default.min.css';
 
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
     title: "Running",
+  },
+  components:{
+    Splide,
+    SplideSlide,
   },
   data() {
     return {
@@ -94,9 +142,106 @@ export default {
       started: null,
       running: false,
       isPause: false,
+      //splide options
+      options: {
+        rewind : true,
+        perPage:1,
+        width  : 400,
+        gap    : '1rem',
+      },
+      records:[
+        {"userId": 1,
+        "accDistance": 1.012,
+        "accTime": 305,
+        },
+        {"userId": 1,
+        "accDistance": 2.112,
+        "accTime": 360,
+        },
+        {"userId": 1,
+        "accDistance": 3.001,
+        "accTime": 368,
+        },
+        {"userId": 1,
+        "accDistance": 3.123,
+        "accTime": 412,
+        }
+      ],
+
+      //chart
+     echart4 : {
+        tooltip: {
+          show: true,
+          // trigger: 'axis',
+          axisPointer: {
+            type: "line",
+            animation: true
+          }
+        },
+        grid: {
+          top: "10%",
+          left: "0",
+          right: "0",
+          bottom: "0"
+        },
+        xAxis: {
+          type: "category",
+          data: [],
+          axisLine: {
+            show: true
+          },
+          axisLabel: {
+            show: true
+          },
+          axisTick: {
+            show: true
+          }
+        },
+        yAxis: {
+          type: "value",
+          axisLine: {
+            show: false
+          },
+          axisLabel: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          splitLine: {
+            show: true
+          }
+        },
+        label: {show: true, color: "#212121"},
+        series: [
+          {
+            data: [],
+            type: "line",
+            showSymbol: true,
+            smooth: true,
+            color: "#639",
+            lineStyle: {
+              opacity: 1,
+              width: 2
+            }
+          }
+        ]
+     }
     };
   },
   mounted() {
+    this.$store.commit('closeSidebar')
+    this.getTempRuns()
+    for(var i=0; i<this.records.length; i++){
+        if(i!=this.records.length-1)  {
+            this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
+        }
+        this.records[i].accDistance+=" km"
+        console.log(this.echart4)
+        this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+        this.echart4.xAxis.data.push(this.records[i].accDistance)
+    }
+
     if (window.google && window.google.maps) {
       this.initMap();
     } else {
@@ -105,10 +250,28 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(["userInfo","defaultProfile"]),
   },
   methods: {
-    ...mapMutations(["mutateMyRunning"]),
+    ...mapMutations(["mutateMyRunning","closeSidebar"]),
+    getTempRuns(){
+        http.get(`runnings/temp/`)
+            .then((res) => {
+                console.log("임시 저장 데이터")
+                console.log(res.data);
+                this.records= res.data
+            })
+            .catch((err) => {
+                console.log("1Km이상 뛰지 않았어요")
+                console.log(this.records)
+            });
+    },
+     convertToTime(origin){
+        var time = "";
+        time += parseInt(origin/60) + "\'";
+        time += origin%60 + "\"";
+        return time;
+    },
     initMap() {
       navigator.geolocation.getCurrentPosition((position) => {
         this.current.lat = position.coords.latitude;
@@ -160,7 +323,6 @@ export default {
     },
 
     resetLocations() {
-      
       this.endTime = "";
       this.clock = "00:00:00";
       this.timeBegan = null;
@@ -169,7 +331,6 @@ export default {
       this.started = null;
       this.checkSecond = 0;
       this.checkOneKm = 0;
-      this.speed = 0;
       this.current.lat = 0;
       this.current.lng = 0;
       this.previous.lat = 0;
@@ -263,7 +424,7 @@ export default {
             var distance = this.computeDistance(this.previous, this.current);
             console.log("watchposition 이동거리" + distance);
             console.log("watchposition 걸린시간" + this.accumulated_time);
-            var threshold = 0.01;
+            var threshold = 0.001;
             if (distance > threshold) {
               // 일정속도 이상으로 뛸때만 기록.
               this.previous.lat = this.current.lat;
@@ -273,7 +434,6 @@ export default {
               this.checkOneKm = this.accumulated_distance;
               this.checkSecond = this.accumulated_time;
 
-
               var currentLatLng = new google.maps.LatLng(
                 this.current.lat,
                 this.current.lng
@@ -281,6 +441,7 @@ export default {
               this.linePath.push(currentLatLng);
               this.encode_polyline(currentLatLng, this.poly);
             }
+            // if (this.checkOneKm >= 1) {
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
               this.speed = (this.checkOneKm * 1000) / this.checkSecond;
@@ -299,8 +460,8 @@ export default {
         {
           timeout: 5000,
           maximumAge: 0,
-          // enableHighAccuracy:true,
-          // distanceFilter:40,          
+          enableHighAccuracy:true,
+          distanceFilter:40,          
         }
       );
       this.map = map;
@@ -336,11 +497,11 @@ export default {
     },
     savePosition(position) {
       let data = {
-        userId: this.userInfo.userId,
         accDistance: this.accumulated_distance+0.0001,
-        accTime: this.accumulated_time,
-        speed: this.speed,
+        accTime: this.accumulated_time+0.0001,
+        speed: this.speed+0.0001,
       };
+      console.log(data)
       http
         .post(`runnings/temp`, JSON.stringify(data), {
           headers: {
@@ -355,8 +516,13 @@ export default {
         })
         .catch((err) => {
           console.log("savePosition Error")
-          console.log(err);
         });
+        
+        http.get(`runnings/get/${this.userInfo.userId}`)
+        .then(data =>{
+          this.records = data.data
+          console.log(data.data)
+        })
     },
 
     endLocationUpdates() {
@@ -442,7 +608,7 @@ export default {
       console.log("here!!!")
       console.log(path)
       console.log(this.encode_polyline)
-      document.getElementById("encoded-polyline").value = this.encode_polyline;
+      // document.getElementById("encoded-polyline").value = this.encode_polyline;
  
     },
     
@@ -473,6 +639,10 @@ export default {
 </script>
 
 <style>
+.flex-grow-1{
+  width:30vw;
+  text-align:center;
+}
 .driver-view {
   display: flex;
   flex-direction: column;
@@ -485,8 +655,8 @@ export default {
 }
 .map {
   flex-grow: 1;
-  width: 100%;
-  height: 400px;
+  width: 95%;
+  height: 47vh;
 }
 .bottom-bar {
   height: 100px;
@@ -507,6 +677,14 @@ export default {
 .btn-container {
   display: flex;
   margin-top: 15px;
+}
+.myRecord {
+  width:30vw; 
+  float:left;
+}
+.btn-icon{
+  width:60px !important;
+  height:60px !important;
 }
 .running button {
   text-align: center;

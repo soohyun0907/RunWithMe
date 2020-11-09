@@ -6,19 +6,17 @@
           <div class="col">
             <b-card class="card-profile-1 mb-30 text-center">
                 <img src="@/assets/images/gibu/gibu1.png" alt />
-                <h5 class="m-0">[챌린지 제안] 사랑의 온도를 올려주세요</h5>
+                <h5 class="m-0">[챌린지 제안] {{ board.boardTitle }}</h5>
                 
-                <a href="http://naver.com/" target="_black">
+                <!-- <a href="http://naver.com/" target="_black">
                 URL : http://naver.com
                 <br>
                 해당사이트로 이동</a>
-                <br><br>
+                <br><br> -->
                 <p>
-                    같이 기부레이스하실??같이 기부레이스하실??같이 기부레이스하실??같이 기부레이스하실??같이 기부레이스하실??같이 기부레이스하실??같이 기부레이스하실??같이 기부레이스하실??같이 기부레이스하실??같이 기부레이스하실??같이 기부레이스하실??
+                  {{ board.boardContent }}
                 </p>
-                <button @click="JoinChallenge()" class="btn btn-primary btn-rounded">
-                    챌린지 참가
-                </button>
+
                 <div class="card-socials-simple mt-4">
 
                 <a @click="goBack">
@@ -37,19 +35,38 @@ import { mapGetters } from "vuex";
 
 export default {
   metaInfo: {
-    title: "challengeBoard",
+    title: "challengeBoardDetail",
   },
   data() {
     return {
+      board: {
+        boardTitle: "",
+        boardContent: ""
+      }
     }
+  },
+  mounted() {
+    this.$store.commit('closeSidebar')
+    http
+      .get("boards/board/"+this.$route.query.boardId)
+      .then(({data}) => {
+        if(data.status == 200){
+          this.board.boardTitle = data.data.boardTitle;
+          this.board.boardContent = data.data.boardContent;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return;
+      })
   },
   methods:{
       goBack(){
-          alert("hi back click")
+        this.$router.push("/app/board/challengeBoard");
       },
-      JoinChallenge(){
-          alert("join challenge!!")
-      }
+      // JoinChallenge(){
+      //   alert("join challenge!!")
+      // }
   }
 };
 
