@@ -225,7 +225,7 @@ public class UserController {
 		if(jwtTokenProvider.validateToken(token)) {
 			String userEmail = jwtTokenProvider.getUserEmailFromJwt(token);
 			User userId = userService.findByUserEmail(userEmail).get();
-			// challengeService.deleteAllChallengeUserByUserEmail(userEmail); // 나중에 develop에서 주석풀기!
+			challengeService.deleteAllChallengeUserByUserEmail(userEmail);
 			userService.delete(userEmail);
 			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT,ResponseMessage.USER_DELETE_SUCCESS),HttpStatus.OK);
 			
