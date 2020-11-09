@@ -6,7 +6,12 @@
         <div class="card user-profile o-hidden mb-30">
             <div class="header-cover" style="background-image: url(http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-5.jpeg"></div>
                 <div class="user-info">
-                    <img class="profile-picture avatar-lg mb-2" :src="userInfo.profile">
+                    <div v-if="userInfo.profile!=null">
+                        <img class="profile-picture avatar-lg mb-2" :src="userInfo.profile">
+                    </div>
+                    <div v-else>
+                        <img class="profile-picture avatar-lg mb-2" :src="defaultProfile">
+                    </div> 
                         <b-button variant="outline-info" style="padding:0.2em" @click="goUserInfoEdit()">프로필 변경</b-button>
                         <p class="m-0 text-24">{{userInfo.username}} 님</p>
                         <p class="text-muted m-0">{{userInfo.userEmail}}</p>
@@ -51,15 +56,15 @@
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i>누적 거리</p>
-                                        <span>512km</span>
+                                        <span>{{userInfo.totalDistane}}</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Cloud-Weather text-16 mr-1"></i> 누적 런닝</p>
-                                        <span>62회</span>
+                                        <span>{{userInfo.totalTime}}</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Face-Style-4 text-16 mr-1"></i>누적 시간</p>
-                                        <span>589시간</span>
+                                        <span>{{userInfo.totalCount}}</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-6">
@@ -99,7 +104,7 @@
 
 <script>
 import http from "@/utils/http-common";
-import { mapGetters,mapActions } from "vuex";
+import { mapGetters,mapActions, mapMutations } from "vuex";
 
 export default {
      metaInfo: {
@@ -112,29 +117,37 @@ export default {
       }
   },
    computed: {
-    ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
+    ...mapGetters(["getSideBarToggleProperties", "userInfo","defaultProfile"]),
   },
 
   mounted() {
+      console.log(this.userInfo)
+       this.$store.commit('closeSidebar')
   },
   methods: {
     ...mapActions(["signOut"]),
+    ...mapMutations(["closeSidebar"]),
     memberOut(){
-        var data = this.userInfo 
-        data["user_pw"] = this.inputPass
-        console.log(data)
-        http.delete(`users`,data)  
+        var data = {
+            userPw:this.inputPass
+        }
+        http.post(`users/checkPw`,data)
         .then(data => {
-            this.signOut();
             console.log("i'm gone..")
+            http.delete(`users`)
+            .then(data=>{
+                console.log(data)
+                // this.signOut();
+                this.$router.push('/app/sessions/signIn')   
+            })
         })
-      },
-      goUserInfoEdit() {
-          this.$router.push("/app/mypages/myUserInfoEdit");
-      },
-      goUserInfosEdit(){
-          this.$router.push("/app/mypages/myUserInfosEdit");
-      },
+    },
+    goUserInfoEdit() {
+        this.$router.push("/app/mypages/myUserInfoEdit");
+    },
+    goUserInfosEdit(){
+        this.$router.push("/app/mypages/myUserInfosEdit");
+    },
   },
 }
 </script>
