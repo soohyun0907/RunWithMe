@@ -171,7 +171,7 @@
           <div v-else>
             <img class="profile-picture rounded-circle avatar-sm" src="@/assets/images/faces/defaultProfile.png">
             {{index+1}}. {{ranker.userId.username}}
-          {{ranker.totalExp}}p
+            {{ranker.totalExp}}p
           </div>
         </div>
       </div>
