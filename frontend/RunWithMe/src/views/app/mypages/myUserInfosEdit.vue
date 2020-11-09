@@ -1,163 +1,85 @@
 <template>
     <div class="main-content">
-        <breadcumb :page="'프로필 수정'" :folder="'My Page'" />
         
-         <div class="card user-profile o-hidden mb-30">
-        
-          <div class="header-cover" 
-          :style="{ backgroundImage: 'url(' + signInImage + ')' }">
-          </div>
-          
-          <div class="card-body">
-                          <h1 class="mb-3 text-18">회원가입</h1>
-              <b-form @submit.prevent="submit">
-                <b-form-group label="Email">
-                  <b-form-input
-                    class="form-control form-control-rounded"
-                    label="Name"
-                    type="email"
-                    v-model="email"
-                  >
-                  </b-form-input>
-                  <b-button
-                    @click="emailDuplicate"
-                    pill
-                    variant="primary ripple m-1"
-                    >이메일 중복체크</b-button
-                  >
-                </b-form-group>
+         <breadcumb :page="'회원 정보'" :folder="'My Page'" />
 
-                <b-form-group label="이름">
-                  <b-form-input
-                    class="form-control form-control-rounded"
-                    label="Name"
-                    v-model.trim="$v.fName.$model"
-                  >
-                  </b-form-input>
+        <div class="card user-profile o-hidden mb-30">
+            <div class="header-cover" style="background-image: url(http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-5.jpeg"></div>
+                <div class="user-info">
+                    <div v-if="userInfo.profile!=null">
+                        <img class="profile-picture avatar-lg mb-2" :src="userInfo.profile">
+                    </div>
+                    <div v-else>
+                        <img class="profile-picture avatar-lg mb-2" :src="defaultProfile">
+                    </div> 
+                        <p class="m-0 text-24">{{userInfo.username}} 님</p>
+                        <p class="text-muted m-0">{{userInfo.userEmail}}</p>
+            </div>
+            <div class="card-body">
+                <div>
+                            <h4>회원 정보 수정</h4>
+                            <hr>
 
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error col mt-1"
-                    v-if="!$v.fName.minLength"
-                    >이름을 {{ $v.fName.$params.minLength.min }}글자 이상
-                    입력해주세요.</b-alert
-                  >
-                </b-form-group>
-                <b-row>
-                  <b-col md="8" class=" mb-30">
-                   <b-card title="주 활동지역 선택">
+                            <div class="row">
+                                <div class="col-md-4 col-6">
+                                    <div style="text-align:center" class=" mb-30">
+                                        <p class="text-primary mb-1"><i class="i-Calendar text-16 mr-1"></i>이름</p>
+                                        <span>{{userInfo.username}}</span>
+                                    </div>
+                                    <div style="text-align:center" class=" mb-30">
+                                        <p class="text-primary mb-1"><i class="i-Edit-Map text-16 mr-1"></i>Email</p>
+                                        <span style="white-space:nowrap;">{{userInfo.userEmail}}</span>
+                                    </div>
+                                    <div style="text-align:center" class=" mb-30">
+                                        <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i>성별</p>
+                                        <div v-if="userInfo.gender=='1'">
+                                            <span>남자</span>
+                                        </div>
 
-                    <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
-                      <div v-for="(sido, index) in sidos" v-bind:key="index">
-                        <b-dropdown-item @click="sidoSelected(sido)">{{
-                          sido.sidoName
-                        }}</b-dropdown-item>
-                      </div>
-                    </b-dropdown>
+                                        <div v-if="userInfo.gender=='2'">
+                                            <span>여자</span>
+                                        </div>
+                                    </div>
+                                    <div style="text-align:center" class=" mb-30">
+                                        <p class="text-primary mb-1"><i class="i-Professor text-16 mr-1"></i>등급</p>
+                                        <span><span class="badge badge-danger">Pro</span></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-6">
+                                    <div style="text-align:center" class=" mb-30">
+                                        <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i> 도시 </p>
+                                        <span>{{userInfo.gugunId.sidoId.sidoName}} {{userInfo.gugunId.gugunName}}</span>
+                                    </div>
+                                    <div style="text-align:center" class=" mb-30">
+                                        <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i>누적 거리</p>
+                                        <span>512km</span>
+                                    </div>
+                                    <div style="text-align:center" class=" mb-30">
+                                        <p class="text-primary mb-1"><i class="i-Cloud-Weather text-16 mr-1"></i> 누적 런닝</p>
+                                        <span>62회</span>
+                                    </div>
+                                    <div style="text-align:center" class=" mb-30">
+                                        <p class="text-primary mb-1"><i class="i-Face-Style-4 text-16 mr-1"></i>누적 시간</p>
+                                        <span>589시간</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-6">
+                                    
+                                    
+                                </div>
+                            </div>
+                             <b-button variant="outline-info" style="padding:0.2em" @click="goUserInfosEdit()">회원 정보 수정</b-button>
+                       
 
-                    <b-dropdown variant="primary" id="dropdown-2" text="구군 선택" class="mb-2">
-                      <div v-for="(gugun, index) in guguns" v-bind:key="index">
-                        <b-dropdown-item @click="gugunSelected(gugun)">{{
-                          gugun.gugunName
-                        }}</b-dropdown-item>
-                      </div>
-                    </b-dropdown>
-                  </b-card>
-                  </b-col>
-                </b-row>
-
-              <label class="d-block text-12 text-muted">성별</label>
-                <div class="col-md-6 offset-md-6 pr-0 mb-30">
-                  <label class="radio radio-reverse radio-danger">
-                    <input
-                      type="radio"
-                      name="orderStatus"
-                      value=1
-                      v-model="gender"
-                    />
-                    <span>여자</span>
-                    <span class="checkmark"></span>
-                  </label>
-
-                  <label class="radio radio-reverse radio-success">
-                    <input
-                      type="radio"
-                      name="orderStatus"
-                      value=2
-                      v-model="gender"
-                    />
-                    <span>남자</span>
-                    <span class="checkmark"></span>
-                  </label>
                 </div>
-                <b-form-group label="Password">
-                  <b-form-input
-                    class="form-control form-control-rounded"
-                    label="Name"
-                    type="password"
-                    v-model.trim="$v.password.$model"
-                  >
-                  </b-form-input>
-
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error col mt-1"
-                    v-if="!$v.password.minLength"
-                    >비밀번호는
-                    {{ $v.password.$params.minLength.min }} 이상이어야
-                    합니다.</b-alert
-                  >
-                </b-form-group>
-
-                <b-form-group label="Password 확인">
-                  <b-form-input
-                    class="form-control form-control-rounded"
-                    label="Name"
-                    type="password"
-                    v-model.trim="$v.repeatPassword.$model"
-                  >
-                  </b-form-input>
-
-                  <b-alert
-                    show
-                    variant="danger"
-                    class="error col mt-1"
-                    v-if="!$v.repeatPassword.sameAsPassword"
-                    >비밀번호가 일치하지 않습니다.</b-alert
-                  >
-                </b-form-group>
-
-                <b-button
-                  type="submit"
-                  block
-                  variant="primary"
-                  :disabled="submitStatus === 'PENDING' || $v.$invalid"
-                  class="btn-rounded"
-                  >Sign Up</b-button>
-
-                <p v-once class="typo__p" v-if="submitStatus === 'OK'">
-                  {{ makeToastTwo("success") }}
-                  {{ this.$router.push("/") }}
-                </p>
-                <p v-once class="typo__p" v-if="submitStatus === 'ERROR'">
-                  {{ makeToast("danger") }}
-                </p>
-                <div v-once class="typo__p" v-if="submitStatus === 'PENDING'">
-                  <div class="spinner sm spinner-primary mt-3"></div>
-                </div>
-              </b-form>
-            
-          </div>
-          
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import http from "@/utils/http-common";
-import { mapGetters,mapMutations } from "vuex";
+import { mapGetters,mapActions } from "vuex";
 
 export default {
      metaInfo: {
@@ -170,36 +92,27 @@ export default {
       }
   },
    computed: {
-    ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
+    ...mapGetters(["getSideBarToggleProperties", "userInfo","defaultProfile"]),
   },
+
   mounted() {
+      console.log(this.userInfo)
   },
   methods: {
     ...mapActions(["signOut"]),
-    ...mapMutations(["mutateProfile"]),
-    handleFileUpload() {
-        this.file = this.$refs.files.files;
-    },
-    submitFile(userInfo){
-      let formData = new FormData();
-      formData.append('profile', this.file[0]);
-      http
-        .put('users/'+ userInfo.userId + '/profile', formData, 
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          }
-        })
-        .then(({ data }) => {
-          if(data.status == 200){
-            console.log(data)
-            this.$store.commit('mutateProfile',data.data.profile)
-            console.log(data.data.profile)
-            this.$router.go(0)
-          } else {
-            alert("오류가 발생하였습니다.");
-            return;
-          }
+    memberOut(){
+        var data = {
+            userPw:this.inputPass
+        }
+        http.post(`users/checkPw`,data)
+        .then(data => {
+            console.log("i'm gone..")
+            http.delete(`users`)
+            .then(data=>{
+                console.log(data)
+                // this.signOut();
+                this.$router.push('/app/sessions/signIn')   
+            })
         })
     },
   },
