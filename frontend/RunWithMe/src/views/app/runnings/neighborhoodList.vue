@@ -1,14 +1,7 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Neighborhood List'" :folder="'Runnings'" />
+    <breadcumbcustom :title="'주변 러너 추천'" :desc="area" />
     <div class="ul-contact-page">
-      <div>
-        <h4 style="margin-top: 5px">
-          주변 러너 추천
-        </h4>
-        <span>| {{ userInfo.gugunId.sidoId.sidoName }}
-          {{ userInfo.gugunId.gugunName }} </span>
-      </div>
       <div class="row" style="margin-top: 5px">
         <b-col lg="12" md="12" class="mb-30 text-center">
           <b-form-group id="input-group-2" label-for="input-2">
@@ -32,7 +25,7 @@
           v-for="(contact, index) in contactlist"
           :key="index"
         >
-          <router-link :to="`/app/runnings/friendsDetail`">
+          <router-link :to="{name:'friendsDetail', query:{friendId:contact.friendId}}">
             <div class="card">
               <div class="card-body">
                 <div class="ul-contact-page__profile">
@@ -43,7 +36,7 @@
                   <p class="m-0 text-24">{{ contact.nickname }}</p>
                   <div class="col">
                     총 킬로미터
-                    <h2>{{ contact.accumulated_distance }}</h2>
+                    <h2>{{ contact.totalDistance }}</h2>
                     KM
                   </div>
                   <div class="ul-contact-page__info">
@@ -73,7 +66,7 @@
 </template>
 <script>
 import http from "@/utils/http-common";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "contactList",
@@ -86,11 +79,13 @@ export default {
   },
   mounted() {
     this.getRunners();
+    this.area = this.userInfo.gugunId.sidoId.sidoName + " " + this.userInfo.gugunId.gugunName;
   },
   computed: {
     ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
   },
   methods: {
+    ...mapMutations(["closeSidebar"]),
     convertToTime(origin) {
       var time = "";
       time += parseInt(origin / 60) + "'";
@@ -102,15 +97,18 @@ export default {
         .get(`runnings/summary/region`)
         .then(({ data }) => {
           if (data.status == 200) {
+            // console.log(data.data);
             let obj;
             var contactlist = this.contactlist;
             data.data.forEach((element) => {
-              console.log(data);
+              console.log(element);
               obj = new Object();
+              obj.friendId = element.userId.userId;
               obj.nickname = element.userId.username;
               obj.imgUrl = element.userId.profile;
-              obj.accumulated_distance = element.totalDistance;
+              obj.totalDistance = element.totalDistance.toFixed(2);
               obj.running_cnt = element.totalCount;
+              obj.avg_pace = element.totalTime;
               if (element.totalTime == 0) {
                 obj.avg_pace = 0;
               } else {

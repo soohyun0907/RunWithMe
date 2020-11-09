@@ -290,6 +290,7 @@ export default {
         .then(({data}) => {
           if(data.status == 200){
             let obj;
+            console.log(data.data.runnings[0]);
             for(var i=0; i<data.data.friends.length; i++) {
               obj = new Object();
               if(data.data.runnings[0] == null) {
@@ -298,11 +299,11 @@ export default {
                 obj.total_distance = "";
                 obj.mapImg = "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png";
               }else {
-                obj.runningId = data.data.runnings.runningId;
-                obj.total_distance = data.data.runnings.accDistance;
-                obj.accumulcated_time = data.data.runnings.accTime;
+                obj.runningId = data.data.runnings[0].runningId;
+                obj.total_distance = data.data.runnings[0].accDistance;
+                obj.accumulcated_time = data.data.runnings[0].accTime;
                 obj.running_avg_pace = obj.accumulcated_distance / obj.total_distance;
-                obj.mapImg = data.data.runnings.thumbnail;
+                obj.mapImg = data.data.runnings[0].thumbnail;
               }
               obj.userId = data.data.friends[i].userId;
               if(data.data.friends[i].profile==null){
@@ -315,6 +316,8 @@ export default {
             }
             if(this.friendsFeed.length == 0)
               this.haveFriends = false;
+            
+            console.log(this.friendsFeed);
           }
         })
         .catch((error) => {

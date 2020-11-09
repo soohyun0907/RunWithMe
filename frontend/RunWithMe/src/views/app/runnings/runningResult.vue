@@ -129,38 +129,38 @@ export default {
             });
     },
 
-    // initMap(){
-    //     var map = new google.maps.Map(this.$refs["map"], {
-    //           zoom: 15,
-    //           center: new google.maps.LatLng(37.331777, 127.129347),
-    //           mapTypeId: google.maps.MapTypeId.ROADMAP
-    //     });
+    initMap(){
+        var map = new google.maps.Map(this.$refs["map"], {
+              zoom: 15,
+              center: new google.maps.LatLng(37.331777, 127.129347),
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
 
-    //     this.map = map;
-    //     this.decodePolyline();
-    // },
-    // decodePolyline() {
-    //     const decodePolylines = require('decode-google-map-polyline');
-    //     this.drawLines(decodePolylines(this.result.polyline));
-    // },
-    // drawLines(positions) {
-    //     var runningPathCoordinates = [];
+        this.map = map;
+        this.decodePolyline();
+    },
+    decodePolyline() {
+        const decodePolylines = require('decode-google-map-polyline');
+        this.drawLines(decodePolylines(this.result.polyline));
+    },
+    drawLines(positions) {
+        var runningPathCoordinates = [];
 
-    //     for(var i=0; i<positions.length; i++){
-    //       // console.log(positions[i].lat);
-    //       runningPathCoordinates.push(new google.maps.LatLng(positions[i].lat, positions[i].lng));
-    //     }
+        for(var i=0; i<positions.length; i++){
+          // console.log(positions[i].lat);
+          runningPathCoordinates.push(new google.maps.LatLng(positions[i].lat, positions[i].lng));
+        }
 
-    //     const runningPath = new google.maps.Polyline({
-    //       path: runningPathCoordinates,
-    //       geodesic: true,
-    //       strokeColor: "#ff0000",
-    //       strokeOpacity: 1.0,
-    //       strokeWeight: 2
-    //     });
-    //     this.map.setCenter(new google.maps.LatLng(positions[0].lat, positions[0].lng))
-    //     runningPath.setMap(this.map);
-    // },
+        const runningPath = new google.maps.Polyline({
+          path: runningPathCoordinates,
+          geodesic: true,
+          strokeColor: "#ff0000",
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+        this.map.setCenter(new google.maps.LatLng(positions[0].lat, positions[0].lng))
+        runningPath.setMap(this.map);
+    },
     convertToTime(origin){
         var time = "";
         time += parseInt(origin/60) + "\'";
