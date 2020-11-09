@@ -1,6 +1,8 @@
 package kr.co.rwm.entity;
 
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,14 +25,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Ranks {
+public class Ranks implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="rank_id")
 	private Integer rankId;
 	
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id",referencedColumnName = "user_id")
 	private User userId;
 
