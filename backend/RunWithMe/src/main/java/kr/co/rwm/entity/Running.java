@@ -39,7 +39,7 @@ public class Running {
 	@Column(name = "running_id")
 	private Integer runningId;
 	
-	@Column(name = "user_id", nullable = false)
+	@Column(name = "user_id", nullable = true)
 	private Integer userId;
 	
 	@Column(name = "polyline", columnDefinition = "LONGTEXT")
