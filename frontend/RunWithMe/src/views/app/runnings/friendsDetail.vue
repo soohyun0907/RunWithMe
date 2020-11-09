@@ -1,7 +1,12 @@
 <template>
     <div class="main-content">
         <div class="user-profile-img">
-            <img class="profile-picture mb-2" :src="friendInfo.userId.profile" width="200px" height="170px"/>
+            <div v-if="friendInfo.userId.profile!=null" >
+                <img class="profile-picture mb-2" :src="friendInfo.userId.profile"  height="100vw"/>
+            </div>
+            <div v-else>
+                <img class="profile-picture mb-2" :src="defaultProfile" height="100vw"/>
+            </div>
         </div>
         <div style="margin-top:50px">
         <p class="m-0 text-24" style="text-align:center;">{{friendInfo.userId.username}}</p>
@@ -116,7 +121,7 @@ export default {
         }
     },
     methods: {
-        ...mapMutations(["mutateProfile","closeSidebar"]),
+        ...mapMutations(["mutateProfile","closeSidebar","defaultProfile"]),
         getRunningTime(startTime, endTime) {
             var runningTime = "";
             runningTime += parseInt(endTime.hour() - startTime.hour()) + ":";
