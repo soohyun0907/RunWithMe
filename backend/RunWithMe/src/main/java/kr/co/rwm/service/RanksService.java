@@ -33,4 +33,7 @@ public interface RanksService {
 	
 	// 사용자 랭킹관련 정보 조회
 	List<Ranks> findByUserId(User userId);
+	
+	// 랭크 사용자 삭제
+	void deleteByUserId(User userId);
 }

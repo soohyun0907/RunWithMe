@@ -6,11 +6,9 @@ import chat from "./modules/chat";
 import groupchat from "./modules/groupchat";
 import config from "./modules/config";
 import authData from "./modules/authData";
-import invoice from "./modules/invoice";
-import cart from "./modules/cart";
 import verticalSidebar from "./modules/verticalSidebar";
-import scrumboard from "./modules/scrumboard";
 import createPersistedState from 'vuex-persistedstate';
+import main from "./modules/main";
 
 // Load Vuex
 Vue.use(Vuex);
@@ -24,10 +22,8 @@ export default new Vuex.Store({
     groupchat,
     config,
     authData,
-    invoice,
-    cart,
     verticalSidebar,
-    scrumboard
+    main
   },
   plugins: [
     createPersistedState()
