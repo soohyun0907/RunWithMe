@@ -34,7 +34,7 @@ public class RunningUser {
 	private User userId;
 
 	@Column(name = "total_distance", nullable = false)
-	private double totalDistane;
+	private double totalDistance;
 	
 	@Column(name = "total_time", nullable = false)
 	private Long totalTime;
