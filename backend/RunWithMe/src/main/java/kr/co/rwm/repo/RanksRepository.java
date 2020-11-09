@@ -3,6 +3,8 @@ package kr.co.rwm.repo;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import kr.co.rwm.entity.Ranks;
@@ -15,5 +17,8 @@ public interface RanksRepository extends JpaRepository<Ranks, Long>{
 	List<Ranks> findTop10ByOrderByDonateExpDesc();
 	List<Ranks> findTop10ByOrderByTotalExpDesc();
 	List<Ranks> findAllByOrderByTotalExpDesc();
+	
+	@Transactional
+	void deleteByUserId(User userId);
 	
 }

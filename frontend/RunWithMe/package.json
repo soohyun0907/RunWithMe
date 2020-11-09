@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@johmun/vue-tags-input": "^2.1.0",
+    "@splidejs/vue-splide": "^0.3.5",
     "apexcharts": "^3.19.3",
     "axios": "^0.20.0",
     "babel-polyfill": "^6.26.0",
@@ -52,6 +53,7 @@
     "vue-slider-component": "^3.2.2",
     "vue-star-rating": "^1.6.1",
     "vue-sweetalert2": "^3.0.6",
+    "vue-swipe": "^2.4.0",
     "vue-the-mask": "^0.11.1",
     "vue-tour": "^1.5.0",
     "vue2-daterange-picker": "^0.5.1",

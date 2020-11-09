@@ -73,7 +73,9 @@
                             <b-collapse :id="'collapse-'+challenge.challengeId" class="mt-3 text-center">
                                 <img :src="challenge.img" />
                                 <p> 기간: {{ challenge.startTime }} ~ {{ challenge.endTime }} </p>
-                                <p> {{ challenge.content }} </p>
+                                <p> 설명: {{ challenge.content }} </p>
+                                <p> 현재 참여 인원: {{ challenge.participant }} </p>
+                                <p> 개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM </p>
                                 <h6>모인 금액 {{ challenge.donateCurrent }} / {{ challenge.donateGoal }} 원</h6>
                                 <b-progress class="mb-3"
                                     variant="success"
@@ -144,6 +146,7 @@
 
 <script>
 import http from "@/utils/http-common";
+import { mapGetters,mapMutations } from "vuex";
 
 export default {
     name: 'challenges',
@@ -164,7 +167,11 @@ export default {
         this.getChallengesCommingSoon();
         this.getChallengesDone();
     },
+    mounted() {
+      this.$store.commit('closeSidebar')
+    },
     methods: {
+    ...mapMutations(["mutateMyRunning","closeSidebar"]),
         showConfirmModal(challengeId, challengeTitle, personalDistanceGoal){
             this.confirmModal = "";
             this.$bvModal

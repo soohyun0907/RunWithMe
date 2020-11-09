@@ -93,7 +93,7 @@
           <li class="nav-item">
             <router-link tag="a" class to="/app/apps/groupchat">
               <i class="nav-icon i-Speach-Bubble-3"></i>
-              <span class="item-name">Group-Chat</span>
+              <span class="item-name">지역별 채팅</span>
             </router-link>
           </li>
           <li
@@ -181,16 +181,16 @@
               <span class="item-name">챌린지 제안</span>
             </router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link tag="a" class to="/app/board/challengeBoardDetail">
               <i class="nav-icon i-Stopwatch"></i>
               <span class="item-name">챌린지 제안 상세</span>
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link tag="a" class to="/app/board/createChallenge">
               <i class="nav-icon i-Speach-Bubble-3"></i>
-              <span class="item-name">챌린지 생성</span>
+              <span class="item-name">챌린지 생성(관리자만)</span>
             </router-link>
           </li>
         </ul>
@@ -277,11 +277,13 @@ export default {
     },
     toggleSelectedParentMenu() {
       const currentParentUrl = this.$route.path
+      
         .split("/")
         .filter(x => x !== "")[1];
 
       if (currentParentUrl !== undefined || currentParentUrl !== null) {
         this.selectedParentMenu = currentParentUrl.toLowerCase();
+        //this.selectedParentMenu = "runnings";
       } else {
         this.selectedParentMenu = "runnings";
       }
