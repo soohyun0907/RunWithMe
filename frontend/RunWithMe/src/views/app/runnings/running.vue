@@ -31,15 +31,15 @@
             <section class="bottom-bar">
               <div v-if="!isPause">
                 <button type="button" @click="startLocationUpdates" class="btn round btn btn-success btn-icon rounded-circle m-1">
-                <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
+                <span class="ul-btn__icon"> <i style="font-size:2em; margin-left: 10px;" class="i-Start-2"></i></span>
                 </button>
               </div>
               <div v-if="isPause">
                 <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
-                <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
+                <span class="ul-btn__icon"> <i style="font-size:2em; margin-left: 10px;" class="i-Start-2"></i></span>
                 </button>
                   <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
-                <span class="ul-btn__icon"> <i style="font-size:3em;ㅇ" class="i-Stop-2"></i></span>
+                <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Stop-2"></i></span>
               </button>
 
               </div>
@@ -49,11 +49,11 @@
             <section class="bottom-bar">
 
               <button type="button" @click="stopLocationUpdates" class="btn round btn btn-danger btn-icon rounded-circle m-1">
-                <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Pause"></i></span>
+                <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Pause"></i></span>
               </button>
 
               <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
-                <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Stop-2"></i></span>
+                <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Stop-2"></i></span>
               </button>
 
             </section>
@@ -136,29 +136,29 @@ export default {
       isPause: false,
       //splide options
       options: {
-          rewind : true,
-          perPage:1,
-          width  : 400,
-          gap    : '1rem',
+        rewind : true,
+        perPage:1,
+        width  : 400,
+        gap    : '1rem',
+      },
+      records:[
+        {"userId": 1,
+        "accDistance": 1.012,
+        "accTime": 305,
         },
-        records:[
-            {"userId": 1,
-            "accDistance": 1.012,
-            "accTime": 305,
-            },
-            {"userId": 1,
-            "accDistance": 2.112,
-            "accTime": 360,
-            },
-            {"userId": 1,
-            "accDistance": 3.001,
-            "accTime": 368,
-            },
-            {"userId": 1,
-            "accDistance": 3.123,
-            "accTime": 412,
-            }
-        ],
+        {"userId": 1,
+        "accDistance": 2.112,
+        "accTime": 360,
+        },
+        {"userId": 1,
+        "accDistance": 3.001,
+        "accTime": 368,
+        },
+        {"userId": 1,
+        "accDistance": 3.123,
+        "accTime": 412,
+        }
+      ],
     };
   },
   mounted() {
@@ -172,7 +172,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(["userInfo","defaultProfile"]),
   },
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
@@ -438,8 +438,13 @@ export default {
         })
         .catch((err) => {
           console.log("savePosition Error")
-          console.log(err);
         });
+        
+        http.get(`runnings/get/${this.userInfo.userId}`)
+        .then(data =>{
+          this.records = data.data
+          console.log(data.data)
+        })
     },
 
     endLocationUpdates() {
@@ -594,6 +599,10 @@ export default {
 .myRecord {
   width:30vw; 
   float:left;
+}
+.btn-icon{
+  width:60px !important;
+  height:60px !important;
 }
 .running button {
   text-align: center;

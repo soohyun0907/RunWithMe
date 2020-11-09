@@ -70,9 +70,17 @@
         <div class="ul-widget1">
           <div class="ul-widget__item ul-widget4__users" v-for="(ranker,index) in rankList" :index="index" :key="ranker.rankerId">
             <h5 style="margin-right:5px;">{{ index+1 }} </h5>
-              <div class="ul-widget4__img">
+              <div v-if="ranker.userId.profile!=null" class="ul-widget4__img">
                 <img
                   :src="ranker.userId.profile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+              </div>
+               <div v-else class="ul-widget4__img">
+                <img
+                  :src="defaultProfile"
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
@@ -189,7 +197,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["events"])
+    ...mapGetters(["events","defaultProfile"])
   },
   created() {
     this.getChallengesCommingSoon();
@@ -297,7 +305,11 @@ export default {
                 obj.mapImg = data.data.runnings.thumbnail;
               }
               obj.userId = data.data.friends[i].userId;
-              obj.profileImg = data.data.friends[i].profile;
+              if(data.data.friends[i].profile==null){
+                obj.profileImg = this.defaultProfile
+              }else {
+                obj.profileImg = data.data.friends[i].profile;
+              }
               obj.title = data.data.friends[i].username;
               this.friendsFeed.push(obj);
             }

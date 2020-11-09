@@ -10,7 +10,7 @@
         "
       ></div>
       <div class="user-info">
-        <div v-if="userInfo.profile!=null || userInfo.profile!=''">
+        <div v-if="userInfo.profile!=null">
           <img
             class="profile-picture avatar-lg mb-2"
             :src="userInfo.profile"
@@ -20,7 +20,7 @@
         <div v-else>
           <img
             class="profile-picture avatar-lg mb-2"
-            :src="defaultImage"
+            :src="defaultProfile"
             alt=""/>
         </div>
 
@@ -40,7 +40,7 @@
               <ul class="timeline clearfix">
                 <b-card title="최근 런닝 기록" class="heading text-primary mb-30">
                   <div role="tablist">
-                    <div v-for="(running,i) in areaRunning" :index="i"  :key="running.id">
+                    <div v-for="(running,i) in areaRunning" :index="i" :key="running.id">
                       <b-card no-body class="ul-card__border-radius">
                         <!-- 접혀있을때 보이는 부분 -->
                         <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
@@ -48,7 +48,7 @@
                             <span>
                               <img class="rounded mb-2" :src="running.thumbnail" @error="defaultImage" alt="썸넬" width=30px height=30px style="margin-left:-10px;"/>
                             </span>
-                            {{running.endTime}} 런닝
+                            {{running.end[0]}}일 런닝
                             
                           </b-button>
                         </b-card-header>
@@ -57,12 +57,12 @@
                           <b-card-body>
                             <img class="rounded mb-2" :src="running.thumbnail" alt="running Path" width=100% height=150px/>
                             <b-card-text>
-                              <h5><code>{{running.endTime}}</code> 런닝 기록.</h5>
+                              <h5><code>{{running.end[0]}}</code>일 런닝 기록.</h5>
                             </b-card-text>
-                            <b-card-text>총 런닝 시간 : <strong>{{running.accTime}}초</strong></b-card-text>
+                            <b-card-text>총 런닝 시간 : <strong>{{running.minute}}분 {{running.second}}초</strong></b-card-text>
                             <b-card-text>총 런닝 거리 : <strong>{{running.accDistance}} km</strong></b-card-text>
-                            <b-card-text>시작 시간 : <strong>{{running.startTime}}</strong> </b-card-text>
-                            <b-card-text>종료 시간 : <strong>{{running.endTime}}</strong> </b-card-text>
+                            <b-card-text>시작 시간 : <strong>{{running.start[1]}}</strong> </b-card-text>
+                            <b-card-text>종료 시간 : <strong>{{running.end[1]}}</strong> </b-card-text>
                           </b-card-body>
                         </b-collapse>
                       </b-card>
@@ -90,7 +90,7 @@
                             <span>
                               <img class="rounded mb-2" :src="running.thumbnail" @error="defaultImage" alt="썸넬" width=30px height=30px style="margin-left:-10px;"/>
                             </span>
-                            {{running.endTime}} 런닝
+                            {{running.end[0]}}일 런닝
                             
                           </b-button>
                         </b-card-header>
@@ -99,12 +99,12 @@
                           <b-card-body>
                             <img class="rounded mb-2" :src="running.thumbnail" alt="running Path" width=100% height=150px/>
                             <b-card-text>
-                              <h5><code>{{running.endTime}}</code> 런닝 기록.</h5>
+                              <h5><code>{{running.end[0]}}</code>일 런닝 기록.</h5>
                             </b-card-text>
-                            <b-card-text>총 런닝 시간 : <strong>{{running.accTime}}초</strong></b-card-text>
+                            <b-card-text>총 런닝 시간 : <strong>{{running.minute}}분 {{running.second}}초</strong></b-card-text>
                             <b-card-text>총 런닝 거리 : <strong>{{running.accDistance}} km</strong></b-card-text>
-                            <b-card-text>시작 시간 : <strong>{{running.startTime}}</strong> </b-card-text>
-                            <b-card-text>종료 시간 : <strong>{{running.endTime}}</strong> </b-card-text>
+                            <b-card-text>시작 시간 : <strong>{{running.start[1]}}</strong> </b-card-text>
+                            <b-card-text>종료 시간 : <strong>{{running.end[1]}}</strong> </b-card-text>
                           </b-card-body>
                         </b-collapse>
                       </b-card>
@@ -149,7 +149,6 @@ export default {
     this.getRunningsbyArea()
     this.getRunnings()
     console.log(this.userInfo)
-    console.log("머하냐고"+ this.userInfo.profile)
     if (window.google && window.google.maps) {
       this.initMap();
     } else {
@@ -163,13 +162,34 @@ export default {
       http.get(`runnings/areas`)
       .then(data => {
         this.areaRunning=data.data.data
-        console.log(this.areaRunning)
+        for(var i=0;i<this.areaRunning.length;i++){
+        if(this.areaRunning[i].accTime>=60){
+          this.areaRunning[i]['minute']=this.areaRunning[i].accTime/60
+        }else{
+          this.areaRunning[i]['minute']=0
+        }
+          this.areaRunning[i].accDistance = this.areaRunning[i].accDistance.toFixed(2)
+          this.areaRunning[i]['second']=this.areaRunning[i].accTime%60
+          this.areaRunning[i]['start'] = this.areaRunning[i].startTime.split("T")
+          this.areaRunning[i]['end'] = this.areaRunning[i].endTime.split("T")
+        }
       })
     },
     getRunnings(){
       http.get(`runnings/${this.userInfo.userId}`)
       .then(data => {
         this.allRunning=data.data.data
+        for(var i=0;i<this.allRunning.length;i++){
+        if(this.allRunning[i].accTime>=60){
+          this.allRunning[i]['minute']=this.allRunning[i].accTime/60
+        }else{
+          this.allRunning[i]['minute']=0
+        }
+          this.allRunning[i].accDistance = this.allRunning[i].accDistance.toFixed(2)
+          this.allRunning[i]['second']=this.allRunning[i].accTime%60
+          this.allRunning[i]['start'] = this.allRunning[i].startTime.split("T")
+          this.allRunning[i]['end'] = this.allRunning[i].endTime.split("T")
+        }
         console.log(this.allRunning)
       })
     },
