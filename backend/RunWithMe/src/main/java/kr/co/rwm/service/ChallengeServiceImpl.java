@@ -162,6 +162,13 @@ public class ChallengeServiceImpl implements ChallengeService {
 			if ((cu.getChallengeId().getEndTime()).isBefore(today) 
 					|| cu.getChallengeId().getStartTime().isAfter(today))
 				continue;
+			
+			// challenge update
+			Challenge challenge = challengeRepository.findByChallengeId(cu.getChallengeId().getChallengeId()).get();
+			challenge.setDistanceCurrent(challenge.getDistanceCurrent()+accDistance);
+			challengeRepository.save(challenge);
+			
+			// challenge_user update
 			newDistance = cu.getAccDistance() + accDistance;
 			cu.setAccDistance(newDistance);
 			challengeUserRepository.save(cu); // update challenge user
@@ -264,7 +271,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 		today = today.withHour(23).withMinute(59).withSecond(59).withNano(0);
 		for(ChallengeUser cu: challengeUserList) {
 			Challenge challenge = challengeRepository.findByChallengeId(cu.getChallengeId().getChallengeId()).get();
-			if (challenge.getEndTime().isAfter(today)) continue;
+			if (challenge.getEndTime().isBefore(today)) continue;
 			
 			challenge.setParticipant(challenge.getParticipant()-1);
 			challenge.setDistanceCurrent(challenge.getDistanceCurrent()-cu.getAccDistance());
