@@ -1,14 +1,7 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Neighborhood List'" :folder="'Runnings'" />
+    <breadcumbcustom :title="'주변 러너 추천'" :desc="area" />
     <div class="ul-contact-page">
-      <div>
-        <h4 style="margin-top: 5px">
-          주변 러너 추천
-        </h4>
-        <span>| {{ userInfo.gugunId.sidoId.sidoName }}
-          {{ userInfo.gugunId.gugunName }} </span>
-      </div>
       <div class="row" style="margin-top: 5px">
         <b-col lg="12" md="12" class="mb-30 text-center">
           <b-form-group id="input-group-2" label-for="input-2">
@@ -86,6 +79,7 @@ export default {
   },
   mounted() {
     this.getRunners();
+    this.area = this.userInfo.gugunId.sidoId.sidoName + " " + this.userInfo.gugunId.gugunName;
   },
   computed: {
     ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
