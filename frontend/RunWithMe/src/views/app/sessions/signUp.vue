@@ -175,7 +175,7 @@ import dropdown from "vue-dropdowns";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignUp",
+    title: "회원가입",
   },
 
   data() {

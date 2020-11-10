@@ -20,6 +20,7 @@
                                     {{ challenge.title }}
                                 </h5>
                                 <a class="text-default collapsed" v-b-toggle="'collapse-'+challenge.challengeId">
+                                    <b-badge pill variant="success m-2" v-if="challenge.isParticipate">참여 중</b-badge>
                                     <i class="i-Arrow-Down-2 t-font-boldest text-primary"></i>
                                 </a>
                             </div>
@@ -43,7 +44,7 @@
                                     :value="challenge.distanceCurrent"
                                     animated show-progress>
                                 </b-progress>
-                                <b-button variant="info ripple m-1" @click="showConfirmModal(challenge.challengeId, challenge.title, challenge.personalDistanceGoal)">신청하기</b-button>
+                                <b-button v-if="!challenge.isParticipate" variant="info ripple m-1" @click="showConfirmModal(challenge.challengeId, challenge.title, challenge.personalDistanceGoal)">신청하기</b-button>
                             </b-collapse>
                         </b-card>
                     </b-col>
@@ -67,6 +68,7 @@
                                     {{ challenge.title }}
                                 </h5>
                                 <a class="text-default collapsed" v-b-toggle="'collapse-'+challenge.challengeId">
+                                    <b-badge pill variant="success m-2" v-if="challenge.isParticipate">참여 중</b-badge>
                                     <i class="i-Arrow-Down-2 t-font-boldest text-primary"></i>
                                 </a>
                             </div>
@@ -90,7 +92,7 @@
                                     :value="challenge.distanceCurrent"
                                     animated show-progress>
                                 </b-progress>
-                                <b-button variant="info ripple m-1" @click="showConfirmModal(challenge.challengeId, challenge.title, challenge.personalDistanceGoal)">신청하기</b-button>
+                                <b-button v-if="!challenge.isParticipate" variant="info ripple m-1" @click="showConfirmModal(challenge.challengeId, challenge.title, challenge.personalDistanceGoal)">신청하기</b-button>
                             </b-collapse>
                         </b-card>
                     </b-col>
@@ -114,6 +116,7 @@
                                     {{ challenge.title }}
                                 </h5>
                                 <a class="text-default collapsed" v-b-toggle="'collapse-'+challenge.challengeId">
+                                    <b-badge pill variant="dark m-2" v-if="challenge.isParticipate">참여 완료</b-badge>
                                     <i class="i-Arrow-Down-2 t-font-boldest text-primary"></i>
                                 </a>
                             </div>
@@ -166,6 +169,7 @@ export default {
         this.getChallengesIng();
         this.getChallengesCommingSoon();
         this.getChallengesDone();
+        this.getChallengesParticipate();
     },
     mounted() {
       this.$store.commit('closeSidebar')
@@ -216,10 +220,13 @@ export default {
                             obj.donateCurrent = element.donateCurrent;
                             obj.personalDistanceGoal = element.personalDistanceGoal;
                             obj.participant = element.participant;
+                            obj.isParticipate = false;
                             this.challengesIng.push(obj);
                         });
                         if(this.challengesIng.length == 0)
                             this.haveChallengesIng = false;
+
+                        // console.log(this.challengesIng);
                     }
                 })
                 .catch((error) => {
@@ -247,6 +254,7 @@ export default {
                             obj.donateCurrent = element.donateCurrent;
                             obj.personalDistanceGoal = element.personalDistanceGoal;
                             obj.participant = element.participant;
+                            obj.isParticipate = false;
                             this.challengesSoon.push(obj);
                         });
                         if(this.challengesSoon.length == 0)
@@ -278,10 +286,44 @@ export default {
                             obj.donateCurrent = element.donateCurrent;
                             obj.personalDistanceGoal = element.personalDistanceGoal;
                             obj.participant = element.participant;
+                            obj.isParticipate = false;
                             this.challengesDone.push(obj);
                         });
                         if(this.challengesDone.length == 0)
                             this.haveChallengesDone = false;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return;
+                });
+        },
+        getChallengesParticipate() {
+            http
+                .get("challenges/participation")
+                .then(({data}) => {
+                    if(data.status==200){
+                        // console.log(data.data);
+                        this.challengesIng.forEach(element => {
+                            data.data.ingP.forEach(element2 => {
+                                if(element.challengeId == element2.challengeId.challengeId)
+                                    element.isParticipate = true;
+                            })
+                        })
+
+                        this.challengesSoon.forEach(element => {
+                            data.data.beforeP.forEach(element2 => {
+                                if(element.challengeId == element2.challengeId.challengeId)
+                                    element.isParticipate = true;
+                            })
+                        })
+
+                        this.challengesDone.forEach(element => {
+                            data.data.afterP.forEach(element2 => {
+                                if(element.challengeId == element2.challengeId.challengeId)
+                                    element.isParticipate = true;
+                            })
+                        })
                     }
                 })
                 .catch((error) => {

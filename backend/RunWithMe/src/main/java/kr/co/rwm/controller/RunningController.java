@@ -99,7 +99,6 @@ public class RunningController {
 		}
 	}
 	
-	
 	// stop 눌렀을 때 redis에 있던 record를 꺼내서 db에 저장한다.
 	@PostMapping
 	public ResponseEntity saveStopRecord(@RequestBody Map<String, Object> runningInfo, HttpServletRequest request){

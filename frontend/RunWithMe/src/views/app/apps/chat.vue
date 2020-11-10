@@ -17,53 +17,91 @@
                 class="form-control form-control-rounded"
                 id="search"
                 v-model="search"
-                placeholder="Search contacts"
+                placeholder="친구 이름을 입력하세요"
               />
             </div>
           </div>
 
           <vue-perfect-scrollbar
             :settings="{ suppressScrollX: true, wheelPropagation: false }"
-            class="contacts-scrollable perfect-scrollbar  rtl-ps-none ps scroll"
+            class="contacts-scrollable perfect-scrollbar rtl-ps-none ps scroll"
           >
             <div>
-
               <div
                 class="mt-3 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
               >
-                Contacts
+                Contacts(Online)
               </div>
 
               <div
-                class="p-3 d-flex border-bottom align-items-center contact"
-                v-for="contact in filterContacts"
+                v-for="contact in filterContacts.on"
                 :key="contact.userId"
               >
+              <div
+                   class="p-3 d-flex border-bottom align-items-center contact online"
+                  v-if="contact.username.includes(search)"
+                >
                 <!-- <img
                   :src="contact.avatar"
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
                 /> -->
-                <h6 @click ="choice(contact.userId)" class="">{{ contact.username }}</h6>
+                <h6 @click="choice(contact.userId)" class="">
+                  {{ contact.username }}
+                </h6>
+                </div>
+              </div>
+              <div
+                class="mt-3 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
+              >
+                Contacts(Offline)
               </div>
 
+              <div
+                v-for="contact in filterContacts.off"
+                :key="contact.userId"
+              >
+                <div
+                  class="p-3 d-flex border-bottom align-items-center contact offline"
+                  v-if="contact.username.includes(search)"
+                >
+                  <!-- <img
+                  :src="contact.avatar"
+                  alt=""
+                  class="avatar-sm rounded-circle mr-3"
+                /> -->
+                  <h6 @click="choice(contact.userId)" class="">
+                    {{ contact.username }}
+                  </h6>
+                </div>
+              </div>
 
               <div
                 class="mt-4 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
               >
                 Matching
               </div>
-              <div style="margin : 0 80px;">
-              <button type="button" class="btn round btn-dribble btn-icon rounded-circle m-1"
-                @click ="matching('female')"
-                style="width:40px; height:40px;">
-                      <span class="ul-btn__icon" ><i class="text-20 i-Girl"></i></span>
-              </button>
-              <button type="button" class="btn round btn-twitter btn-icon rounded-circle m-1"
-                 @click ="matching('male')"
-                style="width:40px; height:40px;">
-                  <span class="ul-btn__icon" ><i class="text-20 i-Cool-Guy"></i></span>
-              </button>
+              <div style="margin: 0 80px">
+                <button
+                  type="button"
+                  class="btn round btn-dribble btn-icon rounded-circle m-1"
+                  @click="matching('female')"
+                  style="width: 40px; height: 40px"
+                >
+                  <span class="ul-btn__icon"
+                    ><i class="text-20 i-Girl"></i
+                  ></span>
+                </button>
+                <button
+                  type="button"
+                  class="btn round btn-twitter btn-icon rounded-circle m-1"
+                  @click="matching('male')"
+                  style="width: 40px; height: 40px"
+                >
+                  <span class="ul-btn__icon"
+                    ><i class="text-20 i-Cool-Guy"></i
+                  ></span>
+                </button>
               </div>
               <div
                 class="p-3 d-flex border-bottom align-items-center contact"
@@ -76,12 +114,14 @@
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
                 />
-                <h6 @click ="choice(contact.userId)" class="">{{ contact.username }}</h6>
+                <h6 @click="choice(contact.userId)" class="">
+                  {{ contact.username }}
+                </h6>
               </div>
             </div>
           </vue-perfect-scrollbar>
         </div>
-      </div> 
+      </div>
       <!-- 채팅사이드 바 -->
 
       <div class="chat-content-wrap sidebar-content">
@@ -98,7 +138,8 @@
               class="avatar-sm rounded-circle mr-2"
             /> -->
             <p class="m-0 text-title text-16 flex-grow-1">
-               {{ roomName }} <!--+ "/" + roomDetail.roomId}} -->
+              {{ roomName }}
+              <!--+ "/" + roomDetail.roomId}} -->
             </p>
           </div>
         </div>
@@ -107,9 +148,9 @@
           class="chat-content perfect-scrollbar rtl-ps-none ps scroll"
           id="chatContainer"
         >
-
           <div>
-            <div onscroll="chat_on_scroll()"
+            <div
+              onscroll="chat_on_scroll()"
               class="list-group-item"
               v-for="(message, index) in messages"
               :key="index"
@@ -127,7 +168,7 @@
                     </p>
                     <!-- <span class="text-small text-muted">25 min ago</span> -->
                   </div>
-                  <p class="m-0" >{{ message.message }}</p>
+                  <p class="m-0">{{ message.message }}</p>
                 </div>
                 <img
                   :src="message.img"
@@ -148,7 +189,9 @@
                 />
                 <div class="message flex-grow-1" style="width: 70%">
                   <div class="d-flex">
-                    <p class="mb-1 text-title text-16 flex-grow-1">{{message.sender}}</p>
+                    <p class="mb-1 text-title text-16 flex-grow-1">
+                      {{ message.sender }}
+                    </p>
                     <!-- <span class="text-small text-muted">24 min ago</span> -->
                   </div>
                   <p class="m-0">{{ message.message }}</p>
@@ -178,13 +221,11 @@
                 class="btn btn-icon btn-rounded btn-primary mr-2"
                 type="button"
                 @click="sendMessage('TALK')"
-              >
-              </button>
+              ></button>
             </div>
           </form>
         </div>
         <!-- END 메시지 보내기 -->
-      
       </div>
     </div>
   </div>
@@ -193,90 +234,84 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
-import { isMobile } from 'mobile-device-detect';
+import { isMobile } from "mobile-device-detect";
 import http from "@/utils/http-common";
-import Stomp from 'webstomp-client';
-import SockJS from 'sockjs-client';
+import Stomp from "webstomp-client";
+import SockJS from "sockjs-client";
 //import authData from '@/store/modules/authData';
 
-
-
 export default {
-
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Chat"
+    title: "Chat",
   },
   data() {
     return {
       recentContacts: [],
       search: "",
-      isMobile: false,
+      isMobile: true,
       roomId: "",
       roomName: "",
-      msg: '',
+      msg: "",
       messages: [],
       testUserId: "",
       back: "[알림]",
-      message:"",
-      token: '',
+      message: "",
+      token: "",
       userCount: 0,
-      sock : "",
-      ws :"",
-      matchUsers : []
+      sock: "",
+      ws: "",
+      matchUsers: [],
     };
   },
   methods: {
-    ...mapActions(["changeSelectedUser", "createAndSelectChatroomAction","sendMessages", ]),
+    ...mapActions([
+      "changeSelectedUser",
+      "createAndSelectChatroomAction",
+      "sendMessages",
+    ]),
     ...mapMutations(["selectUserLists"]),
 
-    matching: function(gender){
+    matching: function (gender) {
       var sex = gender;
-      http
-      .get("/friends/match/"+sex, 
-      )
-      .then((data) =>{
+      http.get("/friends/match/" + sex).then((data) => {
         console.log(data);
         this.matchUsers = data.data.data;
-      })
+      });
     },
 
-
-    choice: function(uid){
+    choice: function (uid) {
       // this.createAndSelectChatroomAction(uid);
-      if(this.ws)
-        this.ws.disconnect();
+      if (this.ws) this.ws.disconnect();
       this.isMobile = false;
-      this.messages = []
+      this.messages = [];
       console.log(this.auth);
       this.createAndSelectChatroom(uid);
     },
 
-    createAndSelectChatroom: function(uid){
+    createAndSelectChatroom: function (uid) {
       http
-      .post("/match/room", 
-      {
-          guestId : uid
-      })
-      .then((data) =>{
+        .post("/match/room", {
+          guestId: uid,
+        })
+        .then((data) => {
           console.log(data);
           var roomInfo = data.data.data;
           this.roomId = roomInfo.roomId;
-          this.roomName =  roomInfo.name;
+          this.roomName = roomInfo.name;
           this.enterChat();
-      })
+        });
     },
 
-    send : function(type){
-      console.log(type)
-      console.log(this.msg)
-      var payload = {"type": type, "msg":this.msg}
+    send: function (type) {
+      console.log(type);
+      console.log(this.msg);
+      var payload = { type: type, msg: this.msg };
       this.sendMessages(payload);
     },
 
-    getContactList : function(){
-      if(this.isMobile == false)
-        this.selectUserLists();
+    getContactList: function () {
+      if (this.isMobile == false) this.selectUserLists();
 
       this.isMobile = !this.isMobile;
     },
@@ -287,65 +322,76 @@ export default {
         objDiv.scrollTop = objDiv.scrollHeight;
       }
     },
-    chat_on_scroll(){
-      var obj = document.getElementById("chatList")
-      obj.scrollTop = obj.scroolHeight
-      console.log("hihi")
+    chat_on_scroll() {
+      var obj = document.getElementById("chatList");
+      obj.scrollTop = obj.scroolHeight;
+      console.log("hihi");
     },
-    enterChat: function(){
+    enterChat: function () {
       var _this = this;
 
-      http
-          .get('/match/user').then(response => {
-            
-              console.log(";;lll")
-              console.log(response.data);
-              this.testUserId = response.data;
+      http.get("/match/user").then((response) => {
+        console.log(";;lll");
+        console.log(response.data);
+        this.testUserId = response.data;
 
-              _this.sock = new SockJS("http://localhost:8080/ws-stomp");
-              _this.ws = Stomp.over(_this.sock);
-              console.log("들어는 오냐")
-              console.log(this.auth);
+        _this.sock = new SockJS("http://localhost:8080/ws-stomp");
+        // _this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
+        _this.ws = Stomp.over(_this.sock);
+        console.log("들어는 오냐");
+        console.log(this.auth);
 
-              _this.token = this.auth;
+        _this.token = this.auth;
 
-              console.log("token:" + _this.token)
+        console.log("token:" + _this.token);
 
-              console.log("before")
-              console.log(_this.ws)
-              console.log("after")
-              console.log("ri: " + _this.roomId)
+        console.log("before");
+        console.log(_this.ws);
+        console.log("after");
+        console.log("ri: " + _this.roomId);
 
-              _this.ws.connect({"token":_this.token}, function(frame) {
-                console.log("dd")
-                _this.ws.subscribe("/sub/chat/room/"+ _this.roomId, function(message) {
-                  console.log("subscribe")
-                      var recv = JSON.parse(message.body);
-                      console.log("sub")
-                      console.log(recv)
-                      _this.recvMessage(recv);
-                });
-              }, function(error) {
-                  alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
-              });
-        });
+        _this.ws.connect(
+          { token: _this.token },
+          function (frame) {
+            console.log("dd");
+            _this.ws.subscribe("/sub/chat/room/" + _this.roomId, function (
+              message
+            ) {
+              console.log("subscribe");
+              var recv = JSON.parse(message.body);
+              console.log("sub");
+              console.log(recv);
+              _this.recvMessage(recv);
+            });
+          },
+          function (error) {
+            alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
+          }
+        );
+      });
     },
-    sendMessage: function(type) {
-      console.log("ri: " + localStorage.getItem("roomId"))
-      var payload = {"type": type, "msg":this.message}
+    sendMessage: function (type) {
+      console.log("ri: " + localStorage.getItem("roomId"));
+      var payload = { type: type, msg: this.message };
       console.log("totototo: " + this.token);
-      var header = {"AUTH":this.token};
-      var body = JSON.stringify({type:payload.type, roomId: this.roomId, message:payload.msg});
+      var header = { AUTH: this.token };
+      var body = JSON.stringify({
+        type: payload.type,
+        roomId: this.roomId,
+        message: payload.msg,
+      });
       this.ws.send("/pub/chat/message", body, header);
-      this.message = '';
+      this.message = "";
     },
-    recvMessage: function(recv) {
-
-        this.userCount = recv.userCount;
-        this.messages.push({"type":recv.type,"sender":recv.sender,"message":recv.message, "img": recv.imgUrl})
-    }
-
-
+    recvMessage: function (recv) {
+      this.userCount = recv.userCount;
+      this.messages.push({
+        type: recv.type,
+        sender: recv.sender,
+        message: recv.message,
+        img: recv.imgUrl,
+      });
+    },
   },
 
   computed: {
@@ -356,40 +402,40 @@ export default {
       "getSelectedUser",
       "getRoomInfo",
       "getMessages",
-      "auth"
+      "auth",
     ]),
 
     filterContacts() {
+      // console.log("*****************")
+      // console.log(this.getContactLists)
+      // console.log(this.getContactLists.off)
+      // console.log(this.getContactLists.on)
       return this.getContactLists;
     },
 
-    roomDetail(){
+    roomDetail() {
       return this.getRoomInfo;
     },
 
-    updateMessages(){
+    updateMessages() {
       return this.getMessages;
     },
-    
-
   },
 
-  created: function() {
+  created: function () {
     // console.log(this.getSelectedUser);
-    this.getCurrentUser.forEach(currentUser => {
-      currentUser.chatInfo.forEach(user => {
-        this.getContactLists.filter(contact => {
-          if (user.contactId == contact.id) {
-            this.recentContacts.push(contact);
-          }
-        });
-      });
-    });
+    // this.getCurrentUser.forEach(currentUser => {
+    //   currentUser.chatInfo.forEach(user => {
+    //     this.getContactLists.filter(contact => {
+    //       if (user.contactId == contact.id) {
+    //         this.recentContacts.push(contact);
+    //       }
+    //     });
+    //   });
+    // });
 
-    
     // 친구목록 불러오기
     this.selectUserLists();
-
   },
   updated: function () {
     var obj = document.getElementById("chatContainer");
