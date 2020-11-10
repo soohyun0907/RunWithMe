@@ -461,7 +461,6 @@ export default {
       // }
 
 	    this.thumbnail = staticM_URL
-      window.open(staticM_URL);
     },
     stopLocationUpdates() {
       this.isPause = true;
@@ -501,6 +500,9 @@ export default {
     endLocationUpdates() {
       this.stopLocationUpdates();
       this.getScreenShot();
+      this.speed = (this.checkOneKm * 1000) / this.checkSecond;
+      this.show_speed = this.speed.toFixed(2)
+           
       this.savePosition();
       this.isPause=false;
       this.running = false;

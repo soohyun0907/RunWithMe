@@ -152,6 +152,10 @@ export default {
   mounted() {
     this.$store.commit('closeSidebar')
     this.friendsRun()
+    this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+    this.echart4.xAxis.data.push(this.records[i].accDistance)
+    
+  
   },
   computed: {
     ...mapGetters(["myRunning"]),
@@ -168,14 +172,20 @@ export default {
             console.log(data.data.data);
             console.log("friendsRun - records")
             console.log(data.data.data.records);
+
+            for(var i=0; i<this.records.length; i++){
+                if(i!=this.records.length-1)  {
+                    this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
+                }
+                this.records[i].accDistance+=" km"
+            }
         
             this.timeSplitS = this.result.running.startTime.split('T')
             this.timeSplitE = this.result.running.endTime.split('T')
-            this.result.running.accDistance=parseFloat(parseFloat(this.myRunning.accDistance).toFixed(2))
-            if(this.result.accDistance!=0.00 ||this.result.accTime!=0.00 ||this.result.accDistance!=0 || this.result.accTime!=0){
+            if(this.result.accDistance==0.00 ||this.result.accTime==0.00 ||this.result.accDistance==0 || this.result.accTime==0){
                 this.avgSpeed=0;
             }else {
-                this.avgSpeed = this.avgSpeed.toFixed(2)
+                this.avgSpeed = this.result.running.accDistance/this.result.running.accTime
             }
         });
     },
