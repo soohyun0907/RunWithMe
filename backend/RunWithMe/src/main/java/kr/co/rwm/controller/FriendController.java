@@ -1,5 +1,6 @@
 package kr.co.rwm.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +48,30 @@ public class FriendController {
 			uid = jwtTokenProvider.getUserIdFromJwt(token);
 			List<User> list = friendService.list(uid);
 			return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_FRIENDLIST_SUCCESS, list), HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Response> (new Response(StatusCode.FORBIDDEN,ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
+		}
+	}
+	/**
+	 * 온라인 중인 내 친구들 목록 조회 
+	 * @param request
+	 * @return
+	 */
+	@GetMapping("/contacts/online")
+	public ResponseEntity onlineContacts(HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		int uid = 0; 
+		System.out.println("token: " + token);
+		if(jwtTokenProvider.validateToken(token)) {
+			uid = jwtTokenProvider.getUserIdFromJwt(token);
+			Map<String,List<User>> result = new HashMap<String, List<User>>();
+			List<User> list = friendService.offlineList(uid);
+			result.put("off", list);
+			list = friendService.onlineList(uid);
+			result.put("on", list);
+			
+			System.out.println("[TEST]"+ list.size());
+			return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_FRIENDLIST_SUCCESS, result), HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response> (new Response(StatusCode.FORBIDDEN,ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}
