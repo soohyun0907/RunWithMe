@@ -84,7 +84,7 @@
                     <input
                       type="radio"
                       name="orderStatus"
-                      value=1
+                      value=2
                       v-model="gender"
                     />
                     <span>여자</span>
@@ -95,7 +95,7 @@
                     <input
                       type="radio"
                       name="orderStatus"
-                      value=2
+                      value=1
                       v-model="gender"
                     />
                     <span>남자</span>
