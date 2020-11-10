@@ -82,8 +82,8 @@ public class RunningController {
 	}
 	
 	// swipe했을 때 redis에 있던 record를 보내준다.
-	@GetMapping("/temp/{userId}")
-	public ResponseEntity getTempRecord(@PathVariable int userId, HttpServletRequest request) {
+	@GetMapping("/temp")
+	public ResponseEntity getTempRecord(HttpServletRequest request) {
 		System.out.println("running/controller/temp/getRecord");
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
