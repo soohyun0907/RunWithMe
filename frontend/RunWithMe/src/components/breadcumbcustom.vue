@@ -3,7 +3,7 @@
        <div class="breadcrumbcustom">
             <slot name="header">
                <h1>{{title}}</h1>
-                    <!-- <span>| {{ desc }}</span> -->
+                    <span>| {{ desc }}</span>
             </slot>
         </div>
         <div class="separator-breadcrumb border-top"></div>
