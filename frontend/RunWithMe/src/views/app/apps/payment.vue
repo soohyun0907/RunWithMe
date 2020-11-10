@@ -7,6 +7,7 @@
       align="left"
     />
 
+    <h5>현재 마일리지 : {{ userInfo.mileage }} 원</h5>
     <div align="left">
       <input
         style="width: 28vh; float: left"
@@ -45,6 +46,9 @@ export default {
       money: "",
       isMobile: "",
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   },
   mounted() {
     this.$store.commit("closeSidebar");
