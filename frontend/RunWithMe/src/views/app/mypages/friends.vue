@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Friends List'" :folder="'MyPage'" />
+    <breadcumb :page="'친구 목록'" :folder="'MyPage'" />
     <!-- <div class="wrapper"> -->
     <b-card>
       <vue-good-table
@@ -14,6 +14,7 @@
           enabled: true,
           mode: 'records'
         }"
+        rowsPerPageText="d"
         styleClass="tableOne vgt-table"
         :rows="rows"
       >
@@ -62,6 +63,7 @@
             </div>
           </span>
           <span v-else-if="props.column.field == 'gugunId.gugunName'">
+            {{props.row.gugunId.sidoId.sidoName}} {{props.row.gugunId.gugunName}}
           </span>
           <span v-else-if="props.column.field == 'username'">
             <a href="">
@@ -93,7 +95,7 @@
 
 <script>
 import http from "@/utils/http-common";
-import { mapGetters } from "vuex";
+import { mapGetters,mapMutations } from "vuex";
 
 export default {
   metaInfo: {
@@ -139,8 +141,10 @@ export default {
   },
   mounted() {
     this.getFriendList()
+    this.$store.commit('closeSidebar')
   },
   methods: {
+    ...mapMutations(["closeSidebar"]),
     chatFriend(friendId){
       alert(friendId+"친구와 채팅합니다")
     },
@@ -148,7 +152,7 @@ export default {
       http.delete(`friends/friend/${friendId}`, {
       })
       .then(data => {
-        alert('친구가 삭제되었습니다!')
+        alert('팔로우를 취소합니다.')
       })
     },
     getFriendList(){

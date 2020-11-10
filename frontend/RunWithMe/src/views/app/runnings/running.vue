@@ -393,20 +393,12 @@ export default {
             this.previous.lat = this.current.lat;
             this.previous.lng = this.current.lng;
 
-            this.poly = new google.maps.Polyline({
-              strokeColor: "#000000",
-              strokeOpacity: 1,
-              strokeWeight: 3,
-              map: this.map,
-            });
-
             var currentLatLng = new google.maps.LatLng(
               this.current.lat,
               this.current.lng
             );
             this.linePath.push(currentLatLng);
-            
-            this.encode_polyline(currentLatLng, this.poly);
+
           } else {
             var distance = this.computeDistance(this.previous, this.current);
             console.log("watchposition 이동거리" + distance);
@@ -426,9 +418,7 @@ export default {
                 this.current.lng
               );
               this.linePath.push(currentLatLng);
-              this.encode_polyline(currentLatLng, this.poly);
             }
-            // if (this.checkOneKm >= 1) {
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
               this.speed = (this.checkOneKm * 1000) / this.checkSecond;
@@ -455,22 +445,23 @@ export default {
       this.cur_marker = marker;
     },
     getScreenShot() {
+      console.log("getScreenshot - this.linePath")
       console.log(this.linePath)
 
       //google static map url
       var staticM_URL = "https://maps.googleapis.com/maps/api/staticmap?";
-      staticM_URL += "&size=520x650"; //Set the Google Map Size.
-      staticM_URL += "&zoom=16"; //Set the Google Map Zoom.
+      staticM_URL += "size=520x650&zoom=16&maptype=roadmap&";
       staticM_URL +=
-        "&maptype=roadmap&key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
-      staticM_URL +="path=color:0xff0000ff|weight:3"
-      
-      for(var i=0; i<this.linePath.length; i++){
-        staticM_URL +="|"+this.linePath[i].lat()+","+this.linePath[i].lng()
-      }
+        "key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
+        staticM_URL +="path=color:red|weight:3|enc:"
+        staticM_URL += this.encoded_polyline
+      // staticM_URL +="path=color:orange|weight:3"
+      // for(var i=0; i<this.linePath.length; i++){
+      //   staticM_URL +="|"+this.linePath[i].lat()+","+this.linePath[i].lng()
+      // }
 
-	 this.thumbnail = staticM_URL
-      //window.open(staticM_URL);
+	    this.thumbnail = staticM_URL
+      window.open(staticM_URL);
     },
     stopLocationUpdates() {
       this.isPause = true;
@@ -525,7 +516,7 @@ export default {
       console.log(this.endTime);
       let runningData = {
         userId: this.userInfo.userId,
-        polyline: this.encode_polyline,
+        polyline: this.encoded_polyline,
         startTime: this.startTime,
         endTime: this.endTime,
         accDistance: this.accumulated_distance+0.0001,
@@ -583,14 +574,15 @@ export default {
         map:this.map
       });
       console.log(this.poly)
+      this.encode_polyline(this.poly)
     },
-    encode_polyline(latLng, poly) {
-       var path = poly.getPath();
-       path.push(latLng)
-      this.encode_polyline = google.maps.geometry.encoding.encodePath(path);
+    // encode_polyline(latLng, poly) {
+    encode_polyline(poly) {
+      var path = poly.getPath();
+      this.encoded_polyline = google.maps.geometry.encoding.encodePath(path);
       console.log("here!!!")
       console.log(path)
-      console.log(this.encode_polyline)
+      console.log(this.encoded_polyline)
       // document.getElementById("encoded-polyline").value = this.encode_polyline;
  
     },

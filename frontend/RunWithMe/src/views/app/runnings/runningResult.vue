@@ -1,12 +1,19 @@
 <template>
   <div class="main-content">
-    <breadcumbcustom :title="'Running Result'"/>
+     <div style="text-align:center">
+      <p style="font-size:1.5em;margin-bottom:5px">
+         <h4> {{result.parseTimeE[0]}}일 런닝기록</h4>
+    </div>
     <div class="simpleResult">
         <div class="col">
             <div class="row">
                 <div class="col">
+                    런닝 시작 시간
+                    <h3>{{result.parseTimeS[1]}}</h3>
+                </div>
+                <div class="col">
                     런닝 종료 시간
-                    <h3>{{result.endTime}}</h3>
+                    <h3>{{result.parseTimeE[1]}}</h3>
                 </div>
             </div>
             <div class="row">
@@ -77,6 +84,8 @@ export default {
   mounted() {
     this.$store.commit('closeSidebar')
     this.result = this.myRunning
+    this.result['parseTimeE'] = this.result.endTime.split('T')
+    this.result['parseTimeS'] = this.result.startTime.split('T')
 
     this.result.accDistance=parseFloat(parseFloat(this.myRunning.accDistance).toFixed(2))
     if(this.result.accDistance!=0.00 ||this.result.accTime!=0.00 ||this.result.accDistance!=0 || this.result.accTime!=0){
@@ -86,7 +95,6 @@ export default {
     }
 
     console.log(this.result)
-    conso
 
     this.getTempRuns()
     for(var i=0; i<this.records.length; i++){
