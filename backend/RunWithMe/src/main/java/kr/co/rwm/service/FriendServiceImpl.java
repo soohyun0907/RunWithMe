@@ -3,6 +3,7 @@ package kr.co.rwm.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -68,37 +69,37 @@ public class FriendServiceImpl implements FriendService {
 
 
 	@Override
-	public Friend insert(int uid, Map<String, Integer> friendInfo) {
+	public Friend insert(int uid, int friendId) {
 		
 		Friend relation = Friend.builder()
 						.userId(uid)
 						.build();
 		
-		User user = userRepository.findByUserId(friendInfo.get("friendId"));
+		User user = userRepository.findByUserId(friendId).orElse(null);
+		if(user == null) return null;
+		
 		relation.setUser(user);
 		Friend result = friendRepository.save(relation);	 
-		
-		
-		Friend relation2 = Friend.builder()
-				.userId(friendInfo.get("friendId"))
-				.build();
-		User diff = userRepository.findByUserId(uid).get();
-		relation2.setUser(diff);
-		
-		friendRepository.save(relation2);	 
 		
 		return result;
 	}
 
 	@Override
 	@Transactional
-	public Long delete(int uid, Map<String, Integer> friendInfo) {
-
-		Long ret = friendRepository.deleteByUserIdAndUserUserId(uid, friendInfo.get("friendId"));
+	public Long delete(int uid, int friendId) {
+		System.out.println(friendId);
+		Optional<User> friend = userRepository.findByUserId(friendId);
+		if(!friend.isPresent()) return -1L;
+		
+		Long ret = friendRepository.deleteByUserIdAndUserUserId(uid, friendId);
 		return ret;
 	}
-	
-	
-	
+
+	@Override
+	public boolean findByUserIdAndFriendId(int uid, int friendId) {
+		Optional<Friend> friend = friendRepository.findByUserIdAndUserUserId(uid, friendId);
+		if(friend.isPresent()) return true;
+		else return false;
+	}
 	
 }
