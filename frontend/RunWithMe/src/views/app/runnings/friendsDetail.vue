@@ -8,7 +8,7 @@
                 <img class="profile-picture mb-2" :src="defaultProfile" height="100vw"/>
             </div>
         </div>
-        <div style="margin-top:50px">
+        <div>
         <p class="m-0 text-24" style="text-align:center;">{{friendInfo.userId.username}}</p>
         <div class="col" style="text-align:center;">
             {{friendInfo.userId.gugunId.sidoId.sidoName}} {{friendInfo.userId.gugunId.gugunName}}
@@ -94,7 +94,7 @@ const items = [
 
 export default {
     metaInfo: {
-        title: "Board",
+        title: "친구 정보",
     },
     data() {
         return {
@@ -121,7 +121,7 @@ export default {
         }
     },
     methods: {
-        ...mapMutations(["mutateProfile","closeSidebar","defaultProfile"]),
+        ...mapMutations(["mutateProfile","closeSidebar"]),
         getRunningTime(startTime, endTime) {
             var runningTime = "";
             runningTime += parseInt(endTime.hour() - startTime.hour()) + ":";
@@ -134,6 +134,9 @@ export default {
             time += origin%60 + "\"";
             return time;
         },
+    },
+    computed: {
+    ...mapGetters(["userInfo","defaultProfile"]),
     },
     mounted() {
         http.post(`ranks/search`,{
@@ -150,7 +153,4 @@ export default {
 }
 </script>
 <style scoped>
-.user-profile-img {
-    margin-bottom: 10%;
-}
 </style>
