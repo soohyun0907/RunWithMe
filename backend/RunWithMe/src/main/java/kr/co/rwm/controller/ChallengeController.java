@@ -45,8 +45,8 @@ import lombok.RequiredArgsConstructor;
  * 			김순빈, ver.0.1. 2020-10-26
  * </pre>
  * 
- * @author 김순빈
- * @version 0.1, 2020-10-26, 챌린지 관리 Controller
+ * @author 김형택
+ * @version 0.2, 2020-11-10, 챌린지 전체조회, 참여 여부 수정
  * @see None
  *
  */
@@ -117,8 +117,12 @@ public class ChallengeController {
 	@GetMapping
 	public ResponseEntity findAllChallenge() {
 		System.out.println("/challenges/save - challenge를 전체조회합니다.");
-		List<Challenge> challenges = challengeService.findAllChallenge();
-
+//		List<Challenge> challenges = challengeService.findAllChallenge();
+		LocalDateTime today = LocalDateTime.now();
+		List<Challenge> challenges = challengeService.findAllChallengeGraterThanEndTime(today); // 진행 첼린지
+		List<Challenge> coingSoonChallenges = challengeService.findAllChallengeGraterThanStartTime(today); // 예정 첼린지
+		challenges.addAll(coingSoonChallenges);
+		
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_LIST_SUCCESS, challenges),
 				HttpStatus.OK);
 	}
@@ -134,7 +138,7 @@ public class ChallengeController {
 		System.out.println("/challenges/ing - 진행중인 챌린지 조회");
 		LocalDateTime today = LocalDateTime.now();
 		List<Challenge> ingChallenges = challengeService.findAllChallengeGraterThanEndTime(today); // 진행 첼린지
-
+		
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_ING_SUCCESS, ingChallenges),
 				HttpStatus.OK);
 	}
