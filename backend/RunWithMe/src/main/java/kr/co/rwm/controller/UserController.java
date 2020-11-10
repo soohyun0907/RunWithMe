@@ -140,10 +140,11 @@ public class UserController {
 					HttpStatus.FORBIDDEN);
 		}
 		String token = jwtTokenProvider.generateToken(member.getUserId(), member.getUserEmail(), member.getRoles());
+		response.setHeader("AUTH", token);
 		
-		response.setHeader("AUTH", token);		
+		RunningUser runningUser = recordService.findRunningUserByUserId(member.getUserId());
 		
-		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SIGNIN_SUCCESS, member),
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SIGNIN_SUCCESS, runningUser),
 				HttpStatus.OK);
 	}
 	
