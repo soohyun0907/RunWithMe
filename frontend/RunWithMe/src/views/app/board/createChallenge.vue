@@ -166,7 +166,7 @@ export default {
     submitFile(){
       let formData = new FormData();
       formData.append('files', this.file[0]);
-      console.log(this.file[0]);
+      // console.log(this.file[0]);
       http
         .post('/challenges/images/'+this.challengeId, formData, 
         {
@@ -186,7 +186,7 @@ export default {
     },
     handleFileUpload() {
       this.file = this.$refs.files.files;
-      console.log(this.file);
+      // console.log(this.file);
     }
   }
 };
