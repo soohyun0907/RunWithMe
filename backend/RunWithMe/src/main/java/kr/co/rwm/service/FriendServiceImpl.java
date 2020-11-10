@@ -78,14 +78,14 @@ public class FriendServiceImpl implements FriendService {
 		relation.setUser(user);
 		Friend result = friendRepository.save(relation);	 
 		
-		
-		Friend relation2 = Friend.builder()
-				.userId(friendInfo.get("friendId"))
-				.build();
-		User diff = userRepository.findByUserId(uid).get();
-		relation2.setUser(diff);
-		
-		friendRepository.save(relation2);	 
+		// 주석안하면 양방향으로 팔로워가 추가됨
+//		Friend relation2 = Friend.builder()
+//				.userId(friendInfo.get("friendId"))
+//				.build();
+//		User diff = userRepository.findByUserId(uid).get();
+//		relation2.setUser(diff);
+//		
+//		friendRepository.save(relation2);	 
 		
 		return result;
 	}
