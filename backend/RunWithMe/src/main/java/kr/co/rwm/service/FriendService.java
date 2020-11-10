@@ -16,4 +16,8 @@ public interface FriendService {
 	List<User> match(int uid, String gender);
 
 	boolean findByUserIdAndFriendId(int uid, int friendId);
+
+	List<User> onlineList(int uid);
+
+	List<User> offlineList(int uid);
 }
