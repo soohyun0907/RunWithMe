@@ -1,8 +1,11 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Group Chat'" :folder="'apps'" />
+    <breadcumb :page="'지역별 채팅'" :folder="'apps'" />
 
-    <div class="card chat-sidebar-container sidebar-container">
+    <div
+      class="card chat-sidebar-container sidebar-container"
+      style="height: 400px"
+    >
       <div class="chat-sidebar-wrap sidebar" :class="{ 'ml-0': isMobile }">
         <div class="border-right">
           <div
@@ -19,7 +22,7 @@
                 class="form-control form-control-rounded"
                 id="search"
                 v-model="search"
-                placeholder="서비스 준비중"
+                placeholder="채팅방 이름을 입력하세요"
               />
             </div>
           </div>
@@ -33,14 +36,13 @@
               <div
                 class="mt-4 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
               >
-                그룹 채팅 목록
+                지역별 채팅 목록
               </div>
-              <div
-                
-                v-for="chatroom in this.getChatRoom"
-                :key="chatroom.roomId"
-              >
-                <div class="p-3 d-flex border-bottom align-items-center" v-if="chatroom.name.includes(search)">
+              <div v-for="chatroom in this.getChatRoom" :key="chatroom.roomId">
+                <div
+                  class="p-3 d-flex border-bottom align-items-center"
+                  v-if="chatroom.name.includes(search)"
+                >
                   <h6 @click="choice(chatroom.roomId)" class="">
                     {{ chatroom.name }}
                   </h6>
@@ -61,11 +63,11 @@
                 <h6 class="">{{ contact.name }}</h6> -->
               <!-- </div> -->
 
-              <div
+              <!-- <div
                 class="mt-3 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
               >
                 서비스 준비중입니다.....
-              </div>
+              </div> -->
 
               <!-- <div
                 class="p-3 d-flex border-bottom align-items-center contact"
@@ -121,9 +123,11 @@
           :settings="{ suppressScrollX: true, wheelPropagation: false }"
           class="chat-content perfect-scrollbar rtl-ps-none ps scroll"
           id="chatContainer"
+          style="height: 40vh"
         >
           <div>
-            <div onscroll="chat_on_scroll()"
+            <div
+              onscroll="chat_on_scroll()"
               class="list-group-item"
               v-for="(message, index) in messages"
               :key="index"
@@ -133,15 +137,16 @@
               </div>
 
               <!-- START 나의 채팅 메시지 -->
-              <div class="d-flex mb-20" v-if="testUserId === message.sender">
-                <div class="message flex-grow-1" style="width: 70%">
-                  <div class="d-flex">
-                    <p class="mb-1 text-title text-16 flex-grow-1">
+              <div class="d-flex mb-10" v-if="testUserId === message.sender">
+                <div class="message flex-grow-1" >
+                  <div class="d-flex" >
+                    <p class="mb-1 text-title text-16 flex-grow-1" style="float:left;">
                       {{ message.sender }}
+                    <span class="text-small text-muted" style="padding-left: 3px">{{message.time}}</span>
                     </p>
-                    <!-- <span class="text-small text-muted">25 min ago</span> -->
                   </div>
-                  <p class="m-0" >{{ message.message }}</p>
+                  <p class="m-0" style="padding-left: 5px; float:left;">{{ message.message }}</p>
+                  
                 </div>
                 <img
                   :src="message.img"
@@ -152,7 +157,7 @@
               <!-- END 나의 채팅 메시지 -->
               <!-- START 상대방의 메시지 -->
               <div
-                class="d-flex mb-30 user"
+                class="d-flex mb-10 user"
                 v-if="testUserId != message.sender && back != message.sender"
               >
                 <img
@@ -160,12 +165,14 @@
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
                 />
-                <div class="message flex-grow-1" style="width: 70%">
+                <div class="message flex-grow-1">
                   <div class="d-flex">
-                    <p class="mb-1 text-title text-16 flex-grow-1">{{message.sender}}</p>
-                    <!-- <span class="text-small text-muted">24 min ago</span> -->
+                    <p class="mb-1 text-title text-16 flex-grow-1" style="float:left;">
+                      {{ message.sender }}
+                    <span class="text-small text-muted" style="padding-left: 3px">{{message.time}}</span>
+                    </p>
                   </div>
-                  <p class="m-0">{{ message.message }}</p>
+                  <p class="m-0" style="padding-left: 5px; float:left;">{{ message.message }}</p>
                 </div>
               </div>
               <!-- END 상대방의 메시지 -->
@@ -189,8 +196,9 @@
                 v-model="message"
               />
             </div> -->
-            <div class="form-group">
+            <div class="form-group" style="height:5vh; width:100vh;">
               <input
+                style="float: left; width: 38vh"
                 type="text"
                 class="form-control form-control-rounded"
                 placeholder="메세지를 입력하세요"
@@ -199,15 +207,17 @@
                 v-model="message"
                 v-on:keypress.enter="sendMessage('TALK')"
               />
-            </div>
-            <div class="d-flex">
-              <div class="flex-grow-1"></div>
-              <button
-                class="btn btn-icon btn-rounded btn-primary mr-2"
-                type="button"
-                @click="sendMessage('TALK')"
-              >
-              </button>
+
+              <div class="d-flex" style="padding-left: 5px; float: left; width: 0vh">
+                <div class="flex-grow-1"></div>
+                <button
+                  class="btn btn-icon btn-rounded btn-primary mr-2"
+                  type="button"
+                  @click="sendMessage('TALK')"
+                >
+                  <i class="i-Paper-Plane"></i>
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -238,7 +248,7 @@ export default {
     return {
       recentContacts: [],
       search: "",
-      isMobile: false,
+      isMobile: true,
       currentChatroom: {},
       chatrooms: [],
       isMe: false /* 내가 보낸 메세지: true | 상대방이 보낸 메시지: false */,
@@ -287,10 +297,10 @@ export default {
         this.chat();
       }, 500);
     },
-    chat_on_scroll(){
-      var obj = document.getElementById("chatList")
-      obj.scrollTop = obj.scroolHeight
-      console.log("hihi")
+    chat_on_scroll() {
+      var obj = document.getElementById("chatList");
+      obj.scrollTop = obj.scroolHeight;
+      console.log("hihi");
     },
     sendMessage: function (type) {
       if (this.flag) {
@@ -315,17 +325,21 @@ export default {
       if(recv.imgUrl == null){
         recv.imgUrl = require("@/assets/images/faces/profile.jpg")
       }
+      var today = new Date();
+      var time =  today.getHours() +" : "+today.getMinutes();
       this.userCount = recv.userCount;
       this.messages.push({
         type: recv.type,
         sender: recv.sender,
         message: recv.message,
         img: recv.imgUrl,
+        time: time
       });
     },
 
     chat() {
       http.get("/chat/user").then((response) => {
+        // this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
         this.sock = new SockJS("http://localhost:8080/ws-stomp");
         var _ws = Stomp.over(this.sock);
 
@@ -369,6 +383,7 @@ export default {
   },
 
   mounted: function () {
+    // localStorage.clear();
     this.token = this.auth;
     setTimeout(() => {
       this.selectAllGroupChat();

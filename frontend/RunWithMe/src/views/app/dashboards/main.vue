@@ -68,9 +68,9 @@
       </div>
       <div class="ul-widget__body">
         <div class="ul-widget1">
-          <div class="ul-widget__item ul-widget4__users" v-for="ranker in rankList" :key="ranker.rankId">
-            <h5 style="margin-right:5px;">{{ ranker.rankId }} </h5>
-              <div class="ul-widget4__img">
+          <div class="ul-widget__item ul-widget4__users" v-for="(ranker,index) in rankList" :index="index" :key="ranker.rankerId">
+            <h5 style="margin-right:5px;">{{ index+1 }} </h5>
+              <div v-if="ranker.userId.profile!=null" class="ul-widget4__img">
                 <img
                   :src="ranker.userId.profile"
                   data-toggle="dropdown"
@@ -78,13 +78,21 @@
                   aria-expanded="false"
                 />
               </div>
+               <div v-else class="ul-widget4__img">
+                <img
+                  :src="defaultProfile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+              </div>
               <div class="ul-widget2__info ul-widget4__users-info">
-                <router-link :to="`/app/runnings/friendsDetail`">
+                 <router-link :to="{name:'friendsDetail', query:{friendId:ranker.userId.userId}}">
                   {{ranker.userId.username}}
                 </router-link>
               </div>
               <span class="ul-widget4__number t-font-boldest text-success">
-                {{ranker.totalExp}} p
+                {{ranker.totalExp}}
               </span>
           </div>
         </div>
@@ -115,7 +123,7 @@
         v-for="(item, index) in friendsFeed"
         transition="list"
       >
-        <router-link :to="`/app/runnings/runningResult`">
+        <router-link :to="{name:'runningResult', query:{friendId:item.userId.userId}}">
         <div
           class="card o-hidden mb-30 d-flex "
           :class="{ 'flex-column': isListView, 'flex-row': !isListView }"
@@ -159,10 +167,12 @@ import { Carousel3d, Slide } from 'vue-carousel-3d'
 import { VueperSlides, VueperSlide } from 'vueperslides'
 import 'vueperslides/dist/vueperslides.css'
 import http from "@/utils/http-common";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
-  name: 'mainpage',
+  metaInfo: {
+    title: "Mainpage",
+  },
   components: {
     VueperSlides,
     VueperSlide,
@@ -178,22 +188,28 @@ export default {
       blur: '2px',
       slidesOverlayShow: false,
       slides: [],
+      tmp1: [],
+      tmp2 : [],
       rankList : [],
       friendsFeed: [],
       haveFriends: true,
-      events:[],
+      // events:[],
     };
   },
-  created() {
-   
+  computed: {
+    ...mapGetters(["events","defaultProfile"])
   },
-  mounted() {
-    this.getChallengesIng();
+  created() {
     this.getChallengesCommingSoon();
+    this.getChallengesIng();
     this.getTopRankers();
     this.getFriendsRunning();
   },
+  mounted() {
+    this.$store.commit('closeSidebar')
+  },
   methods: {
+    ...mapMutations(["mutateMyRunning","closeSidebar"]),
     convertToTime(origin) {
         var time = "";
         time += parseInt(origin/60) + "\'";
@@ -212,32 +228,27 @@ export default {
         .then(({data}) => {
           if(data.status==200){
             let obj;
-            var slides = this.slides
             data.data.forEach(element => {
-              console.log(data)
-              obj = element
-              slides.push(obj);
+              obj = new Object();
+              obj.id = element.challengeId;
+              obj.title = element.title;
+              obj.challengeImg = element.challengeImg;
+              obj.startTime = element.startTime;
+              obj.endTime = element.endTime;
+              this.tmp1.push(obj);
             });
+            this.slides = [
+              ...this.tmp1,
+              ...this.tmp2
+            ];
           }
-          console.log(this.slides);
         })
         .catch((error) => {
           console.log(error);
           return;
         });
+      
     },
-    // getChallengesIng() {
-    //   http
-    //     .get("challenges/ing")
-    //     .then((data) => {
-    //       console.log(data)
-    //       this.events = data
-    //       this.slides.push(this.events);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
     getChallengesCommingSoon(){
       http
         .get("challenges/comingsoon")
@@ -251,7 +262,7 @@ export default {
               obj.challengeImg = element.challengeImg;
               obj.startTime = element.startTime;
               obj.endTime = element.endTime;
-              this.slides.push(obj);
+              this.tmp2.push(obj);
             });
           }
         })
@@ -279,6 +290,7 @@ export default {
         .then(({data}) => {
           if(data.status == 200){
             let obj;
+            console.log(data.data.runnings[0]);
             for(var i=0; i<data.data.friends.length; i++) {
               obj = new Object();
               if(data.data.runnings[0] == null) {
@@ -287,19 +299,25 @@ export default {
                 obj.total_distance = "";
                 obj.mapImg = "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png";
               }else {
-                obj.runningId = data.data.runnings.runningId;
-                obj.total_distance = data.data.runnings.accDistance;
-                obj.accumulcated_time = data.data.runnings.accTime;
+                obj.runningId = data.data.runnings[0].runningId;
+                obj.total_distance = data.data.runnings[0].accDistance;
+                obj.accumulcated_time = data.data.runnings[0].accTime;
                 obj.running_avg_pace = obj.accumulcated_distance / obj.total_distance;
-                obj.mapImg = data.data.runnings.thumbnail;
+                obj.mapImg = data.data.runnings[0].thumbnail;
               }
               obj.userId = data.data.friends[i].userId;
-              obj.profileImg = data.data.friends[i].profile;
+              if(data.data.friends[i].profile==null){
+                obj.profileImg = this.defaultProfile
+              }else {
+                obj.profileImg = data.data.friends[i].profile;
+              }
               obj.title = data.data.friends[i].username;
               this.friendsFeed.push(obj);
             }
             if(this.friendsFeed.length == 0)
               this.haveFriends = false;
+            
+            console.log(this.friendsFeed);
           }
         })
         .catch((error) => {

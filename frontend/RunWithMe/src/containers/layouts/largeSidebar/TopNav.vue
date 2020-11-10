@@ -127,13 +127,22 @@
           variant="link"
         >
           <template slot="button-content">
-            <img
-              :src="userInfo.profile"
-              id="userDropdown"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            />
+            <div v-if="userInfo.profile!=null">
+              <img
+                :src="userInfo.profile"
+                id="userDropdown"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"/>
+            </div>
+            <div v-else>
+              <img
+                  :src="defaultProfile"
+                  id="userDropdown"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"/>
+              </div>
           </template>
 
           <div class="dropdown-menu-right" aria-labelledby="userDropdown">
@@ -153,10 +162,17 @@
 
     <infinite-slide-bar duration="20s" :barStyle="{ padding: '5px 0' }">
       <div class="items">
-        <div v-for="ranker in rankList" :key="ranker.rankId" style="margin-right:50px;">
-          <img class="profile-picture rounded-circle avatar-sm" :src="ranker.userId.profile">
-          {{ranker.rankId}}. {{ranker.userId.username}}
-          {{ranker.totalExp}} p
+        <div v-for="(ranker,index) in rankList" :index="index" :key="ranker.rankId" style="margin-right:50px;">
+          <div v-if="ranker.userId.profile!=null">
+            <img class="profile-picture rounded-circle avatar-sm" :src="ranker.userId.profile">
+            {{index+1}}. {{ranker.userId.username}}
+            {{ranker.totalExp}}p
+          </div>
+          <div v-else>
+            <img class="profile-picture rounded-circle avatar-sm" :src="defaultProfile">
+            {{index+1}}. {{ranker.userId.username}}
+            {{ranker.totalExp}}p
+          </div>
         </div>
       </div>
     </infinite-slide-bar>
@@ -195,7 +211,7 @@ export default {
     this.getTopRankers();
   },
   computed: {
-    ...mapGetters(["getSideBarToggleProperties","userInfo"])
+    ...mapGetters(["getSideBarToggleProperties","userInfo","defaultProfile"])
   },
 
   methods: {
@@ -203,7 +219,7 @@ export default {
       "changeSecondarySidebarProperties",
       "changeSidebarProperties",
       "changeThemeMode",
-      "signOut"
+      "signOut",
     ]),
     handleFullScreen() {
       Util.toggleFullScreen();
