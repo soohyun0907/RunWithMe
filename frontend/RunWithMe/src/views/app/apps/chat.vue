@@ -9,7 +9,7 @@
             class="pt-2 pb-2 pl-3 pr-3 d-flex align-items-center o-hidden box-shadow-1 chat-topbar"
           >
             <a class="link-icon d-md-none" @click="isMobile = !isMobile">
-              <i class="icon-regular ml-0 mr-3 i-Left"></i>
+              <i class="text-20 i-Letter-Close"></i>
             </a>
             <div class="form-group m-0 flex-grow-1">
               <input
@@ -29,29 +29,6 @@
             <div>
 
               <div
-                class="mt-4 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
-              >
-                Recent
-              </div>
-              <div
-                class="p-3 d-flex border-bottom align-items-center contact"
-                v-for="contact in getRecentUser"
-                :key="contact.name"
-                :class="contact.status"
-              >
-                <img
-                  :src="contact.avatar"
-                  alt=""
-                  class="avatar-sm rounded-circle mr-3"
-                />
-                <h6 class="">{{ contact.name }}</h6>
-              </div>
-
-
-
-
-
-              <div
                 class="mt-3 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
               >
                 Contacts
@@ -62,15 +39,43 @@
                 v-for="contact in filterContacts"
                 :key="contact.userId"
               >
-                <!-- :class="contact.status"
-              > -->
-                <!-- @click="changeSelectedUser(contact.id)"
-              > -->
                 <!-- <img
                   :src="contact.avatar"
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
                 /> -->
+                <h6 @click ="choice(contact.userId)" class="">{{ contact.username }}</h6>
+              </div>
+
+
+              <div
+                class="mt-4 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
+              >
+                Matching
+              </div>
+              <div style="margin : 0 80px;">
+              <button type="button" class="btn round btn-dribble btn-icon rounded-circle m-1"
+                @click ="matching('female')"
+                style="width:40px; height:40px;">
+                      <span class="ul-btn__icon" ><i class="text-20 i-Girl"></i></span>
+              </button>
+              <button type="button" class="btn round btn-twitter btn-icon rounded-circle m-1"
+                 @click ="matching('male')"
+                style="width:40px; height:40px;">
+                  <span class="ul-btn__icon" ><i class="text-20 i-Cool-Guy"></i></span>
+              </button>
+              </div>
+              <div
+                class="p-3 d-flex border-bottom align-items-center contact"
+                v-for="contact in matchUsers"
+                :key="contact.username"
+                :class="contact.status"
+              >
+                <img
+                  :src="contact.avatar"
+                  alt=""
+                  class="avatar-sm rounded-circle mr-3"
+                />
                 <h6 @click ="choice(contact.userId)" class="">{{ contact.username }}</h6>
               </div>
             </div>
@@ -84,7 +89,7 @@
           class="d-flex pl-3 pr-3 pt-2 pb-2 o-hidden box-shadow-1 chat-topbar"
         >
           <a class="link-icon d-md-none" @click="getContactList()">
-            <i class="icon-regular i-Right ml-0 mr-3"></i>
+            <i class="text-20 i-Reddit"> </i>
           </a>
           <div class="d-flex align-items-center">
             <!-- <img
@@ -100,116 +105,86 @@
         <vue-perfect-scrollbar
           :settings="{ suppressScrollX: true, wheelPropagation: false }"
           class="chat-content perfect-scrollbar rtl-ps-none ps scroll"
+          id="chatContainer"
         >
 
-          <div v-for=" m in messages">
-                <h1> {{m.sender + " " + m.message}} </h1>
-          </div>
-          <!-- <div>
-            <div class="d-flex mb-30">
-              <div class="message flex-grow-1">
-                <div class="d-flex">
-                  <p class="mb-1 text-title text-16 flex-grow-1">
-                    {{ getSelectedUser.name }}
-                  </p>
-                  <span class="text-small text-muted">25 min ago</span>
-                </div>
-                <p class="m-0">
-                  Do you ever find yourself falling into the “discount trap?
-                </p>
+          <div>
+            <div onscroll="chat_on_scroll()"
+              class="list-group-item"
+              v-for="(message, index) in messages"
+              :key="index"
+            >
+              <div class="d-flex mb-30" v-if="back === message.sender">
+                <div>{{ message.sender }} - {{ message.message }}</div>
               </div>
-              <img
-                :src="getSelectedUser.avatar"
-                alt=""
-                class="avatar-sm rounded-circle ml-3"
-              />
-            </div>
 
-            <div class="d-flex mb-30 user">
-              <img
-                src="@/assets/images/faces/1.jpg"
-                alt=""
-                class="avatar-sm rounded-circle mr-3"
-              />
-              <div class="message flex-grow-1">
-                <div class="d-flex">
-                  <p class="mb-1 text-title text-16 flex-grow-1">Jhon Doe</p>
-                  <span class="text-small text-muted">24 min ago</span>
+              <!-- START 나의 채팅 메시지 -->
+              <div class="d-flex mb-20" v-if="testUserId === message.sender">
+                <div class="message flex-grow-1" style="width: 70%">
+                  <div class="d-flex">
+                    <p class="mb-1 text-title text-16 flex-grow-1">
+                      {{ message.sender }}
+                    </p>
+                    <!-- <span class="text-small text-muted">25 min ago</span> -->
+                  </div>
+                  <p class="m-0" >{{ message.message }}</p>
                 </div>
-                <p class="m-0">Lorem ipsum dolor sit amet.</p>
+                <img
+                  :src="message.img"
+                  alt=""
+                  class="avatar-sm rounded-circle ml-3"
+                />
               </div>
-            </div>
-            <div class="d-flex mb-30">
-              <div class="message flex-grow-1">
-                <div class="d-flex">
-                  <p class="mb-1 text-title text-16 flex-grow-1">
-                    {{ getSelectedUser.name }}
-                  </p>
-                  <span class="text-small text-muted">25 min ago</span>
+              <!-- END 나의 채팅 메시지 -->
+              <!-- START 상대방의 메시지 -->
+              <div
+                class="d-flex mb-30 user"
+                v-if="testUserId != message.sender && back != message.sender"
+              >
+                <img
+                  :src="message.img"
+                  alt=""
+                  class="avatar-sm rounded-circle mr-3"
+                />
+                <div class="message flex-grow-1" style="width: 70%">
+                  <div class="d-flex">
+                    <p class="mb-1 text-title text-16 flex-grow-1">{{message.sender}}</p>
+                    <!-- <span class="text-small text-muted">24 min ago</span> -->
+                  </div>
+                  <p class="m-0">{{ message.message }}</p>
                 </div>
-                <p class="m-0">
-                  Do you ever find yourself falling into the “discount trap?
-                </p>
               </div>
-              <img
-                :src="getSelectedUser.avatar"
-                alt=""
-                class="avatar-sm rounded-circle ml-3"
-              />
+              <!-- END 상대방의 메시지 -->
             </div>
-            <div class="d-flex mb-30 user">
-              <img
-                src="@/assets/images/faces/1.jpg"
-                alt=""
-                class="avatar-sm rounded-circle mr-3"
-              />
-              <div class="message flex-grow-1">
-                <div class="d-flex">
-                  <p class="mb-1 text-title text-16 flex-grow-1">Jhon Doe</p>
-                  <span class="text-small text-muted">24 min ago</span>
-                </div>
-                <p class="m-0">Lorem ipsum dolor sit amet.</p>
-              </div>
-            </div>
-          </div> -->
+          </div>
         </vue-perfect-scrollbar>
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <label class="input-group-text">내용</label>
-            </div>
-            <input type="text" class="form-control" v-model="message" v-on:keypress.enter="sendMessage('TALK')">
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="button" @click="sendMessage('TALK')">보내기</button>
-            </div>
-        </div>
-        <!-- <div class="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
-          <form class="inputForm" @submit.prevent="sendMessage('TALK')">
+        <!-- START 메시지 보내기 -->
+        <div class="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
+          <form class="inputForm" onsubmit="return false">
             <div class="form-group">
-              <textarea
+              <input
+                type="text"
                 class="form-control form-control-rounded"
-                placeholder="Type your message"
+                placeholder="메세지를 입력하세요"
                 name="message"
                 id="message"
-                v-model="msg"
-                cols="30"
-                rows="3"
-                spellcheck="false"
-              ></textarea>
+                v-model="message"
+                v-on:keypress.enter="sendMessage('TALK')"
+              />
             </div>
             <div class="d-flex">
               <div class="flex-grow-1"></div>
-              <button class="btn btn-icon btn-rounded btn-primary mr-2" type="submit">
-                <i class="i-Paper-Plane"></i>
-              </button>
               <button
-                class="btn btn-icon btn-rounded btn-outline-primary"
+                class="btn btn-icon btn-rounded btn-primary mr-2"
                 type="button"
+                @click="sendMessage('TALK')"
               >
-                <i class="i-Add-File"></i>
-              </button> 
+              </button>
             </div>
           </form>
-        </div> -->
+        </div>
+        <!-- END 메시지 보내기 -->
+      
       </div>
     </div>
   </div>
@@ -241,16 +216,31 @@ export default {
       roomName: "",
       msg: '',
       messages: [],
+      testUserId: "",
+      back: "[알림]",
       message:"",
       token: '',
       userCount: 0,
       sock : "",
-      ws :""
+      ws :"",
+      matchUsers : []
     };
   },
   methods: {
     ...mapActions(["changeSelectedUser", "createAndSelectChatroomAction","sendMessages", ]),
     ...mapMutations(["selectUserLists"]),
+
+    matching: function(gender){
+      var sex = gender;
+      http
+      .get("/friends/match/"+sex, 
+      )
+      .then((data) =>{
+        console.log(data);
+        this.matchUsers = data.data.data;
+      })
+    },
+
 
     choice: function(uid){
       // this.createAndSelectChatroomAction(uid);
@@ -271,7 +261,6 @@ export default {
       .then((data) =>{
           console.log(data);
           var roomInfo = data.data.data;
-          //this.selectedUser = roomInfo.name;
           this.roomId = roomInfo.roomId;
           this.roomName =  roomInfo.name;
           this.enterChat();
@@ -291,12 +280,28 @@ export default {
 
       this.isMobile = !this.isMobile;
     },
-
+    chatScroll() {
+      console.log("chatScroll");
+      var objDiv = document.getElementById("chatList");
+      if (this.flag) {
+        objDiv.scrollTop = objDiv.scrollHeight;
+      }
+    },
+    chat_on_scroll(){
+      var obj = document.getElementById("chatList")
+      obj.scrollTop = obj.scroolHeight
+      console.log("hihi")
+    },
     enterChat: function(){
       var _this = this;
 
       http
-          .get('/chat/user').then(response => {
+          .get('/match/user').then(response => {
+            
+              console.log(";;lll")
+              console.log(response.data);
+              this.testUserId = response.data;
+
               _this.sock = new SockJS("http://localhost:8080/ws-stomp");
               _this.ws = Stomp.over(_this.sock);
               console.log("들어는 오냐")
@@ -319,26 +324,25 @@ export default {
                       console.log("sub")
                       console.log(recv)
                       _this.recvMessage(recv);
-                      //this.userCount = recv.userCount;
-                      // state.messages.unshift({"type":recv.type,"sender":recv.sender,"message":recv.message})
-                  });
+                });
               }, function(error) {
                   alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
-                  // location.href="/chat/room";
               });
         });
     },
     sendMessage: function(type) {
       console.log("ri: " + localStorage.getItem("roomId"))
       var payload = {"type": type, "msg":this.message}
-      var header = {"token":this.token};
+      console.log("totototo: " + this.token);
+      var header = {"AUTH":this.token};
       var body = JSON.stringify({type:payload.type, roomId: this.roomId, message:payload.msg});
       this.ws.send("/pub/chat/message", body, header);
       this.message = '';
     },
     recvMessage: function(recv) {
+
         this.userCount = recv.userCount;
-        this.messages.unshift({"type":recv.type,"sender":recv.sender,"message":recv.message})
+        this.messages.push({"type":recv.type,"sender":recv.sender,"message":recv.message, "img": recv.imgUrl})
     }
 
 
@@ -357,9 +361,6 @@ export default {
 
     filterContacts() {
       return this.getContactLists;
-      // return this.getContactLists.filter(contact => {
-      //   return contact.name.toLowerCase().match(this.search.toLowerCase());
-      // });
     },
 
     roomDetail(){
@@ -368,8 +369,8 @@ export default {
 
     updateMessages(){
       return this.getMessages;
-    }
-
+    },
+    
 
   },
 
@@ -385,10 +386,15 @@ export default {
       });
     });
 
+    
     // 친구목록 불러오기
     this.selectUserLists();
 
-  }
+  },
+  updated: function () {
+    var obj = document.getElementById("chatContainer");
+    obj.scrollTop = obj.scrollHeight;
+  },
 };
 </script>
 

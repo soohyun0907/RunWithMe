@@ -132,5 +132,14 @@ public interface ChallengeService {
 	 * @return
 	 */
 	public List<ChallengeUser> findAllChallengeUserByUserIdEnd(int userId);
+	
+	/**
+	 * 유저가 탈퇴 시 
+	 * 현재 거리(진행중 챌린지)
+	 * 참가자 수(진행중, 진행예정 챌린지)
+	 * 줄이기
+	 * @param userEmail
+	 */
+	public void deleteAllChallengeUserByUserEmail(String userEmail);
 
 }

@@ -33,6 +33,7 @@ public class ResponseMessage {
     public static final String RECORD_REDIS_INSERT_SUCCESS = "레디스에 레코드 저장";
     public static final String RECORD_REDIS_LIST_SUCCESS = "레디스에서 레코드 목록 조회";
     public static final String USER_SUMMARY_RUNNING_SUCCESS = "유저의 요약 런닝 정보 조회";
+    public static final String REGION_SUMMARY_RUNNING_SUCCESS = "주변 러너들의 런닝 정보 조회";
     
     public static final String CHALLENGE_INSERT_SUCCESS = "챌린지 등록 성공";
     public static final String CHALLENGE_IMG_INSERT_SUCCESS = "챌린지 이미지 등록 성공";
@@ -55,6 +56,9 @@ public class ResponseMessage {
     public static final String CHALLENGE_USER_SEARCH_ING = "유저 참여중 챌린지 조회 성공";
     public static final String CHALLENGE_USER_SEARCH_COMINGSOON = "유저 참여 예정 챌린지 조회 성공";
     public static final String CHALLENGE_USER_SEARCH_END = "유저 참여 종료 챌린지 조회 성공";
+    public static final String BOARD_IMAGE_NO_CONTENT = "등록할 챌린지 제안 이미지 없음";
+    public static final String INSERT_BOARD_IMAGE_SUCCESS = "챌린지 제안 이미지 저장 성공";
+    public static final String BOARD_NOT_FOUND = "해당 챌린지 제안 없음";
     
     public static final String RACE_TOP_RANKING_OK = "레이스 랭킹 Top 10 조회 성공";
     public static final String DONATE_TOP_RANKING_OK = "기부 랭킹 Top 10 조회 성공";
@@ -83,6 +87,7 @@ public class ResponseMessage {
     public static final String CREATE_CHATROOM_SUCCESS = "매칭 채팅방 생성 성공";
 
     public static final String READ_FRIENDLIST_SUCCESS = "친구목록 조회 성공";
+    public static final String READ_MATCHLIST_SUCCESS = "매칭목록 조회 성공";
     public static final String INSERT_FRIEND_SUCCESS = "친구 추가 성공";
     public static final String DELETE_FRIEND_SUCCESS = "친구 삭제 성공";
     
