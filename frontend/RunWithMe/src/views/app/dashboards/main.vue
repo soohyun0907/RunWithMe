@@ -76,6 +76,7 @@
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
+                  height="40px"
                 />
               </div>
                <div v-else class="ul-widget4__img">
@@ -92,7 +93,7 @@
                 </router-link>
               </div>
               <span class="ul-widget4__number t-font-boldest text-success">
-                {{ranker.totalExp}}
+                {{ranker.totalExp}} P
               </span>
           </div>
         </div>
@@ -151,8 +152,8 @@
               </p> -->
               <p class="m-0 text-muted text-small w-15 w-sm-100">
                 {{ item.total_distance }}KM /
-                {{convertToTime(item.running_avg_pace)}} /
-                {{item.accumulcated_time}}
+                {{ convertToTime(item.running_avg_pace) }} /
+                {{ convertToTime(item.accumulcated_time) }}
               </p>
             </div>
           </div>
@@ -211,7 +212,7 @@ export default {
     convertToTime(origin) {
         var time = "";
         time += parseInt(origin/60) + "\'";
-        time += origin%60 + "\"";
+        time += (origin%60).toFixed() + "\"";
         return time;
     },
     toggleOverlay() {
@@ -226,7 +227,7 @@ export default {
         .then(({data}) => {
           if(data.status==200){
             this.slides = data.data;
-            // console.log(this.slides);
+            console.log(this.slides);
           }
         })
         .catch((error) => {
@@ -264,9 +265,9 @@ export default {
                 obj.mapImg = "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png";
               }else {
                 obj.runningId = data.data.runnings[i].runningId;
-                obj.total_distance = data.data.runnings[i].accDistance;
+                obj.total_distance = data.data.runnings[i].accDistance.toFixed(2);
                 obj.accumulcated_time = data.data.runnings[i].accTime;
-                obj.running_avg_pace = obj.accumulcated_distance / obj.total_distance;
+                obj.running_avg_pace = data.data.runnings[i].accTime / data.data.runnings[i].accDistance;
                 obj.mapImg = data.data.runnings[i].thumbnail;
               }
               obj.userId = data.data.friends[i].userId;
@@ -281,7 +282,7 @@ export default {
             if(this.friendsFeed.length == 0)
               this.haveFriends = false;
             
-            // console.log("여기요" + this.friendsFeed);
+            // console.log(this.friendsFeed);
           }
         })
         .catch((error) => {
