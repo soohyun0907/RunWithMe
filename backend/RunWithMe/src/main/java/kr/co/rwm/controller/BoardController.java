@@ -2,14 +2,13 @@ package kr.co.rwm.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,17 +17,37 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.None;
+
+import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.Board;
+import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.BoardService;
 import kr.co.rwm.service.JwtTokenProvider;
 import kr.co.rwm.service.S3Service;
+import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * BoardController
+ * 
+ * <pre>
+ * <b> History: </b>
+ * 				김순빈, ver.0.2. 2020-11-08, 챌린지 제안 이미지 저장 기능 추가
+ * </pre>
+ * 
+ * @author 김형택
+ * @version 0.3, 2020-11-10, 게시판 조회 - writeId -> 작성자 이름 / 댓글수 수정
+ * @see None
+ *
+ */
 @RestController
 @CrossOrigin(origins="*")
 @RequiredArgsConstructor
@@ -36,10 +55,12 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 	
 	private final JwtTokenProvider jwtTokenProvider;
+	private final UserService userService;
+	private final S3Service s3Service;
 
 	@Autowired BoardService boardService;
 
-	@GetMapping("/")
+	@GetMapping("")
 	public ResponseEntity allBoardList(){
 		List<Board> list = boardService.allBoardList();
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_BOARDLIST_SUCCESS, list), HttpStatus.OK);
@@ -47,9 +68,33 @@ public class BoardController {
 	
 	@PostMapping("/board")
 	ResponseEntity insert(@RequestBody Map<String, String> boardInfo) {
-		Board ret = boardService.save(boardInfo);
+		int userId = Integer.parseInt(boardInfo.get("writerId"));
+		Optional<User> user = userService.findByUserId(userId);
+		if(!user.isPresent()) {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN,ResponseMessage.USER_NOT_FOUND),HttpStatus.FORBIDDEN);
+		}
+		String writerName = user.get().getUsername();
+		String writerProfile = user.get().getProfile();
+		Board ret = boardService.save(boardInfo, writerName, writerProfile);
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.INSERT_BOARD_SUCCESS, ret), HttpStatus.OK);
 
+	}
+	
+	@ApiOperation(value = "챌린지 제안하기 이미지 저장", response = ResponseEntity.class)
+	@PostMapping("/board/{board_id}")
+	ResponseEntity insertImage(@PathVariable int board_id, 
+							   @RequestParam("files") MultipartFile files, HttpServletRequest request) {
+		if(files == null) {
+			return new ResponseEntity<Response> (new Response(StatusCode.NO_CONTENT, ResponseMessage.BOARD_IMAGE_NO_CONTENT), HttpStatus.NO_CONTENT);
+		}
+		
+		String url = s3Service.challengeImgUpload(files, "board");
+		Board board = boardService.saveImage(board_id, url);
+		if(board == null) {
+			return new ResponseEntity<Response> (new Response(StatusCode.NOT_FOUND, ResponseMessage.BOARD_NOT_FOUND), HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.INSERT_BOARD_IMAGE_SUCCESS, board), HttpStatus.OK);
 	}
 	
 	@PutMapping("/board")

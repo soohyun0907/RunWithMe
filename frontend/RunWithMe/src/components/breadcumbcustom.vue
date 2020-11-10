@@ -3,9 +3,7 @@
        <div class="breadcrumbcustom">
             <slot name="header">
                <h1>{{title}}</h1>
-                    <ul>
-                        {{date}}
-                    </ul>
+                    <span>| {{ desc }}</span>
             </slot>
         </div>
         <div class="separator-breadcrumb border-top"></div>
@@ -13,7 +11,7 @@
 </template>
 <script>
 export default {
-    props:[ 'date','title'],
+    props:[ 'desc','title'],
    
 }
 </script>

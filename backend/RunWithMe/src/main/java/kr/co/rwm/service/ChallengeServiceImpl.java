@@ -162,6 +162,13 @@ public class ChallengeServiceImpl implements ChallengeService {
 			if ((cu.getChallengeId().getEndTime()).isBefore(today) 
 					|| cu.getChallengeId().getStartTime().isAfter(today))
 				continue;
+			
+			// challenge update
+			Challenge challenge = challengeRepository.findByChallengeId(cu.getChallengeId().getChallengeId()).get();
+			challenge.setDistanceCurrent(challenge.getDistanceCurrent()+accDistance);
+			challengeRepository.save(challenge);
+			
+			// challenge_user update
 			newDistance = cu.getAccDistance() + accDistance;
 			cu.setAccDistance(newDistance);
 			challengeUserRepository.save(cu); // update challenge user
@@ -220,11 +227,46 @@ public class ChallengeServiceImpl implements ChallengeService {
 		}
 		return challengeUsers;
 	}
+	// 참여 안하고 있는 챌린지
+	@Override
+	public List<ChallengeUser> findAllNonChallengeUserByUserIdIng(int userId) {
+		User user = userRepository.findByUserId(userId).get();
+		List<ChallengeUser> challengeUserList = challengeUserRepository.findAllByUserIdNot(user);
+		List<ChallengeUser> challengeUsers = new ArrayList<ChallengeUser>(); 
+		
+		LocalDateTime today = LocalDateTime.now();
+		today = today.withHour(23).withMinute(59).withSecond(59).withNano(0);
+		for(ChallengeUser cu: challengeUserList) {
+			// 끝나는 시간이 오늘보다 나중이고, 시작시간이 오늘보다 이전인 경우
+			if ((cu.getChallengeId().getEndTime()).isAfter(today) 
+					&& cu.getChallengeId().getStartTime().isBefore(today)) {
+				challengeUsers.add(cu);
+			}
+		}
+		return challengeUsers;
+	}
 
 	@Override
 	public List<ChallengeUser> findAllChallengeUserByUserIdComingSoon(int userId) {
 		User user = userRepository.findByUserId(userId).get();
 		List<ChallengeUser> challengeUserList = challengeUserRepository.findAllByUserId(user);
+		List<ChallengeUser> challengeUsers = new ArrayList<ChallengeUser>(); 
+		
+		LocalDateTime today = LocalDateTime.now();
+		today = today.withHour(23).withMinute(59).withSecond(59).withNano(0);
+		for(ChallengeUser cu: challengeUserList) {
+			// 시작시간이 오늘보다 나중일 때
+			if (cu.getChallengeId().getStartTime().isAfter(today)) {
+				challengeUsers.add(cu);
+			}
+		}
+		return challengeUsers;
+	}
+	// 참여 안하고 있는것
+	@Override
+	public List<ChallengeUser> findAllNonChallengeUserByUserIdComingSoon(int userId) {
+		User user = userRepository.findByUserId(userId).get();
+		List<ChallengeUser> challengeUserList = challengeUserRepository.findAllByUserIdNot(user);
 		List<ChallengeUser> challengeUsers = new ArrayList<ChallengeUser>(); 
 		
 		LocalDateTime today = LocalDateTime.now();
@@ -253,6 +295,41 @@ public class ChallengeServiceImpl implements ChallengeService {
 			}
 		}
 		return challengeUsers;
+	}
+	// 참여 안하고 있는 것
+	@Override
+	public List<ChallengeUser> findAllNonChallengeUserByUserIdEnd(int userId) {
+		User user = userRepository.findByUserId(userId).get();
+		List<ChallengeUser> challengeUserList = challengeUserRepository.findAllByUserIdNot(user);
+		List<ChallengeUser> challengeUsers = new ArrayList<ChallengeUser>(); 
+		
+		LocalDateTime today = LocalDateTime.now();
+		today = today.withHour(23).withMinute(59).withSecond(59).withNano(0);
+		for(ChallengeUser cu: challengeUserList) {
+			// 끝나는 시간이 오늘보다 이전일때
+			if ((cu.getChallengeId().getEndTime()).isBefore(today)) {
+				challengeUsers.add(cu);
+			}
+		}
+		return challengeUsers;
+	}
+
+	@Override
+	public void deleteAllChallengeUserByUserEmail(String userEmail) {
+		User user = userRepository.findByUserEmail(userEmail).get();
+		List<ChallengeUser> challengeUserList = challengeUserRepository.findAllByUserId(user);
+		
+		LocalDateTime today = LocalDateTime.now();
+		today = today.withHour(23).withMinute(59).withSecond(59).withNano(0);
+		for(ChallengeUser cu: challengeUserList) {
+			Challenge challenge = challengeRepository.findByChallengeId(cu.getChallengeId().getChallengeId()).get();
+			if (challenge.getEndTime().isBefore(today)) continue;
+			
+			challenge.setParticipant(challenge.getParticipant()-1);
+			challenge.setDistanceCurrent(challenge.getDistanceCurrent()-cu.getAccDistance());
+			challengeRepository.save(challenge);
+		}
+		
 	}
 
 }

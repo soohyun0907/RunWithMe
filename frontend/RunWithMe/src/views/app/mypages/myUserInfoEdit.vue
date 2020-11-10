@@ -6,7 +6,13 @@
        
           <div class="header-cover" style="background-image: url(http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-5.jpeg"></div>
             <div class="user-info">
+              <div v-if="userInfo.profile!=null">
                 <img class="profile-picture avatar-lg mb-2" :src="userInfo.profile">
+              </div>
+              <div v-else>
+                <img class="profile-picture avatar-lg mb-2" :src="defaultProfile">
+              </div>
+                
                   <input type="file" id="files" ref="files" style="margin-left:70px" v-on:change="handleFileUpload()"
                   accept="image/*" />
                    <b-button variant="primary ripple m-1" v-on:click="submitFile(userInfo)">프로필 변경 확인</b-button>
@@ -35,8 +41,8 @@ export default {
     // if no subcomponents specify a metaInfo.title, this title will be used
     title: "Profile"
   },
-   computed: {
-    ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
+  computed: {
+    ...mapGetters(["getSideBarToggleProperties", "userInfo","defaultProfile"]),
   },
   mounted() {
     this.$store.commit('closeSidebar')
@@ -62,7 +68,7 @@ export default {
             console.log(data)
             this.$store.commit('mutateProfile',data.data.profile)
             console.log(data.data.profile)
-            this.$router.go(0)
+            this.$router.go(-1)
           } else {
             alert("오류가 발생하였습니다.");
             return;

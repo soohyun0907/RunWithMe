@@ -1,6 +1,5 @@
 package kr.co.rwm.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,11 +28,11 @@ public class RunningArea {
 	@Column(name = "running_area_id")
 	private Integer runningAreaId;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "running_id")
 	private Running running;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "gugun_id")
 	private Gugun gugun;
 	

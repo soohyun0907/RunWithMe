@@ -35,7 +35,8 @@ public class ChatRoomRepository {
     @Autowired
     // 모든 채팅방 조회
     public List<ChatRoom> findAllRoom() {
-        return hashOpsChatRoom.values(CHAT_ROOMS);
+//	hashOpsChatRoom.delete(CHAT_ROOMS, "e4f42576-88e5-4e4c-9dea-bbb86e2cc4a3");
+    	return hashOpsChatRoom.values(CHAT_ROOMS);
     }
 
     // 특정 채팅방 조회
