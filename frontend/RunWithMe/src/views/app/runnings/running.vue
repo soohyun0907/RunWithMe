@@ -393,24 +393,11 @@ export default {
             this.previous.lat = this.current.lat;
             this.previous.lng = this.current.lng;
 
-            // this.poly = new google.maps.Polyline({
-            //   strokeColor: "#000000",
-            //   strokeOpacity: 1,
-            //   strokeWeight: 3,
-            //   map: this.map,
-            // });
-
             var currentLatLng = new google.maps.LatLng(
               this.current.lat,
               this.current.lng
             );
             this.linePath.push(currentLatLng);
-            this.linePath.push(new google.maps.LatLng(
-                this.current.lat+0.01,
-                this.current.lng+0.01
-              ));
-            
-            // this.encode_polyline(currentLatLng, this.poly);
 
           } else {
             var distance = this.computeDistance(this.previous, this.current);
@@ -431,9 +418,7 @@ export default {
                 this.current.lng
               );
               this.linePath.push(currentLatLng);
-              // this.encode_polyline(currentLatLng, this.poly);
             }
-            // if (this.checkOneKm >= 1) {
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
               this.speed = (this.checkOneKm * 1000) / this.checkSecond;
@@ -465,10 +450,10 @@ export default {
 
       //google static map url
       var staticM_URL = "https://maps.googleapis.com/maps/api/staticmap?";
-      staticM_URL += "size=520x650&zoom=14&maptype=roadmap&";
+      staticM_URL += "size=520x650&zoom=16&maptype=roadmap&";
       staticM_URL +=
         "key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
-        staticM_URL +="path=color:orange|weight:3|enc:"
+        staticM_URL +="path=color:red|weight:3|enc:"
         staticM_URL += this.encoded_polyline
       // staticM_URL +="path=color:orange|weight:3"
       // for(var i=0; i<this.linePath.length; i++){
