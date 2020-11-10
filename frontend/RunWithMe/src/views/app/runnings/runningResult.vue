@@ -19,21 +19,17 @@
             <div class="row">
                 <div class="col">
                     총 런닝 거리
-                    <h3>{{result.accDistance}} km</h3>
+                    <h3>{{result.accDistance.toFixed(2)}} km</h3>
                 </div>
                 <div class="col">
                     총 런닝 시간
-                    <h3>{{result.accTime}}초</h3>
+                    <h3>{{result.accTime.toFixed(2)}}초</h3>
                 </div>
             </div> 
             <div class="row">
                 <div class="col">
                     평균 속도
-                    <h3>{{avgSpeed}} m/s</h3>
-                </div>
-                <div class="col">
-                    최대 속력
-                    <h3>{{avgSpeed}} m/s</h3>
+                    <h3>{{avgSpeed.toFixed(2)}} m/s</h3>
                 </div>
             </div>
         </div>
@@ -41,28 +37,36 @@
 
     <img :src="result.thumbnail" style="width:100%;height:45vh"/>
     <br>
-    <h4 style="text-align:center">구간</h4>
-    <div class = "col" >
-        <div class="row">
-            <div class = "col">
-                <h5>구간</h5>
+    <h4 style="margin-top:5vh; text-align:center">구간</h4>
+    <div class="card mb-30">
+          <div class="card-body p-0">
+            <div style="text-align:center;" class="d-flex border-bottom justify-content-between  p-3 ">
+              <div class="flex-grow-1">
+                <h5 style="text-align:center" class="m-0">구간</h5>
+              </div>
+              <div class="flex-grow-1">
+                <h5 class="m-0">도달 시간</h5>
+              </div>
             </div>
-            <div class = "col">
-                <h4>평균 페이스</h4>
+            <div v-if="records.length==0">
+              <h4 style="text-align:center; margin-top:3vh">구간별 기록이 없네요.</h4>
             </div>
+              <div v-else v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
+                <div class="flex-grow-1">
+                  <h5 style="padding-left:10vw;" class="m-0">{{record.accDistance}} km</h5>
+                </div>
+                <div class="flex-grow-1">
+                  <h5 style="padding-left:10vw;" class="m-0">{{convertToTime(record.accTime.toFixed(2))}}</h5>
+                </div>
+            </div>
+          </div>
         </div>
-        <div v-if="records.length==0">
-            <h4>저장된 구간이 없어요!</h4>
-        </div>
-        <div class="row" v-for="(record,index) in records" :key="index">
-            <div class = "col">
-                <h4>{{record.accDistance}}</h4>
-            </div>
-            <div class = "col">
-                <h4>{{convertToTime(record.accTime)}}</h4>
-            </div>
-        </div>
-    </div>
+         <b-card class="h-100">
+          <h4 class="card-title m-0">시간대별 속도</h4>
+          <div class="chart-wrapper" style="height: 300px ; width:100%">
+            <v-chart :options="echart4" :autoresize="true"></v-chart>
+          </div>
+        </b-card>
     <br>
   </div>
 </template>
@@ -77,8 +81,65 @@ export default {
         date: new Date(),
         result: {},
         avgSpeed:0,
-        records:[
-        ],
+        records:[],
+        echart4 : {
+        tooltip: {
+          show: true,
+          // trigger: 'axis',
+          axisPointer: {
+            type: "line",
+            animation: true
+          }
+        },
+        grid: {
+          top: "10%",
+          left: "0",
+          right: "0",
+          bottom: "0"
+        },
+        xAxis: {
+          type: "category",
+          data: [],
+          axisLine: {
+            show: true
+          },
+          axisLabel: {
+            show: true
+          },
+          axisTick: {
+            show: true
+          }
+        },
+        yAxis: {
+          type: "value",
+          axisLine: {
+            show: false
+          },
+          axisLabel: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          splitLine: {
+            show: true
+          }
+        },
+        label: {show: true, color: "#212121"},
+        series: [
+          {
+            data: [],
+            type: "line",
+            showSymbol: true,
+            smooth: true,
+            color: "#639",
+            lineStyle: {
+              opacity: 1,
+              width: 2
+            }
+          }
+        ]
+     }
     }
   },
   mounted() {
@@ -87,11 +148,13 @@ export default {
     this.result['parseTimeE'] = this.result.endTime.split('T')
     this.result['parseTimeS'] = this.result.startTime.split('T')
 
-    this.result.accDistance=parseFloat(parseFloat(this.myRunning.accDistance).toFixed(2))
-    if(this.result.accDistance!=0.00 ||this.result.accTime!=0.00 ||this.result.accDistance!=0 || this.result.accTime!=0){
-        this.avgSpeed=0;
+    if(this.result.accDistance!=0.00
+    &&this.result.accTime!=0.00 
+    &&this.result.accDistance!=0 
+    && this.result.accTime!=0){
+        this.avgspeed = this.result.accDistance/this.result.accTime
     }else {
-        this.avgSpeed = this.avgSpeed.toFixed(2)
+        this.avgSpeed=0;
     }
 
     console.log(this.result)
@@ -101,8 +164,11 @@ export default {
         if(i!=this.records.length-1)  {
             this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
         }
-            this.records[i].accDistance+=" km"
+        this.records[i].accDistance+=" km"
     }
+    this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+    this.echart4.xAxis.data.push(this.records[i].accDistance)
+  
 
     
 
