@@ -79,6 +79,7 @@ export default {
   },
   mounted() {
     this.getRunners();
+    this.$store.commit('closeSidebar')
     this.area = this.userInfo.gugunId.sidoId.sidoName + " " + this.userInfo.gugunId.gugunName;
   },
   computed: {

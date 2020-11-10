@@ -8,7 +8,7 @@
           height="120vw"
         />
       </div>
-      <div v-else>
+      <div v-if="friendInfo.userId.profile==null">
         <img
           class="profile-picture mb-2"
           :src="defaultProfile"
@@ -51,7 +51,7 @@
         v-for="(item, index) in items"
         transition="list"
       >
-        <router-link :to="`/app/runnings/runningResult`">
+         <router-link :to="{name:'runningFriends', query:{friendName:friendInfo.userId.username, runningId:item.runningId}}">
           <div
             class="card o-hidden mb-30 d-flex"
             :class="{ 'flex-column': isListView, 'flex-row': !isListView }"
@@ -70,8 +70,8 @@
                 <div class="item-title">{{ item.title }} 런닝</div>
                 <br />
                 <p class="m-0 text-muted text-small w-15 w-sm-100">
-                  {{ item.total_distance }}KM &nbsp; &nbsp; &nbsp; &nbsp;
-                  {{ convertToTime(item.running_avg_pace) }} &nbsp;
+                  {{ item.total_distance }}KM /&nbsp; &nbsp; &nbsp; &nbsp;
+                  {{ convertToTime(item.running_avg_pace) }} /&nbsp;
                   {{ item.acc_time_hour }}{{ item.acc_time_min }}'{{
                     item.acc_time_second
                   }}''
@@ -111,8 +111,8 @@ export default {
       .then((data) => {
         this.friendInfo = data.data.data[0];
         console.log(this.friendInfo);
-        this.isFollower();
         this.getRunning();
+        this.isFollower();
       });
     console.log(this.$route.query.friendId);
     this.$store.commit("closeSidebar");
@@ -159,6 +159,7 @@ export default {
             let obj;
             data.data.forEach((element) => {
               obj = new Object();
+              obj.runningId= element.runningId;
               obj.img = element.thumbnail;
               obj.title = element.startTime.split("T")[0];
               obj.total_distance = element.accDistance.toFixed(2);
