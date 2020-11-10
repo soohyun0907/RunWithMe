@@ -32,6 +32,9 @@ public class Board {
    @Column(name = "writer_name", nullable = false)
    private String writerName;
    
+   @Column(length = 500, name = "writer_profile")
+   private String writerProfile;
+   
    @Column(name = "board_title", nullable = false)
    private String boardTitle;
    

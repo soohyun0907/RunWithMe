@@ -2,6 +2,7 @@ package kr.co.rwm.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,8 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.None;
+
 import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.Board;
+import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.StatusCode;
@@ -65,8 +69,13 @@ public class BoardController {
 	@PostMapping("/board")
 	ResponseEntity insert(@RequestBody Map<String, String> boardInfo) {
 		int userId = Integer.parseInt(boardInfo.get("writerId"));
-		String writerName = userService.findByUserId(userId).get().getUsername();
-		Board ret = boardService.save(boardInfo,writerName);
+		Optional<User> user = userService.findByUserId(userId);
+		if(!user.isPresent()) {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN,ResponseMessage.USER_NOT_FOUND),HttpStatus.FORBIDDEN);
+		}
+		String writerName = user.get().getUsername();
+		String writerProfile = user.get().getProfile();
+		Board ret = boardService.save(boardInfo, writerName, writerProfile);
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.INSERT_BOARD_SUCCESS, ret), HttpStatus.OK);
 
 	}
