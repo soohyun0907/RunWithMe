@@ -56,15 +56,15 @@
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i>누적 거리</p>
-                                        <span>{{userInfo.totalDistane}}</span>
+                                        <span>{{userTotal.totalDistance}} Km</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Cloud-Weather text-16 mr-1"></i> 누적 런닝</p>
-                                        <span>{{userInfo.totalTime}}</span>
+                                        <span>{{userTotal.totalTime}} 초</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Face-Style-4 text-16 mr-1"></i>누적 시간</p>
-                                        <span>{{userInfo.totalCount}}</span>
+                                        <span>{{userTotal.totalCount}} 회</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-6">
@@ -109,7 +109,7 @@ import { mapGetters,mapActions, mapMutations } from "vuex";
 export default {
      metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Profile"
+    title: "내 정보"
   },
   data() {
     return {
@@ -117,11 +117,12 @@ export default {
       }
   },
    computed: {
-    ...mapGetters(["getSideBarToggleProperties", "userInfo","defaultProfile"]),
+    ...mapGetters(["getSideBarToggleProperties", "userInfo","defaultProfile","userTotal"]),
   },
 
   mounted() {
       console.log(this.userInfo)
+      console.log(this.userTotal)
        this.$store.commit('closeSidebar')
   },
   methods: {

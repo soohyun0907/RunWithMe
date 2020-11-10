@@ -5,18 +5,18 @@
         <img
           class="profile-picture mb-2"
           :src="friendInfo.userId.profile"
-          height="100vw"
+          height="120vw"
         />
       </div>
       <div v-else>
         <img
           class="profile-picture mb-2"
           :src="defaultProfile"
-          height="100vw"
+          height="120vw"
         />
       </div>
     </div>
-    <div style="margin-top: 50px">
+    <div>
       <p class="m-0 text-24" style="text-align: center">
         {{ friendInfo.userId.username }}
       </p>
@@ -220,7 +220,4 @@ export default {
 };
 </script>
 <style scoped>
-.user-profile-img {
-  margin-bottom: 10%;
-}
 </style>

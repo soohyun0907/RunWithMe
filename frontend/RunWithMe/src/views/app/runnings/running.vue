@@ -16,7 +16,7 @@
           </div>
           <div class="myRecord" >
               <div id="run_desc speed">현재 속도</div>
-              <span id="acc_time">{{ speed }}m/s</span>
+              <span id="acc_time">{{ show_speed }}m/s</span>
           </div>
           <div class="myRecord">
                 <div id="run_desc time">누적 시간</div>
@@ -75,6 +75,9 @@
                 <h5 class="m-0">도달 시간</h5>
               </div>
             </div>
+            <div v-if="records.length==0">
+              <h4>임시저장된 기록이 없네요.</h4>
+            </div>
               <div v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
                 <div class="flex-grow-1">
                   <h5 class="m-0">{{record.accDistance}}</h5>
@@ -131,7 +134,7 @@ export default {
       endTime: "",
       speed: 0,
       avgSpeed:0,
-      gugun: ["광명시"],
+      gugun: [],
       currentCity: "",
       thumbnail:"",
       //스톱워치 변수
@@ -149,24 +152,7 @@ export default {
         width  : 400,
         gap    : '1rem',
       },
-      records:[
-        {"userId": 1,
-        "accDistance": 1.012,
-        "accTime": 305,
-        },
-        {"userId": 1,
-        "accDistance": 2.112,
-        "accTime": 360,
-        },
-        {"userId": 1,
-        "accDistance": 3.001,
-        "accTime": 368,
-        },
-        {"userId": 1,
-        "accDistance": 3.123,
-        "accTime": 412,
-        }
-      ],
+      records:[],
 
       //chart
      echart4 : {
@@ -231,7 +217,7 @@ export default {
   },
   mounted() {
     this.$store.commit('closeSidebar')
-    this.getTempRuns()
+    
     for(var i=0; i<this.records.length; i++){
         if(i!=this.records.length-1)  {
             this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
@@ -257,9 +243,10 @@ export default {
     getTempRuns(){
         http.get(`runnings/temp/`)
             .then((res) => {
-                console.log("임시 저장 데이터")
+                console.log("km마다 뛴 기록 받아오기")
                 console.log(res.data);
                 this.records= res.data
+                console.log(this.records.length)
             })
             .catch((err) => {
                 console.log("1Km이상 뛰지 않았어요")
@@ -424,11 +411,11 @@ export default {
             var distance = this.computeDistance(this.previous, this.current);
             console.log("watchposition 이동거리" + distance);
             console.log("watchposition 걸린시간" + this.accumulated_time);
+            this.previous.lat = this.current.lat;
+            this.previous.lng = this.current.lng;
             var threshold = 0.001;
             if (distance > threshold) {
               // 일정속도 이상으로 뛸때만 기록.
-              this.previous.lat = this.current.lat;
-              this.previous.lng = this.current.lng;
               this.accumulated_distance += distance;
               this.show_distance = Math.round(this.accumulated_distance * 100) /100
               this.checkOneKm = this.accumulated_distance;
@@ -445,7 +432,7 @@ export default {
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
               this.speed = (this.checkOneKm * 1000) / this.checkSecond;
-              this.show_speed = this.speed
+              this.show_speed = this.speed.toFixed(2)
               this.checkSecond = 0;
               this.checkOneKm -= 1;
 
@@ -498,7 +485,7 @@ export default {
     savePosition(position) {
       let data = {
         accDistance: this.accumulated_distance+0.0001,
-        accTime: this.accumulated_time+0.0001,
+        accTime: this.accumulated_time,
         speed: this.speed+0.0001,
       };
       console.log(data)
@@ -517,17 +504,13 @@ export default {
         .catch((err) => {
           console.log("savePosition Error")
         });
-        
-        http.get(`runnings/get/${this.userInfo.userId}`)
-        .then(data =>{
-          this.records = data.data
-          console.log(data.data)
-        })
+        this.getTempRuns()
     },
 
     endLocationUpdates() {
-     this.stopLocationUpdates();
+      this.stopLocationUpdates();
       this.getScreenShot();
+      this.savePosition();
       this.isPause=false;
       this.running = false;
       this.stoppedDuration = 0;

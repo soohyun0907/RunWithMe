@@ -39,7 +39,7 @@ import { mapGetters,mapMutations } from "vuex";
 export default {
      metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Profile"
+    title: "프로필 수정"
   },
   computed: {
     ...mapGetters(["getSideBarToggleProperties", "userInfo","defaultProfile"]),
