@@ -45,7 +45,7 @@
 
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'">
-            <a href="" @click="chatFriend(props.row.userId);">
+            <a href="/app/apps/chat" @click="chatFriend(props.row.username);">
               <i class="i-Speach-Bubble-8 text-25 text-success mr-2"></i>
               {{ props.row.button }}</a
             >
@@ -146,7 +146,7 @@ export default {
   methods: {
     ...mapMutations(["closeSidebar"]),
     chatFriend(friendId){
-      alert(friendId+"친구와 채팅합니다")
+      alert(friendId+"님과 채팅")
     },
     deleteFriend(friendId){
       http.delete(`friends/friend/${friendId}`, {
