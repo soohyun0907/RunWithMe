@@ -26,11 +26,12 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public Board save(Map<String, String> boardInfo, String writerName) {
+	public Board save(Map<String, String> boardInfo, String writerName, String writerProfile) {
 		
 		Board entity = Board.builder()
 				.writerId(Integer.parseInt(boardInfo.get("writerId")))
 				.writerName(writerName)
+				.writerProfile(writerProfile)
 				.boardTitle(boardInfo.get("boardTitle"))
 				.boardContent(boardInfo.get("boardContent"))
 				.boardRegdate(new Date())
