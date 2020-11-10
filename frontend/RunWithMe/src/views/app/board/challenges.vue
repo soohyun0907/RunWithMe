@@ -216,6 +216,7 @@ export default {
                             obj.donateCurrent = element.donateCurrent;
                             obj.personalDistanceGoal = element.personalDistanceGoal;
                             obj.participant = element.participant;
+                            obj.isParticipate = false;
                             this.challengesIng.push(obj);
                         });
                         if(this.challengesIng.length == 0)
