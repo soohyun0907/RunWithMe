@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.transaction.Transactional;
 
@@ -45,7 +47,17 @@ public class RecordServiceImpl implements RecordService {
 	public void saveAllRecord(int runningId, List<Record> records) {
 		Running running = runningRepository.findByRunningId(runningId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 런닝이 없습니다."));
-		for(Record record: records) {
+		
+		ArrayList<Record> recordList = new ArrayList<Record>();
+		recordList.addAll(records);
+		Collections.sort(recordList, new Comparator<Record>() {
+			@Override
+			public int compare(Record o1, Record o2) {
+				return (int) (o1.getAccDistance() - o2.getAccDistance());
+			}
+		});
+		
+		for(Record record: recordList) {
 			record.setRunningId(running);
 			recordRepository.save(record);
 		}
