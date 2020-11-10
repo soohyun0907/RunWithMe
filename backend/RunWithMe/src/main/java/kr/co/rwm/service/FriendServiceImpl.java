@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.rwm.entity.Friend;
+import kr.co.rwm.entity.Ranks;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.repo.FriendRepository;
+import kr.co.rwm.repo.RanksRepository;
 import kr.co.rwm.repo.UserRepository;
 
 @Service
@@ -22,6 +24,10 @@ public class FriendServiceImpl implements FriendService {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	RanksRepository rankRepository;
+
 	
 	@Override
 	public List<User> list(int uid) {
@@ -35,6 +41,31 @@ public class FriendServiceImpl implements FriendService {
 		
 		return contactsList;
 	}
+	
+	
+
+	@Override
+	public List<User> match(int uid, String gender) {
+		User user = userRepository.findByUserId(uid).get();
+		int dong = user.getGugunId().getGugunId();
+		int sex;
+		if(gender.equals("male"))
+			sex = 0;
+		else
+			sex = 1;
+		int tier = rankRepository.findByUserId(user).get().getTier();
+
+		List<Ranks> userList = rankRepository.findByTier(tier);
+		List<User> result = new ArrayList<User>();
+		for (Ranks ranks : userList) {
+			if(ranks.getUserId().getGender() == sex && ranks.getUserId().getGugunId().getGugunId() == dong && ranks.getUserId().getUserId() != uid)
+				result.add(ranks.getUserId());
+		}
+		
+		return result;
+	}
+
+
 
 	@Override
 	public Friend insert(int uid, Map<String, Integer> friendInfo) {

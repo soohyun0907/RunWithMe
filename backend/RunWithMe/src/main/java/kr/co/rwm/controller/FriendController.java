@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,21 @@ public class FriendController {
 			uid = jwtTokenProvider.getUserIdFromJwt(token);
 			List<User> list = friendService.list(uid);
 			return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_FRIENDLIST_SUCCESS, list), HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Response> (new Response(StatusCode.FORBIDDEN,ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	@GetMapping("/match/{gender}")
+	public ResponseEntity match(HttpServletRequest request, @PathVariable String gender) {
+		System.out.println(gender);
+		String token = request.getHeader("AUTH");
+		int uid = 0; 
+		System.out.println("token: " + token);
+		if(jwtTokenProvider.validateToken(token)) {
+			uid = jwtTokenProvider.getUserIdFromJwt(token);
+			List<User> list = friendService.match(uid, gender);
+			return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_MATCHLIST_SUCCESS, list), HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response> (new Response(StatusCode.FORBIDDEN,ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}
