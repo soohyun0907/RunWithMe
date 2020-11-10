@@ -69,7 +69,9 @@
       <div class="ul-widget__body">
         <div class="ul-widget1">
           <div class="ul-widget__item ul-widget4__users" v-for="(ranker,index) in rankList" :index="index" :key="ranker.rankerId">
-            <h5 style="margin-right:5px;">{{ index+1 }} </h5>
+            <div>
+            <h5 style="width:5vh;">{{ index+1 }} </h5>
+            </div>
               <div v-if="ranker.userId.profile!=null" class="ul-widget4__img">
                 <img
                   :src="ranker.userId.profile"
