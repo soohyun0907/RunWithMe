@@ -21,11 +21,20 @@
             placeholder="제안하고자 하는 챌린지 설명, 기간, 목표 거리, 목표 금액, 개인당 목표 거리를 포함해서 작성해주세요."
             rows="8"
         ></b-form-textarea>
-        </b-form-group>
+        <br>
+        <div v-if="updateBoardImg">
+            <input type="file" id="files" ref="files" v-on:change="handleFileUpload()"
+                accept="image/*" />
+        </div>
 
-            <b-col md="12">
+        </b-form-group>
+            <b-col md="12" v-if="!updateBoardImg">
                 <b-button class="m-1" type="submit" variant="primary">Submit</b-button>
                 <b-button type="reset" variant="danger">Reset</b-button>
+            </b-col>
+
+            <b-col md="12" v-if="updateBoardImg">
+                <b-button class="m-1" variant="primary" @click="submitFile()">File Submit</b-button>
             </b-col>
         </b-form>
   </div>
@@ -54,13 +63,15 @@ export default {
                 boardContent: ""
             },
             boardId : "",
-            updateBoardImg : false
+            updateBoardImg : false,
+            file: [],
         }
     },
     methods: {
         ...mapMutations(["closeSidebar"]),
         onSubmit(el) {
             let x = el.preventDefault();
+            console.log(this.userInfo);
             this.board.writerId = this.userInfo.userId;
             http
                 .post('/boards/board', 
@@ -69,7 +80,7 @@ export default {
                 .then(({ data }) => {
                     if(data.status == 200){
                         alert("게시글 완료 이미지를 등록해주세요.");
-                        console.log(data);
+                        // console.log(data);
                         this.boardId = data.data.boardId;
                         this.updateBoardImg = true;
                     } else {
@@ -84,6 +95,31 @@ export default {
             this.board.boardTitle = "";
             this.board.boardContent = "";
         },
+        submitFile(){
+            let formData = new FormData();
+            formData.append('files', this.file[0]);
+            http
+                .post('boards/board/'+ this.boardId,
+                     formData, 
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                    }
+                })
+                .then(({ data }) => {
+                    if(data.status == 200){
+                        alert("이미지 업로드 완료!~");
+                        this.$router.push("/app/board/challengeBoard");
+                    } else {
+                        alert("오류가 발생하였습니다.");
+                        return;
+                    }
+                })
+        },
+        handleFileUpload() {
+            this.file = this.$refs.files.files;
+            // console.log(this.file);
+        }
     }
 }
 </script>

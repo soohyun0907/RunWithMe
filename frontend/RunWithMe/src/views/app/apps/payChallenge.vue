@@ -65,10 +65,15 @@ export default {
         movePayment: "",
     };
   },
+  computed: {
+    ...mapGetters(["userInfo"])
+  },
   created() {
     this.challengeId = this.$route.query.no;
     this.getChallengeInfo();
-    this.getUserInfo();
+    this.mileage = this.userInfo.mileage;
+    if(this.mileage == 0)
+      this.showMovepaymentModal();
   },
   mounted() {
     this.$store.commit('closeSidebar')
@@ -83,19 +88,6 @@ export default {
                 this.challengeInfo = data.data.challengeId;
             }
             // console.log(this.challengeInfo);
-        })
-        .catch((error) => {
-            console.log(error);
-            return;
-        })
-    },
-    getUserInfo() {
-        http
-        .get('/users')
-        .then(({data}) => {
-            this.mileage = data.data.mileage;
-            if(this.mileage == 0)
-              this.showMovepaymentModal();
         })
         .catch((error) => {
             console.log(error);
