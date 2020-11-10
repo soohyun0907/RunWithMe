@@ -146,8 +146,8 @@ export default {
   },
 
   mounted() {
-    this.getRunningsbyArea()
     this.getRunnings()
+    this.getRunningsbyArea()
     console.log(this.userInfo)
     if (window.google && window.google.maps) {
       this.initMap();

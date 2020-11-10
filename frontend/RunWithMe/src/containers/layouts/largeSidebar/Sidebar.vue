@@ -48,8 +48,8 @@
             :data-submenu="true"
           >
             <a class="nav-item-hold" href="#">
-              <i class="nav-icon i-Administrator"></i>
-              <span class="nav-text">ChallengeBoard</span>
+              <i class="nav-icon i-Target"></i>
+              <span class="nav-text">Challenge</span>
             </a>
             <div class="triangle"></div>
           </li>
