@@ -153,7 +153,7 @@ export default {
   },
    methods: {
     ...mapActions(["signOut"]),
-    ...mapMutations(["closeSidebar"]),
+    ...mapMutations(["closeSidebar","mutateUserInfo"]),
     //   validate form
     sidoSelected(sido) {
       console.log(sido.sidoName)
@@ -188,7 +188,13 @@ export default {
         console.log(data);
         http.put(`users/`, data)
         .then(data=>{
+          console.log("회원정보 수정!")
           console.log(data)
+          http.get(`users/`)
+          .then(data => {
+            console.log("회원정보 갱신!")
+            this.$store.commit('mutateUserInfo',data.data.data)
+          })
         }).catch(err =>{
           console.log("회원정보 수정 에러")
         })
