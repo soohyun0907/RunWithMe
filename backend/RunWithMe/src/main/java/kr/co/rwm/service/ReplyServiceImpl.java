@@ -86,4 +86,10 @@ public class ReplyServiceImpl implements ReplyService {
 		return ret;
 	}
 
+	@Override
+	public List<Reply> findReplyByBoardId(int boardId) {
+		List<Reply> reply = replyRepository.findAllByBoardId(boardId);
+		return reply;
+	}
+
 }

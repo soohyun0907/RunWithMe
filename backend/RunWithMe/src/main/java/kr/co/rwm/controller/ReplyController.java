@@ -57,6 +57,12 @@ public class ReplyController {
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_REPLY_SUCCESS, list), HttpStatus.OK);
 	}
 	
+	@GetMapping("/reply/{boardId}")
+	ResponseEntity replyListByBoardId(@PathVariable int boardId) {
+		List<Reply> list = replyService.findReplyByBoardId(boardId);
+		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_REPLY_SUCCESS, list), HttpStatus.OK);
+	}
+	
 	@PostMapping("/reply")
 	ResponseEntity insert(@RequestBody Map<String, String> replyInfo, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
