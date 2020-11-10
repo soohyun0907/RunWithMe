@@ -56,7 +56,7 @@
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i>누적 거리</p>
-                                        <span>{{userTotal.totalDistance}} Km</span>
+                                        <span>{{userTotal.totalDistance.toFixed(2)}} Km</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Cloud-Weather text-16 mr-1"></i> 누적 런닝</p>
