@@ -15,5 +15,7 @@ public interface ReplyService {
 
 	Long delete(int reply_id);
 
+	List<Reply> findReplyByBoardId(int boardId);
+
 
 }
