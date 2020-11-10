@@ -93,7 +93,7 @@ public class ChallengeController {
 		System.out.println("/challenges/save - 관리자가 challenge를 등록합니다.");
 		User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (loginUser.getRoles().stream().anyMatch(x -> x.equals("admin"))) {
-			String url = s3Service.challengeImgUpload(files);
+			String url = s3Service.challengeImgUpload(files, "challenges");
 			System.out.println("images"+url);
 			Challenge challenge = challengeService.findChallengeByChallengeId(challengeId);
 			challenge.setChallengeImg(url);

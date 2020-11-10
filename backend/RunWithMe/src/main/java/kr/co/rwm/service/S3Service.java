@@ -11,6 +11,6 @@ public interface S3Service {
 
 	String profileUpload(MultipartFile file, ByteArrayOutputStream profile);
 	
-	public String challengeImgUpload(MultipartFile file);
+	public String challengeImgUpload(MultipartFile file, String fileName);
 
 }
