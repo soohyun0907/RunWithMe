@@ -118,6 +118,7 @@ public interface ChallengeService {
 	 * @return
 	 */
 	public List<ChallengeUser> findAllChallengeUserByUserIdIng(int userId);
+	public List<ChallengeUser> findAllNonChallengeUserByUserIdIng(int userId);
 	
 	/**
 	 * 유저의 참가 예정 챌린지 목록
@@ -125,6 +126,7 @@ public interface ChallengeService {
 	 * @return
 	 */
 	public List<ChallengeUser> findAllChallengeUserByUserIdComingSoon(int userId);
+	public List<ChallengeUser> findAllNonChallengeUserByUserIdComingSoon(int userId);
 	
 	/**
 	 * 유저의 종료 챌린지 목록
@@ -132,6 +134,7 @@ public interface ChallengeService {
 	 * @return
 	 */
 	public List<ChallengeUser> findAllChallengeUserByUserIdEnd(int userId);
+	public List<ChallengeUser> findAllNonChallengeUserByUserIdEnd(int userId);
 	
 	/**
 	 * 유저가 탈퇴 시 
