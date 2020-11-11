@@ -1,14 +1,14 @@
 <template>
   <div class="main-content">
     <div class="user-profile-img">
-      <div v-if="friendInfo.userId.profile != null">
+      <div v-if="friendInfo && friendInfo.userId.profile!= null">
         <img
           class="profile-picture mb-2"
           :src="friendInfo.userId.profile"
           height="120vw"
         />
       </div>
-      <div v-if="friendInfo.userId.profile==null">
+      <div v-else>
         <img
           class="profile-picture mb-2"
           :src="defaultProfile"

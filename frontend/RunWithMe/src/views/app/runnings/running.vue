@@ -234,8 +234,8 @@ export default {
         http.get(`runnings/temp/`)
             .then((res) => {
                 console.log("km마다 뛴 기록 받아오기")
-                console.log(res.data);
-                this.records= res.data
+                console.log(res.data.data);
+                this.records= res.data.data
 
                 for(var i=0; i<this.records.length; i++){
                   if(i!=this.records.length-1)  {
@@ -420,6 +420,8 @@ export default {
                 this.current.lng
               );
               this.linePath.push(currentLatLng);
+              this.show_speed = (this.accDistance*1000 / this.accumulated_time).toFixed(2)
+
             }
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
@@ -495,6 +497,7 @@ export default {
         })
         .catch((err) => {
           console.log("savePosition Error")
+          console.log(err)
         });
         this.getTempRuns()
     },
@@ -534,6 +537,9 @@ export default {
         console.log(runningData)
         this.$store.commit('mutateMyRunning',runningData)
         this.$router.push('/app/runnings/runningResult')
+      }).catch(err => {
+        console.log("runnings/ 저장 오류")
+        console.log(err)
       })
     },
     clockRunning() {
