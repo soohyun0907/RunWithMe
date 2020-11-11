@@ -285,8 +285,9 @@ export default {
 
         {
             this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
-            this.uid = this.userInfo.userId;
-
+            this.uid = this.userInfo.userId.userId;
+            
+            console.log(this.uid)
             http
                 .get('/runnings/'+this.uid)
                 .then(response => {
