@@ -105,7 +105,11 @@ export default {
           if(data.status == 200){
             this.makePayment();
           } else {
-            alert("챌린지 참여 중 오류가 발생하였습니다.");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '챌린지 참여 중 오류가 발생하였습니다.'
+            });
             return;
           }
         })
@@ -134,9 +138,18 @@ export default {
         .delete("/challenges/runners/"+this.challengeId+"/"+this.donateAmount)
         .then(({data}) => {
           if(data.status == 200){
-            alert("챌린지 참여 중 오류가 발생하였습니다.");
+            // alert("챌린지 참여 중 오류가 발생하였습니다.")
+            Swal.fire({
+              icon: 'success',
+              title: '챌린지 취소 성공',
+              text: '챌린지 참여를 취소하였습니다.'
+            });
           } else {
-            alert("챌린지 참여 중 오류가 발생하였습니다.");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '챌린지 참여 중 오류가 발생하였습니다.'
+            });
             return;
           }
         })
