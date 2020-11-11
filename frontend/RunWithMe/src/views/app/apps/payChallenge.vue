@@ -65,10 +65,15 @@ export default {
         movePayment: "",
     };
   },
+  computed: {
+    ...mapGetters(["userInfo"])
+  },
   created() {
     this.challengeId = this.$route.query.no;
     this.getChallengeInfo();
-    this.getUserInfo();
+    this.mileage = this.userInfo.mileage;
+    if(this.mileage == 0)
+      this.showMovepaymentModal();
   },
   mounted() {
     this.$store.commit('closeSidebar')
@@ -89,19 +94,6 @@ export default {
             return;
         })
     },
-    getUserInfo() {
-        http
-        .get('/users')
-        .then(({data}) => {
-            this.mileage = data.data.mileage;
-            if(this.mileage == 0)
-              this.showMovepaymentModal();
-        })
-        .catch((error) => {
-            console.log(error);
-            return;
-        })
-    },
     onSubmit(el) {
       let x = el.preventDefault();
       http
@@ -113,7 +105,11 @@ export default {
           if(data.status == 200){
             this.makePayment();
           } else {
-            alert("챌린지 참여 중 오류가 발생하였습니다.");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '챌린지 참여 중 오류가 발생하였습니다.'
+            });
             return;
           }
         })
@@ -142,9 +138,18 @@ export default {
         .delete("/challenges/runners/"+this.challengeId+"/"+this.donateAmount)
         .then(({data}) => {
           if(data.status == 200){
-            alert("챌린지 참여 중 오류가 발생하였습니다.");
+            // alert("챌린지 참여 중 오류가 발생하였습니다.")
+            Swal.fire({
+              icon: 'success',
+              title: '챌린지 취소 성공',
+              text: '챌린지 참여를 취소하였습니다.'
+            });
           } else {
-            alert("챌린지 참여 중 오류가 발생하였습니다.");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '챌린지 참여 중 오류가 발생하였습니다.'
+            });
             return;
           }
         })

@@ -48,4 +48,6 @@ public interface RecordService {
 
 	public List<RunningUser> findRunningUserByUserIdAndUserId(int userId);
 
+	public List<RunningUser> analysis(int userId);
+
 }

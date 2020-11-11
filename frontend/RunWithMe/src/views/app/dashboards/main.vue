@@ -69,13 +69,16 @@
       <div class="ul-widget__body">
         <div class="ul-widget1">
           <div class="ul-widget__item ul-widget4__users" v-for="(ranker,index) in rankList" :index="index" :key="ranker.rankerId">
-            <h5 style="margin-right:5px;">{{ index+1 }} </h5>
+            <div>
+            <h5 style="width:5vh;">{{ index+1 }} </h5>
+            </div>
               <div v-if="ranker.userId.profile!=null" class="ul-widget4__img">
                 <img
                   :src="ranker.userId.profile"
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
+                  height="40px"
                 />
               </div>
                <div v-else class="ul-widget4__img">
@@ -91,8 +94,8 @@
                   {{ranker.userId.username}}
                 </router-link>
               </div>
-              <span class="ul-widget4__number t-font-boldest text-success">
-                {{ranker.totalExp}}
+              <span style="text-align:right; width:20vw" class="ul-widget4__number t-font-boldest text-success">
+                {{ranker.totalExp}} P
               </span>
           </div>
         </div>
@@ -151,8 +154,8 @@
               </p> -->
               <p class="m-0 text-muted text-small w-15 w-sm-100">
                 {{ item.total_distance }}KM /
-                {{convertToTime(item.running_avg_pace)}} /
-                {{item.accumulcated_time}}
+                {{ convertToTime(item.running_avg_pace) }} /
+                {{ convertToTime(item.accumulcated_time) }}
               </p>
             </div>
           </div>
@@ -193,15 +196,13 @@ export default {
       rankList : [],
       friendsFeed: [],
       haveFriends: true,
-      // events:[],
     };
   },
   computed: {
-    ...mapGetters(["events","defaultProfile"])
+    ...mapGetters(["defaultProfile"])
   },
   created() {
-    this.getChallengesCommingSoon();
-    this.getChallengesIng();
+    this.getChallenges();
     this.getTopRankers();
     this.getFriendsRunning();
   },
@@ -213,7 +214,7 @@ export default {
     convertToTime(origin) {
         var time = "";
         time += parseInt(origin/60) + "\'";
-        time += origin%60 + "\"";
+        time += (origin%60).toFixed() + "\"";
         return time;
     },
     toggleOverlay() {
@@ -222,25 +223,13 @@ export default {
       else
         this.slidesOverlayShow = true;
     },
-    getChallengesIng() {
+    getChallenges() {
       http
-        .get("challenges/ing")
+        .get("challenges")
         .then(({data}) => {
           if(data.status==200){
-            let obj;
-            data.data.forEach(element => {
-              obj = new Object();
-              obj.id = element.challengeId;
-              obj.title = element.title;
-              obj.challengeImg = element.challengeImg;
-              obj.startTime = element.startTime;
-              obj.endTime = element.endTime;
-              this.tmp1.push(obj);
-            });
-            this.slides = [
-              ...this.tmp1,
-              ...this.tmp2
-            ];
+            this.slides = data.data;
+            console.log(this.slides);
           }
         })
         .catch((error) => {
@@ -248,28 +237,6 @@ export default {
           return;
         });
       
-    },
-    getChallengesCommingSoon(){
-      http
-        .get("challenges/comingsoon")
-        .then(({data}) => {
-          if(data.status==200){
-            let obj;
-            data.data.forEach(element => {
-              obj = new Object();
-              obj.id = element.challengeId;
-              obj.title = element.title;
-              obj.challengeImg = element.challengeImg;
-              obj.startTime = element.startTime;
-              obj.endTime = element.endTime;
-              this.tmp2.push(obj);
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          return;
-        });
     },
     getTopRankers() {
       http
@@ -290,20 +257,20 @@ export default {
         .then(({data}) => {
           if(data.status == 200){
             let obj;
-            console.log(data.data.runnings[0]);
+            // console.log(data.data);
             for(var i=0; i<data.data.friends.length; i++) {
               obj = new Object();
-              if(data.data.runnings[0] == null) {
-                obj.total_distance = "기록이 없습니다";
-                obj.runningId = "";
-                obj.total_distance = "";
+              if(data.data.runnings[i] == null) {
+                obj.total_distance = 0;
+                obj.running_avg_pace = 0;
+                obj.accumulcated_time = 0;
                 obj.mapImg = "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png";
               }else {
-                obj.runningId = data.data.runnings[0].runningId;
-                obj.total_distance = data.data.runnings[0].accDistance;
-                obj.accumulcated_time = data.data.runnings[0].accTime;
-                obj.running_avg_pace = obj.accumulcated_distance / obj.total_distance;
-                obj.mapImg = data.data.runnings[0].thumbnail;
+                obj.runningId = data.data.runnings[i].runningId;
+                obj.total_distance = data.data.runnings[i].accDistance.toFixed(2);
+                obj.accumulcated_time = data.data.runnings[i].accTime;
+                obj.running_avg_pace = data.data.runnings[i].accTime / data.data.runnings[i].accDistance;
+                obj.mapImg = data.data.runnings[i].thumbnail;
               }
               obj.userId = data.data.friends[i].userId;
               if(data.data.friends[i].profile==null){
@@ -317,7 +284,7 @@ export default {
             if(this.friendsFeed.length == 0)
               this.haveFriends = false;
             
-            console.log(this.friendsFeed);
+            // console.log(this.friendsFeed);
           }
         })
         .catch((error) => {

@@ -84,7 +84,7 @@
                     <input
                       type="radio"
                       name="orderStatus"
-                      value=1
+                      value=2
                       v-model="gender"
                     />
                     <span>여자</span>
@@ -95,7 +95,7 @@
                     <input
                       type="radio"
                       name="orderStatus"
-                      value=2
+                      value=1
                       v-model="gender"
                     />
                     <span>남자</span>
@@ -172,10 +172,14 @@ import { required, sameAs, minLength } from "vuelidate/lib/validators";
 import { mapGetters, mapActions } from "vuex";
 import http from "@/utils/http-common";
 import dropdown from "vue-dropdowns";
+//sweet alert
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+import 'sweetalert2/src/sweetalert2.scss'
+
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignUp",
+    title: "회원가입",
   },
 
   data() {
@@ -291,20 +295,33 @@ export default {
       http
         .get(`/users/check/${this.email}`)
         .then((res) => {
-          console.log("이메일 인증 시도 성공");
           if (res.data.data == true) {
-            console.log("회원 가입 가능한 이메일입니다!");
             this.emailAuth = true;
+            Swal.fire({
+              icon:'success',
+              text:'사용할 수 있는 이메일입니다!',
+              showConfirmButton:false,
+              timer:1200,
+            })
           } else {
-            console.log("중복된 이메일입니다.");
-            console.log(res);
+            Swal.fire({
+              icon:'error',
+              text:'이메일 형식이 잘못되었습니다!',
+              showConfirmButton:false,
+              timer:1200,
+            })
           }
         })
         .catch((error) => {
-          console.log("이메일 인증 실패");
-          console.log(error);
           this.emailAuth = false;
-        });
+          console.log("이메일 인증 실패");
+            Swal.fire({
+              icon:'error',
+              text:'이미 가입된 이메일입니다!',
+              showConfirmButton:false,
+              timer:1200,
+            })
+          });
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {

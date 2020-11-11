@@ -1,11 +1,13 @@
 <template>
     <div class="main-content">
       <breadcumb :page="'Challenge Board'" :folder="'Board'" />
-
-      <b-button variant="primary ripple btn-icon m-1" @click="goWrite()">
-        <span class="ul-btn__icon"><i class="i-Gear-2"></i></span>
-        <span class="ul-btn__text ml-1">글쓰기</span>
-      </b-button>
+      <div class="btn">
+        <b-button class="float-right" variant="primary ripple btn-icon" @click="goWrite()">
+          <span class="ul-btn__icon"><i class="i-Gear-2"></i></span>
+          <span class="ul-btn__text">글쓰기</span>
+        </b-button>
+      </div>
+      <div class="board">
       <b-col xl="8" md="12" class=" mb-30">
         <!-- <b-card class="h-100"> -->
           <div class="ul-widget5" v-for="board in Boards" :key="board.boardId">
@@ -23,7 +25,7 @@
                     </div>
                     <div class="ul-widget5__info">
                       <span>Author:</span>
-                      <span class="text-primary"> {{ board.writerId}} </span> <br>
+                      <span class="text-primary"> {{ board.writerName}} </span> <br>
                       <span>Released:</span>
                       <span class="text-primary">{{ board.boardEditdate.substring(0,10) }}</span>
                     </div>
@@ -38,7 +40,7 @@
                     </span>
                   </div>
                   <div class="ul-widget5__stats">
-                    <span class="ul-widget5__number"> 0 </span>
+                    <span class="ul-widget5__number"> {{ board.replyCount }} </span>
                     <span class="ul-widget5__sales text-mute">
                       댓글 수
                     </span>
@@ -50,12 +52,13 @@
           </div>
         <!-- </b-card> -->
       </b-col>
+      </div>
     </div>
 </template>
 
 <script>
 import http from "@/utils/http-common";
-import { mapGetters } from "vuex";
+import { mapGetters,mapMutations } from "vuex";
 
 export default {
   metaInfo: {
@@ -73,10 +76,12 @@ export default {
     this.getBoards();
   },
   methods: {
+  ...mapMutations(['closeSidebar']),
     getBoards() {
       http
         .get("boards")
         .then(({data}) => {
+          console.log(data.data);
           this.Boards = data.data;
           this.Boards = this.Boards.reverse();
         })

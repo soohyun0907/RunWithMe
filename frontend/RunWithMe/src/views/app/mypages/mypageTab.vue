@@ -101,7 +101,7 @@
                             <b-card-text>
                               <h5><code>{{running.end[0]}}</code>일 런닝 기록.</h5>
                             </b-card-text>
-                            <b-card-text>총 런닝 시간 : <strong>{{running.minute}}분 {{running.second}}초</strong></b-card-text>
+                            <b-card-text>총 런닝 시간 : <strong>{{ parseInt(running.minute) }}분 {{running.second}}초</strong></b-card-text>
                             <b-card-text>총 런닝 거리 : <strong>{{running.accDistance}} km</strong></b-card-text>
                             <b-card-text>시작 시간 : <strong>{{running.start[1]}}</strong> </b-card-text>
                             <b-card-text>종료 시간 : <strong>{{running.end[1]}}</strong> </b-card-text>
@@ -122,7 +122,7 @@
 
 <script>
 import http from "@/utils/http-common";
-import { mapGetters } from "vuex";
+import { mapGetters,mapMutations } from "vuex";
 
 export default {
   metaInfo: {
@@ -146,8 +146,9 @@ export default {
   },
 
   mounted() {
-    this.getRunningsbyArea()
+    this.$store.commit('closeSidebar')
     this.getRunnings()
+    this.getRunningsbyArea()
     console.log(this.userInfo)
     if (window.google && window.google.maps) {
       this.initMap();
@@ -158,13 +159,14 @@ export default {
     console.log(this.userInfo);
   },
   methods: {
+    ...mapMutations(["closeSidebar"]),
     getRunningsbyArea(){
       http.get(`runnings/areas`)
       .then(data => {
         this.areaRunning=data.data.data
         for(var i=0;i<this.areaRunning.length;i++){
         if(this.areaRunning[i].accTime>=60){
-          this.areaRunning[i]['minute']=this.areaRunning[i].accTime/60
+          this.areaRunning[i]['minute']= this.areaRunning[i].accTime/60
         }else{
           this.areaRunning[i]['minute']=0
         }
