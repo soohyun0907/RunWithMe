@@ -80,7 +80,7 @@
             </div>
               <div v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
                 <div class="flex-grow-1">
-                  <h5 class="m-0">{{record.accDistance.toFixed(1)}} km</h5>
+                  <h5 class="m-0">{{record.accDistance}} km</h5>
                 </div>
                 <div class="flex-grow-1">
                   <h5 class="m-0">{{convertToTime(record.accTime.toFixed(2))}}</h5>
@@ -239,7 +239,10 @@ export default {
 
                 for(var i=0; i<this.records.length; i++){
                   if(i!=this.records.length-1)  {
-                      this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
+                      this.records[i].accDistance= Math.floor(this.records[i].accDistance)
+                  }else{
+                      this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(2)
+
                   }
                   this.records[i].accDistance+=" km"
                   console.log(this.echart4)
