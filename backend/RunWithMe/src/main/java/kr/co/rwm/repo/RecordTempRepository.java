@@ -2,6 +2,8 @@ package kr.co.rwm.repo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,11 +38,17 @@ public class RecordTempRepository {
 		Arrays.sort(mapkey);
 
 		List<Record> records = new ArrayList<Record>();
-		// 결과 출력
 		for (Integer nKey : map.keySet())
 		{
 			records.add(map.get(nKey));
 		}
+
+		Collections.sort(records, new Comparator<Record>() {
+			@Override
+			public int compare(Record o1, Record o2) {
+				return (int) (o1.getAccDistance() - o2.getAccDistance());
+			}
+		});
 		
 		return records;
 	}

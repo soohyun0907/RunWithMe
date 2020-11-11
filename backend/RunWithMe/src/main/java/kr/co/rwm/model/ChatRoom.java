@@ -23,4 +23,9 @@ public class ChatRoom implements Serializable {
         chatRoom.name = name;
         return chatRoom;
     }
+
+	@Override
+	public String toString() {
+		return "ChatRoom [roomId=" + roomId + ", name=" + name + ", userCount=" + userCount + "]";
+	}
 }
