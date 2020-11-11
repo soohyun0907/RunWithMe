@@ -231,14 +231,12 @@ export default {
         .then(({data}) => {
           if(data.status==200){
             this.slides = data.data;
-            console.log(this.slides);
           }
         })
         .catch((error) => {
           console.log(error);
           return;
         });
-      
     },
     getTopRankers() {
       http
