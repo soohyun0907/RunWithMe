@@ -29,7 +29,7 @@
       </div>
       <div align="center">
         <b-button v-if="isFriend" variant="outline-dark m-1" @click="cancleFollow()">팔로우 취소</b-button>
-        <b-button v-if="!isFriend" variant="info ripple m-1" @click="insertFollow()">팔로우</b-button>
+        <b-button v-if="!isFriend && friendInfo.userId.userId!=userInfo.userId" variant="info ripple m-1" @click="insertFollow()">팔로우</b-button>
       </div>
     </div>
     <br />
