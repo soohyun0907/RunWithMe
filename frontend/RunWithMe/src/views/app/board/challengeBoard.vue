@@ -1,11 +1,13 @@
 <template>
     <div class="main-content">
       <breadcumb :page="'Challenge Board'" :folder="'Board'" />
-
-      <b-button variant="primary ripple btn-icon" @click="goWrite()">
-        <span class="ul-btn__icon"><i class="i-Gear-2"></i></span>
-        <span class="ul-btn__text">글쓰기</span>
-      </b-button>
+      <div class="btn">
+        <b-button class="float-right" variant="primary ripple btn-icon" @click="goWrite()">
+          <span class="ul-btn__icon"><i class="i-Gear-2"></i></span>
+          <span class="ul-btn__text">글쓰기</span>
+        </b-button>
+      </div>
+      <div class="board">
       <b-col xl="8" md="12" class=" mb-30">
         <!-- <b-card class="h-100"> -->
           <div class="ul-widget5" v-for="board in Boards" :key="board.boardId">
@@ -50,6 +52,7 @@
           </div>
         <!-- </b-card> -->
       </b-col>
+      </div>
     </div>
 </template>
 
