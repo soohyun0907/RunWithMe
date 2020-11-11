@@ -25,6 +25,7 @@
           <vue-perfect-scrollbar
             :settings="{ suppressScrollX: true, wheelPropagation: false }"
             class="contacts-scrollable perfect-scrollbar rtl-ps-none ps scroll"
+            style="height:50vh;"
           >
             <div>
               <div
