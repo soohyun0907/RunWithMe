@@ -81,12 +81,12 @@ public class FriendServiceImpl implements FriendService {
 		User user = userRepository.findByUserId(uid).get();
 		int dong = user.getGugunId().getGugunId();
 		int sex;
-		if (gender.equals("male"))
-			sex = 0;
-		else
+		if(gender.equals("male"))
 			sex = 1;
+		else
+			sex = 2;
 		int tier = rankRepository.findByUserId(user).get().getTier();
-
+		System.out.println("tier:" + tier);
 		List<Ranks> userList = rankRepository.findByTier(tier);
 		List<User> result = new ArrayList<User>();
 		for (Ranks ranks : userList) {
@@ -95,6 +95,27 @@ public class FriendServiceImpl implements FriendService {
 				result.add(ranks.getUserId());
 		}
 
+		return result;
+	}
+
+
+	public List<User> analysis(int uid, String gender) {
+		User user = userRepository.findByUserId(uid).get();
+		int dong = user.getGugunId().getGugunId();
+		int sex;
+		if(gender.equals("male"))
+			sex = 1;
+		else
+			sex = 2;
+		int tier = rankRepository.findByUserId(user).get().getTier();
+		System.out.println("tier:" + tier);
+		List<Ranks> userList = rankRepository.findByTier(tier);
+		List<User> result = new ArrayList<User>();
+		for (Ranks ranks : userList) {
+			if(ranks.getUserId().getGender() == sex && ranks.getUserId().getUserId() != uid)
+				result.add(ranks.getUserId());
+		}
+		
 		return result;
 	}
 
