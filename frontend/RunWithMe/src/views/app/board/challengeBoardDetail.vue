@@ -57,10 +57,22 @@
             </div>
               <!-- </div> -->
             <div class="col">
-              <h5>{{ reply.content}}</h5>
-              <div class="float-right">
-                  {{ reply.regdate.substring(0,10) }}
-                  {{ reply.regdate.substring(11,16) }}
+              <b-collapse visible :id="'collapse-'+reply.replyId">
+                <h5>{{ reply.content}}</h5>
+              </b-collapse>
+              <b-collapse :id="'collapse-'+reply.replyId">
+                <b-textarea v-model="reply.content"></b-textarea>
+                <b-button-group size="sm" class="mr-1">
+                  <b-button @click="updateReply(reply.replyId, reply.content)">수정</b-button>
+                  <b-button v-b-toggle="'collapse-'+reply.replyId">취소</b-button>
+                </b-button-group>
+                <!-- <b-button size="sm" variant="dark m-1">수정</b-button> -->
+              </b-collapse>
+              {{ reply.regdate.substring(0,10) }}
+              {{ reply.regdate.substring(11,16) }}
+              <div v-if="userInfo.userId == reply.replyWriterId" class="float-right">
+                  <a href @click="deleteReply(reply.replyId)" style="margin-right:15px;">삭제</a> &nbsp;
+                  <a v-b-toggle="'collapse-'+reply.replyId">수정</a>
               </div>
             </div>
             </b-list-group-item>
@@ -70,7 +82,7 @@
           <b-input-group class="mt-3" style="margin-bottom: 20px;">
             <b-form-input v-model="replyInfo.content"></b-form-input>
             <b-input-group-append>
-              <b-button variant="info" @click="postReply()">Button</b-button>
+              <b-button variant="info" @click="postReply()">댓글 등록</b-button>
             </b-input-group-append>
           </b-input-group>
         </div>
@@ -102,14 +114,14 @@ export default {
       },
       allReply: [],
       isWriter: false,
-      deleteModal: "",
+      deleteModal: ""
     }
   },
   computed: {
     ...mapGetters(["defaultProfile", "userInfo"])
   },
   mounted() {
-    this.$store.commit('closeSidebar')
+    this.$store.commit('closeSidebar');
     this.getBoardInfo();
     this.getReplyInfo();
     this.getBoards();
@@ -162,7 +174,7 @@ export default {
       .then(({data}) => {
         if(data.status == 200){
           // this.allReply = data.data;
-          console.log(data.data);
+          // console.log(data.data);
           var obj;
           data.data.forEach(element => {
             obj = new Object();
@@ -276,6 +288,41 @@ export default {
           // An error occurred
           console.log(error);
         });
+    },
+    deleteReply(replyId) {
+      http
+      .delete("replies/reply/" + replyId)
+      .then(({data}) => {
+        if(data.status == 200) {
+          console.log("댓글삭제 완료!");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return;
+      })
+    },
+    updateReply(replyId, content) {
+      http
+        .put("replies/reply", {
+          replyId: replyId,
+          boardId: this.board.boardId,
+          content: content,
+          replyDepth: 0,
+          parentId: 0,
+          replyOrder: 0
+        })
+        .then(({data}) => {
+          if(data.status == 200) {
+            alert("댓글 수정 성공!");
+            setTimeout(() => {
+              this.$router.go(0)
+            },0);
+          } else {
+            alert("댓글 수정 실패");
+            return;
+          }
+        })
     }
   }
 };

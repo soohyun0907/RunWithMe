@@ -158,6 +158,15 @@ const routes = [
             path: "createChallenge",
             component: () => import("./views/app/board/createChallenge")
           },
+          {
+            path: "challengesAdmin",
+            component: () => import("./views/app/board/challengesAdmin")
+          },
+          {
+            path: "challengeDetail",
+            name: "challengeDetail",
+            component: () => import("./views/app/board/challengeDetail")
+          },
         ]
       },
 
