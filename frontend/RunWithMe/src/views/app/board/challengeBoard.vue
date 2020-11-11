@@ -55,7 +55,7 @@
 
 <script>
 import http from "@/utils/http-common";
-import { mapGetters } from "vuex";
+import { mapGetters,mapMutations } from "vuex";
 
 export default {
   metaInfo: {
@@ -73,6 +73,7 @@ export default {
     this.getBoards();
   },
   methods: {
+  ...mapMutations(['closeSidebar']),
     getBoards() {
       http
         .get("boards")
