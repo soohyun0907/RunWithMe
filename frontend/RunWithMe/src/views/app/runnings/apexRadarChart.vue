@@ -3,7 +3,7 @@
        <b-col  md="6" lg="4" sm="6">
             <b-card title="" class=" mb-30">
                 <div class="example">
-                <apexchart width="300" height="240" type="heatmap" :options="heatmap.chartOptions" :series="heatmap.series"></apexchart>
+                <apexchart ref="heatmap" width="270" height="240" type="heatmap" :options="heatmap.chartOptions" :series="heatmap.series"></apexchart>
                 </div>
                 <hr>
                 <div id="basicArea-chart">
@@ -79,57 +79,29 @@ export default {
                         title: {
                             text: "running plant"
                         },
-                        labels : ["Jan","","","","Feb","","","","Mar","","",""]
+                        labels : ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
                     },
                     series: [{
-                        name: 'Sun',
-                        data: this.generateData(12, {
-                            min: 0,
-                            max: 90
-                        })
+                        name: '5th',
+                        data: [0,0,10,0,0,0,0]
                         },
                         {
-                        name: 'Sat',
-                        data: this.generateData(12, {
-                            min: 0,
-                            max: 90
-                        })
+                        name: '4th',
+                        data: [0,0,0,3,0,0,0]
                         },
                         {
-                        name: 'Fri',
-                        data: this.generateData(12, {
-                            min: 0,
-                            max: 90
-                        })
+                        name: '3rd',
+                        data: [1,0,0,0,0,0,0]
                         },
                         {
-                        name: 'Thu',
-                        data: this.generateData(12, {
-                            min: 0,
-                            max: 90
-                        })
+                        name: '2nd',
+                        data: [0,0,0,0,0,0,0]
                         },
                         {
-                        name: 'Wen',
-                        data: this.generateData(12, {
-                            min: 0,
-                            max: 90
-                        })
+                        name: '1st',
+                        data: [0,0,0,0,0,0,0]
                         },
-                        {
-                        name: 'Tue',
-                        data: this.generateData(12, {
-                            min: 0,
-                            max: 90
-                        })
-                        },
-                        {
-                        name: 'Mon',
-                        data: this.generateData(12, {
-                            min: 0,
-                            max: 90
-                        })
-                        },
+                        
                     ],
                 },
             date : "",
@@ -137,23 +109,10 @@ export default {
             uid : "",
             userInfo : {},
             interval : "",
+            month : {"Jan":1, "Feb" : 2, "Mar": 3, "Apr":4, "May":5, "Jun":6 , "Jul":7, "Aug":8, "Sep":9, "Oct":10, "Nov":11,"Dec":12},
         }
     },
-    methods: { 
-        generateData(count, yrange) {
-            var i = 0;
-            var series = [];
-            while (i < count) {
-                var x = (i + 1).toString();
-                var y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-                series.push({
-                        x: x,
-                        y: y
-                    });
-                i++;
-            }
-            return series;
-        },              
+    methods: {         
         refresh: function(){
             
             this.oldDate = this.date;
@@ -293,6 +252,41 @@ export default {
                 .then(response => {
                     console.log(typeof(response.data.data));
                     console.log(response.data.data);
+
+                    // 잔디심기
+                    var now = new Date();
+                    var curMonth = this.$moment(now).format("MMM");
+                    console.log(curMonth)
+                    var startDate = now.getFullYear() + "-" + ((now.getMonth()+1)%12) + "-1";
+                    var startDay = this.$moment(startDate).day();
+                    console.log("startDay:"+startDay)
+                    for (const [key, value] of Object.entries(response.data.data)) {
+                        var month = this.$moment(value.startTime).format("MMM")
+                        var date = this.$moment(value.startTime).format("D")
+                        var day = this.$moment(value.startTime).day()
+                        
+                        //console.log(day)
+                        // console.log(this.month[curMonth])
+                        // console.log(this.month[month])
+                        if(this.month[curMonth] === this.month[month])
+                        {
+                            //console.log(this.$moment(value.startTime).format("D"))
+                            var curDate = this.$moment(value.startTime).format("D");
+                            var curDay = this.$moment(value.startTime).day();
+                            var distance = value.accDistance;
+                            //console.log(parseInt(curDate) + parseInt(startDay));
+                            var result = parseInt((parseInt(curDate) + parseInt(startDay)) / 7);
+                            console.log(curDay + "/" + result);
+                            this.heatmap.series[4-result].data[curDay] += distance;
+                        }
+                    }
+
+                    console.log(this.heatmap.series)
+                    this.$refs.heatmap.updateOptions([{
+                    }], false, true)
+
+
+                    // 분석하기
                     var totalTime = 0;
                     var totalDis = 0;
                     var length = response.data.data.length;
@@ -343,6 +337,12 @@ export default {
                 });
 
             }
+
+        
+
+
+
+
     }
 
 }
