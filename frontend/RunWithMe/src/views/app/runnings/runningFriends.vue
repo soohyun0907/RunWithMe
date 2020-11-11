@@ -1,10 +1,11 @@
 <template>
   <div class="main-content">
-    <div style="text-align:center">
+    <breadcumbcustom :title="title" :desc="timeSplitE[0]" />
+    <!-- <div style="text-align:center">
       <p style="font-size:1.5em;margin-bottom:5px">
            "{{$route.query.friendName}}"  님의</p> 
          <h4> {{timeSplitE[0]}}일 런닝기록</h4>
-    </div>
+    </div> -->
     <div class="simpleResult">
         <div class="col">
             <div class="row">
@@ -87,6 +88,7 @@ export default {
         records:[],
         timeSplitS:{},
         timeSplitE:{},
+        title: "",
          //chart
      echart4 : {
         tooltip: {
@@ -152,7 +154,7 @@ export default {
   mounted() {
     this.$store.commit('closeSidebar')
     this.friendsRun()
-    
+    this.title = this.$route.query.friendName + "님의 런닝 기록";
   
   },
   computed: {
