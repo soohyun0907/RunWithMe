@@ -1,5 +1,12 @@
 <template>
     <div class="app">
+      <div class="btn col">
+        <div class="btn-group float-right" role="group" aria-label="Basic example" style="margin-bottom: 5px;">
+          <b-button size="sm" variant="secondary" @click="goPrevChallengeBoard()">이전글</b-button>
+          <b-button size="sm" variant="secondary" @click="goNextChallengeBoard()">다음글</b-button>
+          <b-button size="sm" variant="secondary" @click="goChallengeBoard()">목록</b-button>
+        </div>
+      </div>
       <div class="header">
         <slot name="header">
           <div class="col">
@@ -29,14 +36,6 @@
       <hr>
       <div class="reply">
         <h6>댓글( {{ board.replyCount }} )</h6>
-        <div class="inputBox">
-          <b-input-group class="mt-3" style="margin-bottom: 20px;">
-            <b-form-input v-model="replyInfo.content"></b-form-input>
-            <b-input-group-append>
-              <b-button variant="info" @click="postReply()">Button</b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </div>
         <!-- <div class="replies"> -->
           <b-list-group class="list-group-flush" v-for="reply in allReply" :key="reply.replyId">
             <b-list-group-item>
@@ -59,6 +58,14 @@
             </b-list-group-item>
           </b-list-group>
         <!-- </div> -->
+        <div class="inputBox">
+          <b-input-group class="mt-3" style="margin-bottom: 20px;">
+            <b-form-input v-model="replyInfo.content"></b-form-input>
+            <b-input-group-append>
+              <b-button variant="info" @click="postReply()">Button</b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </div>
       </div>
     </div>
 </template>
@@ -157,6 +164,22 @@ export default {
         console.log(error);
         return;
       })
+    },
+    goChallengeBoard() {
+      // console.log("이동!");
+      this.$router.push("/app/board/challengeBoard");
+    },
+    goPrevChallengeBoard() {
+      this.$router.push("/app/board/challengeBoardDetail?boardId="+(this.board.boardId-1));
+      setTimeout(() => {
+        this.$router.go(0)
+      },0);
+    },
+    goNextChallengeBoard() {
+      this.$router.push("/app/board/challengeBoardDetail?boardId="+(this.board.boardId+1));
+      setTimeout(() => {
+        this.$router.go(0)
+      },0);
     }
   }
 };
