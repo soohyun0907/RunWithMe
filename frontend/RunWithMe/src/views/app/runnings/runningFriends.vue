@@ -1,29 +1,30 @@
 <template>
   <div class="main-content">
-     <div style="text-align:center">
+    <div style="text-align:center">
       <p style="font-size:1.5em;margin-bottom:5px">
-         <h4> {{result.parseTimeE[0]}}일 런닝기록</h4>
+           "{{$route.query.friendName}}"  님의</p> 
+         <h4> {{timeSplitE[0]}}일 런닝기록</h4>
     </div>
     <div class="simpleResult">
         <div class="col">
             <div class="row">
-                <div class="col">
+                 <div class="col">
                     런닝 시작 시간
-                    <h3>{{result.parseTimeS[1]}}</h3>
+                    <h3>{{timeSplitS[1]}}</h3>
                 </div>
                 <div class="col">
                     런닝 종료 시간
-                    <h3>{{result.parseTimeE[1]}}</h3>
+                    <h3>{{timeSplitE[1]}}</h3>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     총 런닝 거리
-                    <h3>{{result.accDistance.toFixed(2)}} km</h3>
+                    <h3>{{result.running.accDistance.toFixed(2)}} km</h3>
                 </div>
                 <div class="col">
                     총 런닝 시간
-                    <h3>{{convertToTime(result.accTime.toFixed(2))}}초</h3>
+                    <h3>{{convertToTime(result.running.accTime.toFixed(2))}}</h3>
                 </div>
             </div> 
             <div class="row">
@@ -35,10 +36,10 @@
         </div>
     </div>
 
-    <img :src="result.thumbnail" style="width:100%;height:45vh"/>
+    <img :src="result.running.thumbnail" style="width:100%;height:45vh"/>
     <br>
     <h4 style="margin-top:5vh; text-align:center">구간</h4>
-    <div class="card mb-30">
+     <div class="card mb-30">
           <div class="card-body p-0">
             <div style="text-align:center;" class="d-flex border-bottom justify-content-between  p-3 ">
               <div class="flex-grow-1">
@@ -49,9 +50,9 @@
               </div>
             </div>
             <div v-if="records.length==0">
-              <h4 style="text-align:center; margin-top:3vh">구간별 기록이 없네요.</h4>
+              <h4>임시저장된 기록이 없네요.</h4>
             </div>
-              <div v-else v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
+              <div v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
                 <div class="flex-grow-1">
                   <h5 style="padding-left:10vw;" class="m-0">{{record.accDistance.toFixed(1)}} km</h5>
                 </div>
@@ -76,7 +77,7 @@ import { mapGetters,mapMutations } from "vuex";
 
 export default {
   metaInfo: {
-    title: "런닝 결과",
+    title: "친구의 런닝",
   },
   data() {
     return {
@@ -84,7 +85,10 @@ export default {
         result: {},
         avgSpeed:0,
         records:[],
-        echart4 : {
+        timeSplitS:{},
+        timeSplitE:{},
+         //chart
+     echart4 : {
         tooltip: {
           show: true,
           // trigger: 'axis',
@@ -142,51 +146,56 @@ export default {
           }
         ]
      }
+
     }
   },
   mounted() {
     this.$store.commit('closeSidebar')
-    this.result = this.myRunning
-    this.result['parseTimeE'] = this.result.endTime.split('T')
-    this.result['parseTimeS'] = this.result.startTime.split('T')
-
-    if(this.result.accDistance!=0.00
-    &&this.result.accTime!=0.00 
-    &&this.result.accDistance!=0 
-    && this.result.accTime!=0){
-        this.avgspeed = this.result.accDistance/this.result.accTime
-    }else {
-        this.avgSpeed=0;
-    }
-    console.log(this.result)
-    this.getTempRuns()
+    this.friendsRun()
+    
+  
   },
   computed: {
     ...mapGetters(["myRunning"]),
   },
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
-    getTempRuns(){
-        http.get(`runnings/temp/`)
-            .then((res) => {
-                console.log("Running Result 에서 구간별 런닝 조회")
-                console.log(res.data);
-                this.records=res.data
-                for(var i=0; i<this.records.length; i++){
-                    if(i!=this.records.length-1)  {
-                        this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
-                    }
-                    this.records[i].accDistance+=" km"
-                }
-                this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
-                this.echart4.xAxis.data.push(this.records[i].accDistance)
-            })
-            .catch((err) => {
-                console.log("1Km이상 뛰지 않았어요")
-                console.log(this.records)
-            });
-    },
+    friendsRun(){
+        http
+        .get(`/runnings/records/${this.$route.query.runningId}`)
+        .then((data) => {
+            this.result = data.data.data
+            this.records = data.data.data.records
+            console.log("friendsRun - result")
+            console.log(data.data.data);
+            console.log("friendsRun - records")
+            console.log(data.data.data.records);
 
+            for(var i=0; i<this.records.length; i++){
+                if(i!=this.records.length-1)  {
+                    this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
+                }
+                this.records[i].accDistance+=" km"
+            }
+            this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+            this.echart4.xAxis.data.push(this.records[i].accDistance)
+  
+            this.timeSplitS = this.result.running.startTime.split('T')
+            this.timeSplitE = this.result.running.endTime.split('T')
+            if(this.result.accDistance==0.00 ||this.result.accTime==0.00 ||this.result.accDistance==0 || this.result.accTime==0){
+                this.avgSpeed=0;
+            }else {
+                this.avgSpeed = this.result.running.accDistance/this.result.running.accTime
+            }
+        });
+    },
+ 
+     convertToTime(origin) {
+      var time = "";
+      time += parseInt(origin / 60) + "'";
+      time += (origin % 60) + '"';
+      return time;
+    },
     initMap(){
         var map = new google.maps.Map(this.$refs["map"], {
               zoom: 15,

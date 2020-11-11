@@ -122,7 +122,7 @@
 
 <script>
 import http from "@/utils/http-common";
-import { mapGetters } from "vuex";
+import { mapGetters,mapMutations } from "vuex";
 
 export default {
   metaInfo: {
@@ -146,6 +146,7 @@ export default {
   },
 
   mounted() {
+    this.$store.commit('closeSidebar')
     this.getRunnings()
     this.getRunningsbyArea()
     console.log(this.userInfo)
@@ -158,6 +159,7 @@ export default {
     console.log(this.userInfo);
   },
   methods: {
+    ...mapMutations(["closeSidebar"]),
     getRunningsbyArea(){
       http.get(`runnings/areas`)
       .then(data => {

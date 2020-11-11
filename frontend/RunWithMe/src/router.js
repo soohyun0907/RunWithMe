@@ -60,16 +60,16 @@ const routes = [
       {
         path: "/app/runnings",
         component: () => import("./views/app/runnings"),
-        redirect: "/app/runnings/kakaomaptest",
+        redirect: "/app/runnings/running",
         children: [
           {
             path: "runningResult",
             name: "runningResult",
-	           component: () => import("./views/app/runnings/runningResult")
+	          component: () => import("./views/app/runnings/runningResult")
           },
           {
             path: "running",
-	          component: () => import("./views/app/runnings/running")
+            component: () => import("./views/app/runnings/running")
           },
           {
             path: "neighborhoodList",
@@ -81,8 +81,9 @@ const routes = [
             component: () => import("./views/app/runnings/friendsDetail")
           },
           {
-            path: "apexRadarChart",
-            component: () => import("./views/app/runnings/apexRadarChart")
+            path: "runningFriends",
+	          name: "runningFriends",
+            component: () => import("./views/app/runnings/runningFriends")
           },
         ]
       },
