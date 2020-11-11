@@ -261,9 +261,9 @@ export default {
             for(var i=0; i<data.data.friends.length; i++) {
               obj = new Object();
               if(data.data.runnings[i] == null) {
-                obj.total_distance = "기록이 없습니다";
-                obj.runningId = "";
-                obj.total_distance = "";
+                obj.total_distance = 0;
+                obj.running_avg_pace = 0;
+                obj.accumulcated_time = 0;
                 obj.mapImg = "https://soonirwm.s3.ap-northeast-2.amazonaws.com/thumbnail/2020/10/23/7dfd9d9e-1_staticmap.png";
               }else {
                 obj.runningId = data.data.runnings[i].runningId;
