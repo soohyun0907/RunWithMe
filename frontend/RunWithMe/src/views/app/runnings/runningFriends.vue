@@ -20,11 +20,11 @@
             <div class="row">
                 <div class="col">
                     총 런닝 거리
-                    <h3>{{result.running.accDistance.toFixed(2)}} km</h3>
+                    <h3>{{result.accDistance.toFixed(2)}} km</h3>
                 </div>
                 <div class="col">
                     총 런닝 시간
-                    <h3>{{convertToTime(result.running.accTime.toFixed(2))}}</h3>
+                    <h3>{{convertToTime(result.accTime.toFixed(2))}}</h3>
                 </div>
             </div> 
             <div class="row">
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <img :src="result.running.thumbnail" style="width:100%;height:45vh"/>
+    <img :src="result.thumbnail" style="width:100%;height:45vh"/>
     <br>
     <h4 style="margin-top:5vh; text-align:center">구간</h4>
      <div class="card mb-30">
@@ -54,7 +54,7 @@
             </div>
               <div v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
                 <div class="flex-grow-1">
-                  <h5 style="padding-left:10vw;" class="m-0">{{record.accDistance.toFixed(1)}} km</h5>
+                  <h5 style="padding-left:10vw;" class="m-0">{{record.accDistance}} km</h5>
                 </div>
                 <div class="flex-grow-1">
                   <h5 style="padding-left:10vw;" class="m-0">{{convertToTime(record.accTime.toFixed(2))}}</h5>
@@ -164,41 +164,43 @@ export default {
         http
         .get(`/runnings/records/${this.$route.query.runningId}`)
         .then((data) => {
-            this.result = data.data.data
+            this.result = data.data.data.running
             this.records = data.data.data.records
-            console.log("friendsRun - result")
-            console.log(data.data.data);
-            console.log("friendsRun - records")
-            console.log(data.data.data.records);
+            this.timeSplitS = this.result.startTime.split('T')
+            this.timeSplitE = this.result.endTime.split('T')
+
 
             for(var i=0; i<this.records.length; i++){
-                if(i!=this.records.length-1)  {
-                    this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
+              if(i!=this.records.length-1)  {
+                this.records[i].accDistance= Math.floor(this.records[i].accDistance)
+                }else{
+                  this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(2)
                 }
-                this.records[i].accDistance+=" km"
+                this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+                this.echart4.xAxis.data.push(this.records[i].accDistance)
             }
-            this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
-            this.echart4.xAxis.data.push(this.records[i].accDistance)
   
-            this.timeSplitS = this.result.running.startTime.split('T')
-            this.timeSplitE = this.result.running.endTime.split('T')
             if(this.result.accDistance==0.00 ||this.result.accTime==0.00 ||this.result.accDistance==0 || this.result.accTime==0){
-                this.avgSpeed=0;
+              this.avgSpeed=0;
             }else {
-                this.avgSpeed = this.result.running.accDistance/this.result.running.accTime
+              this.avgSpeed = this.result.accDistance*1000/this.result.accTime
             }
+       console.log("friendsRun - result")
+       console.log(this.result);
+       console.log("friendsRun - records")
+       console.log(this.records);
         });
     },
  
      convertToTime(origin) {
-      var time = "";
+       var time = "";
       time += parseInt(origin / 60) + "'";
       time += (origin % 60) + '"';
       return time;
     },
     initMap(){
-        var map = new google.maps.Map(this.$refs["map"], {
-              zoom: 15,
+      var map = new google.maps.Map(this.$refs["map"], {
+        zoom: 15,
               center: new google.maps.LatLng(37.331777, 127.129347),
               mapTypeId: google.maps.MapTypeId.ROADMAP
         });
