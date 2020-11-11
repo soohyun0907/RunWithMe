@@ -24,7 +24,7 @@
                 </div>
                 <div class="col">
                     총 런닝 시간
-                    <h3>{{convertToTime(result.running.accTime)}}</h3>
+                    <h3>{{convertToTime(result.running.accTime.toFixed(2))}}</h3>
                 </div>
             </div> 
             <div class="row">
@@ -152,8 +152,6 @@ export default {
   mounted() {
     this.$store.commit('closeSidebar')
     this.friendsRun()
-    this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
-    this.echart4.xAxis.data.push(this.records[i].accDistance)
     
   
   },
@@ -179,7 +177,9 @@ export default {
                 }
                 this.records[i].accDistance+=" km"
             }
-        
+            this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+            this.echart4.xAxis.data.push(this.records[i].accDistance)
+  
             this.timeSplitS = this.result.running.startTime.split('T')
             this.timeSplitE = this.result.running.endTime.split('T')
             if(this.result.accDistance==0.00 ||this.result.accTime==0.00 ||this.result.accDistance==0 || this.result.accTime==0){
@@ -196,19 +196,6 @@ export default {
       time += (origin % 60) + '"';
       return time;
     },
-    getTempRuns(){
-        http.get(`runnings/temp/`)
-            .then((res) => {
-                console.log("Running Result 에서 구간별 런닝 조회")
-                console.log(res.data);
-                this.records=res.data
-            })
-            .catch((err) => {
-                console.log("1Km이상 뛰지 않았어요")
-                console.log(this.records)
-            });
-    },
-
     initMap(){
         var map = new google.maps.Map(this.$refs["map"], {
               zoom: 15,

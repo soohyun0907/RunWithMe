@@ -80,10 +80,10 @@
             </div>
               <div v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
                 <div class="flex-grow-1">
-                  <h5 class="m-0">{{record.accDistance}}</h5>
+                  <h5 class="m-0">{{record.accDistance.toFixed(1)}} km</h5>
                 </div>
                 <div class="flex-grow-1">
-                  <h5 class="m-0">{{convertToTime(record.accTime)}}</h5>
+                  <h5 class="m-0">{{convertToTime(record.accTime.toFixed(2))}}</h5>
                 </div>
             </div>
           </div>
@@ -218,16 +218,6 @@ export default {
   mounted() {
     this.$store.commit('closeSidebar')
     
-    for(var i=0; i<this.records.length; i++){
-        if(i!=this.records.length-1)  {
-            this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
-        }
-        this.records[i].accDistance+=" km"
-        console.log(this.echart4)
-        this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
-        this.echart4.xAxis.data.push(this.records[i].accDistance)
-    }
-
     if (window.google && window.google.maps) {
       this.initMap();
     } else {
@@ -246,7 +236,16 @@ export default {
                 console.log("km마다 뛴 기록 받아오기")
                 console.log(res.data);
                 this.records= res.data
-                console.log(this.records.length)
+
+                for(var i=0; i<this.records.length; i++){
+                  if(i!=this.records.length-1)  {
+                      this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
+                  }
+                  this.records[i].accDistance+=" km"
+                  console.log(this.echart4)
+                  this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+                  this.echart4.xAxis.data.push(this.records[i].accDistance)
+                }
             })
             .catch((err) => {
                 console.log("1Km이상 뛰지 않았어요")
