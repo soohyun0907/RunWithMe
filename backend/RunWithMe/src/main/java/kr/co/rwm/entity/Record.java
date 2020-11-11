@@ -30,7 +30,7 @@ public class Record implements Serializable {
    /**
     * Redis에 올리려면 Serializable 필요
     */
-   private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 17L;
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +51,7 @@ public class Record implements Serializable {
    private double accDistance;
    
    @Column(name = "accumulated_time", nullable = false)
-   private double accTime;
+   private Long accTime;
    
    @Column(name = "speed")
    private double speed;
