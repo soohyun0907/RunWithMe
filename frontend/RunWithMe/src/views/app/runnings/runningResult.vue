@@ -144,10 +144,6 @@ export default {
      }
     }
   },
-  created(){
-    this.getTempRuns()
-
-  },
   mounted() {
     this.$store.commit('closeSidebar')
     this.result = this.myRunning
@@ -164,6 +160,7 @@ export default {
     }
     console.log("this.result")
     console.log(this.result)
+    this.getTempRuns()
   },
   computed: {
     ...mapGetters(["myRunning"]),
@@ -171,28 +168,21 @@ export default {
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
     getTempRuns(){
-        http.get(`runnings/temp/`)
-            .then((res) => {
-                console.log("Running Result 에서 구간별 런닝 조회")
-                this.records=res.data.data
-                console.log(this.records)
-                if(this.records.length!=0){
-                  for(var i=0; i<this.records.length; i++){
-                      if(i!=this.records.length-1)  {
-                          this.records[i].accDistance= Math.floor(this.records[i].accDistance)
-                      }else{
-                          this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(2)
-                      }
-                      this.records[i].accDistance+=" km"
-                      this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
-                      this.echart4.xAxis.data.push(this.records[i].accDistance)
-                  }
-                }
-            })
-            .catch((err) => {
-                console.log("1Km이상 뛰지 않음 or get(runnings/temp오류")
-                console.log(err)
-            });
+      this.records=this.result.records
+      console.log("this.records")
+      console.log(this.records)
+      if(this.records.length!=0){
+        for(var i=0; i<this.records.length; i++){
+            if(i!=this.records.length-1)  {
+                this.records[i].accDistance= Math.floor(this.records[i].accDistance)
+            }else{
+                this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(2)
+            }
+            this.records[i].accDistance+=" km"
+            this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+            this.echart4.xAxis.data.push(this.records[i].accDistance)
+        }
+      }
     },
 
     initMap(){
