@@ -8,7 +8,7 @@
         :line-numbers="false"
         :search-options="{
           enabled: true,
-          placeholder: 'Search this table'
+          placeholder: '검색'
         }"
         :pagination-options="{
           enabled: true,
@@ -61,9 +61,11 @@
               여자
             </div>
           </span>
+          <span v-else-if="props.column.field == 'gugunId.gugunName'">
+          </span>
           <span v-else-if="props.column.field == 'username'">
             <a href="">
-              <div class="ul-widget-app__profile-pic">
+              <div class="ul-widget-app__profile-pic" style="text-align:center">
                 <div v-if="props.row.profile!=null">
                   <img
                     class="profile-picture avatar-sm mb-2 rounded-circle img-fluid"
@@ -74,7 +76,12 @@
                     class="profile-picture avatar-sm mb-2 rounded-circle img-fluid"
                     :src="defaultProfile" alt=""/>
                 </div>
-                {{ props.row.username }}
+                <div v-if="props.row.gender==1">
+                  <i class ="i-Business-Man"/> {{ props.row.username }}
+                </div>
+                <div v-if="props.row.gender==2">
+                  <i class ="i-Girl"/> {{ props.row.username }}
+                </div>
               </div>
             </a>
           </span>
@@ -99,19 +106,20 @@ export default {
           label: "이름",
           field: "username"
         },
-        {
-          label: "Email",
-          field: "userEmail"
-        },
+        // {
+        //   label: "Email",
+        //   field: "userEmail"
+        // },
         // {
         //   label: "등급",
         //   field: "span",
         //   html: true
+
         // },
-        {
-          label: "성별",
-          field: "gender"
-        },
+        // {
+        //   label: "성별",
+        //   field: "gender"
+        // },
         {
           label: "지역",
           field: "gugunId.gugunName"

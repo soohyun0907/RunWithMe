@@ -8,7 +8,6 @@ import config from "./modules/config";
 import authData from "./modules/authData";
 import verticalSidebar from "./modules/verticalSidebar";
 import createPersistedState from 'vuex-persistedstate';
-import main from "./modules/main";
 
 // Load Vuex
 Vue.use(Vuex);
@@ -22,8 +21,7 @@ export default new Vuex.Store({
     groupchat,
     config,
     authData,
-    verticalSidebar,
-    main
+    verticalSidebar
   },
   plugins: [
     createPersistedState()

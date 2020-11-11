@@ -65,7 +65,7 @@ import { mapGetters, mapActions,mapMutations } from "vuex";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignIn",
+    title: "로그인",
   },
   data() {
     return {
