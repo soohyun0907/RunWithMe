@@ -81,8 +81,8 @@ public class RecordServiceImpl implements RecordService {
 								.userId(userId)
 								.polyline(String.valueOf(runningInfo.get("polyline")))
 								.thumbnail(String.valueOf(runningInfo.get("thumbnail")))
-								.accDistance((double) runningInfo.get("accDistance"))
-								.accTime(((Number) runningInfo.get("accTime")).longValue())
+								.accDistance(Double.parseDouble(String.valueOf(runningInfo.get("accDistance"))))
+								.accTime(Long.parseLong(String.valueOf(runningInfo.get("accTime"))))
 								.startTime(LocalDateTime.parse((CharSequence) runningInfo.get("startTime"), formatter))
 								.endTime(LocalDateTime.parse((CharSequence) runningInfo.get("endTime"), formatter))
 								.build();
