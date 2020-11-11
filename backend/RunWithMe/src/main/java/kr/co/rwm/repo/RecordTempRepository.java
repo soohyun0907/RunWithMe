@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
 import kr.co.rwm.entity.Record;
+import kr.co.rwm.entity.User;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -23,8 +25,23 @@ public class RecordTempRepository {
     private HashOperations<String, Integer, Record> hashOpsRecord;
 	
 	// userId로 저장
-	public void setUserRecord(Record record) {
-		int km = (int) record.getAccDistance();
+//	public void setUserRecord(Record record) {
+//		int km = (int) record.getAccDistance();
+//		
+//		System.out.println(record.toString()+" "+km);
+//		hashOpsRecord.put(String.valueOf(record.getUserId().getUserId()), km, record);
+//	}
+	
+	public void setUserRecordTemp(User user, Map<String, String> map) {
+		double accDistance = Double.parseDouble(map.get("accDistance"));
+		int km = (int) accDistance;
+		
+		Record record = Record.builder()
+							.userId(user)
+							.accDistance(Double.parseDouble(map.get("accDistance")))
+							.accTime(Long.parseLong(map.get("accTime")))
+							.speed(Double.parseDouble(map.get("speed")))
+							.build();
 		
 		System.out.println(record.toString()+" "+km);
 		hashOpsRecord.put(String.valueOf(record.getUserId().getUserId()), km, record);

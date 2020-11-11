@@ -65,13 +65,13 @@ public class RunningController {
 	
 	// redis에 userid를 key로 km당 기록을 저장한다.
 	@PostMapping("/temp")
-	public ResponseEntity saveRecord(@RequestBody Record record, HttpServletRequest request){
+	public ResponseEntity saveRecord(@RequestBody Map<String, String> record, HttpServletRequest request){
 		System.out.println("running/controller/temp/record");
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
 			User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			record.setUserId(loginUser);
-			recordTempRepository.setUserRecord(record);
+//			record.setUserId(loginUser);
+			recordTempRepository.setUserRecordTemp(loginUser, record);
 			
 			return new ResponseEntity<String>(ResponseMessage.RECORD_REDIS_INSERT_SUCCESS, HttpStatus.CREATED);
 		
