@@ -9,7 +9,7 @@ public interface BoardService {
 
 	List<Board> allBoardList();
 
-	Board save(Map<String, String> boardInfo);
+	Board save(Map<String, String> boardInfo, String writerName, String writerProfile);
 
 	Board update(Map<String, String> boardInfo);
 

@@ -39,7 +39,7 @@ import { mapGetters,mapMutations } from "vuex";
 export default {
      metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Profile"
+    title: "프로필 수정"
   },
   computed: {
     ...mapGetters(["getSideBarToggleProperties", "userInfo","defaultProfile"]),
@@ -70,7 +70,11 @@ export default {
             console.log(data.data.profile)
             this.$router.go(-1)
           } else {
-            alert("오류가 발생하였습니다.");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '오류가 발생했습니다.',
+            })
             return;
           }
         })

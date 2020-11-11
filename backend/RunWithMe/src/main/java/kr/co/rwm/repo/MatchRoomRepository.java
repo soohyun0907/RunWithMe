@@ -52,15 +52,12 @@ public class MatchRoomRepository {
     public ChatRoom createAndSelectChatroom( int uid, Map<String, Integer> idInfo) {
     	
     	System.out.println("uid: " + uid);
+    	System.out.println("guestId: " + idInfo.get("guestId"));
     	Optional<Matching> matching = matchRepository.findByMasterIdAndGuestId(uid, idInfo.get("guestId"));
     	
     	if(matching.isPresent()) // 이미 방이 존재하다면,
     	{
-    		System.out.println("있음");
     		ChatRoom result =  hashOpsMatchRoom.get(matching.get().getRoomId(), CHAT_ROOMS);
-    		System.out.println(matching.get().getRoomId());
-    		System.out.println(matching.get().getMasterId());
-    		 
     		return result;
     	} 
     	else 
@@ -68,12 +65,10 @@ public class MatchRoomRepository {
     		String friendName = userRepository.findByUserId(idInfo.get("guestId")).getUsername();
         	ChatRoom chatRoom = ChatRoom.create(friendName); 
         	hashOpsMatchRoom.put(chatRoom.getRoomId(), CHAT_ROOMS, chatRoom);
-        	
         	Matching match = Matching.builder().masterId(uid).guestId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
         	matchRepository.save(match);
         	match = Matching.builder().guestId(uid).masterId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
         	matchRepository.save(match);        	
-        	System.out.println("chat :"+ chatRoom.getName());
         	return chatRoom;
     	}
     }

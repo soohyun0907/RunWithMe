@@ -7,6 +7,7 @@
       align="left"
     />
 
+    <h5>현재 마일리지 : {{ userInfo.mileage }} 원</h5>
     <div align="left">
       <input
         style="width: 28vh; float: left"
@@ -46,6 +47,9 @@ export default {
       isMobile: "",
     };
   },
+  computed: {
+    ...mapGetters(["userInfo"])
+  },
   mounted() {
     this.$store.commit("closeSidebar");
   },
@@ -65,14 +69,21 @@ export default {
     ...mapMutations(["mutateMyRunning", "closeSidebar"]),
     chargeKakao() {
       if (!this.isMobile) {
-        alert("모바일에서만 충전 가능합니다.");
-        document.location.href = "/app/apps/payment";
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: '모바일에서만 충전 가능합니다.',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.location.href = "/app/apps/payment";
+          }
+        })
       } else {
         var IMP = window.IMP;
         IMP.init("imp42556076");
         var money = this.money;
         // console.log(money);
-
+        money = parseInt(money);
         IMP.request_pay(
           {
             pg: "kakaopay",
@@ -95,17 +106,44 @@ export default {
               // msg += "결제 금액 : " + rsp.paid_amount;
               // msg += "카드 승인번호 : " + rsp.apply_num;
 
-              http.get(`payment/charge/${money}`).then((data) => {
-                console.log(data);
-                alert(msg);
-                document.location.href = "/app/apps/paymentDone"; //챌린지 참여 목록으로 이동?
-              });
-              alert("결제에 실패하였습니다.");
-              document.location.href = "/app/apps/payment";
+              http
+                .get(`payment/charge/${money}`)
+                .then(({data}) => {
+                  console.log(data);
+                  // alert(msg);
+                  Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                  })
+                  setTimeout(() => {
+                    document.location.href = "/app/apps/paymentDone"; //챌린지 참여 목록으로 이동?
+                  }, 1500);
+                })
+                .catch((error) => {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: '결제에 실패하였습니다.'
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      document.location.href = "/app/apps/payment";
+                    }
+                  })
+                });
             } else {
               var msg = rsp.error_msg;
-              alert(msg);
-              document.location.href = "/app/apps/payment";
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: msg
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  document.location.href = "/app/apps/payment";
+                }
+              })
             }
           }
         );
