@@ -162,6 +162,7 @@ export default {
     }else {
         this.avgSpeed=0;
     }
+    console.log("this.result")
     console.log(this.result)
   },
   computed: {
@@ -174,7 +175,7 @@ export default {
             .then((res) => {
                 console.log("Running Result 에서 구간별 런닝 조회")
                 this.records=res.data.data
-                console.log(this.records.data)
+                console.log(this.records)
                 if(this.records.length!=0){
                   for(var i=0; i<this.records.length; i++){
                       if(i!=this.records.length-1)  {
