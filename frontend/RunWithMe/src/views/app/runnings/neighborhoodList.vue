@@ -3,7 +3,7 @@
     <breadcumbcustom :title="'주변 러너 추천'" :desc="area" />
     <div class="ul-contact-page">
       <div class="row" style="margin-top: 5px">
-        <b-col lg="12" md="12" class="mb-30 text-center">
+        <!-- <b-col lg="12" md="12" class="mb-30 text-center">
           <b-form-group id="input-group-2" label-for="input-2">
             <b-form-input
               id="input-2"
@@ -11,7 +11,7 @@
               placeholder="Enter your name...."
             ></b-form-input>
           </b-form-group>
-        </b-col>
+        </b-col> -->
 
         <b-col v-if="!haveRunners">
           <span>아직 주변 러너들이 없어요ㅠ.ㅠ</span>
