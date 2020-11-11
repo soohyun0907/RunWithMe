@@ -23,7 +23,7 @@
                 </div>
                 <div class="col">
                     총 런닝 시간
-                    <h3>{{result.accTime.toFixed(2)}}초</h3>
+                    <h3>{{convertToTime(result.accTime.toFixed(2))}}초</h3>
                 </div>
             </div> 
             <div class="row">
@@ -53,7 +53,7 @@
             </div>
               <div v-else v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
                 <div class="flex-grow-1">
-                  <h5 style="padding-left:10vw;" class="m-0">{{record.accDistance}} km</h5>
+                  <h5 style="padding-left:10vw;" class="m-0">{{record.accDistance.toFixed(1)}} km</h5>
                 </div>
                 <div class="flex-grow-1">
                   <h5 style="padding-left:10vw;" class="m-0">{{convertToTime(record.accTime.toFixed(2))}}</h5>
@@ -75,7 +75,9 @@ import http from "@/utils/http-common";
 import { mapGetters,mapMutations } from "vuex";
 
 export default {
-  name: 'runningResult',
+  metaInfo: {
+    title: "런닝 결과",
+  },
   data() {
     return {
         date: new Date(),
@@ -156,22 +158,8 @@ export default {
     }else {
         this.avgSpeed=0;
     }
-
     console.log(this.result)
-
     this.getTempRuns()
-    for(var i=0; i<this.records.length; i++){
-        if(i!=this.records.length-1)  {
-            this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
-        }
-        this.records[i].accDistance+=" km"
-    }
-    this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
-    this.echart4.xAxis.data.push(this.records[i].accDistance)
-  
-
-    
-
   },
   computed: {
     ...mapGetters(["myRunning"]),
@@ -184,6 +172,14 @@ export default {
                 console.log("Running Result 에서 구간별 런닝 조회")
                 console.log(res.data);
                 this.records=res.data
+                for(var i=0; i<this.records.length; i++){
+                    if(i!=this.records.length-1)  {
+                        this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
+                    }
+                    this.records[i].accDistance+=" km"
+                }
+                this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+                this.echart4.xAxis.data.push(this.records[i].accDistance)
             })
             .catch((err) => {
                 console.log("1Km이상 뛰지 않았어요")
