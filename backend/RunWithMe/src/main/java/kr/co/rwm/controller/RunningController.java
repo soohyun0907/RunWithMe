@@ -81,23 +81,23 @@ public class RunningController {
 		}
 	}
 	
-	   // swipe했을 때 redis에 있던 record를 보내준다.
-	   @GetMapping("/temp")
-	   public ResponseEntity getTempRecord(HttpServletRequest request) {
-	      System.out.println("running/controller/temp/getRecord");
-	      String token = request.getHeader("AUTH");
-	      if(jwtTokenProvider.validateToken(token)) {
-	         User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	         
-	         List<Record> records = recordTempRepository.findRecordByUserId(loginUser.getUserId());   // 토큰O 추후에 이렇게 바꿀것
-	         return new ResponseEntity<Response>(new 
-	               Response(StatusCode.OK, ResponseMessage.RECORD_REDIS_LIST_SUCCESS, records), HttpStatus.OK);
-	         
-	      }else {
-	         return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
-	               HttpStatus.FORBIDDEN);
-	      }
-	   }
+	// swipe했을 때 redis에 있던 record를 보내준다.
+	@GetMapping("/temp")
+	public ResponseEntity getTempRecord(HttpServletRequest request) {
+		System.out.println("running/controller/temp/getRecord");
+		String token = request.getHeader("AUTH");
+		if(jwtTokenProvider.validateToken(token)) {
+			User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			List<Record> records = recordTempRepository.findRecordByUserId(loginUser.getUserId());	// 토큰O 추후에 이렇게 바꿀것
+			return new ResponseEntity<Response>(new 
+					Response(StatusCode.OK, ResponseMessage.RECORD_REDIS_LIST_SUCCESS, records), HttpStatus.OK);
+			
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+					HttpStatus.FORBIDDEN);
+		}
+	}
 	
 	// stop 눌렀을 때 redis에 있던 record를 꺼내서 db에 저장한다.
 	@PostMapping
@@ -282,5 +282,22 @@ public class RunningController {
 		}
 		
 	}
+	
+	@ApiOperation(value = "유저와 동일한 티어의 유저 러닝 정보", response = ResponseEntity.class)
+	@GetMapping("/analysis")
+	public ResponseEntity analysis(HttpServletRequest request) {
+		String token = request.getHeader("AUTH");
+		if(jwtTokenProvider.validateToken(token)) {
+			int userId = jwtTokenProvider.getUserIdFromJwt(token);
+			List<RunningUser> runningUsers = recordService.analysis(userId);
+			return new ResponseEntity<Response>(new 
+					Response(StatusCode.OK, ResponseMessage.REGION_SUMMARY_RUNNING_SUCCESS, runningUsers), HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Response>(new 
+					Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN), HttpStatus.FORBIDDEN);
+		}
+		
+	}
+	
 	
 }

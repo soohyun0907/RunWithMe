@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,8 +46,8 @@ import lombok.RequiredArgsConstructor;
  * 			김순빈, ver.0.1. 2020-10-26
  * </pre>
  * 
- * @author 김순빈
- * @version 0.1, 2020-10-26, 챌린지 관리 Controller
+ * @author 김형택
+ * @version 0.2, 2020-11-10, 챌린지 전체조회, 참여 여부 수정
  * @see None
  *
  */
@@ -117,10 +118,50 @@ public class ChallengeController {
 	@GetMapping
 	public ResponseEntity findAllChallenge() {
 		System.out.println("/challenges/save - challenge를 전체조회합니다.");
-		List<Challenge> challenges = challengeService.findAllChallenge();
-
+//		List<Challenge> challenges = challengeService.findAllChallenge();
+		LocalDateTime today = LocalDateTime.now();
+		List<Challenge> challenges = challengeService.findAllChallengeGraterThanEndTime(today); // 진행 첼린지
+		List<Challenge> coingSoonChallenges = challengeService.findAllChallengeGraterThanStartTime(today); // 예정 첼린지
+		challenges.addAll(coingSoonChallenges);
+		
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_LIST_SUCCESS, challenges),
 				HttpStatus.OK);
+	}
+	
+	/**
+	 * 챌린지 전체 목록 및 참여 조회
+	 * 
+	 * @return
+	 */
+	@ApiOperation(value = "챌린지 전체 목록 및 참여 조회", response = ResponseEntity.class)
+	@GetMapping("/participation")
+	public ResponseEntity findAllMyChallenge(HttpServletRequest request) {
+		System.out.println("/challenges/participation - challenge를 전체조회 및 참여를 확인합니다.");
+		String token = request.getHeader("AUTH");
+		if (jwtTokenProvider.validateToken(token)) {
+			int userId = userId = jwtTokenProvider.getUserIdFromJwt(token);
+			Map<String,List<ChallengeUser>> map = new HashMap<String, List<ChallengeUser>>();
+			map.put("ing", challengeService.findAllNonChallengeUserByUserIdIng(userId));
+			map.put("before", challengeService.findAllNonChallengeUserByUserIdComingSoon(userId));
+			map.put("after", challengeService.findAllNonChallengeUserByUserIdEnd(userId));
+			map.put("ingP", challengeService.findAllChallengeUserByUserIdIng(userId));
+			map.put("beforeP", challengeService.findAllChallengeUserByUserIdComingSoon(userId));
+			map.put("afterP", challengeService.findAllChallengeUserByUserIdEnd(userId));
+
+			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_LIST_SUCCESS, map),
+					HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_LIST_FAIL),HttpStatus.FORBIDDEN);
+		}
+//		List<Challenge> challenges = challengeService.findAllChallenge();
+//		LocalDateTime today = LocalDateTime.now();
+		
+//		challengeService.findAllChallengeUserByUserIdIng(userId);
+//		challengeService.findAllChallengeUserByUserIdComingSoon(userId);
+//		challengeService.findAllChallengeUserByUserIdEnd(userId);
+//		challengeService.findAllNonChallengeUserByUserIdIng(userId);
+//		challengeService.findAllNonChallengeUserByUserIdComingSoon(userId);
+//		challengeService.findAllNonChallengeUserByUserIdEnd(userId);
 	}
 	
 	/**
@@ -134,7 +175,7 @@ public class ChallengeController {
 		System.out.println("/challenges/ing - 진행중인 챌린지 조회");
 		LocalDateTime today = LocalDateTime.now();
 		List<Challenge> ingChallenges = challengeService.findAllChallengeGraterThanEndTime(today); // 진행 첼린지
-
+		
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_ING_SUCCESS, ingChallenges),
 				HttpStatus.OK);
 	}

@@ -6,18 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.rwm.entity.Gugun;
+import kr.co.rwm.entity.Ranks;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
 import kr.co.rwm.entity.RunningArea;
 import kr.co.rwm.entity.RunningUser;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.repo.GugunRepository;
+import kr.co.rwm.repo.RanksRepository;
 import kr.co.rwm.repo.RecordRepository;
 import kr.co.rwm.repo.RunningAreaRepository;
 import kr.co.rwm.repo.RunningRepository;
@@ -36,6 +41,9 @@ public class RecordServiceImpl implements RecordService {
 	private final RunningAreaRepository runningAreaRepository;
 	private final RunningUserRepository runningUserRepository;
 	
+	@Autowired
+	RanksRepository rankRepository;
+
 	@Override
 	public void saveRecord(Record record) {
 		recordRepository.save(record);
@@ -45,7 +53,17 @@ public class RecordServiceImpl implements RecordService {
 	public void saveAllRecord(int runningId, List<Record> records) {
 		Running running = runningRepository.findByRunningId(runningId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 런닝이 없습니다."));
-		for(Record record: records) {
+		
+		ArrayList<Record> recordList = new ArrayList<Record>();
+		recordList.addAll(records);
+		Collections.sort(recordList, new Comparator<Record>() {
+			@Override
+			public int compare(Record o1, Record o2) {
+				return (int) (o1.getAccDistance() - o2.getAccDistance());
+			}
+		});
+		
+		for(Record record: recordList) {
 			record.setRunningId(running);
 			recordRepository.save(record);
 		}
@@ -216,5 +234,23 @@ public class RecordServiceImpl implements RecordService {
 		}
 		return runningUsers;
 	}
+
+	@Override
+	public List<RunningUser> analysis(int userId) {
+		
+		User user = userRepository.findByUserId(userId).get();
+		int tier = rankRepository.findByUserId(user).get().getTier();
+		
+		List<Ranks> userList = rankRepository.findByTier(tier);
+		List<User> result = new ArrayList<User>();
+		for (Ranks ranks : userList) {
+			User userInfo = ranks.getUserId();
+			List<Running> runningList = runningRepository.findAllByUserIdOrderByStartTimeDesc(userInfo.getUserId());
+			
+		}
+		return null;
+	}
+	
+	
 	
 }
