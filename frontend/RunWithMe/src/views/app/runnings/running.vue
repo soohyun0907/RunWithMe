@@ -12,7 +12,7 @@
         <div style="text-align:center; margin-top:40px;">
           <div class="myRecord"  >
               <div id="run_desc distance">누적 거리</div>
-            <span id="acc_dis" > {{ show_distance }}km </span>
+            <span id="acc_dis" > {{ accumulated_distance.toFixed(2) }}km </span>
           </div>
           <div class="myRecord" >
               <div id="run_desc speed">현재 속도</div>
@@ -122,7 +122,6 @@ export default {
       map: null,
       accumulated_distance: 0, // 총 누적거리
       accumulated_time: 0, // 총 누적 시간
-      show_distance:0, //총 누적거리 - 보여주기
       speed: 0, // 현재 속력
       show_speed:0, // 현재 속력 - 보여주기
       checkOneKm: 0, //1 km마다 초기화
@@ -265,7 +264,6 @@ export default {
       navigator.geolocation.getCurrentPosition((position) => {
         this.current.lat = position.coords.latitude;
         this.current.lng = position.coords.longitude;
-        this.show_distance = Math.round(this.accumulated_distance * 100) /100
 
         var startLoc = new google.maps.LatLng(
           this.current.lat,
@@ -388,11 +386,11 @@ export default {
 
           map.setCenter(now);
           marker.setPosition(now);
-
-          this.previous.lat = this.current.lat;
-          this.previous.lng = this.current.lng;
-          
           if (this.previous.lat == 0) {
+            
+            this.previous.lat = this.current.lat;
+            this.previous.lng = this.current.lng;
+            
             //이제 런닝 시작이면
             var currentLatLng = new google.maps.LatLng(
               this.current.lat,
@@ -402,13 +400,16 @@ export default {
 
           } else {
             var distance = this.computeDistance(this.previous, this.current);
+            
             console.log("watchposition 이동거리" + distance);
             console.log("watchposition 걸린시간" + this.checkSecond);
             var threshold = 0.001;
+            this.previous.lat = this.current.lat;
+            this.previous.lng = this.current.lng;
+            
             if (distance > threshold) {
               // 일정속도 이상으로 뛸때만 기록.
               this.accumulated_distance += distance;
-              this.show_distance = Math.round(this.accumulated_distance * 100) /100
               this.checkOneKm += distance;
 
               var currentLatLng = new google.maps.LatLng(
@@ -482,12 +483,12 @@ export default {
     },
     savePosition(position) {
       if(this.checkOneKm==0 || this.checkSecond==0){
-        var speed = "0.001"
+        var speed = "0.01"
       }else{
-        var speed = (this.speed+0.001).toString()
+        var speed = (this.speed+0.01).toString()
       }
       let data = {
-        accDistance:(this.checkOneKm+0.001).toString(),
+        accDistance:(this.checkOneKm+0.01).toString(),
         accTime: this.accumulated_time.toString(),
         speed: speed,
       };
