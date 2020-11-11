@@ -121,7 +121,7 @@ export default {
     ...mapGetters(["defaultProfile", "userInfo"])
   },
   mounted() {
-    this.$store.commit('closeSidebar')
+    this.$store.commit('closeSidebar');
     this.getBoardInfo();
     this.getReplyInfo();
     this.getBoards();
