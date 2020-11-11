@@ -43,7 +43,7 @@
               <!-- <div class="row"> -->
             <div class="writer_img col">
               <p>
-                <img v-if="reply.replyWriterProfile == null" class="profile-picture rounded-circle" :src="defaultProfile"/>
+                <img v-if="reply.replyWriterProfile == null" class="profile-picture rounded-circle avatar-sm" :src="defaultProfile"/>
                 <img v-else class="profile-picture rounded-circle avatar-sm" :src="reply.replyWriterProfile" />
                 {{ reply.replyWriter }}
               </p>
