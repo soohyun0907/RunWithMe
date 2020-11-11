@@ -85,6 +85,11 @@ const routes = [
 	          name: "runningFriends",
             component: () => import("./views/app/runnings/runningFriends")
           },
+          {
+            path: "apexRadarChart",
+            component: () => import("./views/app/runnings/apexRadarChart")
+          },
+
         ]
       },
       // mypages
@@ -135,6 +140,11 @@ const routes = [
             component: () => import("./views/app/board/challengeBoardWrite")
           },
           {
+            path: "challengeBoardEdit",
+            name: "challengeBoardEdit",
+            component: () => import("./views/app/board/challengeBoardEdit")
+          },
+          {
             path : 'challengeBoardDetail',
             name : 'challengeBoardDetail',
             component :()=> import("./views/app/board/challengeBoardDetail") ,
@@ -147,6 +157,20 @@ const routes = [
           {
             path: "createChallenge",
             component: () => import("./views/app/board/createChallenge")
+          },
+          {
+            path: "editChallenge",
+            name: "editChallenge",
+            component: () => import("./views/app/board/editChallenge")
+          },
+          {
+            path: "challengesAdmin",
+            component: () => import("./views/app/board/challengesAdmin")
+          },
+          {
+            path: "challengeDetail",
+            name: "challengeDetail",
+            component: () => import("./views/app/board/challengeDetail")
           },
         ]
       },

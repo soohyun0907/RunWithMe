@@ -50,4 +50,6 @@ public interface RecordService {
 
 	public List<RunningUser> analysis(int userId);
 
+	public List<Record> convertRecords(Map<String, Object> runningInfo, User loginUser);
+
 }

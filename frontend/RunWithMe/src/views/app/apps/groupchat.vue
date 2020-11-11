@@ -31,6 +31,7 @@
           <vue-perfect-scrollbar
             :settings="{ suppressScrollX: true, wheelPropagation: false }"
             class="contacts-scrollable perfect-scrollbar rtl-ps-none ps scroll"
+            style="height:50vh;"
           >
             <div>
               <div
@@ -91,7 +92,7 @@
       </div>
 
       <!-- 채팅사이드 바 -->
-      <div class="chat-content-wrap sidebar-content">
+      <div class="chat-content-wrap sidebar-content" >
         <div
           class="d-flex pl-3 pr-3 pt-2 pb-2 o-hidden box-shadow-1 chat-topbar"
         >
