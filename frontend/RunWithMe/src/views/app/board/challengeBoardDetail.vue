@@ -65,7 +65,7 @@
 
 <script>
 import http from "@/utils/http-common";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   metaInfo: {
@@ -93,6 +93,7 @@ export default {
     this.getReplyInfo();
   },
   methods:{
+    ...mapMutations(["closeSidebar"]),
     goBack() {
       this.$router.push("/app/board/challengeBoard");
     },

@@ -228,7 +228,7 @@ export default {
   },
   methods: {
     ...mapActions(["changeSelectedUser", "createAndSelectChatroomAction","sendMessages", ]),
-    ...mapMutations(["selectUserLists"]),
+    ...mapMutations(["selectUserLists","closeSidebar"]),
 
     matching: function(gender){
       var sex = gender;
@@ -390,6 +390,9 @@ export default {
     // 친구목록 불러오기
     this.selectUserLists();
 
+  },
+  mounted() {
+    this.$store.commit('closeSidebar')
   },
   updated: function () {
     var obj = document.getElementById("chatContainer");
