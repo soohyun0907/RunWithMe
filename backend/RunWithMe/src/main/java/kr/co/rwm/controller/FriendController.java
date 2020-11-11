@@ -66,6 +66,21 @@ public class FriendController {
 		}
 	}
 	
+	@GetMapping("/analysis/{gender}")
+	public ResponseEntity analysis(HttpServletRequest request, @PathVariable String gender) {
+		System.out.println(gender);
+		String token = request.getHeader("AUTH");
+		int uid = 0; 
+		System.out.println("token: " + token);
+		if(jwtTokenProvider.validateToken(token)) {
+			uid = jwtTokenProvider.getUserIdFromJwt(token);
+			List<User> list = friendService.analysis(uid, gender);
+			return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_MATCHLIST_SUCCESS, list), HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Response> (new Response(StatusCode.FORBIDDEN,ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
+		}
+	}
+	
 	@PostMapping("/friend")
 	public ResponseEntity insert(@RequestBody Map<String, Integer> friendInfo, HttpServletRequest request){
 		System.out.println("friends/controller/추가");

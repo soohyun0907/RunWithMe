@@ -14,4 +14,6 @@ public interface FriendService {
 	Long delete(int uid, Map<String, Integer> friendInfo);
 
 	List<User> match(int uid, String gender);
+
+	List<User> analysis(int uid, String gender);
 }

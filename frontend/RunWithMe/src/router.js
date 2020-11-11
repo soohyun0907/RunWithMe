@@ -65,11 +65,11 @@ const routes = [
           {
             path: "runningResult",
             name: "runningResult",
-	    component: () => import("./views/app/runnings/runningResult")
+	           component: () => import("./views/app/runnings/runningResult")
           },
           {
             path: "running",
-	    component: () => import("./views/app/runnings/running")
+	          component: () => import("./views/app/runnings/running")
           },
           {
             path: "neighborhoodList",
@@ -77,8 +77,12 @@ const routes = [
           },
           {
             path: "friendsDetail",
-	    name: "friendsDetail",
+	          name: "friendsDetail",
             component: () => import("./views/app/runnings/friendsDetail")
+          },
+          {
+            path: "apexRadarChart",
+            component: () => import("./views/app/runnings/apexRadarChart")
           },
         ]
       },
