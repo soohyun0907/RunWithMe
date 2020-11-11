@@ -49,7 +49,7 @@
               <i class="i-Speach-Bubble-8 text-25 text-success mr-2"></i>
               {{ props.row.button }}</a
             >
-            <a href="" @click="deleteFriend(props.row.userId);">
+            <a @click="deleteFriend(props.row.userId);">
               <i class="i-Close-Window text-25 text-danger"></i>
               {{ props.row.button }}</a
             >
@@ -96,6 +96,17 @@
 <script>
 import http from "@/utils/http-common";
 import { mapGetters,mapMutations } from "vuex";
+
+const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+        confirmButton: 'b-button',
+        cancelButton: 'b-button'
+    },
+    buttonsStyling: {
+        confirmButton: "outline-dark m-1",
+        cancelButton: 'info ripple m-1'
+    }
+})
 
 export default {
   metaInfo: {
@@ -146,14 +157,69 @@ export default {
   methods: {
     ...mapMutations(["closeSidebar"]),
     chatFriend(friendId){
-      alert(friendId+"님과 채팅")
-      this.$router.push('/app/apps/chat')
+      swalWithBootstrapButtons.fire({
+          title: friendId+'님과 채팅하시겠습니까?',
+          text: "채팅방으로 이동합니다.",
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: '네',
+          cancelButtonText: '아니요',
+          reverseButtons: false
+
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.$router.push("/app/apps/chat");
+        } else if (
+              result.dismiss === Swal.DismissReason.cancel
+          ) {
+              swalWithBootstrapButtons.fire(
+              '취소되었습니다.',
+              '',
+              'error'
+              )
+          }
+      })
     },
     deleteFriend(friendId){
-      http.delete(`friends/friend/${friendId}`, {
-      })
-      .then(data => {
-        alert('팔로우를 취소합니다.')
+      swalWithBootstrapButtons.fire({
+          title: '팔로우를 취소하시겠습니까?',
+          text: "다시 팔로우 가능합니다!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '팔로우를 취소할래요.',
+          cancelButtonText: '계속 팔로우할래요.',
+          reverseButtons: true
+
+      }).then((result) => {
+        if (result.isConfirmed) {
+            http.delete(`friends/friend/${friendId}`, {
+            })
+            .then(({data}) => {
+                if(data.status == 200) {
+                    this.isFriend = false;
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                return;
+            });
+            swalWithBootstrapButtons.fire(
+              '팔로우 취소',
+              '팔로우가 취소되었습니다.',
+              'success'
+            ).then((result) => {
+              this.$router.go(0);
+            })
+        } else if (
+              /* Read more about handling dismissals below */
+              result.dismiss === Swal.DismissReason.cancel
+          ) {
+              swalWithBootstrapButtons.fire(
+              '취소되었습니다.',
+              '계속 팔로우 중입니다.',
+              'error'
+              )
+          }
       })
     },
     getFriendList(){
