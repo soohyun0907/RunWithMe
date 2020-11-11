@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class RecordTempRepository {
 	// userId, km, record
 	@Resource(name = "redisTemplate")
-    private HashOperations<String, Integer, Record> hashOpsRecord;
+    private HashOperations<String, String, Record> hashOpsRecord;
 	
 	// userId로 저장
 //	public void setUserRecord(Record record) {
@@ -44,22 +44,26 @@ public class RecordTempRepository {
 							.build();
 		
 		System.out.println(record.toString()+" "+km);
-		hashOpsRecord.put(String.valueOf(record.getUserId().getUserId()), km, record);
+		hashOpsRecord.put(String.valueOf(record.getUserId().getUserId()), String.valueOf(km), record);
 	}
 	
 	// userId로 조회
 	public List<Record> findRecordByUserId(int userId) {
-		Map<Integer, Record> map = hashOpsRecord.entries(String.valueOf(userId));
+		Map<String, Record> map = hashOpsRecord.entries(String.valueOf(userId));
 		// 키로 정렬
-		Object[] mapkey = map.keySet().toArray();
-		Arrays.sort(mapkey);
-
+//		Object[] mapkey = map.keySet().toArray();
+//		Arrays.sort(mapkey);
+//
 		List<Record> records = new ArrayList<Record>();
-		for (Integer nKey : map.keySet())
-		{
-			records.add(map.get(nKey));
+//		for (Integer nKey : map.keySet())
+//		{
+//			records.add(map.get(nKey));
+//		}
+		
+		for(int i=1; i<=map.size(); i++) {
+			records.add(map.get(String.valueOf(i)));
 		}
-
+		
 		Collections.sort(records, new Comparator<Record>() {
 			@Override
 			public int compare(Record o1, Record o2) {
