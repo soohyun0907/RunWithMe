@@ -57,7 +57,8 @@ public class MatchRoomController {
 			uid = jwtTokenProvider.getUserIdFromJwt(token);
 		}
     	ChatRoom result =  matchRoomRepository.createAndSelectChatroom(uid, idInfo);
-    	
+    	System.out.println("*******************************");
+    	System.out.println(result);
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.CREATE_CHATROOM_SUCCESS, result), HttpStatus.OK);
     }
