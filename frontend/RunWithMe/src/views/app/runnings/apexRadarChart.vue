@@ -200,7 +200,7 @@ export default {
                     (this.series[0].data[1])));
 
                     var gender = "";
-                    if(this.userInfo.gender === 1)
+                    if(this.userInfo.userId.gender === 1)
                         gender = "male";
                     else
                         gender = "female";
@@ -286,7 +286,7 @@ export default {
         {
             this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
             this.uid = this.userInfo.userId.userId;
-            
+
             console.log(this.uid)
             http
                 .get('/runnings/'+this.uid)
