@@ -27,6 +27,19 @@ import kr.co.rwm.service.ReplyService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+/*
+ * ReplyController
+ * <pre>
+ * <b> History:</b>
+ *			이선수, ver.0.1 , 2020-10-28 : ReplyController 구축
+ * </pre>
+ * 
+ * @author 김형택
+ * @version 0.3, 2020-11-10, 댓글 수 정보 수정
+ * @see None
+ * 
+ */
+
 @RestController
 @CrossOrigin(origins="*")
 @RequiredArgsConstructor
@@ -38,9 +51,15 @@ public class ReplyController {
 	@Autowired
 	ReplyService replyService;
 	
-	@GetMapping("/")
+	@GetMapping("")
 	ResponseEntity replyList() {
 		List<Reply> list = replyService.allReplyList();
+		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_REPLY_SUCCESS, list), HttpStatus.OK);
+	}
+	
+	@GetMapping("/reply/{boardId}")
+	ResponseEntity replyListByBoardId(@PathVariable int boardId) {
+		List<Reply> list = replyService.findReplyByBoardId(boardId);
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_REPLY_SUCCESS, list), HttpStatus.OK);
 	}
 	

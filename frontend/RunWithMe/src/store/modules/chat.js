@@ -2,6 +2,7 @@ import {user, contacts, chatCollection, chatroom} from "../../data/groupchat";
 import http from "@/utils/http-common";
 import Stomp from 'webstomp-client';
 import SockJS from 'sockjs-client';
+import store from "@/store/modules/groupchat.js";
 
 const state = {
   currentUser: user,
@@ -58,12 +59,16 @@ const mutations = {
   },
   selectUserLists:(state) => {
     http
-      .get("/friends/contacts")
+      .get("/friends/contacts/online",{
+        AUTH: localStorage.getItem('auth'),
+      })
       .then((data)=>{
         // console.log("localstorage_auth");
         // console.log(localStorage.getItem('auth'));
         // console.log("before");
-        // console.log(data.data.data);
+        // console.log("*********************")
+        // console.log(data.data.data.off);
+        // console.log(data.data.data.on);
         
         state.contactList = data.data.data;
         // console.log("?")

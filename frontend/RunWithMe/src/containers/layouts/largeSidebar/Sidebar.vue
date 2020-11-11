@@ -48,8 +48,8 @@
             :data-submenu="true"
           >
             <a class="nav-item-hold" href="#">
-              <i class="nav-icon i-Administrator"></i>
-              <span class="nav-text">ChallengeBoard</span>
+              <i class="nav-icon i-Target"></i>
+              <span class="nav-text">Challenge</span>
             </a>
             <div class="triangle"></div>
           </li>
@@ -123,6 +123,12 @@
             <router-link tag="a" class to="/app/runnings/running">
               <i class="nav-icon i-Stopwatch"></i>
               <span class="item-name">Running</span>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link tag="a" class to="/app/runnings/apexRadarChart">
+              <i class="text-20 i-Pulse"></i>
+              <span class="item-name"> Analysis</span>
             </router-link>
           </li>
         </ul>

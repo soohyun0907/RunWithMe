@@ -61,13 +61,14 @@ public class UserController {
 	
 	private final PasswordEncoder passwordEncoder;
 	private final JwtTokenProvider jwtTokenProvider;
-	private final RedisTemplate<String, String> logoutRedis;
+	private final RedisTemplate<String, String> redis;
 	private final S3Service s3Service;
 	private final AreaService areaService;
 	private final UserService userService;
 	private final RanksService rankService;
 	private final RecordService recordService;
 	private final ChallengeService challengeService;
+//	private final RedisTemplate redis;
 	
 	/**
 	 * 회원가입 - 이메일 중복 여부 True/False를 판단하고, True일 경우 JSON 객체 기반으로 회원가입을 진행한다.
@@ -140,10 +141,13 @@ public class UserController {
 					HttpStatus.FORBIDDEN);
 		}
 		String token = jwtTokenProvider.generateToken(member.getUserId(), member.getUserEmail(), member.getRoles());
+		response.setHeader("AUTH", token);
 		
-		response.setHeader("AUTH", token);		
+		RunningUser runningUser = recordService.findRunningUserByUserId(member.getUserId());
 		
-		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SIGNIN_SUCCESS, member),
+		// 로그인된 사용자 목록
+		redis.opsForValue().set(member.getUserId().toString(), "success");
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SIGNIN_SUCCESS, runningUser),
 				HttpStatus.OK);
 	}
 	
@@ -161,9 +165,11 @@ public class UserController {
 		String token = request.getHeader("AUTH");
 		if (jwtTokenProvider.validateToken(token)) {
 			Date expirationDate = jwtTokenProvider.getExpirationDate(token);
-			logoutRedis.opsForValue().set(token, "logout", expirationDate.getTime() - System.currentTimeMillis(),
+			redis.opsForValue().set(token, "logout", expirationDate.getTime() - System.currentTimeMillis(),
 					TimeUnit.MILLISECONDS);
-			System.out.println(logoutRedis.opsForValue().get(token));
+			String userId = jwtTokenProvider.getUserPk(token);
+			redis.opsForHash().delete(userId.toString());
+			System.out.println(redis.opsForValue().get(token));
 			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.LOGOUT_SUCCESS),
 					HttpStatus.OK);
 		} else {
