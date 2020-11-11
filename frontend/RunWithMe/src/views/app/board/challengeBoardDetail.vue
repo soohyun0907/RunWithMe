@@ -26,15 +26,23 @@
           </div>
         </slot>
       </div>
-      <hr>
+      <hr style="margin-bottom:1px;">
       <div class="main-content">
         <img :src="board.boardImage" />
         <p>
           {{ board.boardContent }}
         </p>
       </div>
-      <hr>
-      <div class="reply">
+      <hr style="margin-bottom:5px;">
+      <div v-if="isWriter">
+        <div class="float-right">
+          <router-link :to="{name:'challengeBoardEdit', query:{boardId:board.boardId}}">
+            <b-button size="sm" variant="dark m-1">수정</b-button>
+          </router-link>
+          <b-button size="sm" variant="dark m-1" @click="deleteBoard()">삭제</b-button>
+        </div>
+      </div>
+      <div class="reply" style="margin-top:30px;">
         <h6>댓글( {{ board.replyCount }} )</h6>
         <!-- <div class="replies"> -->
           <b-list-group class="list-group-flush" v-for="reply in allReply" :key="reply.replyId">
@@ -80,6 +88,10 @@ export default {
   },
   data() {
     return {
+      havePrev: true,
+      haveNext: true,
+      prevBoardId: 0,
+      nextBoardId: 0,
       board: {},
       replyInfo: {
         boardId: "",
@@ -88,16 +100,19 @@ export default {
         parentId: 0,
         replyOrder: 0
       },
-      allReply: []
+      allReply: [],
+      isWriter: false,
+      deleteModal: "",
     }
   },
   computed: {
-    ...mapGetters(["defaultProfile"])
+    ...mapGetters(["defaultProfile", "userInfo"])
   },
   mounted() {
     this.$store.commit('closeSidebar')
     this.getBoardInfo();
     this.getReplyInfo();
+    this.getBoards();
   },
   methods:{
     ...mapMutations(["closeSidebar"]),
@@ -132,6 +147,8 @@ export default {
       .then(({data}) => {
         if(data.status == 200){
           this.board = data.data;
+          if(data.data.writerId == this.userInfo.userId)
+            this.isWriter = true;
         }
       })
       .catch((error) => {
@@ -145,7 +162,7 @@ export default {
       .then(({data}) => {
         if(data.status == 200){
           // this.allReply = data.data;
-          // console.log(data.data);
+          console.log(data.data);
           var obj;
           data.data.forEach(element => {
             obj = new Object();
@@ -154,6 +171,7 @@ export default {
             obj.regdate = element.regdate;
             obj.replyWriter = element.user.username;
             obj.replyWriterProfile = element.user.profile;
+            obj.replyWriterId = element.user.userId;
             this.allReply.push(obj);
           });
           // this.allReply = this.allReply.reverse();
@@ -165,21 +183,99 @@ export default {
         return;
       })
     },
+    getBoards() {
+      http
+        .get("boards")
+        .then(({data}) => {
+          // console.log(data.data[0].boardId);
+          for(var i=0;i<data.data.length; i++){
+            if(data.data[i].boardId == this.$route.query.boardId){
+              if(i == 0) this.havePrev = false;
+              if(this.havePrev)
+                this.prevBoardId = data.data[i-1].boardId;
+              
+              if(i==data.data.length-1) this.haveNext =false;
+              if(this.haveNext)
+                this.nextBoardId = data.data[i+1].boardId;
+
+              break;
+            }
+          }
+
+          // console.log(this.prevBoardId + " " + this.nextBoardId);
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        });
+    },
     goChallengeBoard() {
       // console.log("이동!");
       this.$router.push("/app/board/challengeBoard");
     },
     goPrevChallengeBoard() {
-      this.$router.push("/app/board/challengeBoardDetail?boardId="+(this.board.boardId-1));
-      setTimeout(() => {
-        this.$router.go(0)
-      },0);
+      if(this.havePrev) {
+        this.$router.push("/app/board/challengeBoardDetail?boardId="+this.prevBoardId);
+        setTimeout(() => {
+          this.$router.go(0)
+        },0);
+      } else {
+        alert("이전글이 존재하지 않습니다.");
+      }
     },
     goNextChallengeBoard() {
-      this.$router.push("/app/board/challengeBoardDetail?boardId="+(this.board.boardId+1));
-      setTimeout(() => {
-        this.$router.go(0)
-      },0);
+      if(this.haveNext) {
+        this.$router.push("/app/board/challengeBoardDetail?boardId="+this.nextBoardId);
+        setTimeout(() => {
+          this.$router.go(0)
+        },0);
+      } else {
+        alert("다음글이 존재하지 않습니다.");
+      }
+    },
+    deleteBoard() {
+      this.deleteModal = "";
+      this.$bvModal
+        .msgBoxConfirm("삭제하면 되돌릴 수 없습니다.", {
+          title: "삭제하시겠습니까?",
+          size: "sm",
+          buttonSize: "sm",
+          okVariant: "danger",
+          okTitle: "YES",
+          cancelTitle: "NO",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          this.deleteModal = value;
+          if(this.deleteModal) {
+            http
+            .delete("boards/board/" + this.$route.query.boardId)
+            .then(({data}) => {
+              if(data.status == 200) {
+                Swal.fire({
+                  icon: 'success',
+                  text: '게시글이 삭제되었습니다.'
+                });
+                this.$router.push("/app/board/challengeBoard");
+              }
+            })
+            .catch((error) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '삭제 중 오류가 발생하였습니다' + error
+              });
+              console.log(error);
+              return;
+            })
+          }
+        })
+        .catch(err => {
+          // An error occurred
+          console.log(error);
+        });
     }
   }
 };
