@@ -81,8 +81,8 @@ public class RecordServiceImpl implements RecordService {
 								.userId(userId)
 								.polyline(String.valueOf(runningInfo.get("polyline")))
 								.thumbnail(String.valueOf(runningInfo.get("thumbnail")))
-								.accDistance((double) runningInfo.get("accDistance"))
-								.accTime(((Number) runningInfo.get("accTime")).longValue())
+								.accDistance(Double.parseDouble(String.valueOf(runningInfo.get("accDistance"))))
+								.accTime(Long.parseLong(String.valueOf(runningInfo.get("accTime"))))
 								.startTime(LocalDateTime.parse((CharSequence) runningInfo.get("startTime"), formatter))
 								.endTime(LocalDateTime.parse((CharSequence) runningInfo.get("endTime"), formatter))
 								.build();
@@ -249,6 +249,26 @@ public class RecordServiceImpl implements RecordService {
 			
 		}
 		return null;
+	}
+
+	@Override
+	public List<Record> convertRecords(Map<String, Object> runningInfo, User loginUser) {
+		// TODO Auto-generated method stub
+		List<Map<String, String>> recordList = (List<Map<String, String>>) runningInfo.get("records");
+		
+		List<Record> records = new ArrayList<Record>();
+		for(Map<String, String> map: recordList) {
+			Record record = Record.builder()
+					.userId(loginUser)
+					.accDistance(Double.parseDouble(map.get("accDistance")))
+					.accTime(Long.parseLong(map.get("accTime")))
+					.speed(Double.parseDouble(map.get("speed")))
+					.build();
+			
+			records.add(record);
+		}
+		
+		return records;
 	}
 	
 	

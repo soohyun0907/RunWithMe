@@ -126,7 +126,7 @@
         v-for="(item, index) in friendsFeed"
         transition="list"
       >
-        <router-link :to="{name:'runningResult', query:{friendId:item.userId.userId}}">
+        <router-link :to="{name:'runningFriends', query:{friendName:item.title, runningId:item.runningId}}">
         <div
           class="card o-hidden mb-30 d-flex "
           :class="{ 'flex-column': isListView, 'flex-row': !isListView }"
@@ -208,6 +208,8 @@ export default {
   },
   mounted() {
     this.$store.commit('closeSidebar')
+    console.log("this.friendsFeed")
+    console.log(this.friendsFeed)
   },
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
@@ -229,14 +231,12 @@ export default {
         .then(({data}) => {
           if(data.status==200){
             this.slides = data.data;
-            console.log(this.slides);
           }
         })
         .catch((error) => {
           console.log(error);
           return;
         });
-      
     },
     getTopRankers() {
       http
