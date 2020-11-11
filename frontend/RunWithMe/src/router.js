@@ -85,6 +85,11 @@ const routes = [
 	          name: "runningFriends",
             component: () => import("./views/app/runnings/runningFriends")
           },
+          {
+            path: "apexRadarChart",
+            component: () => import("./views/app/runnings/apexRadarChart")
+          },
+
         ]
       },
       // mypages
