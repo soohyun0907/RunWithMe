@@ -250,6 +250,26 @@ public class RecordServiceImpl implements RecordService {
 		}
 		return null;
 	}
+
+	@Override
+	public List<Record> convertRecords(Map<String, Object> runningInfo, User loginUser) {
+		// TODO Auto-generated method stub
+		List<Map<String, String>> recordList = (List<Map<String, String>>) runningInfo.get("records");
+		
+		List<Record> records = new ArrayList<Record>();
+		for(Map<String, String> map: recordList) {
+			Record record = Record.builder()
+					.userId(loginUser)
+					.accDistance(Double.parseDouble(map.get("accDistance")))
+					.accTime(Long.parseLong(map.get("accTime")))
+					.speed(Double.parseDouble(map.get("speed")))
+					.build();
+			
+			records.add(record);
+		}
+		
+		return records;
+	}
 	
 	
 	
