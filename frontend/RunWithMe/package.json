@@ -25,6 +25,7 @@
     "mobile-device-detect": "^0.4.3",
     "nprogress": "^0.2.0",
     "sockjs-client": "^1.1.2",
+    "sweetalert2": "^10.9.1",
     "v-calendar": "^1.0.8",
     "v2-datepicker": "^3.1.1",
     "vue": "^2.6.11",
