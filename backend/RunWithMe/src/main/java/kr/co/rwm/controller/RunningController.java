@@ -111,8 +111,9 @@ public class RunningController {
 			Running savedRunning = recordService.saveRunning(runningInfo, loginUser.getUserId());
 			
 			// 2. redis에서 records 조회 + 삭제 + running의 마지막 값으로 마지막 record 추가
-			List<Record> records = recordTempRepository.findRecordByUserId(loginUser.getUserId());
-			recordTempRepository.deleteByUserId(loginUser.getUserId(), (int) savedRunning.getAccDistance());
+//			List<Record> records = recordTempRepository.findRecordByUserId(loginUser.getUserId());
+//			recordTempRepository.deleteByUserId(loginUser.getUserId(), (int) savedRunning.getAccDistance());
+			List<Record> records = recordService.convertRecords(runningInfo, loginUser);
 			Record lastRecord = Record.builder()
 					.userId(loginUser)
 					.accDistance(savedRunning.getAccDistance())
