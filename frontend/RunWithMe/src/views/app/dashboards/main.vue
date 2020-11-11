@@ -94,7 +94,7 @@
                   {{ranker.userId.username}}
                 </router-link>
               </div>
-              <span class="ul-widget4__number t-font-boldest text-success">
+              <span style="text-align:right; width:20vw" class="ul-widget4__number t-font-boldest text-success">
                 {{ranker.totalExp}} P
               </span>
           </div>
