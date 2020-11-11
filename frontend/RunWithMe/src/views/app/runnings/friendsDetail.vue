@@ -29,7 +29,7 @@
       </div>
       <div align="center">
         <b-button v-if="isFriend" variant="outline-dark m-1" @click="cancleFollow()">팔로우 취소</b-button>
-        <b-button v-if="!isFriend" variant="info ripple m-1" @click="insertFollow()">팔로우</b-button>
+        <b-button v-if="!isFriend && friendInfo.userId.userId!=userInfo.userId" variant="info ripple m-1" @click="insertFollow()">팔로우</b-button>
       </div>
     </div>
     <br />
@@ -195,7 +195,15 @@ export default {
         .then(({data}) => {
             if(data.status == 200) {
                 this.isFriend = true;
-                alert("팔로우 성공");
+                // alert("팔로우 성공");
+                // swal("팔로우 성공!", "Follow success!", "success");
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: '팔로우 성공',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             }
         })
         .catch((error) => {
@@ -204,18 +212,53 @@ export default {
         });
     },
     cancleFollow() {
-        console.log(this.friendInfo.userId.userId);
-        http.delete(`friends/friend/`+this.friendInfo.userId.userId)
-        .then(({data}) => {
-            if(data.status == 200) {
-                this.isFriend = false;
-                alert("팔로우 취소");
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'b-button',
+                cancelButton: 'b-button'
+            },
+            buttonsStyling: {
+                confirmButton: "outline-dark m-1",
+                cancelButton: 'info ripple m-1'
             }
         })
-        .catch((error) => {
-            console.log(error);
-            return;
-        });
+
+        swalWithBootstrapButtons.fire({
+            title: '팔로우를 취소하시겠습니까?',
+            text: "다시 팔로우 가능합니다!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '팔로우를 취소할래요.',
+            cancelButtonText: '계속 팔로우할래요.',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                http.delete(`friends/friend/`+this.friendInfo.userId.userId)
+                .then(({data}) => {
+                    if(data.status == 200) {
+                        this.isFriend = false;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return;
+                });
+                swalWithBootstrapButtons.fire(
+                '팔로우 취소',
+                '팔로우가 취소되었습니다.',
+                'success'
+                )
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                '취소되었습니다.',
+                '계속 팔로우 중입니다.',
+                'error'
+                )
+            }
+        })
     },
   },
 };

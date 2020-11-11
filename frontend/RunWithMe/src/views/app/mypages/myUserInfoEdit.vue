@@ -70,7 +70,11 @@ export default {
             console.log(data.data.profile)
             this.$router.go(-1)
           } else {
-            alert("오류가 발생하였습니다.");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '오류가 발생했습니다.',
+            })
             return;
           }
         })
