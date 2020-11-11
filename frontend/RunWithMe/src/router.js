@@ -140,6 +140,11 @@ const routes = [
             component: () => import("./views/app/board/challengeBoardWrite")
           },
           {
+            path: "challengeBoardEdit",
+            name: "challengeBoardEdit",
+            component: () => import("./views/app/board/challengeBoardEdit")
+          },
+          {
             path : 'challengeBoardDetail',
             name : 'challengeBoardDetail',
             component :()=> import("./views/app/board/challengeBoardDetail") ,
