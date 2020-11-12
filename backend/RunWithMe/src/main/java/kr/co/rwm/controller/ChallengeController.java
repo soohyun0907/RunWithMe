@@ -281,7 +281,7 @@ public class ChallengeController {
 					HttpStatus.NOT_FOUND);
 		}else if(ret == 0) {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_DELETE_FAIL, null),
-					HttpStatus.FORBIDDEN);
+					HttpStatus.OK);
 		}
 
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_DELETE_SUCCESS, null),
