@@ -2,35 +2,49 @@
   <div class="main-content">
     <h3>기부/이벤트</h3>
 
+    <b-modal id="modal-sm" size="sm" centered :title="modalInfo.title" button-size="sm">
+      <img :src="modalInfo.challengeImg" style="margin-bottom:10px;" />
+      <h5> {{ modalInfo.content }} </h5>
+      <h6> {{ modalInfo.startTime }} ~ {{ modalInfo.endTime }} </h6>
+      <template #modal-footer="{ cancel }">
+        <!-- Emulate built in modal footer ok and cancel button actions -->
+        <b-button size="sm" variant="success" @click="goDetail(modalInfo.id)">
+          상세보기
+        </b-button>
+        <b-button size="sm" variant="danger" @click="cancel()">
+          Cancel
+        </b-button>
+      </template>
+    </b-modal>
+
     <div v-if="slides.length==0">
         <h3 class="mt-5" style="text-align: center;">현재 진행중인 이벤트가 없어요!</h3>
     </div>
 
-  <div v-else> 
-    <!-- <carousel-3d :width="180" :height="250"> -->
-    <carousel-3d :width="150" :height="150"
-     :controls-visible="true" >
-      <!-- <slide v-for="(slide,index) in slides" :key="index" style="border: 0px;"> -->
-      <slide v-for="(slide,i) in slides" :index="i" :key="slide.id" style="border: 0px;">
-        <div @click="toggleOverlay(i)">
-          <b-overlay 
-          :show="slide.clicked" 
-          :variant="variant"
-          :opacity="opacity"
-          :blur="blur"
-          rounded="sm">
-            <img :src="slide.challengeImg" />
-            <template #overlay>
-              <div class="text-center">
-                <h5 style="overflow:hidden;">{{slide.title}}</h5>
-                <h6>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h6>
-              </div>
-            </template>
-          </b-overlay>
-        </div>
-      </slide>
-    </carousel-3d>
-  </div>
+    <div v-else> 
+      <carousel-3d :width="150" :height="150"
+      :controls-visible="true" >
+        <slide v-for="(slide,i) in slides" :index="i" :key="slide.id" style="border: 0px;">
+          <div @click="showInfoModal(slide)" v-b-modal.modal-sm>
+            <!-- <b-overlay 
+            :show="slidesOverlayShow" 
+            :variant="variant"
+            :opacity="opacity"
+            :blur="blur"
+            rounded="sm"> -->
+              <img :src="slide.challengeImg" />
+              <!-- <template #overlay>
+                <div class="text-center">
+                  <b-button pill variant="info m-1">Info</b-button> -->
+                  <!-- <h5 style="overflow:hidden;">{{slide.title}}</h5>
+                  <h6>{{ slide.startTime | moment('YYYY.MM.DD') }} ~ {{ slide.endTime | moment('YYYY.MM.DD') }}</h6> -->
+                <!-- </div>
+              </template>
+            </b-overlay> -->
+          </div>
+        </slide>
+      </carousel-3d>
+    </div>
   
     <hr>
     <b-card style="margin-bottom:15px;">
@@ -274,6 +288,14 @@ export default {
       rankListDonate : [],
       friendsFeed: [],
       haveFriends: true,
+      modalInfo: {
+        id: 0,
+        title: "",
+        challengeImg: "",
+        content: "",
+        startTime: "",
+        endTime: ""
+      }
     };
   },
   computed: {
@@ -288,8 +310,6 @@ export default {
   },
   mounted() {
     this.$store.commit('closeSidebar')
-    console.log("this.friendsFeed")
-    console.log(this.friendsFeed)
   },
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
@@ -299,12 +319,11 @@ export default {
         time += (origin%60).toFixed() + "\"";
         return time;
     },
-    toggleOverlay(clickedSlide) {
-      this.slides[clickedSlide].clicked = true;
-      for(var i=0; i<this.slides.length; i++ ){
-        if(i!=clickedSlide)  this.slides[i].clicked = false;
-        console.log(i+" " + this.slides[i].clicked)
-      }
+    toggleOverlay() {
+      if(this.slidesOverlayShow)
+        this.slidesOverlayShow = false;
+      else
+        this.slidesOverlayShow = true;
     },
     getChallenges() {
       http
@@ -312,11 +331,6 @@ export default {
         .then(({data}) => {
           if(data.status==200){
             this.slides = data.data;
-            for(var i=0; i< this.slides.length; i++){
-              this.slides[i]['clicked'] = false;
-            }
-            console.log("this.slides")
-            console.log(this.slides)
           }
         })
         .catch((error) => {
@@ -369,7 +383,6 @@ export default {
         .then(({data}) => {
           if(data.status == 200){
             let obj;
-            // console.log(data.data);
             for(var i=0; i<data.data.friends.length; i++) {
               obj = new Object();
               if(data.data.runnings[i] == null) {
@@ -395,14 +408,23 @@ export default {
             }
             if(this.friendsFeed.length == 0)
               this.haveFriends = false;
-            
-            // console.log(this.friendsFeed);
           }
         })
         .catch((error) => {
           console.log(error);
           return;
         })
+    },
+    showInfoModal(slide) {
+      this.modalInfo.id = slide.challengeId;
+      this.modalInfo.title = slide.title;
+      this.modalInfo.challengeImg = slide.challengeImg;
+      this.modalInfo.content = slide.content;
+      this.modalInfo.startTime = this.$moment(slide.startTime).format('YYYY.MM.DD');
+      this.modalInfo.endTime = this.$moment(slide.endTime).format('YYYY.MM.DD');
+    },
+    goDetail(challengeId) {
+      this.$router.push("/app/board/challengeDetail?challengeId="+challengeId);
     }
   }
 };

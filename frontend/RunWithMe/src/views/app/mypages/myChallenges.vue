@@ -196,7 +196,7 @@ export default {
                         obj.startTime = element.challengeId.startTime;
                         obj.endTime = element.challengeId.endTime;
                         obj.distanceGoal = element.challengeId.distanceGoal;
-                        obj.distanceCurrent = element.challengeId.distanceCurrent;
+                        obj.distanceCurrent = (element.challengeId.distanceCurrent).toFixed(2);
                         obj.donateGoal = element.challengeId.donateGoal;
                         obj.donateCurrent = element.challengeId.donateCurrent;
                         obj.personalDistanceGoal = element.challengeId.personalDistanceGoal;
