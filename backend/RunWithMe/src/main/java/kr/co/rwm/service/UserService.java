@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import kr.co.rwm.dto.UserDto;
 import kr.co.rwm.entity.Payment;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.repo.PaymentRepository;
@@ -35,7 +36,7 @@ public class UserService implements UserDetailsService {
 		return userRepository.findByUserEmail(userEmail);
 	}
 
-	public User join(User user, String password) {
+	public User join(UserDto user, String password) {
 		return userRepository.save(User.builder().gugunId(user.getGugunId()).gender(user.getGender()).userEmail(user.getUserEmail())
 				.userName(user.getUsername()).userPw(password).mileage(INIT_MILEAGE).roles(Collections.singletonList("USER")).build());
 	}
@@ -49,7 +50,19 @@ public class UserService implements UserDetailsService {
 		userRepository.deleteByUserEmail(userEmail);
 	}
 
-	public void update(Optional<User> user,User changeUser) {
+	public void update(Optional<User> user,UserDto changeUser) {
+		User temp = user.get();
+		user.ifPresent(selectUser->{
+			selectUser.setUserId(temp.getUserId());
+			selectUser.setUserPw(changeUser.getChangePw());
+			selectUser.setGender(temp.getGender());
+			selectUser.setUserName(changeUser.getUsername());
+			selectUser.setProfile(changeUser.getProfile());
+			selectUser.setGugunId(changeUser.getGugunId());
+			userRepository.save(selectUser);
+		});
+	}
+	public void profileUpdate(Optional<User> user,User changeUser) {
 		User temp = user.get();
 		user.ifPresent(selectUser->{
 			selectUser.setUserId(temp.getUserId());
