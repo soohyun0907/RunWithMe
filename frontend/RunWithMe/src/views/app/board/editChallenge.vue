@@ -1,10 +1,10 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'챌린지 생성'" :folder="'Challenge'" />
+    <breadcumb :page="'챌린지 수정'" :folder="'Challenge'" />
     <b-row>
       <!-- form-inputs-rounded -->
       <b-col md="12 mb-30">
-        <b-card class title="Create Challenge">
+        <b-card class title="Edit Challenge">
           <b-form @submit="onSubmit" @reset="onReset">
             <b-row>
               <b-form-group
@@ -13,7 +13,7 @@
                 label-for="input-1"
               >
                 <b-form-input
-                  v-model="form.cName"
+                  v-model="challenge.title"
                   type="text"
                   required
                   placeholder=""
@@ -26,7 +26,7 @@
                 description="챌린지에 대한 간단한 소개를 입력해주세요."
               >
                 <b-form-input
-                  v-model="form.content"
+                  v-model="challenge.content"
                   type="text"
                   required
                   placeholder=""
@@ -39,7 +39,7 @@
                 description="총 목표 거리를 입력해주세요."
               >
                 <b-form-input
-                  v-model="form.goalDistance"
+                  v-model="challenge.distanceGoal"
                   type="text"
                   required
                   placeholder=""
@@ -52,7 +52,7 @@
                 description="참여하는 개인당 목표 거리를 입력해주세요."
               >
                 <b-form-input
-                  v-model="form.personalDistanceGoal"
+                  v-model="challenge.personalDistanceGoal"
                   type="text"
                   required
                   placeholder=""
@@ -65,7 +65,7 @@
                 description="총 목표 금액을 입력해주세요."
               >
                 <b-form-input
-                  v-model="form.goalDonate"
+                  v-model="challenge.donateGoal"
                   type="text"
                   required
                   placeholder=""
@@ -78,15 +78,16 @@
               >
                 <date-range-picker ref="picker" 
                   :singleDatePicker="false"
-                  v-model="form.dateRange">
+                  v-model="challenge.dateRange">
                 </date-range-picker>
               </b-form-group>
 
-              <div v-if="updateChallengeImg">
+              <b-col md="12" v-if="updateChallengeImg">
                 <input type="file" id="files" ref="files" v-on:change="handleFileUpload()"
                   accept="image/*" />
-                <b-button class="m-1" variant="primary" v-on:click="submitFile()">Submit</b-button>
-              </div>
+                <b-button size="sm" class="m-1" variant="primary" @click="submitFile()">이미지 수정</b-button>
+                <b-button size="sm" class="m-1" variant="danger" @click="movePage()">이미지 수정안함</b-button>
+              </b-col>
 
               <b-col md="12" v-else>
                 <b-button class="m-1" type="submit" variant="primary">Submit</b-button>
@@ -108,73 +109,48 @@ import { mapGetters, mapMutations } from "vuex";
 
 export default {
   metaInfo: {
-    // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Challenge Creation Form"
+    title: "Edit Challenge"
   },
   components: { DateRangePicker },
   data() {
     return {
-      challengeId: "",
       updateChallengeImg: false,
       file: [],
-      form: {
-        cName: "",
+      originInfo: {},
+      challenge: {
+        title: "",
         content: "",
-        goalDistance: "",
-        personalDistanceGoal: "",
-        goalDonate: "",
+        distanceGoal: 0,
+        donateGoal: 0,
+        personalDistanceGoal: 0,
         dateRange: {
-            startDate: new Date(),
-            endDate: new Date()
-        },
-      },
-      alertModal: ""
-    };
-  },
-  computed: {
-    ...mapGetters(["userInfo","defaultProfile"]),
+          startDate: new Date(),
+          endDate: new Date()
+        }
+      }
+    }
   },
   mounted() {
     this.$store.commit('closeSidebar');
-    if(this.userInfo.roles.length == 1){
-      this.alertModal = "";
-      this.$bvModal
-        .msgBoxConfirm("관리자만 접근 가능한 페이지입니다.", {
-          size: "sm",
-          buttonSize: "sm",
-          okVariant: "danger",
-          okTitle: "YES",
-          footerClass: "p-2",
-          hideHeaderClose: false,
-          centered: true
-        })
-        .then(value => {
-          this.alertModal = value;
-          this.$router.push("/app/dashboards/main");
-        })
-        .catch(err => {
-          console.log(error);
-        });
-    }
+    this.getChallengeDetail();
   },
   methods: {
     ...mapMutations(["closeSidebar"]),
     onSubmit(el) {
       let x = el.preventDefault();
       http
-        .post('/challenges', {
-          title: this.form.cName,
-          content: this.form.content,
-          distanceGoal: this.form.goalDistance,
-          donateGoal: this.form.goalDonate,
-          startTime: this.form.dateRange.startDate,
-          endTime: this.form.dateRange.endDate,
-          personalDistanceGoal: this.form.personalDistanceGoal
+        .put('challenges/'+this.originInfo.challengeId, {
+          title: this.challenge.title,
+          content: this.challenge.content,
+          distanceGoal: this.challenge.distanceGoal,
+          donateGoal: this.challenge.donateGoal,
+          startTime: this.challenge.dateRange.startDate,
+          endTime: this.challenge.dateRange.endDate,
+          personalDistanceGoal: this.challenge.personalDistanceGoal
         })
         .then(({ data }) => {
           if(data.status == 200){
-            alert("챌린지 생성 완료 이미지를 등록해주세요.");
-            this.challengeId = data.data.challengeId;
+            alert("챌린지 수정 완료 이미지 수정이 가능합니다.");
             this.updateChallengeImg = true;
           } else {
             alert("오류가 발생하였습니다.");
@@ -185,19 +161,19 @@ export default {
     onReset(evt) {
       evt.preventDefault();
       // Reset our form values
-      this.form.cName = "";
-      this.form.goalDistance = "";
-      this.form.goalMoney = "";
-      this.form.dateRange = {
-            startDate: new Date(),
-            endDate: new Date()};
+      this.challenge.title = this.originInfo.title;
+      this.challenge.content = this.originInfo.content;
+      this.challenge.distanceGoal = this.originInfo.distanceGoal;
+      this.challenge.donateGoal = this.originInfo.donateGoal;
+      this.challenge.personalDistanceGoal = this.originInfo.personalDistanceGoal;
+      this.challenge.dateRange.startDate = this.originInfo.startTime;
+      this.challenge.dateRange.endDate = this.originInfo.endTime;
     },
     submitFile(){
       let formData = new FormData();
       formData.append('files', this.file[0]);
-      // console.log(this.file[0]);
       http
-        .post('/challenges/images/'+this.challengeId, formData, 
+        .post('/challenges/images/'+this.originInfo.challengeId, formData, 
         {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -206,7 +182,7 @@ export default {
         .then(({ data }) => {
           if(data.status == 200){
             alert(data.message);
-            this.$router.push("/app/board/challenges");
+            this.$router.push("/app/board/challengeDetail?challengeId="+this.originInfo.challengeId);
           } else {
             alert("오류가 발생하였습니다.");
             return;
@@ -215,7 +191,30 @@ export default {
     },
     handleFileUpload() {
       this.file = this.$refs.files.files;
-      // console.log(this.file);
+    },
+    getChallengeDetail() {
+      http
+      .get("challenges/"+this.$route.query.challengeId)
+      .then(({data}) => {
+        if(data.status == 200){
+          console.log(data.data);
+          this.originInfo = data.data.challengeId;
+          this.challenge.title = data.data.challengeId.title;
+          this.challenge.content = data.data.challengeId.content;
+          this.challenge.distanceGoal = data.data.challengeId.distanceGoal;
+          this.challenge.donateGoal = data.data.challengeId.donateGoal;
+          this.challenge.personalDistanceGoal = data.data.challengeId.personalDistanceGoal;
+          this.challenge.dateRange.startDate = data.data.challengeId.startTime;
+          this.challenge.dateRange.endDate = data.data.challengeId.endTime;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return;
+      })
+    },
+    movePage() {
+      this.$router.push("/app/board/challengeDetail?challengeId="+this.originInfo.challengeId);
     }
   }
 };

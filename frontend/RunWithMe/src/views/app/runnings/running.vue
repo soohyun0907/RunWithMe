@@ -540,9 +540,9 @@ export default {
       this.endTime = new Date();
       this.endTime = this.$moment(this.endTime).format("YYYY-MM-DDTHH:mm:ss");
 
-      //////////////////////////  
+      ////////////////////////// 
 
-
+      this.gugun.length.length==0 ? this.gugun : this.gugun.push("강남구")
       let runningData = {
         polyline: this.encoded_polyline.toString(),
         startTime: this.startTime,
@@ -595,18 +595,27 @@ export default {
       var hour = timeElapsed.getUTCHours();
       var min = timeElapsed.getUTCMinutes();
       var sec = timeElapsed.getUTCSeconds();
-      this.accumulated_time += 1;
-      this.checkSecond += 1;
-      console.log("총 런닝 시간 체크 : " +this.accumulated_time)
-      console.log(hour + "" + min + "" +sec)
+      
       this.clock =
         this.zeroPrefix(hour, 2) +
         ":" +
         this.zeroPrefix(min, 2) +
         ":" +
         this.zeroPrefix(sec, 2);
+        
+      var realTime = ((currentTime- this.timeBegan-this.stoppedDuration)/1000).toFixed(0)
+      
+      console.log("실제 시간 " + realTime)
+
+      
+      // this.accumulated_time += 1;
+      // this.checkSecond += 1;
+      this.accumulated_time = realTime;
+      this.checkSecond = realTime;
+      console.log(this.clock)
     },
     zeroPrefix(num, digit) {
+      
       var zero = "";
       for (var i = 0; i < digit; i++) {
         zero += "0";
@@ -669,7 +678,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .flex-grow-1{
   width:30vw;
   text-align:center;
