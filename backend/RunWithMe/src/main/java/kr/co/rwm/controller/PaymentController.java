@@ -28,33 +28,33 @@ public class PaymentController {
 	
 	// 충전
 	@GetMapping("/charge/{money}")
-	public ResponseEntity charge(@PathVariable int money, HttpServletRequest request) {
+	public ResponseEntity<Response<? extends Object>> charge(@PathVariable int money, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		if (jwtTokenProvider.validateToken(token)) {
 			int uid = jwtTokenProvider.getUserIdFromJwt(token);
 			userService.charge(uid, money);
-			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.CHARGE_SUCCESS),
+			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.NO_CONTENT, ResponseMessage.CHARGE_SUCCESS),
 					HttpStatus.OK);
 		}else {
-			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
 					HttpStatus.FORBIDDEN);
 		}
 	}
 	// 소비
 	@GetMapping("/{money}")
-	public ResponseEntity payment(@PathVariable int money, HttpServletRequest request) {
+	public ResponseEntity<Response<? extends Object>> payment(@PathVariable int money, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		if (jwtTokenProvider.validateToken(token)) {
 			int uid = jwtTokenProvider.getUserIdFromJwt(token);
 			if(userService.pay(uid, money)) {
-				return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.PAY_SUCCESS),
+				return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.NO_CONTENT, ResponseMessage.PAY_SUCCESS),
 						HttpStatus.OK);
 			}else {
-				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.PAY_FAIL),
+				return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.PAY_FAIL),
 						HttpStatus.FORBIDDEN);
 			}
 		}else {
-			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
 					HttpStatus.FORBIDDEN);
 		}
 	}
