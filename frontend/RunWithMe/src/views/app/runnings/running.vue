@@ -217,6 +217,11 @@ export default {
   },
   mounted() {
     this.$store.commit('closeSidebar')
+    if(localStorage.getItem("newdaeyong@naver.com")){
+      console.log(localStorage.getItem("newdaeyong@naver.com"))
+    }else{
+      console.log("업써요")
+    }
     
     if (window.google && window.google.maps) {
       this.initMap();
