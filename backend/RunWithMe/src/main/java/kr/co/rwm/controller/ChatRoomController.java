@@ -16,14 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.co.rwm.entity.User;
 import kr.co.rwm.model.ChatRoom;
-import kr.co.rwm.model.LoginInfo;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.repo.ChatRoomRepository;
-import kr.co.rwm.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -33,16 +30,16 @@ import lombok.RequiredArgsConstructor;
 public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
-    private final JwtTokenProvider jwtTokenProvider;
 
 
     // 전체 그룹 채팅 목록 조회
     @GetMapping("/room")
     @ResponseBody
-    public ResponseEntity room() {
+    public ResponseEntity<Response<? extends Object>> room() {
         List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
         chatRooms.stream().forEach(room -> room.setUserCount(chatRoomRepository.getUserCount(room.getRoomId())));
-        return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.GROUP_LIST_SUCCESS, chatRooms),
+        
+        return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK, ResponseMessage.GROUP_LIST_SUCCESS, chatRooms),
 				HttpStatus.OK);
     }
 
@@ -71,21 +68,8 @@ public class ChatRoomController {
     @ResponseBody
     public String getUserInfo() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
-        Integer userId = user.getUserId();
-        
         String name = auth.getName();
         return name;
     }
-//    @GetMapping("/user")
-//    @ResponseBody
-//    public LoginInfo getUserInfo() {
-//    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//    	User user = (User) auth.getPrincipal();
-//    	Integer userId = user.getUserId();
-//    	
-//    	String name = auth.getName();
-//    	System.out.println("[TEST:2020-11-02] "+name);
-//    	return LoginInfo.builder().name(name).token(jwtTokenProvider.generateToken(userId, name, null)).build();
-//    }
+    
 }
