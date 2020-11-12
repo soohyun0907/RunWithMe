@@ -145,6 +145,7 @@ export default {
             obj.replyWriter = data.data.user.username;
             obj.replyWriterProfile = data.data.user.profile;
             this.allReply.push(obj);
+            this.board.replyCount += 1;
           } else {
             alert("댓글 등록 실패");
             return;
