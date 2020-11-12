@@ -29,9 +29,16 @@
             :value="challenge.distanceCurrent"
             animated show-progress>
         </b-progress>
-        <router-link :to="{name:'editChallenge', query:{challengeId:challenge.challengeId}}">
-            <b-button class="float-right" size="sm" variant="dark m-1">수정</b-button>
-        </router-link>
+        <div v-if="userInfo.roles.length == 2">
+            <router-link :to="{name:'editChallenge', query:{challengeId:challenge.challengeId}}">
+                <b-button class="float-right" size="sm" variant="dark m-1">수정</b-button>
+            </router-link>
+        </div>
+        <div v-else>
+            <router-link :to="{name:'payChallenge', query:{no:challenge.challengeId}}">
+                <b-button class="float-right" size="sm" variant="success m-1">참여하기</b-button>
+            </router-link>
+        </div>
     </div>
 </template>
 
