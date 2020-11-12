@@ -12,9 +12,9 @@
      :controls-visible="true" >
       <!-- <slide v-for="(slide,index) in slides" :key="index" style="border: 0px;"> -->
       <slide v-for="(slide,i) in slides" :index="i" :key="slide.id" style="border: 0px;">
-        <div @click="toggleOverlay">
+        <div @click="toggleOverlay(i)">
           <b-overlay 
-          :show="slidesOverlayShow" 
+          :show="slide.clicked" 
           :variant="variant"
           :opacity="opacity"
           :blur="blur"
@@ -299,11 +299,12 @@ export default {
         time += (origin%60).toFixed() + "\"";
         return time;
     },
-    toggleOverlay() {
-      if(this.slidesOverlayShow)
-        this.slidesOverlayShow = false;
-      else
-        this.slidesOverlayShow = true;
+    toggleOverlay(clickedSlide) {
+      this.slides[clickedSlide].clicked = true;
+      for(var i=0; i<this.slides.length; i++ ){
+        if(i!=clickedSlide)  this.slides[i].clicked = false;
+        console.log(i+" " + this.slides[i].clicked)
+      }
     },
     getChallenges() {
       http
@@ -311,6 +312,11 @@ export default {
         .then(({data}) => {
           if(data.status==200){
             this.slides = data.data;
+            for(var i=0; i< this.slides.length; i++){
+              this.slides[i]['clicked'] = false;
+            }
+            console.log("this.slides")
+            console.log(this.slides)
           }
         })
         .catch((error) => {
