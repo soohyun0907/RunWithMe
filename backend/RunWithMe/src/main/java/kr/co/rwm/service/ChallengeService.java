@@ -3,13 +3,19 @@ package kr.co.rwm.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import kr.co.rwm.dto.ChallengeDto;
 import kr.co.rwm.entity.Challenge;
 import kr.co.rwm.entity.ChallengeUser;
 import kr.co.rwm.entity.User;
 
 public interface ChallengeService {
 
-	public Challenge saveChallenge(Challenge challenge);
+	/**
+	 * challenge를 저장
+	 * @param challengeDto
+	 * @return Challenge
+	 */
+	public Challenge saveChallenge(ChallengeDto challengeDto);
 	
 	public List<Challenge> findAllChallenge();
 	
