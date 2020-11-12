@@ -673,7 +673,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .flex-grow-1{
   width:30vw;
   text-align:center;
