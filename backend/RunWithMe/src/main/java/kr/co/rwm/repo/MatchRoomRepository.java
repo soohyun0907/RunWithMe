@@ -38,6 +38,7 @@ public class MatchRoomRepository {
     @Autowired
     MatchRepository matchRepository;
     
+    private final String GUEST_ID = "guestId";
     // 모든 채팅방 조회
     public List<ChatRoom> findAllRoom() {
         return hashOpsMatchRoom.values(CHAT_ROOMS);
@@ -52,8 +53,8 @@ public class MatchRoomRepository {
     public ChatRoom createAndSelectChatroom( int uid, Map<String, Integer> idInfo) {
     	
     	System.out.println("uid: " + uid);
-    	System.out.println("guestId: " + idInfo.get("guestId"));
-    	Optional<Matching> matching = matchRepository.findByMasterIdAndGuestId(uid, idInfo.get("guestId"));
+    	System.out.println("guestId: " + idInfo.get(GUEST_ID));
+    	Optional<Matching> matching = matchRepository.findByMasterIdAndGuestId(uid, idInfo.get(GUEST_ID));
     	
     	if(matching.isPresent()) // 이미 방이 존재하다면,
     	{
@@ -62,12 +63,12 @@ public class MatchRoomRepository {
     	} 
     	else 
     	{
-    		String friendName = userRepository.findByUserId(idInfo.get("guestId")).getUsername();
+    		String friendName = userRepository.findByUserId(idInfo.get(GUEST_ID)).getUsername();
         	ChatRoom chatRoom = ChatRoom.create(friendName); 
         	hashOpsMatchRoom.put(chatRoom.getRoomId(), CHAT_ROOMS, chatRoom);
-        	Matching match = Matching.builder().masterId(uid).guestId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
+        	Matching match = Matching.builder().masterId(uid).guestId(idInfo.get(GUEST_ID)).roomId(chatRoom.getRoomId()).build();
         	matchRepository.save(match);
-        	match = Matching.builder().guestId(uid).masterId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
+        	match = Matching.builder().guestId(uid).masterId(idInfo.get(GUEST_ID)).roomId(chatRoom.getRoomId()).build();
         	matchRepository.save(match);        	
         	return chatRoom;
     	}

@@ -24,6 +24,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 	private final ChallengeRepository challengeRepository;
 	private final UserRepository userRepository;
 	private final ChallengeUserRepository challengeUserRepository;
+	private final String NO_CHALLENGE = "해당 챌린지가 없습니다.";
 
 	@Override
 	public Challenge saveChallenge(Challenge challenge) {
@@ -38,13 +39,13 @@ public class ChallengeServiceImpl implements ChallengeService {
 	@Override
 	public Challenge findChallengeByChallengeId(int challengeId) {
 		return challengeRepository.findByChallengeId(challengeId)
-				.orElseThrow(() -> new IllegalArgumentException("해당 챌린지가 없습니다."));
+				.orElseThrow(() -> new IllegalArgumentException(NO_CHALLENGE));
 	}
 
 	@Override
 	public Challenge updateChallenge(int challengeId, Challenge challenge) {
 		Challenge updateChallenge = challengeRepository.findByChallengeId(challengeId)
-				.orElseThrow(() -> new IllegalArgumentException("해당 챌린지가 없습니다."));
+				.orElseThrow(() -> new IllegalArgumentException(NO_CHALLENGE));
 		updateChallenge.setTitle(challenge.getTitle());
 		updateChallenge.setContent(challenge.getContent());
 		updateChallenge.setDistanceGoal(challenge.getDistanceGoal());
@@ -75,7 +76,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 	@Override
 	public Challenge updateChallengeDistance(int challengeId, int userId, double distance) {
 		Challenge challenge = challengeRepository.findByChallengeId(challengeId)
-				.orElseThrow(() -> new IllegalArgumentException("해당 챌린지가 없습니다."));
+				.orElseThrow(() -> new IllegalArgumentException(NO_CHALLENGE));
 		challenge.setDistanceCurrent(challenge.getDistanceCurrent() + distance);
 		challengeRepository.save(challenge);
 
@@ -85,7 +86,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 	@Override
 	public Challenge updateChallengeDonate(int challengeId, long donate) {
 		Challenge challenge = challengeRepository.findByChallengeId(challengeId)
-				.orElseThrow(() -> new IllegalArgumentException("해당 챌린지가 없습니다."));
+				.orElseThrow(() -> new IllegalArgumentException(NO_CHALLENGE));
 		challenge.setDonateCurrent(challenge.getDonateCurrent() + donate);
 		challengeRepository.save(challenge);
 
@@ -190,10 +191,8 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 		LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
 		yesterday = yesterday.withHour(23).withMinute(59).withSecond(59).withNano(0);
-		System.out.println(yesterday);
 
 		List<Challenge> challenges = challengeRepository.findAllByEndTime(yesterday);
-		System.out.println(challenges.size());
 		
 		double personalGoal;
 		for (Challenge c : challenges) {
