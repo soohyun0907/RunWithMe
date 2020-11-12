@@ -3,13 +3,22 @@
        <b-col  md="6" lg="4" sm="6">
             <b-card title="" class=" mb-30">
                 <div class="example">
+                <!-- <button class="btn btn-primary updateRadar" style = "margin-left : 200px;" @click="refresh()"> refresh </button> -->
+                <div style = "margin-left:230px;">
+                <!-- <button type="button" class="btn btn-outline-success m-1"  @click="refresh()"><i class="text-20 i-Data-Refresh"></i></button>
+                <button type="button" class="btn btn-outline-success m-1"  @click="refresh()"><i class="text-20 i-Repeat-3"></i></button> -->
+                <button type="button" class="btn btn-outline-success m-1"  @click="refresh()"><i class="text-20 i-Repeat-2"></i></button>
+                <!-- <button type="button" class="btn btn-outline-success m-1"  @click="refresh()"><i class="text-20 i-File-Refresh"></i></button>
+                <button type="button" class="btn btn-outline-success m-1"  @click="refresh()"><i class="text-20 i-Reload1"></i></button>
+                <button type="button" class="btn btn-outline-success m-1"  @click="refresh()"><i class="text-20 i-Reload"></i></button>
+                <button type="button" class="btn btn-outline-success m-1"  @click="refresh()"><strong>refresh</strong></button> -->
+                </div>
                 <apexchart ref="heatmap" width="270" height="240" type="heatmap" :options="heatmap.chartOptions" :series="heatmap.series"></apexchart>
                 </div>
                 <hr>
                 <div id="basicArea-chart">
                      <h6> <strong><i class="text-20 i-Clock-Back"></i> old  - </strong> {{oldDate}} </h6>
                      <h6> <strong><i class="text-20 i-Clock"></i> cur  - </strong> {{date}} </h6>
-                     <button class="btn btn-primary updateRadar" style = "margin-left : 200px;" @click="refresh()"> refresh </button>
                      <apexchart ref="realtimeChart" type=radar height=335 :options= chartOptions :series=  series  />
                 </div>
             </b-card>
@@ -79,7 +88,7 @@ export default {
                         title: {
                             text: "running plant"
                         },
-                        labels : ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+                        labels : ["Sun", "Mon","Tue","Wed","Thu","Fri","Sat"]
                     },
                     series: [{
                         name: '5th',
@@ -227,6 +236,10 @@ export default {
             this.$refs.realtimeChart.updateOptions([{
             }], false, true)
             localStorage.setItem("series", JSON.stringify(this.series));
+
+            this.$refs.heatmap.updateOptions([{
+                
+            }], false, true)
         }
     },
     created(){
@@ -282,8 +295,7 @@ export default {
                     }
 
                     console.log(this.heatmap.series)
-                    this.$refs.heatmap.updateOptions([{
-                    }], false, true)
+
 
 
                     // 분석하기
