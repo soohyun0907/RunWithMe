@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import kr.co.rwm.dto.UserDto;
 import kr.co.rwm.entity.Payment;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.repo.PaymentRepository;
@@ -23,9 +24,9 @@ public class UserService implements UserDetailsService {
 	private final UserRepository userRepository;
 	private final PaymentRepository payRepository;
 	private final int INIT_MILEAGE = 0;
+
 	@Override
 	public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-		System.out.println(userEmail);
 		return userRepository.findByUserEmail(userEmail)
 				.orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 	}
@@ -35,9 +36,10 @@ public class UserService implements UserDetailsService {
 		return userRepository.findByUserEmail(userEmail);
 	}
 
-	public User join(User user, String password) {
-		return userRepository.save(User.builder().gugunId(user.getGugunId()).gender(user.getGender()).userEmail(user.getUserEmail())
-				.userName(user.getUsername()).userPw(password).mileage(INIT_MILEAGE).roles(Collections.singletonList("USER")).build());
+	public User join(UserDto user, String password) {
+		return userRepository.save(User.builder().gugunId(user.getGugunId()).gender(user.getGender())
+				.userEmail(user.getUserEmail()).userName(user.getUsername()).userPw(password).mileage(INIT_MILEAGE)
+				.roles(Collections.singletonList("USER")).build());
 	}
 
 	public Optional<User> findByUserId(int userId) {
@@ -49,42 +51,65 @@ public class UserService implements UserDetailsService {
 		userRepository.deleteByUserEmail(userEmail);
 	}
 
-	public void update(Optional<User> user,User changeUser) {
-		User temp = user.get();
-		user.ifPresent(selectUser->{
-			selectUser.setUserId(temp.getUserId());
-			selectUser.setUserPw(changeUser.getChangePw());
-			selectUser.setGender(temp.getGender());
-			selectUser.setUserName(changeUser.getUsername());
-			selectUser.setProfile(changeUser.getProfile());
-			selectUser.setGugunId(changeUser.getGugunId());
-			userRepository.save(selectUser);
-		});
+	public void update(Optional<User> user, UserDto changeUser) {
+		if (user.isPresent()) {
+			User temp = user.get();
+			user.ifPresent(selectUser -> {
+				selectUser.setUserId(temp.getUserId());
+				selectUser.setUserPw(changeUser.getChangePw());
+				selectUser.setGender(temp.getGender());
+				selectUser.setUserName(changeUser.getUsername());
+				selectUser.setProfile(temp.getProfile());
+				selectUser.setGugunId(changeUser.getGugunId());
+				userRepository.save(selectUser);
+			});
+		}
 	}
-	
-	public void charge(int uid,int money) {
-		Optional<User> user = userRepository.findByUserId(uid);
-		int total = user.get().getMileage() + money;
- 		user.ifPresent(selectUser->{
-			selectUser.setMileage(total);
-			userRepository.save(selectUser);
-		});
- 		payRepository.save(Payment.builder().chargeMoney(money).userId(user.get()).build());
+
+	public void profileUpdate(Optional<User> user, User changeUser) {
+		if (user.isPresent()) {
+			User temp = user.get();
+			user.ifPresent(selectUser -> {
+				selectUser.setUserId(temp.getUserId());
+				selectUser.setUserPw(changeUser.getPassword());
+				selectUser.setGender(temp.getGender());
+				selectUser.setUserName(changeUser.getUsername());
+				selectUser.setProfile(changeUser.getProfile());
+				selectUser.setGugunId(changeUser.getGugunId());
+				userRepository.save(selectUser);
+			});
+		}
 	}
-	
-	public boolean pay(int uid,int money) {
+
+	public void charge(int uid, int money) {
 		Optional<User> user = userRepository.findByUserId(uid);
-		if(user.get().getMileage() < money) { // 결제를 할 수 없는 경우
-			return false;
-			
-		}else {
-			int total = user.get().getMileage() - money;
-			user.ifPresent(selectUser->{
+		if (user.isPresent()) {
+			int total = user.get().getMileage() + money;
+			user.ifPresent(selectUser -> {
 				selectUser.setMileage(total);
 				userRepository.save(selectUser);
 			});
-			payRepository.save(Payment.builder().payMoney(money).userId(user.get()).build());
-			return true;
+			payRepository.save(Payment.builder().chargeMoney(money).userId(user.get()).build());
+		}
+	}
+
+	public boolean pay(int uid, int money) {
+		Optional<User> user = userRepository.findByUserId(uid);
+		if (user.isPresent()) {
+			if (user.get().getMileage() < money) { // 결제를 할 수 없는 경우
+				return false;
+
+			} else {
+				int total = user.get().getMileage() - money;
+				user.ifPresent(selectUser -> {
+					selectUser.setMileage(total);
+					userRepository.save(selectUser);
+				});
+				payRepository.save(Payment.builder().payMoney(money).userId(user.get()).build());
+				return true;
+			}
+		}else {
+			return false;
 		}
 	}
 }
