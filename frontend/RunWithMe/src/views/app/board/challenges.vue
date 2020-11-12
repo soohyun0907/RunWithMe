@@ -26,7 +26,7 @@
                             </div>
                             <b-collapse :id="'collapse-'+challenge.challengeId" class="mt-3 text-center">
                                 <img :src="challenge.img" />
-                                <p> 기간: {{ challenge.startTime }} ~ {{ challenge.endTime }} </p>
+                                <p> 기간: {{ challenge.startTime | moment('YYYY.MM.DD') }} ~ {{ challenge.endTime | moment('YYYY.MM.DD') }} </p>
                                 <p> 설명: {{ challenge.content }} </p>
                                 <p> 현재 참여 인원: {{ challenge.participant }} </p>
                                 <p> 개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM </p>
@@ -74,7 +74,7 @@
                             </div>
                             <b-collapse :id="'collapse-'+challenge.challengeId" class="mt-3 text-center">
                                 <img :src="challenge.img" />
-                                <p> 기간: {{ challenge.startTime }} ~ {{ challenge.endTime }} </p>
+                                <p> 기간: {{ challenge.startTime | moment('YYYY.MM.DD') }} ~ {{ challenge.endTime | moment('YYYY.MM.DD') }} </p>
                                 <p> 설명: {{ challenge.content }} </p>
                                 <p> 현재 참여 인원: {{ challenge.participant }} </p>
                                 <p> 개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM </p>
@@ -122,7 +122,7 @@
                             </div>
                             <b-collapse :id="'collapse-'+challenge.challengeId" class="mt-3 text-center">
                                 <img :src="challenge.img" />
-                                <p> 기간: {{ challenge.startTime }} ~ {{ challenge.endTime }} </p>
+                                <p> 기간: {{ challenge.startTime | moment('YYYY.MM.DD') }} ~ {{ challenge.endTime | moment('YYYY.MM.DD') }} </p>
                                 <p> {{ challenge.content }} </p>
                                 <h6>모인 금액</h6>
                                 <b-progress class="mb-3"
@@ -212,8 +212,8 @@ export default {
                             obj.title = element.title;
                             obj.content = element.content;
                             obj.img = element.challengeImg;
-                            obj.startTime = element.startTime.substring(0,10);
-                            obj.endTime = element.endTime.substring(0,10);
+                            obj.startTime = element.startTime;
+                            obj.endTime = element.endTime;
                             obj.distanceGoal = element.distanceGoal;
                             obj.distanceCurrent = element.distanceCurrent;
                             obj.donateGoal = element.donateGoal;
@@ -246,8 +246,8 @@ export default {
                             obj.title = element.title;
                             obj.content = element.content;
                             obj.img = element.challengeImg;
-                            obj.startTime = element.startTime.substring(0,10);
-                            obj.endTime = element.endTime.substring(0,10);
+                            obj.startTime = element.startTime;
+                            obj.endTime = element.endTime;
                             obj.distanceGoal = element.distanceGoal;
                             obj.distanceCurrent = element.distanceCurrent;
                             obj.donateGoal = element.donateGoal;
@@ -278,8 +278,8 @@ export default {
                             obj.title = element.title;
                             obj.content = element.content;
                             obj.img = element.challengeImg;
-                            obj.startTime = element.startTime.substring(0,10);
-                            obj.endTime = element.endTime.substring(0,10);
+                            obj.startTime = element.startTime;
+                            obj.endTime = element.endTime;
                             obj.distanceGoal = element.distanceGoal;
                             obj.distanceCurrent = element.distanceCurrent;
                             obj.donateGoal = element.donateGoal;
