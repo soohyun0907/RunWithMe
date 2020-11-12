@@ -39,10 +39,6 @@ public class ChatService {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender("[알림]");
         }
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println(chatMessage);
-        System.out.println(channelTopic.getTopic());
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!");
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
     }
     
