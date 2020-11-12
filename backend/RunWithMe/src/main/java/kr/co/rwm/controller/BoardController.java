@@ -44,7 +44,7 @@ import lombok.RequiredArgsConstructor;
  * </pre>
  * 
  * @author 김형택
- * @version 0.3, 2020-11-10, 게시판 조회 - writeId -> 작성자 이름 / 댓글수 수정
+ * @version 0.4, 2020-11-12, RequestMapping - public 수정
  * @see None
  *
  */
@@ -67,7 +67,7 @@ public class BoardController {
 	}
 	
 	@PostMapping("/board")
-	ResponseEntity insert(@RequestBody Map<String, String> boardInfo) {
+	public ResponseEntity insert(@RequestBody Map<String, String> boardInfo) {
 		int userId = Integer.parseInt(boardInfo.get("writerId"));
 		Optional<User> user = userService.findByUserId(userId);
 		if(!user.isPresent()) {
@@ -82,7 +82,7 @@ public class BoardController {
 	
 	@ApiOperation(value = "챌린지 제안하기 이미지 저장", response = ResponseEntity.class)
 	@PostMapping("/board/{board_id}")
-	ResponseEntity insertImage(@PathVariable int board_id, 
+	public ResponseEntity insertImage(@PathVariable int board_id, 
 							   @RequestParam("files") MultipartFile files, HttpServletRequest request) {
 		if(files == null) {
 			return new ResponseEntity<Response> (new Response(StatusCode.NO_CONTENT, ResponseMessage.BOARD_IMAGE_NO_CONTENT), HttpStatus.NO_CONTENT);
@@ -98,20 +98,20 @@ public class BoardController {
 	}
 	
 	@PutMapping("/board")
-	ResponseEntity update(@RequestBody Map<String, String> boardInfo) {
+	public ResponseEntity update(@RequestBody Map<String, String> boardInfo) {
 		Board ret = boardService.update(boardInfo);
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.UPDATE_BOARD_SUCCESS, ret), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/board/{board_id}")
-	ResponseEntity delete(@PathVariable int board_id) {
+	public ResponseEntity delete(@PathVariable int board_id) {
 		Long ret = boardService.delete(board_id);
 		
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.DELETE_BOARD_SUCCESS, ret), HttpStatus.OK);
 	}
 	
 	@GetMapping("/board/{board_id}")
-	ResponseEntity detail(@PathVariable int board_id, HttpServletRequest request) {
+	public ResponseEntity detail(@PathVariable int board_id, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int uid = 0;
 		if(jwtTokenProvider.validateToken(token)) {
