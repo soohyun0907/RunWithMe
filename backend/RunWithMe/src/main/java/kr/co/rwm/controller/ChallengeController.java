@@ -280,7 +280,13 @@ public class ChallengeController {
 		int challengeId = map.get("challengeId");
 		int donation = map.get("donation");
 		ChallengeUser challengeUser = challengeService.participateChallenge(challengeId, donation, userId);
-
+		
+		if(challengeUser == null) {
+			return new ResponseEntity<Response<? extends Object>>(
+					new Response<>(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_PARTICIPATE_FAIL, null),
+					HttpStatus.FORBIDDEN);
+		}
+		
 		return new ResponseEntity<Response<? extends Object>>(
 				new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_PARTICIPATE_SUCCESS, challengeUser),
 				HttpStatus.OK);
