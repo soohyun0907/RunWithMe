@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.rwm.dto.UserDto;
 import kr.co.rwm.entity.Ranks;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
@@ -64,7 +65,7 @@ public class RankController {
 
 	// 조건부 검색을 통한 랭킹 정보 조회 (email, userId, userName)
 	@PostMapping("/search")
-	public ResponseEntity searchRankingInfo(@RequestBody User user) {
+	public ResponseEntity searchRankingInfo(@RequestBody UserDto user) {
 		List<Ranks> result = rankService.findByUserId(user);
 		return new ResponseEntity<Response>(new Response(StatusCode.OK,ResponseMessage.SEARCH_RANKER_OK,result),HttpStatus.OK);
 	}
