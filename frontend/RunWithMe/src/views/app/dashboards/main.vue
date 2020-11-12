@@ -12,9 +12,9 @@
      :controls-visible="true" >
       <!-- <slide v-for="(slide,index) in slides" :key="index" style="border: 0px;"> -->
       <slide v-for="(slide,i) in slides" :index="i" :key="slide.id" style="border: 0px;">
-        <div @click="toggleOverlay">
+        <div @click="toggleOverlay(i)">
           <b-overlay 
-          :show="slidesOverlayShow" 
+          :show="slide.clicked" 
           :variant="variant"
           :opacity="opacity"
           :blur="blur"
@@ -31,37 +31,113 @@
       </slide>
     </carousel-3d>
   </div>
-    <!-- <vueper-slides
-      class="no-shadow"
-      :visible-slides="1.7"
-      :arrows="false"
-      :slide-ratio="1 / 4"
-      :gap="3"
-      :dragging-distance="70"
-      fixedHeight="250px"
-      prevent-y-scroll>
-      <vueper-slide v-for="(slide, i) in slides" :index="i" :key="i"
-        :image="slide.challengeImg" >
-        <div @click="toggleOverlay">
-          <b-overlay 
-          :show="slidesOverlayShow" 
-          :variant="variant"
-          :opacity="opacity"
-          :blur="blur"
-          rounded="sm">
-            <template #overlay>
-              <div class="text-center">
-                <h3>{{slide.title}}</h3>
-                <h5>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h5>
-              </div>
-            </template>
-          </b-overlay>
-        </div>
-      </vueper-slide>
-    </vueper-slides> -->
+  
     <hr>
     <b-card style="margin-bottom:15px;">
-      <div class="d-flex justify-content-between">
+      <b-tabs  
+        active-nav-item-class="nav nav-tabs"
+        content-class="mt-3">
+
+        <b-tab title="전체 랭킹" active>
+          <div class="ul-widget__item ul-widget4__users" v-for="(ranker,index) in rankList" :index="index" :key="ranker.rankerId">
+            <div>
+            <h5 style="width:5vh;">{{ index+1 }} </h5>
+            </div>
+              <div v-if="ranker.userId.profile!=null" class="ul-widget4__img">
+                <img
+                  :src="ranker.userId.profile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  height="40px"
+                />
+              </div>
+               <div v-else class="ul-widget4__img">
+                <img
+                  :src="defaultProfile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+              </div>
+              <div class="ul-widget2__info ul-widget4__users-info">
+                 <router-link :to="{name:'friendsDetail', query:{friendId:ranker.userId.userId}}">
+                  {{ranker.userId.username}}
+                </router-link>
+              </div>
+              <span style="text-align:right; width:20vw" class="ul-widget4__number t-font-boldest text-success">
+                {{ranker.totalExp}} P
+              </span>
+          </div>
+        </b-tab>
+
+        <b-tab title="기부 랭킹">
+          <div class="ul-widget__item ul-widget4__users" v-for="(ranker,index) in rankListDonate" :index="index" :key="ranker.rankerId">
+            <div>
+            <h5 style="width:5vh;">{{ index+1 }} </h5>
+            </div>
+              <div v-if="ranker.userId.profile!=null" class="ul-widget4__img">
+                <img
+                  :src="ranker.userId.profile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  height="40px"
+                />
+              </div>
+               <div v-else class="ul-widget4__img">
+                <img
+                  :src="defaultProfile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+              </div>
+              <div class="ul-widget2__info ul-widget4__users-info">
+                 <router-link :to="{name:'friendsDetail', query:{friendId:ranker.userId.userId}}">
+                  {{ranker.userId.username}}
+                </router-link>
+              </div>
+              <span style="text-align:right; width:20vw" class="ul-widget4__number t-font-boldest text-success">
+                {{ranker.donateExp}} P
+              </span>
+          </div>
+        </b-tab>
+
+        <b-tab title="기록 랭킹" >
+          <div class="ul-widget__item ul-widget4__users" v-for="(ranker,index) in rankListRace" :index="index" :key="ranker.rankerId">
+            <div>
+            <h5 style="width:5vh;">{{ index+1 }} </h5>
+            </div>
+              <div v-if="ranker.userId.profile!=null" class="ul-widget4__img">
+                <img
+                  :src="ranker.userId.profile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  height="40px"
+                />
+              </div>
+               <div v-else class="ul-widget4__img">
+                <img
+                  :src="defaultProfile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+              </div>
+              <div class="ul-widget2__info ul-widget4__users-info">
+                 <router-link :to="{name:'friendsDetail', query:{friendId:ranker.userId.userId}}">
+                  {{ranker.userId.username}}
+                </router-link>
+              </div>
+              <span style="text-align:right; width:20vw" class="ul-widget4__number t-font-boldest text-success">
+                {{ranker.raceExp}} P
+              </span>
+          </div>
+        </b-tab>
+      </b-tabs>
+      <!-- <div class="d-flex justify-content-between">
         <h3 class="ul-widget__head-title">
           TOP RANK
         </h3>
@@ -99,7 +175,7 @@
               </span>
           </div>
         </div>
-      </div>
+      </div> -->
     </b-card>
     <hr>
     <h3>친구 피드 시작</h3>
@@ -194,6 +270,8 @@ export default {
       tmp1: [],
       tmp2 : [],
       rankList : [],
+      rankListRace : [],
+      rankListDonate : [],
       friendsFeed: [],
       haveFriends: true,
     };
@@ -203,7 +281,9 @@ export default {
   },
   created() {
     this.getChallenges();
-    this.getTopRankers();
+    this.getTopRankersTotal();
+    this.getTopRankersDonate();
+    this.getTopRankersRace();
     this.getFriendsRunning();
   },
   mounted() {
@@ -219,11 +299,12 @@ export default {
         time += (origin%60).toFixed() + "\"";
         return time;
     },
-    toggleOverlay() {
-      if(this.slidesOverlayShow)
-        this.slidesOverlayShow = false;
-      else
-        this.slidesOverlayShow = true;
+    toggleOverlay(clickedSlide) {
+      this.slides[clickedSlide].clicked = true;
+      for(var i=0; i<this.slides.length; i++ ){
+        if(i!=clickedSlide)  this.slides[i].clicked = false;
+        console.log(i+" " + this.slides[i].clicked)
+      }
     },
     getChallenges() {
       http
@@ -231,6 +312,11 @@ export default {
         .then(({data}) => {
           if(data.status==200){
             this.slides = data.data;
+            for(var i=0; i< this.slides.length; i++){
+              this.slides[i]['clicked'] = false;
+            }
+            console.log("this.slides")
+            console.log(this.slides)
           }
         })
         .catch((error) => {
@@ -238,12 +324,38 @@ export default {
           return;
         });
     },
-    getTopRankers() {
+    getTopRankersTotal() {
       http
         .get(`ranks/top/total`)
         .then(({data}) => {
           if(data.status == 200){
             this.rankList = data.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        })
+    },
+    getTopRankersDonate() {
+      http
+        .get(`ranks/top/donate`)
+        .then(({data}) => {
+          if(data.status == 200){
+            this.rankListDonate = data.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        })
+    },
+    getTopRankersRace() {
+      http
+        .get(`ranks/top/race`)
+        .then(({data}) => {
+          if(data.status == 200){
+            this.rankListRace = data.data;
           }
         })
         .catch((error) => {
