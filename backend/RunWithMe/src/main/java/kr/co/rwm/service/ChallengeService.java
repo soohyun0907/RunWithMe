@@ -3,13 +3,19 @@ package kr.co.rwm.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import kr.co.rwm.dto.ChallengeDto;
 import kr.co.rwm.entity.Challenge;
 import kr.co.rwm.entity.ChallengeUser;
 import kr.co.rwm.entity.User;
 
 public interface ChallengeService {
 
-	public Challenge saveChallenge(Challenge challenge);
+	/**
+	 * challenge를 저장
+	 * @param challengeDto
+	 * @return Challenge
+	 */
+	public Challenge saveChallenge(ChallengeDto challengeDto);
 	
 	public List<Challenge> findAllChallenge();
 	
@@ -26,8 +32,9 @@ public interface ChallengeService {
 	/**
 	 * challengeId로 챌린지 삭제
 	 * @param challengeId
+	 * @return boolean (true: 참여자 없음, false: 참여자있음)
 	 */
-	public void deleteChallenge(int challengeId);
+	public int deleteChallenge(int challengeId);
 	
 	/**
 	 * challengeId를 이용해서 user가 뛴만큼 user 및 challenge의 distance update

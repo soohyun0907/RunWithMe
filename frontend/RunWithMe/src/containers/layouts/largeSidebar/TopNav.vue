@@ -24,7 +24,7 @@
         @click="handleFullScreen"
       ></i> -->
       <!-- Notificaiton -->
-      <div class="dropdown">
+      <!-- <div class="dropdown">
         <b-dropdown
           id="dropdown-1"
           text="Dropdown Button"
@@ -36,31 +36,31 @@
           <template slot="button-content">
             <span class="badge badge-primary">1</span>
             <i class="i-Bell text-muted header-icon"></i>
-          </template>
+          </template> -->
           <!-- Notification dropdown -->
-          <vue-perfect-scrollbar
+          <!-- <vue-perfect-scrollbar
             :settings="{ suppressScrollX: true, wheelPropagation: false }"
             :class="{ open: getSideBarToggleProperties.isSideNavOpen }"
             ref="myData"
             class="dropdown-menu-right rtl-ps-none notification-dropdown  ps scroll"
-          >
+          > -->
             <!-- <div class="dropdown-menu-right rtl-ps-none notification-dropdown"> -->
-            <div class="dropdown-item d-flex">
+            <!-- <div class="dropdown-item d-flex">
               <div class="notification-icon">
                 <i class="i-Speach-Bubble-6 text-primary mr-1"></i>
               </div>
               <div class="notification-details flex-grow-1">
-                <p class="m-0 d-flex align-items-center">
+                <p class="m-0 d-flex align-items-center"> -->
                   <!-- <span>New message</span> -->
                   <!-- <span class="badge badge-pill badge-primary ml-1 mr-1">new</span> -->
                   <!-- <span class="flex-grow-1"></span>
                   <span class="text-small text-muted ml-auto">10 sec ago</span> -->
-                </p>
+                <!-- </p>
                 <p class="text-small text-muted m-0">
                   서비스 준비 중 입니다.
                 </p>
               </div>
-            </div>
+            </div> -->
             <!-- <div class="dropdown-item d-flex">
               <div class="notification-icon">
                 <i class="i-Receipt-3 text-success mr-1"></i>
@@ -111,15 +111,15 @@
               </div>
             </div> -->
             <!-- </div> -->
-          </vue-perfect-scrollbar>
+          <!-- </vue-perfect-scrollbar>
         </b-dropdown>
-      </div>
+      </div> -->
       <!-- Notificaiton End -->
 
       <!-- User avatar dropdown -->
       <div class="dropdown">
         <b-dropdown
-          id="dropdown-1"
+          id="dropdown-0"
           text="Dropdown Button"
           class="m-md-2 user col align-self-end"
           toggle-class="text-decoration-none"

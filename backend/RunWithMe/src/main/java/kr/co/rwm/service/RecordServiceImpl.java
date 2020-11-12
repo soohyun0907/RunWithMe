@@ -97,7 +97,12 @@ public class RecordServiceImpl implements RecordService {
 
 	@Override
 	public Running findRunningById(int runningId) {
-		return runningRepository.findByRunningId(runningId).get();
+		Optional<Running> running = runningRepository.findByRunningId(runningId);
+		if(running.isPresent()) {
+			return running.get();
+		}else {
+			return null;
+		}
 	}
 
 	@Override
@@ -108,15 +113,25 @@ public class RecordServiceImpl implements RecordService {
 	@Override
 	@Transactional
 	public Long deleteRunningByUserId(int userId, int runningId) {
-		User user = userRepository.findByUserId(userId).get();
-		Running running = runningRepository.findByRunningId(runningId).get();
-		RunningUser runningUser = runningUserRepository.findByUserId(user);
-		runningUser.setTotalCount(runningUser.getTotalCount()-1);
-		runningUser.setTotalDistance(runningUser.getTotalDistance()-running.getAccDistance());
-		runningUser.setTotalTime(runningUser.getTotalTime()-running.getAccTime());
-		runningUserRepository.save(runningUser);
-		
-		return runningRepository.deleteByRunningId(runningId);
+		Optional<User> users = userRepository.findByUserId(userId);
+		if(users.isPresent()) {
+			User user = users.get();
+			Optional<Running> runnings = runningRepository.findByRunningId(runningId);
+			if(runnings.isPresent()) {
+				Running running = runnings.get();
+				RunningUser runningUser = runningUserRepository.findByUserId(user);
+				runningUser.setTotalCount(runningUser.getTotalCount()-1);
+				runningUser.setTotalDistance(runningUser.getTotalDistance()-running.getAccDistance());
+				runningUser.setTotalTime(runningUser.getTotalTime()-running.getAccTime());
+				runningUserRepository.save(runningUser);
+				
+				return runningRepository.deleteByRunningId(runningId);
+			}else {
+				return null;
+			}
+		}else {
+			return null;
+		}
 	}
 
 	@Override
@@ -206,49 +221,65 @@ public class RecordServiceImpl implements RecordService {
 
 	@Override
 	public List<Running> findAllRunningByActivityArea(int userId) {
-		User user = userRepository.findByUserId(userId).get();
-		int gugunId = user.getGugunId().getGugunId();
-
-		List<Running> runningList = new ArrayList<Running>();
-		List<Running> userRunning = runningRepository.findAllByUserIdOrderByStartTimeDesc(userId);
-		for(Running running: userRunning) {
-			if(running.getRunningArea().stream().anyMatch(x -> x.getGugun().getGugunId()==gugunId))
-				runningList.add(running);
+		Optional<User> users = userRepository.findByUserId(userId);
+		if(users.isPresent()) {
+			User user = users.get();
+			int gugunId = user.getGugunId().getGugunId();
+			
+			List<Running> runningList = new ArrayList<Running>();
+			List<Running> userRunning = runningRepository.findAllByUserIdOrderByStartTimeDesc(userId);
+			for(Running running: userRunning) {
+				if(running.getRunningArea().stream().anyMatch(x -> x.getGugun().getGugunId()==gugunId))
+					runningList.add(running);
+			}
+			
+			return runningList;
+			
+		}else {
+			return null;
 		}
-		
-		return runningList;
 	}
 
 	@Override
 	public List<RunningUser> findRunningUserByUserIdAndUserId(int userId) {
-		User user = userRepository.findByUserId(userId).get();
-		int gugunId = user.getGugunId().getGugunId();
-		List<RunningUser> runningUsers = new ArrayList<RunningUser>();
-		
-		List<RunningUser> runningUserList = runningUserRepository.findAll();
-		for(RunningUser ru: runningUserList) {
-			if(ru.getUserId().getGugunId().getGugunId() == gugunId) {
-				if(ru.getUserId().getUserId() == userId) continue;
-				runningUsers.add(ru);
+		Optional<User> users = userRepository.findByUserId(userId);
+		if(users.isPresent()) {
+			User user = users.get();
+			int gugunId = user.getGugunId().getGugunId();
+			List<RunningUser> runningUsers = new ArrayList<RunningUser>();
+			
+			List<RunningUser> runningUserList = runningUserRepository.findAll();
+			for(RunningUser ru: runningUserList) {
+				if(ru.getUserId().getGugunId().getGugunId() == gugunId) {
+					if(ru.getUserId().getUserId() == userId) continue;
+					runningUsers.add(ru);
+				}
 			}
+			return runningUsers;
+			
+		}else {
+			return null;
 		}
-		return runningUsers;
 	}
 
 	@Override
-	public List<RunningUser> analysis(int userId) {
+	public List<Record> convertRecords(Map<String, Object> runningInfo, User loginUser) {
+		// TODO Auto-generated method stub
+		List<Map<String, String>> recordList = (List<Map<String, String>>) runningInfo.get("records");
 		
-		User user = userRepository.findByUserId(userId).get();
-		int tier = rankRepository.findByUserId(user).get().getTier();
-		
-		List<Ranks> userList = rankRepository.findByTier(tier);
-		List<User> result = new ArrayList<User>();
-		for (Ranks ranks : userList) {
-			User userInfo = ranks.getUserId();
-			List<Running> runningList = runningRepository.findAllByUserIdOrderByStartTimeDesc(userInfo.getUserId());
+		List<Record> records = new ArrayList<Record>();
+		for(Map<String, String> map: recordList) {
+			Record record = Record.builder()
+					.userId(loginUser)
+					.accDistance(Double.parseDouble(map.get("accDistance")))
+					.accTime(Long.parseLong(map.get("accTime")))
+					.speed(Double.parseDouble(map.get("speed")))
+					.build();
 			
+			records.add(record);
 		}
-		return null;
+		
+		return records;
 	}
 	
 	
