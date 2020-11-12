@@ -43,11 +43,11 @@ import lombok.RequiredArgsConstructor;
  * UserController
  * <pre>
  * <b> History:</b>
- *			김순빈, ver.0.4 , 2020-11-08 : /users/{userId}, /users 요청시 등급, 누적 거리, 누적 런닝, 누적 시간 필요
+ *			김형텍, ver.0.4 , 2020-11-12 : Remove usage of Generic wildcard type
  * </pre>
  * 
  * @author 김형택
- * @version 0.1, 2020-10-26, 유저 관리 Controller
+ * @version 0.4, 2020-10-26, 유저 관리 Controller
  * @see None
  * 
  */
@@ -84,7 +84,7 @@ public class UserController {
 	 */
 	@ApiOperation(value = "회원 가입", response = ResponseEntity.class, notes = "userName, userEmail, userPw가 담긴 JSON객체와 MultipartFile의 프로필 이미지로 회원가입을 한다.")
 	@PostMapping("")
-	public ResponseEntity<?> signup(@RequestBody User user, MultipartFile profile){
+	public ResponseEntity signup(@RequestBody User user, MultipartFile profile){
 		if(!user.getAuth()) {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN,ResponseMessage.EMAIL_CHECK_FAIL,false),HttpStatus.FORBIDDEN);
 		}else {
@@ -109,7 +109,7 @@ public class UserController {
 	 */
 	@ApiOperation(value = "이메일 중복 확인", response = ResponseEntity.class, notes = "userEmail로 이메일 중복체크를 한다.")
 	@GetMapping("/check/{userEmail}")
-	public ResponseEntity<?> emailCheck(@PathVariable String userEmail){
+	public ResponseEntity emailCheck(@PathVariable String userEmail){
 		if(userService.findByUserEmail(userEmail).isPresent()) {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN,ResponseMessage.ALREADY_USER_EMAIL,false),HttpStatus.FORBIDDEN);
 		}

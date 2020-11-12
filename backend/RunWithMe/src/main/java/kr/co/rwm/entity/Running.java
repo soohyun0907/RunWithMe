@@ -1,22 +1,17 @@
 package kr.co.rwm.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.io.Serializable;
 
 import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 import javax.persistence.JoinColumn;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -32,7 +27,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Running {
+public class Running implements Serializable {
+	
+	private static final long serialVersionUID = 18L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
