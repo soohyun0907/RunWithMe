@@ -3,6 +3,7 @@ package kr.co.rwm.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -57,10 +58,18 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 	@Transactional
 	@Override
-	public void deleteChallenge(int challengeId) {
-		Challenge challenge = challengeRepository.findByChallengeId(challengeId)
-				.orElseThrow(() -> new IllegalArgumentException("해당 챌린지가 없습니다."));
-		challengeRepository.delete(challenge);
+	public int deleteChallenge(int challengeId) {
+		Optional<Challenge> challenge = challengeRepository.findByChallengeId(challengeId);
+		if(!challenge.isPresent()) {
+			return -1;
+		}
+		
+		if(challenge.get().getParticipant()>0) {
+			return 0;
+		}else {
+			challengeRepository.deleteByChallengeId(challenge.get().getChallengeId());
+			return 1;
+		}
 	}
 
 	@Override

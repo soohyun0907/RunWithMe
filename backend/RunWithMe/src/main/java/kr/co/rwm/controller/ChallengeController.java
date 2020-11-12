@@ -274,7 +274,14 @@ public class ChallengeController {
 	@DeleteMapping("/{challengeId}")
 	public ResponseEntity deleteChallenge(@PathVariable int challengeId) {
 		System.out.println("/challenges/delete - 관리자가 challenge를 삭제합니다.");
-		challengeService.deleteChallenge(challengeId);
+		int ret = challengeService.deleteChallenge(challengeId);
+		if(ret == -1) {
+			return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.CHALLENGE_NOT_FOUND, null),
+					HttpStatus.NOT_FOUND);
+		}else if(ret == 0) {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_DELETE_FAIL, null),
+					HttpStatus.FORBIDDEN);
+		}
 
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CHALLENGE_DELETE_SUCCESS, null),
 				HttpStatus.OK);
