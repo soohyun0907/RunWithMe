@@ -3,14 +3,19 @@
        <b-col  md="6" lg="4" sm="6">
             <b-card title="" class=" mb-30">
                 <div class="example">
-                <apexchart ref="heatmap" width="270" height="240" type="heatmap" :options="heatmap.chartOptions" :series="heatmap.series"></apexchart>
+                <div style = "margin-left:230px;">
+                <button type="button" class="btn btn-outline-success m-1"  @click="heatMapRefresh()"><i class="text-20 i-Repeat-2"></i></button>
+                </div>
+                <apexchart ref="heatmap" width="285" height="250" type="heatmap" :options="heatmap.chartOptions" :series="heatmap.series"></apexchart>
                 </div>
                 <hr>
+                <div style = "margin-left:230px;">
+                <button type="button" class="btn btn-outline-success m-1"  @click="refresh()"><i class="text-20 i-Repeat-2"></i></button>
+                </div>
                 <div id="basicArea-chart">
                      <h6> <strong><i class="text-20 i-Clock-Back"></i> old  - </strong> {{oldDate}} </h6>
                      <h6> <strong><i class="text-20 i-Clock"></i> cur  - </strong> {{date}} </h6>
-                     <button class="btn btn-primary updateRadar" style = "margin-left : 200px;" @click="refresh()"> refresh </button>
-                     <apexchart ref="realtimeChart" type=radar height=335 :options= chartOptions :series=  series  />
+                     <apexchart ref="realtimeChart" type=radar height="335" :options= chartOptions :series=  series  />
                 </div>
             </b-card>
         </b-col>
@@ -65,7 +70,16 @@ export default {
                         {
                             size: 0
                         },
-                        labels: ['평균속도', '평균거리', '누적거리', '최대시간', '성장률']
+                        xaxis: {
+                                labels: {
+                                    style: {
+                                        fontSize: '8px',
+                                        fontWeight: "bold",
+                                        fontColor : "red"
+                                    }
+                            }
+                        },
+                        labels: ['평균속도 (km/h)', '성장률' , '누적거리(km)', '최대시간(min)', '평균거리(km)']
                     },
                 heatmap : {
                     chartOptions: {
@@ -79,7 +93,7 @@ export default {
                         title: {
                             text: "running plant"
                         },
-                        labels : ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+                        labels : ["Sun", "Mon","Tue","Wed","Thu","Fri","Sat"]
                     },
                     series: [{
                         name: '5th',
@@ -112,7 +126,12 @@ export default {
             month : {"Jan":1, "Feb" : 2, "Mar": 3, "Apr":4, "May":5, "Jun":6 , "Jul":7, "Aug":8, "Sep":9, "Oct":10, "Nov":11,"Dec":12},
         }
     },
-    methods: {         
+    methods: {   
+        heatMapRefresh : function(){
+            this.$refs.heatmap.updateOptions([{
+                
+            }], false, true)
+        },   
         refresh: function(){
             
             this.oldDate = this.date;
@@ -140,8 +159,8 @@ export default {
                     this.series[0].data[0] = this.series[1].data[0];
                     this.series[1].data[0] = totalDis / (totalTime/(60*60));
 
-                    this.series[0].data[1] = this.series[1].data[1];
-                    this.series[1].data[1] = totalDis / length ;
+                    this.series[0].data[4] = this.series[1].data[4];
+                    this.series[1].data[4] = totalDis / length ;
 
                     this.series[0].data[2] = this.series[1].data[2];
                     this.series[1].data[2] = totalDis;
@@ -150,13 +169,13 @@ export default {
                     this.series[1].data[3] = maxTime / (60);
 
 
-                    this.series[0].data[4] = this.series[1].data[4];
+                    this.series[0].data[1] = this.series[1].data[1];
 
-                    this.series[1].data[4] = 
+                    this.series[1].data[1] = 
                     (((this.series[1].data[0]) * 
-                    (this.series[1].data[1])) / 
+                    (this.series[1].data[4])) / 
                     ((this.series[0].data[0]) * 
-                    (this.series[0].data[1])));
+                    (this.series[0].data[4])));
 
                     var gender = "";
                     if(this.userInfo.userId.gender === 1)
@@ -176,6 +195,7 @@ export default {
                             var totalDis = 0;
                             var size = 0;
                             var maxTime = 0;
+                            var maxTimeList = [];
                             var endCheck = 0;
                             for(var i = 0; i < length; i++){
                                var uid = data.data.data[i].userId;
@@ -186,7 +206,7 @@ export default {
                                         console.log("상대 데이터")
                                         console.log(response.data);
                                         size += response.data.data.length;
-
+                                        maxTime = 0;
                                         for (const [key, value] of Object.entries(response.data.data)) {
                                             console.log(`${key}: ${value}`);
                                             totalTime += value.accTime;
@@ -195,38 +215,45 @@ export default {
                                             totalDis += value.accDistance;
                                         }
                                         endCheck++;
+                                        maxTimeList.push(maxTime);
                                         if(endCheck == length)
                                         {
-                                            this.seriesUpdate(totalDis, totalTime, size, maxTime);
+                                            this.seriesUpdate(totalDis, totalTime, size, maxTime, length, maxTimeList);
                                         }
-                                        
                                 });             
                             }
                     });
             });
         },
-        seriesUpdate: function(totalDis, totalTime, size, maxTime){
+        seriesUpdate: function(totalDis, totalTime, size, maxTime, length, maxTimeList){
             console.log("비교")
             console.log("totalDis")
             console.log(totalDis)
             
             console.log("totalTime")
             console.log(totalTime)
+            var sum = 0;
+            for(var i = 0 ; i < maxTimeList.length; i++)
+            {
+                sum += maxTimeList[i];
+            }
+            sum = sum / length;
             // 비교 유저 기록 
             this.series[2].data[0] = totalDis / (totalTime/(60*60));
 
-            this.series[2].data[1] = totalDis / size;
+            this.series[2].data[4] = totalDis / size;
 
-            this.series[2].data[2] = totalDis;
+            this.series[2].data[2] = totalDis / length;
 
-            this.series[2].data[3] = maxTime / 60;
+            this.series[2].data[3] = sum / 60;
 
-            this.series[2].data[4] = 0
+            this.series[2].data[1] = 0
                 
             console.log(this.series)
             this.$refs.realtimeChart.updateOptions([{
             }], false, true)
             localStorage.setItem("series", JSON.stringify(this.series));
+
         }
     },
     created(){
@@ -282,8 +309,7 @@ export default {
                     }
 
                     console.log(this.heatmap.series)
-                    this.$refs.heatmap.updateOptions([{
-                    }], false, true)
+
 
 
                     // 분석하기
@@ -314,8 +340,8 @@ export default {
                         this.series[0].data[0] = totalDis / (totalTime/(60*60));
                         this.series[1].data[0] = totalDis / (totalTime/(60*60));
 
-                        this.series[0].data[1] = totalDis / length ;
-                        this.series[1].data[1] = totalDis / length ;
+                        this.series[0].data[4] = totalDis / length ;
+                        this.series[1].data[4] = totalDis / length ;
 
                         this.series[0].data[2] = totalDis ;
                         this.series[1].data[2] = totalDis ;
@@ -323,9 +349,9 @@ export default {
                         this.series[0].data[3] = maxTime / (60);
                         this.series[1].data[3] = maxTime / (60);
 
-                        this.series[0].data[4] = 0 // 이전 평균속도 * 평균거리 대비 성장률
+                        this.series[0].data[1] = 0 // 이전 평균속도 * 평균거리 대비 성장률
 
-                        this.series[1].data[4] = 0
+                        this.series[1].data[1] = 0
 
                         console.log(this.series)
                         localStorage.setItem("series", JSON.stringify(this.series));
