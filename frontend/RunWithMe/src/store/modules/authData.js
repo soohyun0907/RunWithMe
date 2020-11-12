@@ -49,6 +49,7 @@ export default {
     },
     setLogout(state) {
       state.userInfo = {};
+      state.userTotal = {};
       state.loading = false;
       state.error = null;
       state.auth=""
