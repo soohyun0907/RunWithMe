@@ -44,6 +44,7 @@ const routes = [
           },
           {
             path: "payChallenge",
+            name: "payChallenge",
             component: () => import("./views/app/apps/payChallenge")
           },
           {
