@@ -119,7 +119,7 @@
       <!-- User avatar dropdown -->
       <div class="dropdown">
         <b-dropdown
-          id="dropdown-1"
+          id="dropdown-0"
           text="Dropdown Button"
           class="m-md-2 user col align-self-end"
           toggle-class="text-decoration-none"

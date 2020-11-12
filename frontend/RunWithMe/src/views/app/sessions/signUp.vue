@@ -171,7 +171,7 @@
 import { required, sameAs, minLength } from "vuelidate/lib/validators";
 import { mapGetters, mapActions } from "vuex";
 import http from "@/utils/http-common";
-import dropdown from "vue-dropdowns";
+// import dropdown from "vue-dropdowns";
 //sweet alert
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import 'sweetalert2/src/sweetalert2.scss'
@@ -202,7 +202,7 @@ export default {
     };
   },
   components: {
-    dropdown: dropdown,
+    // dropdown: dropdown,
   },
 
   validations: {
@@ -319,6 +319,7 @@ export default {
         .then((res) => {
           if (res.data.data == true) {
             this.emailAuth = true;
+
             Swal.fire({
               icon:'success',
               text:'사용할 수 있는 이메일입니다!',
