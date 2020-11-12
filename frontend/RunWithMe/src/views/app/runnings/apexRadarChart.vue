@@ -13,7 +13,7 @@
                 <button type="button" class="btn btn-outline-success m-1"  @click="refresh()"><i class="text-20 i-Reload"></i></button>
                 <button type="button" class="btn btn-outline-success m-1"  @click="refresh()"><strong>refresh</strong></button> -->
                 </div>
-                <apexchart ref="heatmap" width="270" height="240" type="heatmap" :options="heatmap.chartOptions" :series="heatmap.series"></apexchart>
+                <apexchart ref="heatmap" width="285" height="250" type="heatmap" :options="heatmap.chartOptions" :series="heatmap.series"></apexchart>
                 </div>
                 <hr>
                 <div id="basicArea-chart">
