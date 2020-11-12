@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
+import kr.co.rwm.dto.ChallengeDto;
 import kr.co.rwm.entity.Challenge;
 import kr.co.rwm.entity.ChallengeUser;
 import kr.co.rwm.entity.User;
@@ -72,7 +73,7 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "챌린지 생성", response = ResponseEntity.class)
 	@PostMapping
-	public ResponseEntity saveChallenge(@RequestBody Challenge challenge) {
+	public ResponseEntity saveChallenge(@RequestBody ChallengeDto challenge) {
 		System.out.println("/challenges/save - 관리자가 challenge를 등록합니다.");
 		User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Challenge newChallenge = new Challenge();

@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import kr.co.rwm.dto.ChallengeDto;
 import kr.co.rwm.entity.Challenge;
 import kr.co.rwm.entity.ChallengeUser;
 import kr.co.rwm.entity.User;
@@ -27,7 +28,9 @@ public class ChallengeServiceImpl implements ChallengeService {
 	private final String NO_CHALLENGE = "해당 챌린지가 없습니다.";
 
 	@Override
-	public Challenge saveChallenge(Challenge challenge) {
+	public Challenge saveChallenge(ChallengeDto challengeDto) {
+		Challenge challenge = Challenge.builder()
+									.build();
 		return challengeRepository.save(challenge);
 	}
 
