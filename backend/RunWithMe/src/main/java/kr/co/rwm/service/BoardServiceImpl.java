@@ -73,11 +73,12 @@ public class BoardServiceImpl implements BoardService{
 	public Board detail(int board_id, int uid) {
 		
 		Optional<Board> board = boardRepository.findByBoardId(board_id);
-		if(uid != board.get().getWriterId())
-			board.get().setReadCount(board.get().getReadCount()+1);
-		System.out.println(uid);
-		System.out.println(board.get().getWriterId());
-		return board.get();
+		if(board.isPresent()) {
+			if(uid != board.get().getWriterId())
+				board.get().setReadCount(board.get().getReadCount()+1);
+			return board.get();
+		}
+		return null;
 	}
 
 	@Override

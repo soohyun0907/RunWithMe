@@ -65,7 +65,7 @@ public class JwtTokenProvider {
 		try {
 			Jws<Claims> claims = this.getClaims(jwt);
 			if (null != logoutRedis.opsForValue().get(jwt)) {
-				System.out.println(("이미 로그아웃 처리된 사용자"));
+				log.info(("이미 로그아웃 처리된 사용자"));
 				return false;
 			}
 
