@@ -59,11 +59,11 @@
                                         <span>{{userTotal.totalDistance.toFixed(2)}} Km</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
-                                        <p class="text-primary mb-1"><i class="i-Cloud-Weather text-16 mr-1"></i> 누적 런닝</p>
+                                        <p class="text-primary mb-1"><i class="i-Cloud-Weather text-16 mr-1"></i> 누적 시간</p>
                                         <span>{{userTotal.totalTime}} 초</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
-                                        <p class="text-primary mb-1"><i class="i-Face-Style-4 text-16 mr-1"></i>누적 시간</p>
+                                        <p class="text-primary mb-1"><i class="i-Face-Style-4 text-16 mr-1"></i>누적 런닝</p>
                                         <span>{{userTotal.totalCount}} 회</span>
                                     </div>
                                 </div>
@@ -72,7 +72,7 @@
                                     
                                 </div>
                             </div>
-                             <b-button variant="outline-info" style="padding:0.2em" @click="goUserInfosEdit()">회원 정보 수정</b-button>
+                             <b-button @click="goUserInfosEdit()" variant="outline-info" style="padding:0.2em" >회원 정보 수정</b-button>
                        
 
                         </b-tab>
