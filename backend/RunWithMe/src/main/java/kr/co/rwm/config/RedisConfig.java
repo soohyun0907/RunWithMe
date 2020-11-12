@@ -10,7 +10,6 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import kr.co.rwm.entity.Record;
 import kr.co.rwm.pubsub.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
 
@@ -56,9 +55,6 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
-        
-        // for Record
-//        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Record.class));
 
         return redisTemplate;
     }
