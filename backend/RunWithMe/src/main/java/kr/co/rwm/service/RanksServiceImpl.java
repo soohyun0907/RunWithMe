@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import kr.co.rwm.dto.UserDto;
 import kr.co.rwm.entity.Ranks;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
@@ -158,7 +159,7 @@ public class RanksServiceImpl implements RanksService{
 
 	// 사용자 정보 조회 ( 이메일 or 이름 or userid 모두 가능)
 	@Override
-	public List<Ranks> findByUserId(User userId) {
+	public List<Ranks> findByUserId(UserDto userId) {
 		User user;
 		List<Ranks> list = new ArrayList<Ranks>();
 		if(userId.getUserId()!=null) {
