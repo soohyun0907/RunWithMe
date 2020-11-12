@@ -66,9 +66,6 @@
             </a>
             <div class="triangle"></div>
           </li>
-
-
-        
         </ul>
       </div>
     </vue-perfect-scrollbar>
@@ -113,12 +110,6 @@
               <span class="item-name">주변 러너 보기</span>
             </router-link>
           </li>
-          <!-- <li class="nav-item">
-            <router-link tag="a" class to="/app/runnings/runningResult">
-              <i class="nav-icon i-File-Chart"></i>
-              <span class="item-name">RunningResult</span>
-            </router-link>
-          </li> -->
           <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/running">
               <i class="nav-icon i-Stopwatch"></i>
@@ -187,22 +178,30 @@
               <span class="item-name">챌린지 제안</span>
             </router-link>
           </li>
-          <!-- <li class="nav-item">
-            <router-link tag="a" class to="/app/board/challengeBoardDetail">
-              <i class="nav-icon i-Stopwatch"></i>
-              <span class="item-name">챌린지 제안 상세</span>
-            </router-link>
-          </li> -->
-          <li class="nav-item">
-            <router-link tag="a" class to="/app/board/createChallenge">
-              <i class="nav-icon i-Speach-Bubble-3"></i>
-              <span class="item-name">챌린지 생성(관리자만)</span>
-            </router-link>
+          <li
+            @click.prevent="toggleSidebarDropdwon($event)"
+            class="nav-item dropdown-sidemenu">
+            <a href>
+              <i class="nav-icon i-File"></i>
+              <span class="item-name"> 챌린지 관리</span>
+              <i class="dd-arrow i-Arrow-Down"></i>
+            </a>
+            <ul class="submenu">
+              <li>
+                <router-link tag="a" class to="/app/board/createChallenge">
+                  <i class="nav-icon i-Speach-Bubble-3"></i>
+                  <span class="item-name">챌린지 생성</span>
+                </router-link>
+              </li>
+              <li>
+                <router-link tag="a" class to="/app/board/challengesAdmin">
+                  <i class="nav-icon i-Add-File"></i>
+                  <span class="item-name">챌린지 관리자 페이지</span>
+                </router-link>
+              </li>
+            </ul>
           </li>
         </ul>
-
-
-
       </div>
     </vue-perfect-scrollbar>
     <div
@@ -240,9 +239,7 @@ export default {
     window.addEventListener("resize", this.handleWindowResize);
     document.addEventListener("click", this.returnSelectedParentMenu);
     this.handleWindowResize();
-    
-    
-     this.$store.subscribe((mutation, state) => {
+    this.$store.subscribe((mutation, state) => {
       if(mutation.type=="mutateAuth"){
         console.log("auth 변경")
         axios.defaults.headers.common['AUTH'] = this.$store.state.auth
@@ -283,7 +280,6 @@ export default {
     },
     toggleSelectedParentMenu() {
       const currentParentUrl = this.$route.path
-      
         .split("/")
         .filter(x => x !== "")[1];
 
@@ -299,7 +295,6 @@ export default {
       let parent = e.target.dataset.item;
       if (hasSubmenu) {
         this.selectedParentMenu = parent;
-
         this.changeSecondarySidebarPropertiesViaMenuItem(true);
       } else {
         this.selectedParentMenu = parent;

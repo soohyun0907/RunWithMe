@@ -83,7 +83,6 @@ export default {
      this.$store.subscribe((mutation,state) =>{
       if(mutation.type =="mutateAuth"){
         console.log("바껴써용")
-	
         setTimeout(() => {
           this.$router.go(0)
         },400);
@@ -105,31 +104,23 @@ export default {
     },
     makeToast(variant = null, msg) {
       this.$bvToast.toast(msg, {
-        title: ` ${variant || "default"}`,
+        title: ` ${"로그인 실패!" || "default"}`,
         variant: variant,
         solid: true,
       });
     },
   },
   watch: {
-    checkUserInfo(val) {
-      console.log("checking,,,")
-      if (this.auth != {}) {
-        this.makeToast("success", "Successfully Logged In");
-      } else {
-        this.makeToast("Success", "Successfully Logged out");
-      }
-    },
     error(val) {
       if (val != null) {
-        this.makeToast("warning", val.message);
+        this.makeToast("danger", "이메일과 비밀번호가 일치하지 않습니다.");
       }
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .spinner.sm {
   height: 2em;
   width: 2em;

@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Create Challenge'" :folder="'Apps'" />
+    <breadcumb :page="'챌린지 생성'" :folder="'Challenge'" />
     <b-row>
       <!-- form-inputs-rounded -->
       <b-col md="12 mb-30">
@@ -82,7 +82,13 @@
                 </date-range-picker>
               </b-form-group>
 
-              <b-col md="12">
+              <div v-if="updateChallengeImg">
+                <input type="file" id="files" ref="files" v-on:change="handleFileUpload()"
+                  accept="image/*" />
+                <b-button class="m-1" variant="primary" v-on:click="submitFile()">Submit</b-button>
+              </div>
+
+              <b-col md="12" v-else>
                 <b-button class="m-1" type="submit" variant="primary">Submit</b-button>
                 <b-button type="reset" variant="danger">Reset</b-button>
               </b-col>
@@ -91,11 +97,6 @@
         </b-card>
       </b-col>
     </b-row>
-    <div v-if="updateChallengeImg">
-      <input type="file" id="files" ref="files" v-on:change="handleFileUpload()"
-        accept="image/*" />
-      <button v-on:click="submitFile()">Submit</button>
-    </div>
   </div>
 </template>
 <script>
@@ -103,7 +104,7 @@ import DateRangePicker from "vue2-daterange-picker";
 //you need to import the CSS manually (in case you want to override it)
 import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
 import http from "@/utils/http-common";
-import axios from "axios";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   metaInfo: {
@@ -127,9 +128,37 @@ export default {
             endDate: new Date()
         },
       },
+      alertModal: ""
     };
   },
+  computed: {
+    ...mapGetters(["userInfo","defaultProfile"]),
+  },
+  mounted() {
+    this.$store.commit('closeSidebar');
+    if(this.userInfo.roles.length == 1){
+      this.alertModal = "";
+      this.$bvModal
+        .msgBoxConfirm("관리자만 접근 가능한 페이지입니다.", {
+          size: "sm",
+          buttonSize: "sm",
+          okVariant: "danger",
+          okTitle: "YES",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          this.alertModal = value;
+          this.$router.push("/app/dashboards/main");
+        })
+        .catch(err => {
+          console.log(error);
+        });
+    }
+  },
   methods: {
+    ...mapMutations(["closeSidebar"]),
     onSubmit(el) {
       let x = el.preventDefault();
       http
