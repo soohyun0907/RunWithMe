@@ -2,7 +2,6 @@ package kr.co.rwm.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -56,6 +55,7 @@ public class FriendServiceImpl implements FriendService {
 		}
 		return contactsList;
 	}
+
 	@Override
 	public List<User> offlineList(int uid) {
 		List<Friend> list = friendRepository.findByUserId(uid);
@@ -70,43 +70,62 @@ public class FriendServiceImpl implements FriendService {
 
 	@Override
 	public List<User> match(int uid, String gender) {
-		User user = userRepository.findByUserId(uid).get();
-		int dong = user.getGugunId().getGugunId();
-		int sex;
-		if(gender.equals("male"))
-			sex = 1;
-		else
-			sex = 2;
-		int tier = rankRepository.findByUserId(user).get().getTier();
-		List<Ranks> userList = rankRepository.findByTier(tier);
-		List<User> result = new ArrayList<User>();
-		for (Ranks ranks : userList) {
-			if (ranks.getUserId().getGender() == sex && ranks.getUserId().getGugunId().getGugunId() == dong
-					&& ranks.getUserId().getUserId() != uid)
-				result.add(ranks.getUserId());
+		Optional<User> users = userRepository.findByUserId(uid);
+		if (users.isPresent()) {
+			User user = users.get();
+			int dong = user.getGugunId().getGugunId();
+			int sex;
+			if (gender.equals("male"))
+				sex = 1;
+			else
+				sex = 2;
+			Optional<Ranks> ranking = rankRepository.findByUserId(user);
+			if (ranking.isPresent()) {
+				int tier = ranking.get().getTier();
+				List<Ranks> userList = rankRepository.findByTier(tier);
+				List<User> result = new ArrayList<User>();
+				for (Ranks ranks : userList) {
+					if (ranks.getUserId().getGender() == sex && ranks.getUserId().getGugunId().getGugunId() == dong
+							&& ranks.getUserId().getUserId() != uid)
+						result.add(ranks.getUserId());
+				}
+				return result;
+			} else {
+				return null;
+			}
+
+		} else {
+			return null;
 		}
 
-		return result;
 	}
 
-
 	public List<User> analysis(int uid, String gender) {
-		User user = userRepository.findByUserId(uid).get();
-		int dong = user.getGugunId().getGugunId();
-		int sex;
-		if(gender.equals("male"))
-			sex = 1;
-		else
-			sex = 2;
-		int tier = rankRepository.findByUserId(user).get().getTier();
-		List<Ranks> userList = rankRepository.findByTier(tier);
-		List<User> result = new ArrayList<User>();
-		for (Ranks ranks : userList) {
-			if(ranks.getUserId().getGender() == sex && ranks.getUserId().getUserId() != uid)
-				result.add(ranks.getUserId());
+		Optional<User> users = userRepository.findByUserId(uid);
+		if (users.isPresent()) {
+			User user = users.get();
+			int sex;
+			if (gender.equals("male"))
+				sex = 1;
+			else
+				sex = 2;
+			Optional<Ranks> ranking = rankRepository.findByUserId(user);
+			if (ranking.isPresent()) {
+				int tier = ranking.get().getTier();
+				List<Ranks> userList = rankRepository.findByTier(tier);
+				List<User> result = new ArrayList<User>();
+				for (Ranks ranks : userList) {
+					if (ranks.getUserId().getGender() == sex && ranks.getUserId().getUserId() != uid)
+						result.add(ranks.getUserId());
+				}
+				
+				return result;
+			}else {
+				return null;
+			}
+		} else {
+			return null;
 		}
-		
-		return result;
 	}
 
 	@Override

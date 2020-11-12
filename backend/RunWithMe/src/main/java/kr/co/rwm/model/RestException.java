@@ -22,6 +22,7 @@ public class RestException extends RuntimeException {
 		this.status = status;
 	}
 
+	@Override
 	public String getMessage() {
 		return message;
 	}

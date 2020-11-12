@@ -52,13 +52,20 @@ public class ReplyServiceImpl implements ReplyService {
 				.build();
 
 		Optional<Board> board = boardRepository.findByBoardId(Integer.parseInt(replyInfo.get("boardId")));
-
-		board.get().setReplyCount(board.get().getReplyCount()+1);
-
-		Optional<User> user = userRepository.findByUserId(uid);
-		reply.setUser(user.get());
-		replyRepository.save(reply);
-		return reply;
+		if(board.isPresent()) {
+			board.get().setReplyCount(board.get().getReplyCount()+1);
+			
+			Optional<User> user = userRepository.findByUserId(uid);
+			if(user.isPresent()) {
+				reply.setUser(user.get());
+				replyRepository.save(reply);
+				return reply;
+			}else {
+				return null;
+			}
+		}else {
+			return null;
+		}
 	}
 
 	@Override
@@ -68,10 +75,11 @@ public class ReplyServiceImpl implements ReplyService {
 
 		if (!reply.isPresent()) {
 			return null;
+		}else {
+			reply.get().setContent(replyInfo.get("content"));
+			reply.get().setEditdate(new Date());
+			return reply.get();
 		}
-		reply.get().setContent(replyInfo.get("content"));
-		reply.get().setEditdate(new Date());
-		return reply.get();
 	}
 
 	@Override
@@ -79,11 +87,14 @@ public class ReplyServiceImpl implements ReplyService {
 	public Long delete(int reply_id) {
 		int boardId = replyRepository.findByReplyId(reply_id).get().getBoardId();
 		Optional<Board> board = boardRepository.findByBoardId(boardId);
-
-		board.get().setReplyCount(board.get().getReplyCount()-1);
-		Long ret = replyRepository.deleteByReplyId(reply_id);
-		
-		return ret;
+		if(board.isPresent()) {
+			board.get().setReplyCount(board.get().getReplyCount()-1);
+			Long ret = replyRepository.deleteByReplyId(reply_id);
+			return ret;
+			
+		}else {
+			return null;
+		}
 	}
 
 	@Override
@@ -91,5 +102,4 @@ public class ReplyServiceImpl implements ReplyService {
 		List<Reply> reply = replyRepository.findAllByBoardId(boardId);
 		return reply;
 	}
-
 }
