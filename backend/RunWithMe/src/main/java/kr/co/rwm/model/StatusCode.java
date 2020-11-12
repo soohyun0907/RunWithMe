@@ -1,5 +1,7 @@
 package kr.co.rwm.model;
 public class StatusCode {
+	
+	public StatusCode() {}
 
     public static final int OK = 200;
 

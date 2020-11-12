@@ -81,6 +81,11 @@ public class User implements UserDetails {
 	private List<ChallengeUser> challengeUser;
 	
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "user_userId")
+	private List<Friend> friends;
+	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String changePw;
 
 	public String getChangePw() {

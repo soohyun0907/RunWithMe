@@ -1,12 +1,13 @@
 package kr.co.rwm.config;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import redis.embedded.RedisServer;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import redis.embedded.RedisServer;
 
 /**
  * 로컬 환경일경우 내장 레디스가 실행된다.
