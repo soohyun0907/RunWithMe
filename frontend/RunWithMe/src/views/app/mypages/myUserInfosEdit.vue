@@ -65,18 +65,19 @@
                 <b-col md="8" class=" mb-30">
                   <b-card title="주 활동지역 선택">
 
-                    <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
+                    <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2 signup">
                       <div v-for="(sido, index) in sidos" v-bind:key="index">
-                        <b-dropdown-item id="sido" @click="sidoSelected(sido)">
-                          {{sido.sidoName}}</b-dropdown-item>
+                        <b-dropdown-item @click="sidoSelected(sido)">{{
+                          sido.sidoName
+                        }}</b-dropdown-item>
                       </div>
                     </b-dropdown>
 
-                    <b-dropdown variant="primary" id="dropdown-2" text="구군 선택" class="mb-2">
+                    <b-dropdown variant="primary" :disabled="selectedSido" id="dropdown-2" text="구군 선택" class="mb-2 signup">
                       <div v-for="(gugun, index) in guguns" v-bind:key="index">
-                        <b-dropdown-item @click="gugunSelected(gugun)">
-                          {{gugun.gugunName}}
-                        </b-dropdown-item>
+                        <b-dropdown-item @click="gugunSelected(gugun)">{{
+                          gugun.gugunName
+                        }}</b-dropdown-item>
                       </div>
                     </b-dropdown>
                   </b-card>
@@ -102,7 +103,7 @@
 import http from "@/utils/http-common";
 import { mapGetters,mapActions,mapMutations } from "vuex";
 import { required, sameAs, minLength } from "vuelidate/lib/validators";
-import dropdown from "vue-dropdowns";
+// import dropdown from "vue-dropdowns";
 export default {
   metaInfo: {
     title: "회원정보 수정",
@@ -116,13 +117,10 @@ export default {
       sidos: [],
       guguns:[],
       selectedgugun:"",
+      selectedSido:"",
       submitStatus: null,
     };
   },
-  components: {
-    dropdown: dropdown,
-  },
-
   validations: {
     fName: {
       required,
@@ -140,6 +138,10 @@ export default {
     this.sidos = res.data.data;
     console.log(this.sidos[0].sidoName);
     });
+     var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
+     sidoDropBtn.style.backgroundColor="#663399"
+      sidoDropBtn.style.color="#FFFFFF"
+     
   },
   computed: {
     ...mapGetters(["loggedInUser", "loading", "error","getSideBarToggleProperties", "userInfo","defaultProfile"]),
@@ -149,18 +151,33 @@ export default {
     ...mapMutations(["closeSidebar","mutateUserInfo","mutateUserTotal"]),
     //   validate form
     sidoSelected(sido) {
-      console.log(sido.sidoName)
+      console.log(sido.sidoId)
+      this.selectedSido = sido.sidoname
       http.get(`areas/`+sido.sidoId).then((res) =>{
         this.guguns= res.data.data
         console.log(this.guguns)
       })
-      
-      document.getElementById('dropdown-1').innerText=sido.sidoName
+      var sidoDrop = document.getElementById('dropdown-1')
+      var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
+      var gugunDrop = document.getElementById('dropdown-2')
+      var gugunDropBtn = document.getElementById('dropdown-2__BV_toggle_')
+      sidoDropBtn.innerText = sido.sidoName
+      gugunDropBtn.innerText = "구군 선택"
+      sidoDropBtn.style.backgroundColor="#663399"
+      sidoDropBtn.style.color="#FFFFFF"
+      gugunDropBtn.style.backgroundColor="#663399"
+      gugunDropBtn.style.color="#FFFFFF"
+
     },
     gugunSelected(gugun){
       this.selectedgugun = gugun.gugunId
       console.log(this.selectedgugun)
-      document.getElementById('dropdown-2').innerText=gugun.gugunName
+      var gugunDrop = document.getElementById('dropdown-2')
+      var gugunDropBtn = document.getElementById('dropdown-2__BV_toggle_')
+      gugunDropBtn.innerText = gugun.gugunName
+      gugunDropBtn.style.backgroundColor="#663399"
+      gugunDropBtn.style.color="#FFFFFF"
+
     },
     submit() {
       console.log("회원정보 수정 데이터 전송중..");
@@ -205,6 +222,7 @@ export default {
 </script>
 <style scoped>
 
-
-
+#userDropdown {
+  
+}
 </style>

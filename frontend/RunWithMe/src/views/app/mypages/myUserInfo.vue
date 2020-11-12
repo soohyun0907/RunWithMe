@@ -105,6 +105,8 @@
 <script>
 import http from "@/utils/http-common";
 import { mapGetters,mapActions, mapMutations } from "vuex";
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+import 'sweetalert2/src/sweetalert2.scss'
 
 export default {
      metaInfo: {
@@ -137,9 +139,17 @@ export default {
             console.log("i'm gone..")
             http.delete(`users`)
             .then(data=>{
-                console.log(data)
-                // this.signOut();
+                
+            Swal.fire({
+              icon:'success',
+              text:'회원 탈퇴 성공! 메인으로 이동합니다',
+              showConfirmButton:false,
+              timer:1000,
+            })
+            console.log(data)
+            setTimeout(() => {
                 this.$router.push('/app/sessions/signIn')   
+            }, 1000);
             })
         })
     },
