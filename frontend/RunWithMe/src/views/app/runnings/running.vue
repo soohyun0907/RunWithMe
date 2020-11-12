@@ -535,9 +535,9 @@ export default {
       this.endTime = new Date();
       this.endTime = this.$moment(this.endTime).format("YYYY-MM-DDTHH:mm:ss");
 
-      //////////////////////////  
+      ////////////////////////// 
 
-
+      this.gugun.length.length==0 ? this.gugun : this.gugun.push("강남구")
       let runningData = {
         polyline: this.encoded_polyline.toString(),
         startTime: this.startTime,
@@ -673,7 +673,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .flex-grow-1{
   width:30vw;
   text-align:center;

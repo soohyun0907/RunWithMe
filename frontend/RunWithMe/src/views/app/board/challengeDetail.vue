@@ -11,7 +11,7 @@
         <img :src="challenge.challengeImg" />
         <br>
         <br>
-        <p> 기간: {{ challenge.startTime.substring(0,10) }} ~ {{ challenge.endTime.substring(0,10) }} <br>
+        <p> 기간: {{ challenge.startTime | moment('YYYY.MM.DD') }} ~ {{ challenge.endTime | moment('YYYY.MM.DD') }} <br>
             설명: {{ challenge.content }} <br>
             현재 참여 인원: {{ challenge.participant }} <br>
             개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM <br>

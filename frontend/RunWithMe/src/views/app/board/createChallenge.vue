@@ -128,10 +128,34 @@ export default {
             endDate: new Date()
         },
       },
+      alertModal: ""
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo","defaultProfile"]),
   },
   mounted() {
     this.$store.commit('closeSidebar');
+    if(this.userInfo.roles.length == 1){
+      this.alertModal = "";
+      this.$bvModal
+        .msgBoxConfirm("관리자만 접근 가능한 페이지입니다.", {
+          size: "sm",
+          buttonSize: "sm",
+          okVariant: "danger",
+          okTitle: "YES",
+          footerClass: "p-2",
+          hideHeaderClose: false,
+          centered: true
+        })
+        .then(value => {
+          this.alertModal = value;
+          this.$router.push("/app/dashboards/main");
+        })
+        .catch(err => {
+          console.log(error);
+        });
+    }
   },
   methods: {
     ...mapMutations(["closeSidebar"]),

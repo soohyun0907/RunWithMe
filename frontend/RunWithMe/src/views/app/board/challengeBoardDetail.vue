@@ -19,8 +19,7 @@
                 <img v-if="board.writerProfile == null" class="profile-picture rounded-circle" :src="defaultProfile" style="width:35px; height:35px" />
                 <img v-else class="profile-picture rounded-circle" :src="board.writerProfile" style="width:35px; height:35px" />
                 {{ board.writerName }}
-                {{ board.boardRegdate.substring(0,10) }}
-                {{ board.boardRegdate.substring(11,16) }}
+                {{ board.boardRegdate | moment('YYYY.MM.DD HH:mm') }}
               </p>
             </div>
           </div>
@@ -68,8 +67,7 @@
                 </b-button-group>
                 <!-- <b-button size="sm" variant="dark m-1">수정</b-button> -->
               </b-collapse>
-              {{ reply.regdate.substring(0,10) }}
-              {{ reply.regdate.substring(11,16) }}
+              {{ reply.regdate | moment('YYYY.MM.DD HH:mm') }}
               <div v-if="userInfo.userId == reply.replyWriterId" class="float-right">
                   <a href @click="deleteReply(reply.replyId)" style="margin-right:15px;">삭제</a> &nbsp;
                   <a v-b-toggle="'collapse-'+reply.replyId">수정</a>
