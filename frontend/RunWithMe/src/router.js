@@ -159,6 +159,11 @@ const routes = [
             component: () => import("./views/app/board/createChallenge")
           },
           {
+            path: "editChallenge",
+            name: "editChallenge",
+            component: () => import("./views/app/board/editChallenge")
+          },
+          {
             path: "challengesAdmin",
             component: () => import("./views/app/board/challengesAdmin")
           },
