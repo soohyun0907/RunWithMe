@@ -1,7 +1,5 @@
 package kr.co.rwm.dto;
 
-import java.util.Date;
-
 import kr.co.rwm.entity.Challenge;
 import kr.co.rwm.entity.User;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,8 @@
 package kr.co.rwm.model;
 public class ResponseMessage {
 	
+	public ResponseMessage() {}
+	
 	public static final String SIGNUP_SUCCESS = "회원가입 성공";
 	public static final String ALREADY_USER_EMAIL = "중복된 이메일";
 	public static final String EMAIL_CHECK_OK = "회원 가입 가능한 Email";
