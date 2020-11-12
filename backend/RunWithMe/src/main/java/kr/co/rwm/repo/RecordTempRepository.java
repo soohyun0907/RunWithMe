@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class RecordTempRepository {
@@ -43,7 +45,7 @@ public class RecordTempRepository {
 							.speed(Double.parseDouble(map.get("speed")))
 							.build();
 		
-		System.out.println(record.toString()+" "+km);
+		log.info(record.toString()+" "+km);
 		hashOpsRecord.put(String.valueOf(record.getUserId().getUserId()), String.valueOf(km), record);
 	}
 	
