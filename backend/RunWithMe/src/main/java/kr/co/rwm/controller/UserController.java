@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
+import kr.co.rwm.dto.UserDto;
 import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.RunningUser;
 import kr.co.rwm.entity.User;
@@ -84,7 +85,7 @@ public class UserController {
 	 */
 	@ApiOperation(value = "회원 가입", response = ResponseEntity.class, notes = "userName, userEmail, userPw가 담긴 JSON객체와 MultipartFile의 프로필 이미지로 회원가입을 한다.")
 	@PostMapping("")
-	public ResponseEntity signup(@RequestBody User user, MultipartFile profile){
+	public ResponseEntity signup(@RequestBody UserDto user, MultipartFile profile){
 		if(!user.getAuth()) {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN,ResponseMessage.EMAIL_CHECK_FAIL,false),HttpStatus.FORBIDDEN);
 		}else {
@@ -129,7 +130,7 @@ public class UserController {
 	 */
 	@ApiOperation(value = "로그인", response = ResponseEntity.class, notes = "userEmail, userPw로 로그인한다.")
 	@PostMapping("/signin")
-	public ResponseEntity signin(@RequestBody User user, HttpServletResponse response){
+	public ResponseEntity signin(@RequestBody UserDto user, HttpServletResponse response){
 		System.out.println(user);
 		User member = userService.findByUserEmail(user.getUserEmail())
 				.orElse(null);
@@ -169,7 +170,6 @@ public class UserController {
 					TimeUnit.MILLISECONDS);
 			String userId = jwtTokenProvider.getUserPk(token);
 			redis.opsForHash().delete(userId.toString());
-			System.out.println(redis.opsForValue().get(token));
 			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.LOGOUT_SUCCESS),
 					HttpStatus.OK);
 		} else {
@@ -207,7 +207,7 @@ public class UserController {
 	
 	// 회원 탈퇴 유효성 검사
 	@PostMapping(path="/checkPw")
-	public ResponseEntity deleteCheckUser(@RequestBody User user, HttpServletRequest request) {
+	public ResponseEntity deleteCheckUser(@RequestBody UserDto user, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
 			String userEmail = jwtTokenProvider.getUserEmailFromJwt(token);
@@ -244,7 +244,7 @@ public class UserController {
 	// 회원 정보 수정
 	// 기존 비밀번호를 입력받고 회원정보 수정 진행
 	@PutMapping(path="")
-	public ResponseEntity updateUser(@RequestBody User user, HttpServletRequest request) {
+	public ResponseEntity updateUser(@RequestBody UserDto user, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
 			String userEmail = jwtTokenProvider.getUserEmailFromJwt(token);
@@ -297,10 +297,8 @@ public class UserController {
 			}else {
 				User changeUser = member.get();
 				changeUser.setProfile(url);
-				System.out.println(changeUser.getUserPw());
-				System.out.println(changeUser.getPassword());
 				changeUser.setChangePw(changeUser.getPassword());
-				userService.update(member, changeUser);
+				userService.profileUpdate(member, changeUser);
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.UPLOAD_PROFILE_SUCCESS,changeUser),
 						HttpStatus.OK);
 			}
