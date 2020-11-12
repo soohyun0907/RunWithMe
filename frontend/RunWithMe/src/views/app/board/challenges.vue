@@ -222,7 +222,7 @@ export default {
                             obj.startTime = element.startTime;
                             obj.endTime = element.endTime;
                             obj.distanceGoal = element.distanceGoal;
-                            obj.distanceCurrent = element.distanceCurrent;
+                            obj.distanceCurrent = (element.distanceCurrent).toFixed(2);
                             obj.donateGoal = element.donateGoal;
                             obj.donateCurrent = element.donateCurrent;
                             obj.personalDistanceGoal = element.personalDistanceGoal;
