@@ -30,6 +30,17 @@ public class ChallengeServiceImpl implements ChallengeService {
 	@Override
 	public Challenge saveChallenge(ChallengeDto challengeDto) {
 		Challenge challenge = Challenge.builder()
+									.title(challengeDto.getTitle())
+									.content(challengeDto.getContent())
+									.distanceGoal(challengeDto.getDistanceGoal())
+									.distanceCurrent(challengeDto.getDistanceCurrent())
+									.donateGoal(challengeDto.getDonateGoal())
+									.donateCurrent(challengeDto.getDonateCurrent())
+									.startTime(challengeDto.getStartTime())
+									.endTime(challengeDto.getEndTime())
+									.personalDistanceGoal(challengeDto.getPersonalDistanceGoal())
+									.challengeImg(challengeDto.getChallengeImg())
+									.participant(challengeDto.getParticipant())
 									.build();
 		return challengeRepository.save(challenge);
 	}

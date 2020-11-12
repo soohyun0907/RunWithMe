@@ -79,7 +79,7 @@ public class AreaController {
 		Optional<User> opLoginUser = Optional.ofNullable(loginUser);
 		System.out.println("hi "+opLoginUser.get().getUserPw());
 		loginUser.setGugunId(saveGugun);
-		userService.update(opLoginUser, loginUser);
+		userService.profileUpdate(opLoginUser, loginUser);
 		
 		return new ResponseEntity<Response>(new 
 				Response(StatusCode.OK, ResponseMessage.ACTAREA_INSERT_SUCCESS, null), HttpStatus.OK);
