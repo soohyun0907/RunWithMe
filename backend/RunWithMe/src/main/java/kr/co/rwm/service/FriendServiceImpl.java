@@ -2,7 +2,6 @@ package kr.co.rwm.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -38,9 +37,7 @@ public class FriendServiceImpl implements FriendService {
 	public List<User> list(int uid) {
 		List<Friend> list = friendRepository.findByUserId(uid);
 		List<User> contactsList = new ArrayList<User>();
-		System.out.println("uid: " + uid);
 		for (Friend friend : list) {
-			System.out.println(friend.getUser().getUsername());
 			contactsList.add(friend.getUser());
 		}
 
@@ -51,26 +48,21 @@ public class FriendServiceImpl implements FriendService {
 	public List<User> onlineList(int uid) {
 		List<Friend> list = friendRepository.findByUserId(uid);
 		List<User> contactsList = new ArrayList<User>();
-		System.out.println("uid: " + uid);
 		for (Friend friend : list) {
-			System.out.println(friend.getUser().getUsername());
 			if (redis.opsForValue().get(friend.getUser().getUserId().toString()) != null) {
 				contactsList.add(friend.getUser());
-				System.out.println("[로그인 된 사용자들만 넣기]");
 			}
 		}
 		return contactsList;
 	}
+
 	@Override
 	public List<User> offlineList(int uid) {
 		List<Friend> list = friendRepository.findByUserId(uid);
 		List<User> contactsList = new ArrayList<User>();
-		System.out.println("uid: " + uid);
 		for (Friend friend : list) {
-			System.out.println(friend.getUser().getUsername());
 			if (redis.opsForValue().get(friend.getUser().getUserId().toString()) == null) {
 				contactsList.add(friend.getUser());
-				System.out.println("[로그인 된 사용자들만 넣기]");
 			}
 		}
 		return contactsList;
@@ -78,45 +70,62 @@ public class FriendServiceImpl implements FriendService {
 
 	@Override
 	public List<User> match(int uid, String gender) {
-		User user = userRepository.findByUserId(uid).get();
-		int dong = user.getGugunId().getGugunId();
-		int sex;
-		if(gender.equals("male"))
-			sex = 1;
-		else
-			sex = 2;
-		int tier = rankRepository.findByUserId(user).get().getTier();
-		System.out.println("tier:" + tier);
-		List<Ranks> userList = rankRepository.findByTier(tier);
-		List<User> result = new ArrayList<User>();
-		for (Ranks ranks : userList) {
-			if (ranks.getUserId().getGender() == sex && ranks.getUserId().getGugunId().getGugunId() == dong
-					&& ranks.getUserId().getUserId() != uid)
-				result.add(ranks.getUserId());
+		Optional<User> users = userRepository.findByUserId(uid);
+		if (users.isPresent()) {
+			User user = users.get();
+			int dong = user.getGugunId().getGugunId();
+			int sex;
+			if (gender.equals("male"))
+				sex = 1;
+			else
+				sex = 2;
+			Optional<Ranks> ranking = rankRepository.findByUserId(user);
+			if (ranking.isPresent()) {
+				int tier = ranking.get().getTier();
+				List<Ranks> userList = rankRepository.findByTier(tier);
+				List<User> result = new ArrayList<User>();
+				for (Ranks ranks : userList) {
+					if (ranks.getUserId().getGender() == sex && ranks.getUserId().getGugunId().getGugunId() == dong
+							&& ranks.getUserId().getUserId() != uid)
+						result.add(ranks.getUserId());
+				}
+				return result;
+			} else {
+				return null;
+			}
+
+		} else {
+			return null;
 		}
 
-		return result;
 	}
 
-
 	public List<User> analysis(int uid, String gender) {
-		User user = userRepository.findByUserId(uid).get();
-		int dong = user.getGugunId().getGugunId();
-		int sex;
-		if(gender.equals("male"))
-			sex = 1;
-		else
-			sex = 2;
-		int tier = rankRepository.findByUserId(user).get().getTier();
-		System.out.println("tier:" + tier);
-		List<Ranks> userList = rankRepository.findByTier(tier);
-		List<User> result = new ArrayList<User>();
-		for (Ranks ranks : userList) {
-			if(ranks.getUserId().getGender() == sex && ranks.getUserId().getUserId() != uid)
-				result.add(ranks.getUserId());
+		Optional<User> users = userRepository.findByUserId(uid);
+		if (users.isPresent()) {
+			User user = users.get();
+			int sex;
+			if (gender.equals("male"))
+				sex = 1;
+			else
+				sex = 2;
+			Optional<Ranks> ranking = rankRepository.findByUserId(user);
+			if (ranking.isPresent()) {
+				int tier = ranking.get().getTier();
+				List<Ranks> userList = rankRepository.findByTier(tier);
+				List<User> result = new ArrayList<User>();
+				for (Ranks ranks : userList) {
+					if (ranks.getUserId().getGender() == sex && ranks.getUserId().getUserId() != uid)
+						result.add(ranks.getUserId());
+				}
+				
+				return result;
+			}else {
+				return null;
+			}
+		} else {
+			return null;
 		}
-		
-		return result;
 	}
 
 	@Override
@@ -137,7 +146,6 @@ public class FriendServiceImpl implements FriendService {
 	@Override
 	@Transactional
 	public Long delete(int uid, int friendId) {
-		System.out.println(friendId);
 		Optional<User> friend = userRepository.findByUserId(friendId);
 		if (!friend.isPresent())
 			return -1L;
