@@ -59,15 +59,15 @@
                   <b-col md="8" class=" mb-30">
                    <b-card title="주 활동지역 선택">
 
-                    <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
-                      <div style="heigth:30px" v-for="(sido, index) in sidos" v-bind:key="index">
+                    <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2 signup">
+                      <div v-for="(sido, index) in sidos" v-bind:key="index">
                         <b-dropdown-item @click="sidoSelected(sido)">{{
                           sido.sidoName
                         }}</b-dropdown-item>
                       </div>
                     </b-dropdown>
 
-                    <b-dropdown variant="primary" id="dropdown-2" text="구군 선택" class="mb-2">
+                    <b-dropdown variant="primary" :disabled="selectedSido" id="dropdown-2" text="구군 선택" class="mb-2 signup">
                       <div v-for="(gugun, index) in guguns" v-bind:key="index">
                         <b-dropdown-item @click="gugunSelected(gugun)">{{
                           gugun.gugunName
@@ -196,7 +196,9 @@ export default {
       sidos: [],
       guguns:[],
       selectedgugun:"",
+      selectedSido:"",
       gender:0,
+      
     };
   },
   components: {
@@ -242,6 +244,10 @@ export default {
       this.sidos = res.data.data;
       console.log(this.sidos[0].sidoName);
     });
+     var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
+     sidoDropBtn.style.backgroundColor="#663399"
+      sidoDropBtn.style.color="#FFFFFF"
+     
   },
 
   computed: {
@@ -253,16 +259,32 @@ export default {
     //   validate form
     sidoSelected(sido) {
       console.log(sido.sidoId)
+      this.selectedSido = sido.sidoname
       http.get(`areas/`+sido.sidoId).then((res) =>{
         this.guguns= res.data.data
         console.log(this.guguns)
       })
-      document.getElementById('dropdown-1').innerText=sido.sidoName
+      var sidoDrop = document.getElementById('dropdown-1')
+      var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
+      var gugunDrop = document.getElementById('dropdown-2')
+      var gugunDropBtn = document.getElementById('dropdown-2__BV_toggle_')
+      sidoDropBtn.innerText = sido.sidoName
+      gugunDropBtn.innerText = "구군 선택"
+      sidoDropBtn.style.backgroundColor="#663399"
+      sidoDropBtn.style.color="#FFFFFF"
+      gugunDropBtn.style.backgroundColor="#663399"
+      gugunDropBtn.style.color="#FFFFFF"
+
     },
     gugunSelected(gugun){
       this.selectedgugun = gugun.gugunId
       console.log(this.selectedgugun)
-      document.getElementById('dropdown-2').innerText=gugun.gugunName
+      var gugunDrop = document.getElementById('dropdown-2')
+      var gugunDropBtn = document.getElementById('dropdown-2__BV_toggle_')
+      gugunDropBtn.innerText = gugun.gugunName
+      gugunDropBtn.style.backgroundColor="#663399"
+      gugunDropBtn.style.color="#FFFFFF"
+
     },
     submit() {
       console.log("회원가입 데이터 전송중..");
@@ -344,10 +366,15 @@ export default {
   },
 };
 </script>
-<style>
+
+<style scoped>
 .spinner.sm {
   height: 2em;
   width: 2em;
+}
+.dropdown-menu.show {
+    height: 30vh;
+    overflow-y: scroll;
 }
 </style>
 

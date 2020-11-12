@@ -104,6 +104,10 @@ export default {
     };
   },
   mounted() {
+    console.log("this.userInfo")
+    console.log(this.userInfo)
+    console.log("this.userTotal")
+    console.log(this.userTotal)
     http
       .post(`ranks/search`, {
         userId: this.$route.query.friendId,
@@ -118,7 +122,7 @@ export default {
     this.$store.commit("closeSidebar");
   },
   computed: {
-    ...mapGetters(["userInfo", "defaultProfile"]),
+    ...mapGetters(["userInfo", "userTotal","defaultProfile"]),
   },
   methods: {
     // ...mapMutations(["mutateProfile","closeSidebar","defaultProfile"]),
