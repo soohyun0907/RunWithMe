@@ -28,7 +28,7 @@
                             </div>
                             <b-collapse :id="'collapse-'+challenge.challengeId" class="mt-3 text-center">
                                 <img :src="challenge.img" />
-                                <p> 기간: {{ challenge.startTime }} ~ {{ challenge.endTime }} </p>
+                                <p> 기간: {{ challenge.startTime | moment('YYYY.MM.DD') }} ~ {{ challenge.endTime | moment('YYYY.MM.DD') }} </p>
                                 <p> 설명: {{ challenge.content }} </p>
                                 <p> 현재 참여 인원: {{ challenge.participant }} </p>
                                 <p> 개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM </p>
@@ -78,7 +78,7 @@
                             </div>
                             <b-collapse :id="'collapse-'+challenge.challengeId" class="mt-3 text-center">
                                 <img :src="challenge.img" />
-                                <p> 기간: {{ challenge.startTime }} ~ {{ challenge.endTime }} </p>
+                                <p> 기간: {{ challenge.startTime | moment('YYYY.MM.DD') }} ~ {{ challenge.endTime | moment('YYYY.MM.DD') }} </p>
                                 <p> 설명: {{ challenge.content }} </p>
                                 <p> 현재 참여 인원: {{ challenge.participant }} </p>
                                 <p> 개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM </p>
@@ -128,7 +128,7 @@
                             </div>
                             <b-collapse :id="'collapse-'+challenge.challengeId" class="mt-3 text-center">
                                 <img :src="challenge.img" />
-                                <p> 기간: {{ challenge.startTime }} ~ {{ challenge.endTime }} </p>
+                                <p> 기간: {{ challenge.startTime | moment('YYYY.MM.DD') }} ~ {{ challenge.endTime | moment('YYYY.MM.DD') }} </p>
                                 <p> 설명: {{ challenge.content }} </p>
                                 <p> 참여 인원: {{ challenge.participant }} </p>
                                 <p> 개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM </p>
@@ -193,8 +193,8 @@ export default {
                         obj.title = element.challengeId.title;
                         obj.content = element.challengeId.content;
                         obj.img = element.challengeId.challengeImg;
-                        obj.startTime = element.challengeId.startTime.substring(0,10);
-                        obj.endTime = element.challengeId.endTime.substring(0,10);
+                        obj.startTime = element.challengeId.startTime;
+                        obj.endTime = element.challengeId.endTime;
                         obj.distanceGoal = element.challengeId.distanceGoal;
                         obj.distanceCurrent = element.challengeId.distanceCurrent;
                         obj.donateGoal = element.challengeId.donateGoal;
@@ -224,8 +224,8 @@ export default {
                         obj.title = element.challengeId.title;
                         obj.content = element.challengeId.content;
                         obj.img = element.challengeId.challengeImg;
-                        obj.startTime = element.challengeId.startTime.substring(0,10);
-                        obj.endTime = element.challengeId.endTime.substring(0,10);
+                        obj.startTime = element.challengeId.startTime;
+                        obj.endTime = element.challengeId.endTime;
                         obj.distanceGoal = element.challengeId.distanceGoal;
                         obj.distanceCurrent = element.challengeId.distanceCurrent;
                         obj.donateGoal = element.challengeId.donateGoal;
@@ -255,8 +255,8 @@ export default {
                         obj.title = element.challengeId.title;
                         obj.content = element.challengeId.content;
                         obj.img = element.challengeId.challengeImg;
-                        obj.startTime = element.challengeId.startTime.substring(0,10);
-                        obj.endTime = element.challengeId.endTime.substring(0,10);
+                        obj.startTime = element.challengeId.startTime;
+                        obj.endTime = element.challengeId.endTime;
                         obj.distanceGoal = element.challengeId.distanceGoal;
                         obj.distanceCurrent = element.challengeId.distanceCurrent;
                         obj.donateGoal = element.challengeId.donateGoal;

@@ -99,7 +99,6 @@ export default {
   mounted() {
     this.getChallenges();
     this.$store.commit('closeSidebar')
-    console.log(this.userInfo.roles.length);
     if(this.userInfo.roles.length == 1){
       this.alertModal = "";
       this.$bvModal
@@ -163,12 +162,19 @@ export default {
                 });
                 this.$router.go(0);
               }
+              else if(data.status == 403) {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: '챌린지에 참여 중인 유저가 있어 삭제가 불가능합니다.'
+                });
+              }
             })
             .catch((error) => {
               Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: '삭제 중 오류가 발생하였습니다' + error
+                text: '삭제 중 오류가 발생하였습니다'
               });
               console.log(error);
               return;

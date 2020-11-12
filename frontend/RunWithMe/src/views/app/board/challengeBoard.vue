@@ -27,7 +27,7 @@
                       <span>Author:</span>
                       <span class="text-primary"> {{ board.writerName}} </span> <br>
                       <span>Released:</span>
-                      <span class="text-primary">{{ board.boardEditdate.substring(0,10) }}</span>
+                      <span class="text-primary">{{ board.boardEditdate | moment('YYYY.MM.DD HH:mm') }}</span>
                     </div>
                   </div>
                 </div>
