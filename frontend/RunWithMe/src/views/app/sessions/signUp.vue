@@ -60,7 +60,7 @@
                    <b-card title="주 활동지역 선택">
 
                     <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
-                      <div v-for="(sido, index) in sidos" v-bind:key="index">
+                      <div style="heigth:30px" v-for="(sido, index) in sidos" v-bind:key="index">
                         <b-dropdown-item @click="sidoSelected(sido)">{{
                           sido.sidoName
                         }}</b-dropdown-item>
