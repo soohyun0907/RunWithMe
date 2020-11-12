@@ -1,8 +1,8 @@
 package kr.co.rwm.service;
 
 import java.util.List;
-import java.util.Optional;
 
+import kr.co.rwm.dto.UserDto;
 import kr.co.rwm.entity.Ranks;
 import kr.co.rwm.entity.User;
 
@@ -32,7 +32,7 @@ public interface RanksService {
 	List<Ranks> totalRank();
 	
 	// 사용자 랭킹관련 정보 조회
-	List<Ranks> findByUserId(User userId);
+	List<Ranks> findByUserId(UserDto userId);
 	
 	// 랭크 사용자 삭제
 	void deleteByUserId(User userId);
