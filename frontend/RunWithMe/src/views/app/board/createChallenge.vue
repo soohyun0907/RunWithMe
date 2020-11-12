@@ -173,12 +173,25 @@ export default {
         })
         .then(({ data }) => {
           if(data.status == 200){
-            alert("챌린지 생성 완료 이미지를 등록해주세요.");
             this.challengeId = data.data.challengeId;
             this.updateChallengeImg = true;
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: '챌린지 생성 완료 이미지를 등록해주세요.',
+              showConfirmButton: false,
+              timer: 1500
+            })
           } else {
-            alert("오류가 발생하였습니다.");
-            return;
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '오류가 발생했습니다.'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                return;
+              }
+            })
           }
         })
     },
@@ -205,11 +218,26 @@ export default {
         })
         .then(({ data }) => {
           if(data.status == 200){
-            alert(data.message);
-            this.$router.push("/app/board/challenges");
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: '파일 업로드를 성공했습니다.',
+              showConfirmButton: false,
+              timer: 1500
+            })
+            setTimeout(() => {
+              document.location.href = "/app/board/challenges";
+            }, 1500);
           } else {
-            alert("오류가 발생하였습니다.");
-            return;
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '오류가 발생하였습니다.'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                return;
+              }
+            })
           }
         })
     },
