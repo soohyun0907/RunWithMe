@@ -120,7 +120,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .spinner.sm {
   height: 2em;
   width: 2em;
