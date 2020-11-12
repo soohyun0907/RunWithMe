@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
+import kr.co.rwm.dto.GugunDto;
 import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Running;
 import kr.co.rwm.entity.Sido;
@@ -64,7 +65,7 @@ public class AreaController {
 	
 	@ApiOperation(value = "유저의 활동 지역 설정", response = ResponseEntity.class)
 	@PostMapping
-	public ResponseEntity saveUserArea(@RequestBody Gugun gugun) {
+	public ResponseEntity saveUserArea(@RequestBody GugunDto gugun) {
 		System.out.println("/areas/save");
 		// Gugun 확인
 		Gugun saveGugun = areaService.findGugunByGugunId(gugun.getGugunId());
