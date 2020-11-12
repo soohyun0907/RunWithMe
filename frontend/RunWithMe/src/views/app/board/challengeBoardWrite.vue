@@ -79,12 +79,17 @@ export default {
                 )
                 .then(({ data }) => {
                     if(data.status == 200){
-                        alert("게시글 완료 이미지를 등록해주세요.");
-                        // console.log(data);
+                        Swal.fire({
+                            icon: 'success',
+                            text: '게시글 등록이 완료되었습니다. 이미지를 등록해주세요.'
+                        });
                         this.boardId = data.data.boardId;
                         this.updateBoardImg = true;
                     } else {
-                        alert("오류가 발생하였습니다.");
+                        Swal.fire({
+                            icon: 'error',
+                            text: '게시글 등록 중 오류가 발생하였습니다.'
+                        });
                         return;
                     }
             })
@@ -108,10 +113,16 @@ export default {
                 })
                 .then(({ data }) => {
                     if(data.status == 200){
-                        alert("이미지 업로드 완료!~");
+                        Swal.fire({
+                            icon: 'success',
+                            text: '이미지 업로드가 완료되었습니다.'
+                        });
                         this.$router.push("/app/board/challengeBoard");
                     } else {
-                        alert("오류가 발생하였습니다.");
+                        Swal.fire({
+                            icon: 'error',
+                            text: '이미지 업로드 중 오류가 발생하였습니다.'
+                        });
                         return;
                     }
                 })

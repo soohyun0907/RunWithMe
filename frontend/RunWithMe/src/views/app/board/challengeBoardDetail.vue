@@ -135,9 +135,13 @@ export default {
         .post("replies/reply", this.replyInfo)
         .then(({data}) => {
           if(data.status == 200) {
-            alert("댓글 등록 성공!");
+            Swal.fire({
+              icon: 'success',
+              text: '댓글이 등록되었습니다.'
+            });
+            // alert("댓글 등록 성공!");
             this.replyInfo.content = "";
-            console.log(data.data);
+            // console.log(data.data);
             var obj = new Object();
             obj.replyId = data.data.replyId;
             obj.content = data.data.content;
@@ -147,7 +151,10 @@ export default {
             this.allReply.push(obj);
             this.board.replyCount += 1;
           } else {
-            alert("댓글 등록 실패");
+            Swal.fire({
+              icon: 'error',
+              text: '댓글 등록에 실패하였습니다.'
+            });
             return;
           }
         })
@@ -227,21 +234,25 @@ export default {
     goPrevChallengeBoard() {
       if(this.havePrev) {
         this.$router.push("/app/board/challengeBoardDetail?boardId="+this.prevBoardId);
-        setTimeout(() => {
-          this.$router.go(0)
-        },0);
+        this.$router.go(0)
       } else {
-        alert("이전글이 존재하지 않습니다.");
+        Swal.fire({
+          title: 'Oops...',
+          text: '이전글이 존재하지 않습니다.'
+        });
+        // alert("이전글이 존재하지 않습니다.");
       }
     },
     goNextChallengeBoard() {
       if(this.haveNext) {
         this.$router.push("/app/board/challengeBoardDetail?boardId="+this.nextBoardId);
-        setTimeout(() => {
-          this.$router.go(0)
-        },0);
+        this.$router.go(0)
       } else {
-        alert("다음글이 존재하지 않습니다.");
+        Swal.fire({
+          title: 'Oops...',
+          text: '다음글이 존재하지 않습니다.'
+        });
+        // alert("다음글이 존재하지 않습니다.");
       }
     },
     deleteBoard() {
@@ -293,7 +304,11 @@ export default {
       .delete("replies/reply/" + replyId)
       .then(({data}) => {
         if(data.status == 200) {
-          console.log("댓글삭제 완료!");
+          Swal.fire({
+            icon: 'success',
+            text: '댓글이 삭제되었습니다.'
+          });
+          // console.log("댓글삭제 완료!");
         }
       })
       .catch((error) => {
@@ -313,12 +328,17 @@ export default {
         })
         .then(({data}) => {
           if(data.status == 200) {
-            alert("댓글 수정 성공!");
-            setTimeout(() => {
-              this.$router.go(0)
-            },0);
+            Swal.fire({
+              icon: 'success',
+              text: '댓글이 수정되었습니다.'
+            });
+            // alert("댓글 수정 성공!");
+            this.$router.go(0)
           } else {
-            alert("댓글 수정 실패");
+            Swal.fire({
+              icon: 'error',
+              text: '댓글 수정 중 오류가 발생하였습니다.'
+            });
             return;
           }
         })
