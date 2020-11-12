@@ -41,6 +41,7 @@ public class ResponseMessage {
     public static final String CHALLENGE_UPDATE_SUCCESS = "챌린지 수정 성공";
     public static final String CHALLENGE_UPDATE_FAIL = "챌린지 수정 실패";
     public static final String CHALLENGE_DELETE_SUCCESS = "챌린지 삭제 성공";
+    public static final String CHALLENGE_NOT_FOUND = "챌린지가 없음";
     public static final String CHALLENGE_DELETE_FAIL = "챌린지 삭제 실패";
     public static final String CHALLENGE_LIST_SUCCESS = "챌린지 목록 조회 성공";
     public static final String CHALLENGE_ING_SUCCESS = "진행중 챌린지 목록 조회 성공";
