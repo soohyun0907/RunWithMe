@@ -66,7 +66,7 @@ public class UserService implements UserDetailsService {
 		User temp = user.get();
 		user.ifPresent(selectUser->{
 			selectUser.setUserId(temp.getUserId());
-			selectUser.setUserPw(changeUser.getChangePw());
+			selectUser.setUserPw(changeUser.getPassword());
 			selectUser.setGender(temp.getGender());
 			selectUser.setUserName(changeUser.getUsername());
 			selectUser.setProfile(changeUser.getProfile());
