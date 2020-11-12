@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
  * </pre>
  * 
  * @author 김형택
- * @version 0.3, 2020-11-10, 댓글 수 정보 수정
+ * @version 0.4, 2020-11-12, RequestMapping - public 수정
  * @see None
  * 
  */
@@ -52,19 +52,19 @@ public class ReplyController {
 	ReplyService replyService;
 	
 	@GetMapping("")
-	ResponseEntity replyList() {
+	public ResponseEntity replyList() {
 		List<Reply> list = replyService.allReplyList();
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_REPLY_SUCCESS, list), HttpStatus.OK);
 	}
 	
 	@GetMapping("/reply/{boardId}")
-	ResponseEntity replyListByBoardId(@PathVariable int boardId) {
+	public ResponseEntity replyListByBoardId(@PathVariable int boardId) {
 		List<Reply> list = replyService.findReplyByBoardId(boardId);
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_REPLY_SUCCESS, list), HttpStatus.OK);
 	}
 	
 	@PostMapping("/reply")
-	ResponseEntity insert(@RequestBody Map<String, String> replyInfo, HttpServletRequest request) {
+	public ResponseEntity insert(@RequestBody Map<String, String> replyInfo, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int uid = 0;
 		if(jwtTokenProvider.validateToken(token)) {
@@ -76,13 +76,13 @@ public class ReplyController {
 	}
 	
 	@PutMapping("/reply")
-	ResponseEntity update(@RequestBody Map<String, String> replyInfo) {
+	public ResponseEntity update(@RequestBody Map<String, String> replyInfo) {
 		Reply ret = replyService.update(replyInfo);
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.UPDATE_REPLY_SUCCESS, ret), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/reply/{reply_id}")
-	ResponseEntity delete(@PathVariable int reply_id) {
+	public ResponseEntity delete(@PathVariable int reply_id) {
 		Long ret = replyService.delete(reply_id);
 		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.DELETE_REPLY_SUCCESS, ret), HttpStatus.OK);
 	}

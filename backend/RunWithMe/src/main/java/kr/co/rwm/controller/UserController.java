@@ -308,10 +308,6 @@ public class UserController {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
 					HttpStatus.FORBIDDEN);
 		}
-		
-		
-		
-		
 	}
 	
 	
