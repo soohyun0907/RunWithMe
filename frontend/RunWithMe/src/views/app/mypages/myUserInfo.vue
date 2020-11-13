@@ -15,6 +15,7 @@
                         <b-button variant="outline-info" style="padding:0.2em" @click="goUserInfoEdit()">프로필 변경</b-button>
                         <p class="m-0 text-24">{{userInfo.username}} 님</p>
                         <p class="text-muted m-0">{{userInfo.userEmail}}</p>
+                        <p class="text-muted m-0"><code>보유 마일리지:{{userInfo.mileage}}</code></p>
             </div>
             <div class="card-body">
                 <div>

@@ -1,7 +1,11 @@
 <template>
     <div class="main-content">
         <breadcumb :page="'Challenges'" :folder="'Apps'" />
-
+        <b-card class="o-hidden card-icon-bg card-icon-bg-primary o-hidden text-center">
+            <div>
+                <p class="mt-2 mb-0 text-primary">{{userInfo.username}}님의 보유 마일리지:{{userInfo.mileage}}</p>
+            </div>
+        </b-card>
         <b-tabs>
             <b-tab active>
                 <template slot="title">
@@ -171,6 +175,9 @@ export default {
         this.getChallengesDone();
         this.getChallengesParticipate();
     },
+     computed: {
+         ...mapGetters(["userInfo","defaultProfile","userTotal"]),
+     },
     mounted() {
       this.$store.commit('closeSidebar')
     },
@@ -215,7 +222,7 @@ export default {
                             obj.startTime = element.startTime;
                             obj.endTime = element.endTime;
                             obj.distanceGoal = element.distanceGoal;
-                            obj.distanceCurrent = element.distanceCurrent;
+                            obj.distanceCurrent = (element.distanceCurrent).toFixed(2);
                             obj.donateGoal = element.donateGoal;
                             obj.donateCurrent = element.donateCurrent;
                             obj.personalDistanceGoal = element.personalDistanceGoal;
@@ -335,6 +342,18 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.card-body {
+    padding:0;
+    margin:0 auto;
+}
+.mt-2{
+    margin-top:0 !important;
+}
+.o-hidden{
+    width:80vw;
+    left:7%;
+    margin-bottom:12px;
+    margin-top:-20px !important;
+}
 </style>
