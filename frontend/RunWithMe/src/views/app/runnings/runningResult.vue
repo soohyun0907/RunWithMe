@@ -23,7 +23,7 @@
                 </div>
                 <div class="col">
                     총 런닝 시간
-                    <h3>{{convertToTime(result.accTime.toFixed(2))}}</h3>
+                    <h3>{{convertToTime(result.accTime)}}</h3>
                 </div>
             </div> 
             <div class="row">
@@ -56,7 +56,7 @@
                   <h5 style="padding-left:5vw;" class="m-0">{{record.accDistance}}</h5>
                 </div>
                 <div class="flex-grow-1">
-                  <h5 style="padding-left:2vw;" class="m-0">{{convertToTime(record.accTime.toFixed(2))}}</h5>
+                  <h5 style="padding-left:2vw;" class="m-0">{{convertToTime(record.accTime)}}</h5>
                 </div>
             </div>
           </div>

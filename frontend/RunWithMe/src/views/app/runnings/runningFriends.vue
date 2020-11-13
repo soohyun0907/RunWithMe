@@ -167,7 +167,9 @@ export default {
         .get(`/runnings/records/${this.$route.query.runningId}`)
         .then((data) => {
             this.result = data.data.data.running
-            this.records = data.data.data.records
+            for(var i=1; i<data.data.data.records.length; i++){
+                this.records.push(data.data.data.records[i])
+            }
             this.timeSplitS = this.result.startTime.split('T')
             this.timeSplitE = this.result.endTime.split('T')
 
@@ -175,11 +177,11 @@ export default {
             for(var i=0; i<this.records.length; i++){
               if(i!=this.records.length-1)  {
                 this.records[i].accDistance= Math.floor(this.records[i].accDistance)
-                }else{
-                  this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(2)
-                }
-                this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
-                this.echart4.xAxis.data.push(this.records[i].accDistance)
+              }else{
+                this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(2)
+              }
+              this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+              this.echart4.xAxis.data.push(this.records[i].accDistance)
             }
   
             if(this.result.accDistance==0.00 ||this.result.accTime==0.00 ||this.result.accDistance==0 || this.result.accTime==0){
