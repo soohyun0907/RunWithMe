@@ -128,7 +128,13 @@ export default {
       http
         .get("payment/"+this.donateAmount)
         .then(({data}) => {
-          alert("결제완료");
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: "참여 성공",
+            showConfirmButton: false,
+            timer: 1500
+          })
           //유저 정보 갱신
             http.get('users/').
             then(res => {
