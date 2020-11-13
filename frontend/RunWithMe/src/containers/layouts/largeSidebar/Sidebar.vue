@@ -118,7 +118,7 @@
           </li>
           <li class="nav-item">
             <router-link tag="a" class to="/app/runnings/apexRadarChart">
-              <i class="text-20 i-Pulse"></i>
+              <i class="nav-icon i-Pulse"></i>
               <span class="item-name"> Analysis</span>
             </router-link>
           </li>
