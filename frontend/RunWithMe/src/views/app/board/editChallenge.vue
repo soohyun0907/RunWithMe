@@ -150,11 +150,24 @@ export default {
         })
         .then(({ data }) => {
           if(data.status == 200){
-            alert("챌린지 수정 완료 이미지 수정이 가능합니다.");
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: '챌린지 수정 완료 이미지 수정이 가능합니다.',
+              showConfirmButton: false,
+              timer: 1500
+            })
             this.updateChallengeImg = true;
           } else {
-            alert("오류가 발생하였습니다.");
-            return;
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '오류가 발생하였습니다.',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                return;
+              }
+            })
           }
         })
     },
@@ -181,11 +194,26 @@ export default {
         })
         .then(({ data }) => {
           if(data.status == 200){
-            alert(data.message);
-            this.$router.push("/app/board/challengeDetail?challengeId="+this.originInfo.challengeId);
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: '등록되었습니다.',
+              showConfirmButton: false,
+              timer: 1500
+            })
+            setTimeout(() => {
+              document.location.href = "/app/board/challengeDetail?challengeId="+this.originInfo.challengeId; //챌린지 참여 목록으로 이동?
+            }, 1500);
           } else {
-            alert("오류가 발생하였습니다.");
-            return;
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '오류가 발생하였습니다.',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                return;
+              }
+            })
           }
         })
     },
