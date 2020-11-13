@@ -36,10 +36,6 @@ public class Ranks implements Serializable {
 	@JoinColumn(name="user_id",referencedColumnName = "user_id")
 	private User userId;
 
-//	@ManyToOne
-//	@JoinColumn(name="gugun_id", nullable = false)
-//	private Gugun gugunId;
-	
 	@Column(name = "race_exp", nullable = false)
 	private double raceExp;
 	

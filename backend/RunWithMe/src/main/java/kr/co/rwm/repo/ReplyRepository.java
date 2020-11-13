@@ -1,5 +1,6 @@
 package kr.co.rwm.repo;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +11,8 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
 	Optional<Reply> findByReplyId(int parseInt);
 
-
 	Long deleteByReplyId(int reply_id);
+
+	List<Reply> findAllByBoardId(int boardId);
 
 }

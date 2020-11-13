@@ -11,6 +11,7 @@ import kr.co.rwm.entity.User;
 public interface ChallengeUserRepository extends JpaRepository<ChallengeUser, Long> {
 
 	List<ChallengeUser> findAllByUserId(User user);
+	List<ChallengeUser> findAllByUserIdNot(User user);
 
 	List<ChallengeUser> findAllByChallengeId(Challenge challenge);
 

@@ -3,7 +3,7 @@
     <breadcumbcustom :title="'주변 러너 추천'" :desc="area" />
     <div class="ul-contact-page">
       <div class="row" style="margin-top: 5px">
-        <b-col lg="12" md="12" class="mb-30 text-center">
+        <!-- <b-col lg="12" md="12" class="mb-30 text-center">
           <b-form-group id="input-group-2" label-for="input-2">
             <b-form-input
               id="input-2"
@@ -11,7 +11,7 @@
               placeholder="Enter your name...."
             ></b-form-input>
           </b-form-group>
-        </b-col>
+        </b-col> -->
 
         <b-col v-if="!haveRunners">
           <span>아직 주변 러너들이 없어요ㅠ.ㅠ</span>
@@ -30,7 +30,7 @@
               <div class="card-body">
                 <div class="ul-contact-page__profile">
                   <div class="user-profile-img">
-                    <!-- <img class="profile-picture mb-2" src="@/assets/images/faces/1.jpg" alt="" style="width:40%;height:40%;"> -->
+                    <img v-if="contact.imgUrl == null" class="profile-picture mb-2" :src="defaultProfile">
                     <img class="profile-picture mb-2" :src="contact.imgUrl" />
                   </div>
                   <p class="m-0 text-24">{{ contact.nickname }}</p>
@@ -47,7 +47,7 @@
                       </div>
                       <div class="col">
                         <p class="text-muted mt-3">평균 거리</p>
-                        {{ contact.avg_distance }} km
+                        {{ contact.avg_distance.toFixed(2) }} km
                       </div>
                       <div class="col">
                         <p class="text-muted mt-3">평균 페이스</p>
@@ -79,10 +79,11 @@ export default {
   },
   mounted() {
     this.getRunners();
+    this.$store.commit('closeSidebar');
     this.area = this.userInfo.gugunId.sidoId.sidoName + " " + this.userInfo.gugunId.gugunName;
   },
   computed: {
-    ...mapGetters(["getSideBarToggleProperties", "userInfo"]),
+    ...mapGetters(["getSideBarToggleProperties", "userInfo", "defaultProfile"]),
   },
   methods: {
     ...mapMutations(["closeSidebar"]),
@@ -91,6 +92,9 @@ export default {
       time += parseInt(origin / 60) + "'";
       time += (origin % 60) + '"';
       return time;
+    },
+    convertSectoMin(origin) {
+      return parseInt(origin/60);
     },
     getRunners() {
       http
@@ -109,10 +113,11 @@ export default {
               obj.totalDistance = element.totalDistance.toFixed(2);
               obj.running_cnt = element.totalCount;
               obj.avg_pace = element.totalTime;
+
               if (element.totalTime == 0) {
                 obj.avg_pace = 0;
               } else {
-                obj.avg_pace = element.totalDistance / element.totalTime;
+                obj.avg_pace = parseInt( this.convertSectoMin(element.totalTime) / parseInt(element.totalDistance)) * 100;
               }
 
               if (element.totalCount == 0) {
