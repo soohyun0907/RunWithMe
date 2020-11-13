@@ -1,5 +1,6 @@
 package kr.co.rwm.dto;
 
+import kr.co.rwm.entity.RunningUser;
 import kr.co.rwm.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,5 +26,7 @@ public class RanksDto {
 	private double totalExp;
 
 	private Integer tier;
+	
+	private RunningUser running;
 
 }
