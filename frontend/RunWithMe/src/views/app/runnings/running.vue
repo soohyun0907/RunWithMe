@@ -83,7 +83,7 @@
                   <h5 class="m-0">{{record.accDistance}} km</h5>
                 </div>
                 <div class="flex-grow-1">
-                  <h5 class="m-0">{{convertToTime(record.accTime.toFixed(2))}}</h5>
+                  <h5 class="m-0">{{convertToTime(record.accTime)}}</h5>
                 </div>
             </div>
           </div>
@@ -218,9 +218,9 @@ export default {
   mounted() {
     this.$store.commit('closeSidebar')
     if(localStorage.getItem("newdaeyong@naver.com")){
-      console.log(localStorage.getItem("newdaeyong@naver.com"))
+      // console.log(localStorage.getItem("newdaeyong@naver.com"))
     }else{
-      console.log("업써요")
+      // console.log("업써요")
     }
     
     if (window.google && window.google.maps) {
@@ -358,7 +358,7 @@ export default {
                 var cityDuplicate = false
                 for (var i = 0; i < gugun.length; i++) {
                   if (gugun[i] == currentCity) {
-                    console.log("이미 존재해요");
+                    // console.log("이미 존재해요");
                     cityDuplicate = true
                   }
                 }
@@ -395,8 +395,8 @@ export default {
           } else {
             var distance = this.computeDistance(this.previous, this.current);
             
-            console.log("watchposition 이동거리" + distance);
-            console.log("watchposition 걸린시간" + this.checkSecond);
+            // console.log("watchposition 이동거리" + distance);
+            // console.log("watchposition 걸린시간" + this.checkSecond);
             var threshold = 0.001;
             this.previous.lat = this.current.lat;
             this.previous.lng = this.current.lng;
@@ -415,7 +415,7 @@ export default {
             }
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
-              console.log("최근 1km당 스피드 = " + this.speed);
+              // console.log("최근 1km당 스피드 = " + this.speed);
               this.savePosition();
               setTimeout(() => {
                 this.checkOneKm -= 1;
@@ -445,9 +445,9 @@ export default {
       staticM_URL +=
         "key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
       
-      console.log("getScreenShot")
-      console.log(this.encoded_polyline)
-      console.log(this.encoded_polyline.length)
+      // console.log("getScreenShot")
+      // console.log(this.encoded_polyline)
+      // console.log(this.encoded_polyline.length)
       if(this.encoded_polyline.length>4){
         staticM_URL +="path=color:red|weight:3|enc:"
         staticM_URL += this.encoded_polyline
@@ -486,7 +486,11 @@ export default {
         accTime: this.accumulated_time,
         speed: speed,
       };
+
+    
       this.tempRecords.push(tempRecord)
+      console.log("this.tempRecords")
+      console.log(this.tempRecords)
       this.echart4.series[0].data.push((tempRecord.accTime/60).toFixed(2))
       this.echart4.xAxis.data.push(tempRecord.accDistance)
                 
@@ -499,28 +503,10 @@ export default {
         speed: speed.toString(),
       };
       this.stringTempRecords.push(stringTempRecord)
-       console.log("savePosition - stringtempRecords")
+      console.log("savePosition - stringtempRecords")
      
       console.log(this.stringTempRecords)
-      
 
-      // //래디스에 저장
-      // http
-      //   .post(`runnings/temp`, JSON.stringify(data), {
-      //     headers: {
-      //       "Content-type": "application/json",
-      //     },
-      //   })
-      //   .then((res) => {
-      //     console.log(res.data);
-      //     console.log(
-      //       "1키로당 기록 전송" + data.accDistance + " " + data.accTime
-      //     );
-      //   })
-      //   .catch((err) => {
-      //     console.log("savePosition Error")
-      //     console.log(err)
-      //   });
     },
 
     endLocationUpdates() {
@@ -605,14 +591,10 @@ export default {
         
       var realTime = ((currentTime- this.timeBegan-this.stoppedDuration)/1000).toFixed(0)
       
-      console.log("실제 시간 " + realTime)
-
-      
       // this.accumulated_time += 1;
       // this.checkSecond += 1;
       this.accumulated_time = realTime;
       this.checkSecond = realTime;
-      console.log(this.clock)
     },
     zeroPrefix(num, digit) {
       
