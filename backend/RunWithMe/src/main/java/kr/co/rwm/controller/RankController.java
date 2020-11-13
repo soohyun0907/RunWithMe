@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.rwm.dto.RanksDto;
 import kr.co.rwm.dto.UserDto;
 import kr.co.rwm.entity.Ranks;
 import kr.co.rwm.model.Response;
@@ -30,7 +31,7 @@ public class RankController {
 	// Top 10 기록 레이스 랭킹 조회
 	@GetMapping("/top/race")
 	public ResponseEntity<Response<? extends Object>> raceTopRanking() {
-		List<Ranks> result = rankService.raceTop();
+		List<RanksDto> result = rankService.raceTop();
 		return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK,ResponseMessage.RACE_TOP_RANKING_OK,result),HttpStatus.OK);
 	}
 

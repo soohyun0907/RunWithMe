@@ -45,6 +45,23 @@ public class FriendServiceImpl implements FriendService {
 	}
 
 	@Override
+	public List<Ranks> contactList(int uid) {
+		List<Friend> list = friendRepository.findByUserId(uid);
+		List<Ranks> contactsList = new ArrayList<Ranks>();
+		Optional<Ranks> rank = null;
+		for (Friend friend : list) {
+			rank = rankRepository.findByUserId(friend.getUser());
+			if (rank.isPresent()) {
+				contactsList.add(rank.get());
+			} else {
+				return null;
+			}
+		}
+
+		return contactsList;
+	}
+
+	@Override
 	public List<User> onlineList(int uid) {
 		List<Friend> list = friendRepository.findByUserId(uid);
 		List<User> contactsList = new ArrayList<User>();
@@ -118,9 +135,9 @@ public class FriendServiceImpl implements FriendService {
 					if (ranks.getUserId().getGender() == sex && ranks.getUserId().getUserId() != uid)
 						result.add(ranks.getUserId());
 				}
-				
+
 				return result;
-			}else {
+			} else {
 				return null;
 			}
 		} else {
