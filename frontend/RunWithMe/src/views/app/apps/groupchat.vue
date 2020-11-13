@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'지역별 채팅'" :folder="'apps'" />
+    <breadcumb :page="'지역별 채팅'" :folder="'Chatting'" />
 
     <div
       class="card chat-sidebar-container sidebar-container"
@@ -49,43 +49,6 @@
                   </h6>
                 </div>
               </div>
-              <!-- <div
-                class="p-3 d-flex border-bottom align-items-center contact"
-                v-for="contact in getRecentUser"
-                :key="contact.name"
-                :class="contact.status"
-              > -->
-
-              <!-- <img
-                  :src="contact.avatar"
-                  alt=""
-                  class="avatar-sm rounded-circle mr-3"
-                />
-                <h6 class="">{{ contact.name }}</h6> -->
-              <!-- </div> -->
-
-              <!-- <div
-                class="mt-3 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
-              >
-                서비스 준비중입니다.....
-              </div> -->
-
-              <!-- <div
-                class="p-3 d-flex border-bottom align-items-center contact"
-                v-for="chatroom2 in this.getChatRoom"
-                :key="chatroom2.roomID"
-              >
-                <h6>{{ chatroom2.name }}</h6>
-              </div> -->
-              <!-- :class="contact.status"
-              > -->
-              <!-- @click="changeSelectedUser(contact.id)"
-              > -->
-              <!-- <img
-                  :src="contact.avatar"
-                  alt=""
-                  class="avatar-sm rounded-circle mr-3"
-                /> -->
             </div>
           </vue-perfect-scrollbar>
         </div>

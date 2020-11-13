@@ -61,62 +61,6 @@ export const contacts = [
     status: "online",
     mood: ""
   },
-  // {
-  //   id: "3fc8e01f3ce649d1caf884fbf4f698e4",
-  //   name: "Jacqueline Day",
-  //   avatar: require("@/assets/images/faces/16.jpg"),
-  //   status: "offline",
-  //   mood: ""
-  // },
-  // {
-  //   id: "e929b1d790ab49968ed8e34648553df4",
-  //   name: "Arthur Mendoza",
-  //   avatar: require("@/assets/images/faces/10.jpg"),
-  //   status: "online",
-  //   mood: ""
-  // },
-  // {
-  //   id: "d6caf04bba614632b5fecf91aebf4564",
-  //   name: "Jeremy Lee",
-  //   avatar: require("@/assets/images/faces/9.jpg"),
-  //   status: "offline",
-  //   mood: ""
-  // },
-  // {
-  //   id: "be0fb188c8e242f097fafa24632107e4",
-  //   name: "Johnny Newman",
-  //   avatar: require("@/assets/images/faces/5.jpg"),
-  //   status: "offline",
-  //   mood: ""
-  // },
-  // {
-  //   id: "dea902191b964a68ba5f2d93cff37e13",
-  //   name: "Jeffrey Little",
-  //   avatar: require("@/assets/images/faces/15.jpg"),
-  //   status: "online",
-  //   mood: ""
-  // },
-  // {
-  //   id: "0bf58f5ccc4543a9f8747350b7bda3c7",
-  //   name: "Barbara Romero",
-  //   avatar: require("@/assets/images/faces/4.jpg"),
-  //   status: "offline",
-  //   mood: ""
-  // },
-  // {
-  //   id: "c5d7498bbcb84d81fc72168871ac6a6e",
-  //   name: "Daniel James",
-  //   avatar: require("@/assets/images/faces/2.jpg"),
-  //   status: "offline",
-  //   mood: ""
-  // },
-  // {
-  //   id: "97bfbdd9413e46efdaca2010400fe18c",
-  //   name: "Alice Sanders",
-  //   avatar: require("@/assets/images/faces/17.jpg"),
-  //   status: "offline",
-  //   mood: ""
-  // }
 ];
 export const chatCollection = [
   {
