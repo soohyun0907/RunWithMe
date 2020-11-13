@@ -82,7 +82,6 @@ export default {
         var IMP = window.IMP;
         IMP.init("imp42556076");
         var money = this.money;
-        // console.log(money);
         money = parseInt(money);
         IMP.request_pay(
           {
@@ -98,7 +97,6 @@ export default {
             buyer_postcode: "123-456",
           },
           function (rsp) {
-            console.log(rsp);
             if (rsp.success) {
               var msg = "결제가 완료되었습니다.";
               // msg += "고유ID : " + rsp.imp_uid;
@@ -109,7 +107,6 @@ export default {
               http
                 .get(`payment/charge/${money}`)
                 .then(({data}) => {
-                  console.log(data);
                   // alert(msg);
                   Swal.fire({
                     position: 'center',

@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'매칭 & 채팅'" :folder="'apps'" />
+    <breadcumb :page="'매칭 & 채팅'" :folder="'Chatting'" />
 
     <div class="card chat-sidebar-container sidebar-container">
       <div class="chat-sidebar-wrap sidebar" :class="{ 'ml-0': isMobile }">
@@ -299,7 +299,6 @@ export default {
     matching: function (gender) {
       var sex = gender;
       http.get("/friends/match/" + sex).then((data) => {
-        console.log(data);
         this.matchUsers = data.data.data;
       });
     },
@@ -322,7 +321,6 @@ export default {
             if (this.ws) this.ws.disconnect();
             this.isMobile = false;
             this.messages = [];
-            console.log(this.auth);
             this.createAndSelectChatroom(uid);
           }
         });
@@ -382,7 +380,6 @@ export default {
         _this.ws.connect(
           { token: _this.token },
           function (frame) {
-            console.log("dd");
             _this.ws.subscribe("/sub/chat/room/" + _this.roomId, function (
               message
             ) {
@@ -413,9 +410,7 @@ export default {
           footer: "- RunWithMe -",
         });
       } else {
-        console.log("ri: " + localStorage.getItem("roomId"));
         var payload = { type: type, msg: this.message };
-        console.log("totototo: " + this.token);
         var header = { AUTH: this.token };
         var body = JSON.stringify({
           type: payload.type,
@@ -455,10 +450,6 @@ export default {
     ]),
 
     filterContacts() {
-      // console.log("*****************")
-      // console.log(this.getContactLists)
-      // console.log(this.getContactLists.off)
-      // console.log(this.getContactLists.on)
       return this.getContactLists;
     },
 
@@ -472,17 +463,6 @@ export default {
   },
 
   created: function () {
-    // console.log(this.getSelectedUser);
-    // this.getCurrentUser.forEach(currentUser => {
-    //   currentUser.chatInfo.forEach(user => {
-    //     this.getContactLists.filter(contact => {
-    //       if (user.contactId == contact.id) {
-    //         this.recentContacts.push(contact);
-    //       }
-    //     });
-    //   });
-    // });
-
     // 친구목록 불러오기
     this.selectUserLists();
   },
