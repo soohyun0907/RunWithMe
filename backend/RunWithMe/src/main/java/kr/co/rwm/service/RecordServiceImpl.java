@@ -85,6 +85,13 @@ public class RecordServiceImpl implements RecordService {
 								.startTime(LocalDateTime.parse((CharSequence) runningInfo.get("startTime"), formatter))
 								.endTime(LocalDateTime.parse((CharSequence) runningInfo.get("endTime"), formatter))
 								.build();
+		
+		Optional<User> user = userRepository.findByUserId(userId);
+		if(user.isPresent()) {
+			RunningUser runningUser = runningUserRepository.findByUserId(user.get());
+			runningUser.setTotalCount(runningUser.getTotalCount() + 1);
+			runningUserRepository.save(runningUser);
+		}
 								
 		return runningRepository.save(running);
 	}
