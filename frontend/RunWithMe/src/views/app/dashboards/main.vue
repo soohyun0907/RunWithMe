@@ -112,7 +112,7 @@
                   {{ranker.userId.username}}
                 </router-link>
               </div>
-              <span style="text-align:right; width:20vw" class="ul-widget4__number t-font-boldest text-success">
+              <span style="text-align:right; width:30vw" class="ul-widget4__number t-font-boldest text-success">
                 {{ranker.donateExp}} P
               </span>
           </div>
@@ -145,8 +145,8 @@
                   {{ranker.userId.username}}
                 </router-link>
               </div>
-              <span style="text-align:right; width:20vw" class="ul-widget4__number t-font-boldest text-success">
-                {{ranker.raceExp}} P
+              <span style="text-align:right; width:30vw" class="ul-widget4__number t-font-boldest text-success">
+                {{(ranker.running.totalDistance).toFixed(2)}} Km
               </span>
           </div>
         </b-tab>
