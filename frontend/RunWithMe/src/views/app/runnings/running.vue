@@ -12,11 +12,11 @@
         <div style="text-align:center; margin-top:40px;">
           <div class="myRecord"  >
               <div id="run_desc distance">누적 거리</div>
-            <span id="acc_dis" > {{ show_distance }}km </span>
+            <span id="acc_dis" > {{ accumulated_distance.toFixed(2) }}km </span>
           </div>
           <div class="myRecord" >
               <div id="run_desc speed">현재 속도</div>
-              <span id="acc_time">{{ speed }}m/s</span>
+              <span id="acc_time">{{ speed.toFixed(2) }}m/s</span>
           </div>
           <div class="myRecord">
                 <div id="run_desc time">누적 시간</div>
@@ -75,12 +75,15 @@
                 <h5 class="m-0">도달 시간</h5>
               </div>
             </div>
-              <div v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
+            <div v-if="tempRecords.length==0">
+              <h4>임시저장된 기록이 없네요.</h4>
+            </div>
+              <div v-for="(record,index) in tempRecords" :key="index" class="d-flex border-bottom justify-content-between p-3">
                 <div class="flex-grow-1">
-                  <h5 class="m-0">{{record.accDistance}}</h5>
+                  <h5 class="m-0">{{record.accDistance}} km</h5>
                 </div>
                 <div class="flex-grow-1">
-                  <h5 class="m-0">{{convertToTime(record.accTime)}}</h5>
+                  <h5 class="m-0">{{convertToTime(record.accTime.toFixed(2))}}</h5>
                 </div>
             </div>
           </div>
@@ -117,23 +120,24 @@ export default {
       previous: { lat: 0, lng: 0 },
       watchPositionId: null,
       map: null,
-      accumulated_distance: 0,
-      accumulated_time: 0,
-      show_distance:0,
-      show_speed:0,
-      checkOneKm: 0,
-      checkSecond: 0,
+      accumulated_distance: 0, // 총 누적거리
+      accumulated_time: 0, // 총 누적 시간
+      speed: 0, // 현재 속력
+      show_speed:0, // 현재 속력 - 보여주기
+      checkOneKm: 0, //1 km마다 초기화
+      checkSecond: 0, // 1 km마다 초기화
+      avgSpeed:0, //전체 평균 속력
       linePath: [],
       poly: null,
       encoded_polyline: "",
       cur_marker: null,
       startTime: "",
       endTime: "",
-      speed: 0,
-      avgSpeed:0,
-      gugun: ["광명시"],
+      gugun: [],
       currentCity: "",
       thumbnail:"",
+      tempRecords:[],
+      stringTempRecords:[],
       //스톱워치 변수
       clock: "00:00:00",
       timeBegan: null,
@@ -149,24 +153,6 @@ export default {
         width  : 400,
         gap    : '1rem',
       },
-      records:[
-        {"userId": 1,
-        "accDistance": 1.012,
-        "accTime": 305,
-        },
-        {"userId": 1,
-        "accDistance": 2.112,
-        "accTime": 360,
-        },
-        {"userId": 1,
-        "accDistance": 3.001,
-        "accTime": 368,
-        },
-        {"userId": 1,
-        "accDistance": 3.123,
-        "accTime": 412,
-        }
-      ],
 
       //chart
      echart4 : {
@@ -231,41 +217,31 @@ export default {
   },
   mounted() {
     this.$store.commit('closeSidebar')
-    this.getTempRuns()
-    for(var i=0; i<this.records.length; i++){
-        if(i!=this.records.length-1)  {
-            this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(0)
-        }
-        this.records[i].accDistance+=" km"
-        console.log(this.echart4)
-        this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
-        this.echart4.xAxis.data.push(this.records[i].accDistance)
+    if(localStorage.getItem("newdaeyong@naver.com")){
+      console.log(localStorage.getItem("newdaeyong@naver.com"))
+    }else{
+      console.log("업써요")
     }
-
+    
     if (window.google && window.google.maps) {
       this.initMap();
     } else {
       const script = document.createElement("script");
       script.onload = () => google.maps.load(this.initMap);
     }
+    this.resetLocations()
+    this.accumulated_distance=0
+    this.accumulated_time=0
+    this.checkSecond=0
+    this.checkOneKm=0
+
   },
   computed: {
     ...mapGetters(["userInfo","defaultProfile"]),
   },
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
-    getTempRuns(){
-        http.get(`runnings/temp/`)
-            .then((res) => {
-                console.log("임시 저장 데이터")
-                console.log(res.data);
-                this.records= res.data
-            })
-            .catch((err) => {
-                console.log("1Km이상 뛰지 않았어요")
-                console.log(this.records)
-            });
-    },
+    
      convertToTime(origin){
         var time = "";
         time += parseInt(origin/60) + "\'";
@@ -276,7 +252,6 @@ export default {
       navigator.geolocation.getCurrentPosition((position) => {
         this.current.lat = position.coords.latitude;
         this.current.lng = position.coords.longitude;
-        this.show_distance = Math.round(this.accumulated_distance * 100) /100
 
         var startLoc = new google.maps.LatLng(
           this.current.lat,
@@ -399,58 +374,54 @@ export default {
 
           map.setCenter(now);
           marker.setPosition(now);
-
-          
           if (this.previous.lat == 0) {
-            //이제 런닝 시작이면
+            
             this.previous.lat = this.current.lat;
             this.previous.lng = this.current.lng;
-
-            this.poly = new google.maps.Polyline({
-              strokeColor: "#000000",
-              strokeOpacity: 1,
-              strokeWeight: 3,
-              map: this.map,
-            });
-
+            
+            //이제 런닝 시작이면
             var currentLatLng = new google.maps.LatLng(
               this.current.lat,
               this.current.lng
             );
             this.linePath.push(currentLatLng);
-            
-            this.encode_polyline(currentLatLng, this.poly);
+
+            //라인 그리기 테스트용
+            //  this.linePath.push(new google.maps.LatLng(
+            //   this.current.lat+0.001,
+            //   this.current.lng+0.001
+            // ));
+
           } else {
             var distance = this.computeDistance(this.previous, this.current);
+            
             console.log("watchposition 이동거리" + distance);
-            console.log("watchposition 걸린시간" + this.accumulated_time);
+            console.log("watchposition 걸린시간" + this.checkSecond);
             var threshold = 0.001;
+            this.previous.lat = this.current.lat;
+            this.previous.lng = this.current.lng;
+            
             if (distance > threshold) {
               // 일정속도 이상으로 뛸때만 기록.
-              this.previous.lat = this.current.lat;
-              this.previous.lng = this.current.lng;
               this.accumulated_distance += distance;
-              this.show_distance = Math.round(this.accumulated_distance * 100) /100
-              this.checkOneKm = this.accumulated_distance;
-              this.checkSecond = this.accumulated_time;
+              this.checkOneKm += distance;
 
               var currentLatLng = new google.maps.LatLng(
                 this.current.lat,
                 this.current.lng
               );
               this.linePath.push(currentLatLng);
-              this.encode_polyline(currentLatLng, this.poly);
+              this.speed = (this.checkOneKm * 1000) / this.checkSecond;
             }
-            // if (this.checkOneKm >= 1) {
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
-              this.speed = (this.checkOneKm * 1000) / this.checkSecond;
-              this.show_speed = this.speed
-              this.checkSecond = 0;
-              this.checkOneKm -= 1;
-
-              this.savePosition();
               console.log("최근 1km당 스피드 = " + this.speed);
+              this.savePosition();
+              setTimeout(() => {
+                this.checkOneKm -= 1;
+                this.checkSecond = 0;
+              }, 100);
+
             }
           }
         },
@@ -468,22 +439,30 @@ export default {
       this.cur_marker = marker;
     },
     getScreenShot() {
-      console.log(this.linePath)
-
       //google static map url
       var staticM_URL = "https://maps.googleapis.com/maps/api/staticmap?";
-      staticM_URL += "&size=520x650"; //Set the Google Map Size.
-      staticM_URL += "&zoom=16"; //Set the Google Map Zoom.
+      staticM_URL += "size=520x650&zoom=16&maptype=roadmap&";
       staticM_URL +=
-        "&maptype=roadmap&key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
-      staticM_URL +="path=color:0xff0000ff|weight:3"
+        "key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
       
-      for(var i=0; i<this.linePath.length; i++){
-        staticM_URL +="|"+this.linePath[i].lat()+","+this.linePath[i].lng()
+      console.log("getScreenShot")
+      console.log(this.encoded_polyline)
+      console.log(this.encoded_polyline.length)
+      if(this.encoded_polyline.length>4){
+        staticM_URL +="path=color:red|weight:3|enc:"
+        staticM_URL += this.encoded_polyline
+      }else{
+        staticM_URL += "center="+this.current.lat+","+this.current.lng
       }
 
-	 this.thumbnail = staticM_URL
-      //window.open(staticM_URL);
+
+      // staticM_URL +="path=color:orange|weight:3"
+      // for(var i=0; i<this.linePath.length; i++){
+      //   staticM_URL +="|"+this.linePath[i].lat()+","+this.linePath[i].lng()
+      // }
+
+      this.thumbnail = staticM_URL
+      // window.open(this.thumbnail)
     },
     stopLocationUpdates() {
       this.isPause = true;
@@ -496,38 +475,60 @@ export default {
 
     },
     savePosition(position) {
-      let data = {
-        accDistance: this.accumulated_distance+0.0001,
-        accTime: this.accumulated_time+0.0001,
-        speed: this.speed+0.0001,
+      if(this.checkOneKm==0 || this.checkSecond==0){
+        var speed = 0.01
+      }else{
+        var speed = this.speed+0.01
+      }
+
+      let tempRecord = {
+        accDistance:this.checkOneKm+0.01,
+        accTime: this.accumulated_time,
+        speed: speed,
       };
-      console.log(data)
-      http
-        .post(`runnings/temp`, JSON.stringify(data), {
-          headers: {
-            "Content-type": "application/json",
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          console.log(
-            "1키로당 기록 전송" + data.accDistance + " " + data.accTime
-          );
-        })
-        .catch((err) => {
-          console.log("savePosition Error")
-        });
-        
-        http.get(`runnings/get/${this.userInfo.userId}`)
-        .then(data =>{
-          this.records = data.data
-          console.log(data.data)
-        })
+      this.tempRecords.push(tempRecord)
+      this.echart4.series[0].data.push((tempRecord.accTime/60).toFixed(2))
+      this.echart4.xAxis.data.push(tempRecord.accDistance)
+                
+      console.log("savePosition - tempRecords")
+      console.log(this.tempRecords)
+      
+      let stringTempRecord = {
+        accDistance:(this.checkOneKm+0.01).toString(),
+        accTime: this.accumulated_time.toString(),
+        speed: speed.toString(),
+      };
+      this.stringTempRecords.push(stringTempRecord)
+       console.log("savePosition - stringtempRecords")
+     
+      console.log(this.stringTempRecords)
+      
+
+      // //래디스에 저장
+      // http
+      //   .post(`runnings/temp`, JSON.stringify(data), {
+      //     headers: {
+      //       "Content-type": "application/json",
+      //     },
+      //   })
+      //   .then((res) => {
+      //     console.log(res.data);
+      //     console.log(
+      //       "1키로당 기록 전송" + data.accDistance + " " + data.accTime
+      //     );
+      //   })
+      //   .catch((err) => {
+      //     console.log("savePosition Error")
+      //     console.log(err)
+      //   });
     },
 
     endLocationUpdates() {
-     this.stopLocationUpdates();
+      this.stopLocationUpdates();
       this.getScreenShot();
+      this.speed = (this.accumulated_distance * 1000) / this.accumulated_time;
+           
+      this.savePosition();
       this.isPause=false;
       this.running = false;
       this.stoppedDuration = 0;
@@ -539,23 +540,50 @@ export default {
       this.endTime = new Date();
       this.endTime = this.$moment(this.endTime).format("YYYY-MM-DDTHH:mm:ss");
 
-      console.log(this.endTime);
+      ////////////////////////// 
+
+      this.gugun.length.length==0 ? this.gugun : this.gugun.push("강남구")
       let runningData = {
-        userId: this.userInfo.userId,
-        polyline: this.encode_polyline,
+        polyline: this.encoded_polyline.toString(),
         startTime: this.startTime,
         endTime: this.endTime,
-        accDistance: this.accumulated_distance+0.0001,
+        accDistance: (this.accumulated_distance+0.01).toString(),
+        accTime: this.accumulated_time.toString(),
+        gugun:this.gugun,
+        thumbnail:this.thumbnail,
+        records:this.stringTempRecords,
+      };
+        let myRunningData = {
+        polyline: this.encoded_polyline,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        accDistance: (this.accumulated_distance+0.01),
         accTime: this.accumulated_time,
         gugun:this.gugun,
-	      thumbnail:this.thumbnail,
+        thumbnail:this.thumbnail,
+        records:this.tempRecords,
       };
-      http.post(`runnings/`, runningData)
+      console.log("myRunningData")
+      console.log(myRunningData)
+
+      this.accumulated_distance=0
+      this.accumulated_time=0
+      this.checkSecond=0
+      this.checkOneKm=0
+
+      http.post(`runnings/`, JSON.stringify(runningData), {
+          headers: {
+            "Content-type": "application/json",
+          },
+      })
       .then(data => {
         console.log("런닝 기록 저장 완료.")
         console.log(runningData)
-        this.$store.commit('mutateMyRunning',runningData)
+        this.$store.commit('mutateMyRunning',myRunningData)
         this.$router.push('/app/runnings/runningResult')
+      }).catch(err => {
+        console.log("runnings/ 저장 오류")
+        console.log(err)
       })
     },
     clockRunning() {
@@ -563,19 +591,31 @@ export default {
       var timeElapsed = new Date(
         currentTime - this.timeBegan - this.stoppedDuration
       );
+
       var hour = timeElapsed.getUTCHours();
       var min = timeElapsed.getUTCMinutes();
       var sec = timeElapsed.getUTCSeconds();
-      this.accumulated_time += 1;
-
+      
       this.clock =
         this.zeroPrefix(hour, 2) +
         ":" +
         this.zeroPrefix(min, 2) +
         ":" +
         this.zeroPrefix(sec, 2);
+        
+      var realTime = ((currentTime- this.timeBegan-this.stoppedDuration)/1000).toFixed(0)
+      
+      console.log("실제 시간 " + realTime)
+
+      
+      // this.accumulated_time += 1;
+      // this.checkSecond += 1;
+      this.accumulated_time = realTime;
+      this.checkSecond = realTime;
+      console.log(this.clock)
     },
     zeroPrefix(num, digit) {
+      
       var zero = "";
       for (var i = 0; i < digit; i++) {
         zero += "0";
@@ -583,13 +623,14 @@ export default {
       return (zero + num).slice(-digit);
     },
     drawLines() {
-      var runningPathCoordinates = [];
-
-      for (var i = 0; i < this.linePath.length; i++) {
-        runningPathCoordinates.push(
-          new google.maps.LatLng(this.linePath[i].lat,this.linePath[i].lng)
-        );
-      }
+      // var runningPathCoordinates = [];
+      // for (var i = 0; i < this.linePath.length; i++) {
+      //   runningPathCoordinates.push(
+      //     new google.maps.LatLng(this.linePath[i].lat,this.linePath[i].lng)
+      //   );
+      // }
+      console.log("drawLines - this.linePath")
+      console.log(this.linePath)
       this.poly = new google.maps.Polyline({
         // path: runningPathCoordinates,
         path: this.linePath,
@@ -599,17 +640,16 @@ export default {
         strokeWeight: 2,
         map:this.map
       });
+      console.log("drawLines - this.poly")
       console.log(this.poly)
+      this.encode_polyline(this.poly)
     },
-    encode_polyline(latLng, poly) {
-       var path = poly.getPath();
-       path.push(latLng)
-      this.encode_polyline = google.maps.geometry.encoding.encodePath(path);
-      console.log("here!!!")
-      console.log(path)
-      console.log(this.encode_polyline)
-      // document.getElementById("encoded-polyline").value = this.encode_polyline;
- 
+    // encode_polyline(latLng, poly) {
+    encode_polyline(poly) {
+      var path = poly.getPath();
+      this.encoded_polyline = google.maps.geometry.encoding.encodePath(path);
+      console.log("this.encoded_polyline")
+      console.log(this.encoded_polyline)
     },
     
     computeDistance(startCoords, destCoords) {
@@ -638,7 +678,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .flex-grow-1{
   width:30vw;
   text-align:center;

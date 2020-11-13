@@ -11,6 +11,7 @@ export default {
     isLogin:false,
     auth:"",
     userInfo:{},
+    userTotal:{},
     myRunning:{},
     defaultProfile:require('@/assets/images/faces/defaultProfile.png')
   },
@@ -18,6 +19,7 @@ export default {
     loading: state => state.loading,
     error: state => state.error,
     userInfo: state => state.userInfo,
+    userTotal:state=>state.userTotal,
     auth: state => state.auth,
     isLogin:state =>state.isLogin,
     myRunning:state=>state.myRunning,
@@ -26,6 +28,9 @@ export default {
   mutations: {
     mutateMyRunning(state,myRunning){
       state.myRunning = myRunning
+    },
+    mutateUserTotal(state,userTotal){
+      state.userTotal = userTotal
     },
     mutateProfile(state, profile){
       state.userInfo.profile = profile
@@ -44,6 +49,7 @@ export default {
     },
     setLogout(state) {
       state.userInfo = {};
+      state.userTotal = {};
       state.loading = false;
       state.error = null;
       state.auth=""
@@ -77,7 +83,8 @@ export default {
         userEmail:userEmail,
         userPw:userPw        
       }).then(res => {
-          context.commit('mutateUserInfo', res.data.data)
+          context.commit('mutateUserInfo', res.data.data.userId)
+          context.commit('mutateUserTotal', res.data.data)
           context.commit('mutateAuth',res.headers.auth)
           localStorage.setItem("auth",res.headers.auth)
           localStorage.setItem("userInfo",JSON.stringify(res.data.data))

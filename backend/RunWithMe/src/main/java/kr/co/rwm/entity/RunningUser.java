@@ -28,7 +28,7 @@ public class RunningUser implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 112L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,6 +2,7 @@ package kr.co.rwm.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,12 +23,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.Board;
+import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
 import kr.co.rwm.model.StatusCode;
 import kr.co.rwm.service.BoardService;
 import kr.co.rwm.service.JwtTokenProvider;
 import kr.co.rwm.service.S3Service;
+import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -38,8 +41,8 @@ import lombok.RequiredArgsConstructor;
  * 				김순빈, ver.0.2. 2020-11-08, 챌린지 제안 이미지 저장 기능 추가
  * </pre>
  * 
- * @author 이선수
- * @version 0.1, 2020-10-??
+ * @author 김형택
+ * @version 0.4, 2020-11-12, RequestMapping - public 수정
  * @see None
  *
  */
@@ -50,55 +53,74 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 	
 	private final JwtTokenProvider jwtTokenProvider;
+	private final UserService userService;
 	private final S3Service s3Service;
 
 	@Autowired BoardService boardService;
 
 	@GetMapping("")
-	public ResponseEntity allBoardList(){
+	public ResponseEntity<Response<? extends Object>> allBoardList(){
 		List<Board> list = boardService.allBoardList();
-		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.READ_BOARDLIST_SUCCESS, list), HttpStatus.OK);
+		
+		return new ResponseEntity<Response<? extends Object>>(
+				new Response<>(StatusCode.OK, ResponseMessage.READ_BOARDLIST_SUCCESS, list), HttpStatus.OK);
 	}
 	
 	@PostMapping("/board")
-	ResponseEntity insert(@RequestBody Map<String, String> boardInfo) {
-		Board ret = boardService.save(boardInfo);
-		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.INSERT_BOARD_SUCCESS, ret), HttpStatus.OK);
+	public ResponseEntity<Response<? extends Object>> insert(@RequestBody Map<String, String> boardInfo) {
+		int userId = Integer.parseInt(boardInfo.get("writerId"));
+		Optional<User> user = userService.findByUserId(userId);
+		if(!user.isPresent()) {
+			return new ResponseEntity<Response<? extends Object>>(
+					new Response<>(StatusCode.FORBIDDEN,ResponseMessage.USER_NOT_FOUND),HttpStatus.FORBIDDEN);
+		}
+		String writerName = user.get().getUsername();
+		String writerProfile = user.get().getProfile();
+		Board ret = boardService.save(boardInfo, writerName, writerProfile);
+		
+		return new ResponseEntity<Response<? extends Object>> (
+				new Response<>(StatusCode.OK, ResponseMessage.INSERT_BOARD_SUCCESS, ret), HttpStatus.OK);
 
 	}
 	
 	@ApiOperation(value = "챌린지 제안하기 이미지 저장", response = ResponseEntity.class)
 	@PostMapping("/board/{board_id}")
-	ResponseEntity insertImage(@PathVariable int board_id, 
+	public ResponseEntity<Response<? extends Object>> insertImage(@PathVariable int board_id, 
 							   @RequestParam("files") MultipartFile files, HttpServletRequest request) {
 		if(files == null) {
-			return new ResponseEntity<Response> (new Response(StatusCode.NO_CONTENT, ResponseMessage.BOARD_IMAGE_NO_CONTENT), HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Response<? extends Object>> (
+					new Response<>(StatusCode.NO_CONTENT, ResponseMessage.BOARD_IMAGE_NO_CONTENT), HttpStatus.NO_CONTENT);
 		}
 		
 		String url = s3Service.challengeImgUpload(files, "board");
 		Board board = boardService.saveImage(board_id, url);
 		if(board == null) {
-			return new ResponseEntity<Response> (new Response(StatusCode.NOT_FOUND, ResponseMessage.BOARD_NOT_FOUND), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Response<? extends Object>> (
+					new Response<>(StatusCode.NOT_FOUND, ResponseMessage.BOARD_NOT_FOUND), HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.INSERT_BOARD_IMAGE_SUCCESS, board), HttpStatus.OK);
+		return new ResponseEntity<Response<? extends Object>> (
+				new Response<>(StatusCode.OK, ResponseMessage.INSERT_BOARD_IMAGE_SUCCESS, board), HttpStatus.OK);
 	}
 	
 	@PutMapping("/board")
-	ResponseEntity update(@RequestBody Map<String, String> boardInfo) {
+	public ResponseEntity<Response<? extends Object>> update(@RequestBody Map<String, String> boardInfo) {
 		Board ret = boardService.update(boardInfo);
-		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.UPDATE_BOARD_SUCCESS, ret), HttpStatus.OK);
+		
+		return new ResponseEntity<Response<? extends Object>> (
+				new Response<>(StatusCode.OK, ResponseMessage.UPDATE_BOARD_SUCCESS, ret), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/board/{board_id}")
-	ResponseEntity delete(@PathVariable int board_id) {
+	public ResponseEntity<Response<? extends Object>> delete(@PathVariable int board_id) {
 		Long ret = boardService.delete(board_id);
 		
-		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.DELETE_BOARD_SUCCESS, ret), HttpStatus.OK);
+		return new ResponseEntity<Response<? extends Object>> (
+				new Response<>(StatusCode.OK, ResponseMessage.DELETE_BOARD_SUCCESS, ret), HttpStatus.OK);
 	}
 	
 	@GetMapping("/board/{board_id}")
-	ResponseEntity detail(@PathVariable int board_id, HttpServletRequest request) {
+	public ResponseEntity<Response<? extends Object>> detail(@PathVariable int board_id, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int uid = 0;
 		if(jwtTokenProvider.validateToken(token)) {
@@ -106,7 +128,8 @@ public class BoardController {
 		}
 		Board ret = boardService.detail(board_id, uid);
 		
-		return new ResponseEntity<Response> (new Response(StatusCode.OK, ResponseMessage.DETAIL_BOARD_SUCCESS, ret), HttpStatus.OK);
+		return new ResponseEntity<Response<? extends Object>> (
+				new Response<>(StatusCode.OK, ResponseMessage.DETAIL_BOARD_SUCCESS, ret), HttpStatus.OK);
 	}
 	
 }

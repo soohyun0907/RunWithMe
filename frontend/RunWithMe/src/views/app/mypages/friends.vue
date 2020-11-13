@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Friends List'" :folder="'MyPage'" />
+    <breadcumb :page="'친구 목록'" :folder="'MyPage'" />
     <!-- <div class="wrapper"> -->
     <b-card>
       <vue-good-table
@@ -8,12 +8,13 @@
         :line-numbers="false"
         :search-options="{
           enabled: true,
-          placeholder: 'Search this table'
+          placeholder: '검색'
         }"
         :pagination-options="{
           enabled: true,
           mode: 'records'
         }"
+        rowsPerPageText="d"
         styleClass="tableOne vgt-table"
         :rows="rows"
       >
@@ -44,11 +45,11 @@
 
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'">
-            <a href="" @click="chatFriend(props.row.userId);">
+            <a @click="chatFriend(props.row.username);">
               <i class="i-Speach-Bubble-8 text-25 text-success mr-2"></i>
               {{ props.row.button }}</a
             >
-            <a href="" @click="deleteFriend(props.row.userId);">
+            <a @click="deleteFriend(props.row.userId);">
               <i class="i-Close-Window text-25 text-danger"></i>
               {{ props.row.button }}</a
             >
@@ -61,9 +62,12 @@
               여자
             </div>
           </span>
+          <span v-else-if="props.column.field == 'gugunId.gugunName'">
+            {{props.row.gugunId.sidoId.sidoName}} {{props.row.gugunId.gugunName}}
+          </span>
           <span v-else-if="props.column.field == 'username'">
             <a href="">
-              <div class="ul-widget-app__profile-pic">
+              <div class="ul-widget-app__profile-pic" style="text-align:center">
                 <div v-if="props.row.profile!=null">
                   <img
                     class="profile-picture avatar-sm mb-2 rounded-circle img-fluid"
@@ -74,7 +78,12 @@
                     class="profile-picture avatar-sm mb-2 rounded-circle img-fluid"
                     :src="defaultProfile" alt=""/>
                 </div>
-                {{ props.row.username }}
+                <div v-if="props.row.gender==1">
+                  <i class ="i-Business-Man"/> {{ props.row.username }}
+                </div>
+                <div v-if="props.row.gender==2">
+                  <i class ="i-Girl"/> {{ props.row.username }}
+                </div>
               </div>
             </a>
           </span>
@@ -86,7 +95,18 @@
 
 <script>
 import http from "@/utils/http-common";
-import { mapGetters } from "vuex";
+import { mapGetters,mapMutations } from "vuex";
+
+const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+        confirmButton: 'b-button',
+        cancelButton: 'b-button'
+    },
+    buttonsStyling: {
+        confirmButton: "outline-dark m-1",
+        cancelButton: 'info ripple m-1'
+    }
+})
 
 export default {
   metaInfo: {
@@ -99,19 +119,20 @@ export default {
           label: "이름",
           field: "username"
         },
-        {
-          label: "Email",
-          field: "userEmail"
-        },
+        // {
+        //   label: "Email",
+        //   field: "userEmail"
+        // },
         // {
         //   label: "등급",
         //   field: "span",
         //   html: true
+
         // },
-        {
-          label: "성별",
-          field: "gender"
-        },
+        // {
+        //   label: "성별",
+        //   field: "gender"
+        // },
         {
           label: "지역",
           field: "gugunId.gugunName"
@@ -131,16 +152,74 @@ export default {
   },
   mounted() {
     this.getFriendList()
+    this.$store.commit('closeSidebar')
   },
   methods: {
+    ...mapMutations(["closeSidebar"]),
     chatFriend(friendId){
-      alert(friendId+"친구와 채팅합니다")
+      swalWithBootstrapButtons.fire({
+          title: friendId+'님과 채팅하시겠습니까?',
+          text: "채팅방으로 이동합니다.",
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: '네',
+          cancelButtonText: '아니요',
+          reverseButtons: false
+
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.$router.push("/app/apps/chat");
+        } else if (
+              result.dismiss === Swal.DismissReason.cancel
+          ) {
+              swalWithBootstrapButtons.fire(
+              '취소되었습니다.',
+              '',
+              'error'
+              )
+          }
+      })
     },
     deleteFriend(friendId){
-      http.delete(`friends/friend/${friendId}`, {
-      })
-      .then(data => {
-        alert('친구가 삭제되었습니다!')
+      swalWithBootstrapButtons.fire({
+          title: '팔로우를 취소하시겠습니까?',
+          text: "다시 팔로우 가능합니다!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '팔로우를 취소할래요.',
+          cancelButtonText: '계속 팔로우할래요.',
+          reverseButtons: true
+
+      }).then((result) => {
+        if (result.isConfirmed) {
+            http.delete(`friends/friend/${friendId}`, {
+            })
+            .then(({data}) => {
+                if(data.status == 200) {
+                    this.isFriend = false;
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                return;
+            });
+            swalWithBootstrapButtons.fire(
+              '팔로우 취소',
+              '팔로우가 취소되었습니다.',
+              'success'
+            ).then((result) => {
+              this.$router.go(0);
+            })
+        } else if (
+              /* Read more about handling dismissals below */
+              result.dismiss === Swal.DismissReason.cancel
+          ) {
+              swalWithBootstrapButtons.fire(
+              '취소되었습니다.',
+              '계속 팔로우 중입니다.',
+              'error'
+              )
+          }
       })
     },
     getFriendList(){

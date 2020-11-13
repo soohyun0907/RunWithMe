@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.co.rwm.entity.User;
 import kr.co.rwm.model.ChatRoom;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
@@ -39,18 +38,9 @@ public class MatchRoomController {
         return "/chat/room2";
     }
 
-//    @GetMapping("/rooms")
-//    @ResponseBody
-//    public List<ChatRoom> room() {
-//        List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
-//        chatRooms.stream().forEach(room -> room.setUserCount(chatRoomRepository.getUserCount(room.getRoomId())));
-//        return chatRooms;
-//    }
-
     @PostMapping("/room")
     @ResponseBody 
-    public ResponseEntity createAndSelectChatroom(@RequestBody Map<String, Integer> idInfo, HttpServletRequest request) {
-    	System.out.println(idInfo);
+    public ResponseEntity<Response<? extends Object>> createAndSelectChatroom(@RequestBody Map<String, Integer> idInfo, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int uid = 0;
 		if(jwtTokenProvider.validateToken(token)) {
@@ -58,18 +48,14 @@ public class MatchRoomController {
 		}
     	ChatRoom result =  matchRoomRepository.createAndSelectChatroom(uid, idInfo);
     	
-		return new ResponseEntity<Response>(new 
-				Response(StatusCode.OK, ResponseMessage.CREATE_CHATROOM_SUCCESS, result), HttpStatus.OK);
+		return new ResponseEntity<Response<? extends Object>>(new 
+				Response<>(StatusCode.OK, ResponseMessage.CREATE_CHATROOM_SUCCESS, result), HttpStatus.OK);
     }
 
     @GetMapping("/user")
     @ResponseBody
     public String getUserInfo() {
-    	System.out.println("유저유저");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
-        Integer userId = user.getUserId();
-        
         String name = auth.getName();
         return name;
     }

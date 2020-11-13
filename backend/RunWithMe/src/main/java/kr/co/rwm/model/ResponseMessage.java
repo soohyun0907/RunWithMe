@@ -1,6 +1,8 @@
 package kr.co.rwm.model;
 public class ResponseMessage {
 	
+	public ResponseMessage() {}
+	
 	public static final String SIGNUP_SUCCESS = "회원가입 성공";
 	public static final String ALREADY_USER_EMAIL = "중복된 이메일";
 	public static final String EMAIL_CHECK_OK = "회원 가입 가능한 Email";
@@ -41,6 +43,7 @@ public class ResponseMessage {
     public static final String CHALLENGE_UPDATE_SUCCESS = "챌린지 수정 성공";
     public static final String CHALLENGE_UPDATE_FAIL = "챌린지 수정 실패";
     public static final String CHALLENGE_DELETE_SUCCESS = "챌린지 삭제 성공";
+    public static final String CHALLENGE_NOT_FOUND = "챌린지가 없음";
     public static final String CHALLENGE_DELETE_FAIL = "챌린지 삭제 실패";
     public static final String CHALLENGE_LIST_SUCCESS = "챌린지 목록 조회 성공";
     public static final String CHALLENGE_ING_SUCCESS = "진행중 챌린지 목록 조회 성공";
@@ -52,6 +55,7 @@ public class ResponseMessage {
     public static final String CHALLENGE_SEARCH_FAIL = "챌린지 상세 조회 실패";
     public static final String CHALLENGE_ACCESS_FORBIDDEN = "권한 없음";
     public static final String CHALLENGE_PARTICIPATE_SUCCESS = "챌린지 참여 성공";
+    public static final String CHALLENGE_PARTICIPATE_FAIL = "챌린지 참여 실패";
     public static final String CHALLENGE_PARTICIPATE_CANCEL_SUCCESS = "챌린지 참여 취소 성공";
     public static final String CHALLENGE_USER_SEARCH_ING = "유저 참여중 챌린지 조회 성공";
     public static final String CHALLENGE_USER_SEARCH_COMINGSOON = "유저 참여 예정 챌린지 조회 성공";
@@ -90,7 +94,7 @@ public class ResponseMessage {
     public static final String READ_MATCHLIST_SUCCESS = "매칭목록 조회 성공";
     public static final String INSERT_FRIEND_SUCCESS = "친구 추가 성공";
     public static final String DELETE_FRIEND_SUCCESS = "친구 삭제 성공";
-    
+    public static final String FOLLOWING_SEARCH_SUCCESS = "팔로잉 여부 조회 성공";
     
     public static final String READ_BOARDLIST_SUCCESS = "게시물 리스트 조회 성공";
     public static final String INSERT_BOARD_SUCCESS = "게시물 추가 성공";
