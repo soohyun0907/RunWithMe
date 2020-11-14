@@ -131,13 +131,13 @@
         >
           <li class="nav-item">
             <router-link tag="a" class to="/app/mypages/myUserInfo">
-              <i class="nav-icon i-Stopwatch"></i>
+              <i class="nav-icon i-Business-Man"></i>
               <span class="item-name">회원 정보</span>
             </router-link>
           </li>
           <li class="nav-item">
             <router-link tag="a" class to="/app/mypages/mypageTab">
-              <i class="nav-icon i-Stopwatch"></i>
+              <i class="nav-icon i-Dashboard"></i>
               <span class="item-name">런닝 정보</span>
             </router-link>
           </li>
@@ -149,7 +149,7 @@
           </li>
           <li class="nav-item">
             <router-link tag="a" class to="/app/mypages/myChallenges">
-              <i class="nav-icon i-Stopwatch"></i>
+              <i class="nav-icon i-Flag"></i>
               <span class="item-name">나의 챌린지</span>
             </router-link>
           </li>
