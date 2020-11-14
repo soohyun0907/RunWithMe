@@ -122,15 +122,24 @@ export default {
    computed: {
     ...mapGetters(["getSideBarToggleProperties", "userInfo","defaultProfile","userTotal"]),
   },
-
   mounted() {
       console.log(this.userInfo)
-      console.log(this.userTotal)
-       this.$store.commit('closeSidebar')
+    console.log(this.userTotal)
+    this.$store.commit('closeSidebar')
+    this.userInfoUpdated()  
+    
   },
   methods: {
     ...mapActions(["signOut"]),
     ...mapMutations(["closeSidebar"]),
+    userInfoUpdated(){
+        http.get(`users/`)
+          .then(data => {
+            console.log("회원정보 갱신!")
+            this.$store.commit('mutateUserInfo',data.data.data.userId)
+            this.$store.commit('mutateUserTotal',data.data.data)
+          })
+    },
     memberOut(){
         var data = {
             userPw:this.inputPass

@@ -88,6 +88,8 @@ export default {
         },400);
       }
      })
+
+     this.makeVariantToast('info')
   },
   computed: {
     validation() {
@@ -99,6 +101,15 @@ export default {
   methods: {
     ...mapActions(["login","signOut"]),
     ...mapMutations(["setLoading","setLogout"]),
+     //   toast-target
+     makeVariantToast(variant = null) {
+      this.$bvToast.toast("모바일로 이용하시는 것을 권장합니다", {
+        title: `RWM`,
+        variant: variant,
+        solid: true,
+        // appendToast:'b-toaster-top-center'
+      });
+    },
     formSubmit() {
       this.login({ userEmail: this.userEmail, userPw: this.userPw });
     },

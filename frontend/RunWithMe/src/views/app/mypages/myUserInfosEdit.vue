@@ -51,6 +51,7 @@
                   label="Name"
                   v-model.trim="$v.fName.$model"
                 >
+                dddddddd{{userInfo.username}}
                 </b-form-input>
 
                 <b-alert
@@ -144,7 +145,7 @@ export default {
      
   },
   computed: {
-    ...mapGetters(["loggedInUser", "loading", "error","getSideBarToggleProperties", "userInfo","defaultProfile"]),
+    ...mapGetters(["loggedInUser","userInfo", "loading", "error","getSideBarToggleProperties", "userInfo","defaultProfile"]),
   },
    methods: {
     ...mapActions(["signOut"]),

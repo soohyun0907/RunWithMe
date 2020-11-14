@@ -307,6 +307,12 @@ export default {
         console.log(data);
         this.signUserUp({ data });
         this.submitStatus = "PENDING";
+        Swal.fire({
+            icon:'success',
+            text:'회원가입 성공!',
+            showConfirmButton:false,
+            timer:1200,
+          })
         setTimeout(() => {
           this.submitStatus = "OK";
         }, 500);
