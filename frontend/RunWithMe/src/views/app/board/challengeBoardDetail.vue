@@ -141,7 +141,7 @@ export default {
             });
             // alert("댓글 등록 성공!");
             this.replyInfo.content = "";
-            // console.log(data.data);
+            // //console.log(data.data);
             var obj = new Object();
             obj.replyId = data.data.replyId;
             obj.content = data.data.content;
@@ -170,7 +170,7 @@ export default {
         }
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         return;
       })
     },
@@ -180,7 +180,7 @@ export default {
       .then(({data}) => {
         if(data.status == 200){
           // this.allReply = data.data;
-          // console.log(data.data);
+          // //console.log(data.data);
           var obj;
           data.data.forEach(element => {
             obj = new Object();
@@ -193,11 +193,11 @@ export default {
             this.allReply.push(obj);
           });
           // this.allReply = this.allReply.reverse();
-          // console.log(this.allReply);
+          // //console.log(this.allReply);
         }
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         return;
       })
     },
@@ -205,7 +205,7 @@ export default {
       http
         .get("boards")
         .then(({data}) => {
-          // console.log(data.data[0].boardId);
+          // //console.log(data.data[0].boardId);
           for(var i=0;i<data.data.length; i++){
             if(data.data[i].boardId == this.$route.query.boardId){
               if(i == 0) this.havePrev = false;

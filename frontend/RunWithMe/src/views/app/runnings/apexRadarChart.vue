@@ -142,13 +142,13 @@ export default {
             http
                 .get('/runnings/'+this.uid)
                 .then(response => {
-                    console.log(response.data);
+                    //console.log(response.data);
                     var totalTime = 0;
                     var totalDis = 0;
                     var length = response.data.data.length;
                     var maxTime = 0;
                     for (const [key, value] of Object.entries(response.data.data)) {
-                        console.log(`${key}: ${value}`);
+                        //console.log(`${key}: ${value}`);
                         totalTime += value.accTime;
                         if(maxTime < value.accTime)
                             maxTime = value.accTime;
@@ -187,9 +187,9 @@ export default {
                     http
                         .get("/friends/analysis/"+gender)
                         .then((data) =>{
-                            console.log(data);
+                            //console.log(data);
                             var length =  data.data.data.length;
-                            console.log("size:" + length)
+                            //console.log("size:" + length)
 
                             var totalTime = 0;
                             var totalDis = 0;
@@ -203,12 +203,12 @@ export default {
                                http
                                 .get('/runnings/'+ uid)
                                     .then(response => {
-                                        console.log("상대 데이터")
-                                        console.log(response.data);
+                                        //console.log("상대 데이터")
+                                        //console.log(response.data);
                                         size += response.data.data.length;
                                         maxTime = 0;
                                         for (const [key, value] of Object.entries(response.data.data)) {
-                                            console.log(`${key}: ${value}`);
+                                            //console.log(`${key}: ${value}`);
                                             totalTime += value.accTime;
                                             if(maxTime < value.accTime)
                                                 maxTime = value.accTime;
@@ -226,12 +226,12 @@ export default {
             });
         },
         seriesUpdate: function(totalDis, totalTime, size, maxTime, length, maxTimeList){
-            console.log("비교")
-            console.log("totalDis")
-            console.log(totalDis)
+            //console.log("비교")
+            //console.log("totalDis")
+            //console.log(totalDis)
             
-            console.log("totalTime")
-            console.log(totalTime)
+            //console.log("totalTime")
+            //console.log(totalTime)
             var sum = 0;
             for(var i = 0 ; i < maxTimeList.length; i++)
             {
@@ -249,7 +249,7 @@ export default {
 
             this.series[2].data[1] = 0
                 
-            console.log(this.series)
+            //console.log(this.series)
             this.$refs.realtimeChart.updateOptions([{
             }], false, true)
             localStorage.setItem("series", JSON.stringify(this.series));
@@ -273,42 +273,42 @@ export default {
             this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
             this.uid = this.userInfo.userId.userId;
 
-            console.log(this.uid)
+            //console.log(this.uid)
             http
                 .get('/runnings/'+this.uid)
                 .then(response => {
-                    console.log(typeof(response.data.data));
-                    console.log(response.data.data);
+                    //console.log(typeof(response.data.data));
+                    //console.log(response.data.data);
 
                     // 잔디심기
                     var now = new Date();
                     var curMonth = this.$moment(now).format("MMM");
-                    console.log(curMonth)
+                    //console.log(curMonth)
                     var startDate = now.getFullYear() + "-" + ((now.getMonth()+1)%12) + "-1";
                     var startDay = this.$moment(startDate).day();
-                    console.log("startDay:"+startDay)
+                    //console.log("startDay:"+startDay)
                     for (const [key, value] of Object.entries(response.data.data)) {
                         var month = this.$moment(value.startTime).format("MMM")
                         var date = this.$moment(value.startTime).format("D")
                         var day = this.$moment(value.startTime).day()
                         
-                        //console.log(day)
-                        // console.log(this.month[curMonth])
-                        // console.log(this.month[month])
+                        ////console.log(day)
+                        // //console.log(this.month[curMonth])
+                        // //console.log(this.month[month])
                         if(this.month[curMonth] === this.month[month])
                         {
-                            //console.log(this.$moment(value.startTime).format("D"))
+                            ////console.log(this.$moment(value.startTime).format("D"))
                             var curDate = this.$moment(value.startTime).format("D");
                             var curDay = this.$moment(value.startTime).day();
                             var distance = value.accDistance;
-                            //console.log(parseInt(curDate) + parseInt(startDay));
+                            ////console.log(parseInt(curDate) + parseInt(startDay));
                             var result = parseInt((parseInt(curDate) + parseInt(startDay)) / 7);
-                            console.log(curDay + "/" + result);
+                            //console.log(curDay + "/" + result);
                             this.heatmap.series[4-result].data[curDay] += distance;
                         }
                     }
 
-                    console.log(this.heatmap.series)
+                    //console.log(this.heatmap.series)
 
 
 
@@ -317,25 +317,25 @@ export default {
                     var totalDis = 0;
                     var length = response.data.data.length;
                     var maxTime = 0;
-                    console.log("totalDis")
-                    console.log(totalDis)
+                    //console.log("totalDis")
+                    //console.log(totalDis)
                     for (const [key, value] of Object.entries(response.data.data)) {
-                        // console.log(`${key}: ${value}`);
+                        // //console.log(`${key}: ${value}`);
                         totalTime += value.accTime;
                         if(maxTime < value.accTime)
                             maxTime = value.accTime;
                         totalDis += value.accDistance;
                     }
 
-                    console.log("totalDis")
-                    console.log(totalDis)
+                    //console.log("totalDis")
+                    //console.log(totalDis)
                     
-                    console.log("totalTime")
-                    console.log(totalTime)
+                    //console.log("totalTime")
+                    //console.log(totalTime)
 
                     if(!localStorage.getItem("series")) // 기록이 하나도 없다면,
                     {
-                        console.log("여기들어오니?")
+                        //console.log("여기들어오니?")
                         // 현시점 전 기록 (1,2)
                         this.series[0].data[0] = totalDis / (totalTime/(60*60));
                         this.series[1].data[0] = totalDis / (totalTime/(60*60));
@@ -353,7 +353,7 @@ export default {
 
                         this.series[1].data[1] = 0
 
-                        console.log(this.series)
+                        //console.log(this.series)
                         localStorage.setItem("series", JSON.stringify(this.series));
                     }    
                     else // 기록측정을 한적이 있다면,

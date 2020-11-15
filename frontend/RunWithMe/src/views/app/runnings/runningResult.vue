@@ -158,8 +158,8 @@ export default {
     }else {
         this.avgSpeed=0;
     }
-    console.log("this.result")
-    console.log(this.result)
+    // console.log("this.result")
+    // console.log(this.result)
     this.getTempRuns()
   },
   computed: {
@@ -169,8 +169,8 @@ export default {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
     getTempRuns(){
       this.records=this.result.records
-      console.log("this.records")
-      console.log(this.records)
+      // console.log("this.records")
+      // console.log(this.records)
       if(this.records.length!=0){
         for(var i=0; i<this.records.length; i++){
             if(i!=this.records.length-1)  {
