@@ -1,7 +1,7 @@
 <template>
     <div class="main-content">
         <breadcumb :page="'Challenges'" :folder="'Apps'" />
-        <b-card class="o-hidden card-icon-bg card-icon-bg-primary o-hidden text-center">
+        <b-card class="mileage o-hidden card-icon-bg card-icon-bg-primary o-hidden text-center">
             <div>
                 <p class="mt-2 mb-0 text-primary">{{userInfo.username}}님의 보유 마일리지:{{userInfo.mileage}}</p>
             </div>
@@ -128,14 +128,14 @@
                                 <img :src="challenge.img" />
                                 <p> 기간: {{ challenge.startTime | moment('YYYY.MM.DD') }} ~ {{ challenge.endTime | moment('YYYY.MM.DD') }} </p>
                                 <p> {{ challenge.content }} </p>
-                                <h6>모인 금액</h6>
+                                <h6>모인 금액 {{ challenge.donateCurrent }} / {{ challenge.donateGoal }} 원</h6>
                                 <b-progress class="mb-3"
                                     variant="success"
                                     :max="challenge.donateGoal"
                                     :value="challenge.donateCurrent"
                                     animated show-progress>
                                 </b-progress>
-                                <h6>전체 달성률</h6>
+                                <h6>전체 달성률 {{ challenge.distanceCurrent }} / {{ challenge.distanceGoal }} KM </h6>
                                 <b-progress class="mb-3"
                                     variant="warning"
                                     :max="challenge.distanceGoal"
@@ -279,6 +279,7 @@ export default {
                 .then(({data}) => {
                     if(data.status==200){
                         let obj;
+                        console.log(data.data);
                         data.data.forEach(element => {
                             obj = new Object();
                             obj.challengeId = element.challengeId;
@@ -343,10 +344,6 @@ export default {
 </script>
 
 <style scoped>
-.card-body {
-    padding:0;
-    margin:0 auto;
-}
 .mt-2{
     margin-top:0 !important;
 }
