@@ -189,10 +189,10 @@ export default {
             }else {
               this.avgSpeed = this.result.accDistance*1000/this.result.accTime
             }
-       console.log("friendsRun - result")
-       console.log(this.result);
-       console.log("friendsRun - records")
-       console.log(this.records);
+      //  console.log("friendsRun - result")
+      //  console.log(this.result);
+      //  console.log("friendsRun - records")
+      //  console.log(this.records);
         });
     },
  

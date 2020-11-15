@@ -87,10 +87,10 @@ export default {
             if(data.status==200){
                 this.challengeInfo = data.data.challengeId;
             }
-            // console.log(this.challengeInfo);
+            // //console.log(this.challengeInfo);
         })
         .catch((error) => {
-            console.log(error);
+            //console.log(error);
             return;
         })
     },
@@ -138,7 +138,7 @@ export default {
           //유저 정보 갱신
             http.get('users/').
             then(res => {
-              console.log(res)
+              //console.log(res)
               this.$store.commit('mutateUserInfo',res.data.data.userId)
               this.$store.commit('mutateUserTotal',res.data.data)
               localStorage.setItem("userInfo",JSON.stringify(res.data.data))
@@ -152,12 +152,12 @@ export default {
               title: 'Oops...',
               text: '마일리지가 부족합니다'
             });
-          console.log(error);
+          //console.log(error);
           return;
         })
     },
     cancelChallenge() {
-      console.log(this.challengeId+" "+this.donateAmount);
+      //console.log(this.challengeId+" "+this.donateAmount);
       http
         .delete("/challenges/runners/"+this.challengeId+"/"+this.donateAmount)
         .then(({data}) => {
@@ -179,7 +179,7 @@ export default {
         })
         .catch((error) => {
           // this.cancelChallenge();
-          console.log(error);
+          //console.log(error);
           return;
         })
     },
@@ -204,7 +204,7 @@ export default {
           })
         .catch(err => {
           // An error occurred
-          console.log(error);
+          //console.log(error);
         });
     },
   }
