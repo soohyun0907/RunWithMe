@@ -72,7 +72,7 @@ export default {
         ...mapMutations(["closeSidebar"]),
         onSubmit(el) {
             let x = el.preventDefault();
-            console.log(this.userInfo);
+            ////console.log(this.userInfo);
             this.board.writerId = this.userInfo.userId;
             http
                 .put('/boards/board', 
@@ -134,7 +134,7 @@ export default {
         },
         handleFileUpload() {
             this.file = this.$refs.files.files;
-            // console.log(this.file);
+            // //console.log(this.file);
         },
         getBoardInfo(){
             http
@@ -146,7 +146,7 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 return;
             })
         },

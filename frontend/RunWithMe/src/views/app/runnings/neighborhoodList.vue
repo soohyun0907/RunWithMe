@@ -106,7 +106,7 @@ export default {
             let obj;
             var contactlist = this.contactlist;
             data.data.forEach((element) => {
-              console.log(element);
+              // console.log(element);
               obj = new Object();
               obj.friendId = element.userId.userId;
               obj.nickname = element.userId.username;
@@ -129,7 +129,7 @@ export default {
               contactlist.push(obj);
             });
           }
-          console.log(this.contactlist);
+          // console.log(this.contactlist);
           if (this.contactlist.length == 0) {
               this.haveRunners = false;
           }
