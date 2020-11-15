@@ -1,7 +1,7 @@
 <template>
     <div class="main-content">
         <breadcumb :page="'Challenges'" :folder="'Apps'" />
-        <b-card class="o-hidden card-icon-bg card-icon-bg-primary o-hidden text-center">
+        <b-card class="mileage o-hidden card-icon-bg card-icon-bg-primary o-hidden text-center">
             <div>
                 <p class="mt-2 mb-0 text-primary">{{userInfo.username}}님의 보유 마일리지:{{userInfo.mileage}}</p>
             </div>
@@ -343,10 +343,6 @@ export default {
 </script>
 
 <style scoped>
-.card-body {
-    padding:0;
-    margin:0 auto;
-}
 .mt-2{
     margin-top:0 !important;
 }

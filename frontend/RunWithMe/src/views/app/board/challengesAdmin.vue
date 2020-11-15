@@ -116,7 +116,7 @@ export default {
           this.$router.push("/app/dashboards/main");
         })
         .catch(err => {
-          //console.log(error);
+          console.log(error);
         });
     }
   },
@@ -182,7 +182,7 @@ export default {
           }
         })
         .catch(err => {
-          //console.log(error);
+          // console.log(error);
         });
     },
   }

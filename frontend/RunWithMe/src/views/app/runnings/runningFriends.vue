@@ -167,7 +167,7 @@ export default {
         .get(`/runnings/records/${this.$route.query.runningId}`)
         .then((data) => {
             this.result = data.data.data.running
-            console.log(data.data.data.records)
+            // console.log(data.data.data.records)
             for(var i=0; i<data.data.data.records.length; i++){
                 if(i!=data.data.data.records.length-1 && data.data.data.records[i].accDistance<0.1) continue;
                 this.records.push(data.data.data.records[i])
@@ -191,10 +191,10 @@ export default {
             }else {
               this.avgSpeed = this.result.accDistance*1000/this.result.accTime
             }
-       console.log("friendsRun - result")
-       console.log(this.result);
-       console.log("friendsRun - records")
-       console.log(this.records);
+      //  console.log("friendsRun - result")
+      //  console.log(this.result);
+      //  console.log("friendsRun - records")
+      //  console.log(this.records);
         });
     },
  
