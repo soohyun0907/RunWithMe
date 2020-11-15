@@ -477,7 +477,7 @@ export default {
       }
 
       let tempRecord = {
-        accDistance:this.checkOneKm+0.01,
+        accDistance:this.accumulated_distance+0.01,
         accTime: this.accumulated_time,
         speed: speed,
       };
@@ -502,7 +502,7 @@ export default {
       // console.log(this.tempRecords)
       
       let stringTempRecord = {
-        accDistance:(this.checkOneKm+0.01).toString(),
+        accDistance:(this.accumulated_distance+0.01).toString(),
         accTime: this.accumulated_time.toString(),
         speed: speed.toString(),
       };
