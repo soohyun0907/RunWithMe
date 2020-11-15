@@ -208,7 +208,7 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 return;
             });
     },
@@ -239,7 +239,7 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 return;
             });
     },
@@ -270,7 +270,7 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 return;
             });
         },

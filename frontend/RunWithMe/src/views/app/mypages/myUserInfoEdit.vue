@@ -60,9 +60,9 @@ export default {
         })
         .then(({ data }) => {
           if(data.status == 200){
-            console.log(data)
+            //console.log(data)
             this.$store.commit('mutateProfile',data.data.profile)
-            console.log(data.data.profile)
+            //console.log(data.data.profile)
             this.$router.go(-1)
           } else {
             Swal.fire({
