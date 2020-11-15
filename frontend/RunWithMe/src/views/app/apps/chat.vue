@@ -1,13 +1,14 @@
 <template>
   <div class="main-content">
     <breadcumb :page="'매칭 & 채팅'" :folder="'Chatting'" />
-
+    
     <div class="card chat-sidebar-container sidebar-container">
       <div class="chat-sidebar-wrap sidebar" :class="{ 'ml-0': isMobile }">
         <div class="border-right">
           <div
             class="pt-2 pb-2 pl-3 pr-3 d-flex align-items-center o-hidden box-shadow-1 chat-topbar"
           >
+          
             <a class="link-icon d-md-none" @click="isMobile = !isMobile">
               <i class="text-20 i-Letter-Close"></i>
             </a>
@@ -423,7 +424,7 @@ export default {
     },
     recvMessage: function (recv) {
       if (recv.imgUrl == null) {
-        recv.imgUrl = require("@/assets/images/faces/profile.jpg");
+        recv.imgUrl = this.defaultProfile
       }
       var today = new Date();
       var time = today.getHours() + " : " + today.getMinutes();
@@ -447,6 +448,7 @@ export default {
       "getRoomInfo",
       "getMessages",
       "auth",
+      "defaultProfile"
     ]),
 
     filterContacts() {
