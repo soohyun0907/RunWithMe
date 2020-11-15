@@ -52,7 +52,7 @@ export default {
     ...mapGetters(["userInfo"]),
     },
     mounted() {
-        console.log(this.userInfo);
+        //console.log(this.userInfo);
         this.$store.commit('closeSidebar')
     },
     data() {
@@ -71,7 +71,7 @@ export default {
         ...mapMutations(["closeSidebar"]),
         onSubmit(el) {
             let x = el.preventDefault();
-            console.log(this.userInfo);
+            //console.log(this.userInfo);
             this.board.writerId = this.userInfo.userId;
             http
                 .post('/boards/board', 

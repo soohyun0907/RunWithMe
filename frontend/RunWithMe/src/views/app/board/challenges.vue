@@ -204,7 +204,7 @@ export default {
             })
             .catch(err => {
                 // An error occurred
-                console.log(error);
+                //console.log(error);
             });
         },
         getChallengesIng() {
@@ -233,11 +233,11 @@ export default {
                         if(this.challengesIng.length == 0)
                             this.haveChallengesIng = false;
 
-                        // console.log(this.challengesIng);
+                        // //console.log(this.challengesIng);
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    //console.log(error);
                     return;
                 });
         },
@@ -269,7 +269,7 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    //console.log(error);
                     return;
                 });
         },
@@ -301,7 +301,7 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    //console.log(error);
                     return;
                 });
         },
@@ -310,7 +310,7 @@ export default {
                 .get("challenges/participation")
                 .then(({data}) => {
                     if(data.status==200){
-                        // console.log(data.data);
+                        // //console.log(data.data);
                         this.challengesIng.forEach(element => {
                             data.data.ingP.forEach(element2 => {
                                 if(element.challengeId == element2.challengeId.challengeId)
@@ -334,7 +334,7 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    //console.log(error);
                     return;
                 });
         }

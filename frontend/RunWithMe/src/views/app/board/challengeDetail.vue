@@ -61,7 +61,7 @@ export default {
     mounted() {
         this.$store.commit('closeSidebar');
         this.getChallengeDetail();
-        console.log(this.userInfo);
+        //console.log(this.userInfo);
     },
     methods: {
         ...mapMutations(["closeSidebar"]),
@@ -70,7 +70,7 @@ export default {
             .get("challenges/"+this.$route.query.challengeId)
             .then(({data}) => {
                 if(data.status == 200){
-                    // console.log(data.data);
+                    // //console.log(data.data);
                     this.challenge = data.data.challengeId;
                 }
             })

@@ -122,22 +122,31 @@ export default {
    computed: {
     ...mapGetters(["getSideBarToggleProperties", "userInfo","defaultProfile","userTotal"]),
   },
-
   mounted() {
-      console.log(this.userInfo)
-      console.log(this.userTotal)
-       this.$store.commit('closeSidebar')
+      //console.log(this.userInfo)
+    //console.log(this.userTotal)
+    this.$store.commit('closeSidebar')
+    this.userInfoUpdated()  
+    
   },
   methods: {
     ...mapActions(["signOut"]),
     ...mapMutations(["closeSidebar"]),
+    userInfoUpdated(){
+        http.get(`users/`)
+          .then(data => {
+            //console.log("회원정보 갱신!")
+            this.$store.commit('mutateUserInfo',data.data.data.userId)
+            this.$store.commit('mutateUserTotal',data.data.data)
+          })
+    },
     memberOut(){
         var data = {
             userPw:this.inputPass
         }
         http.post(`users/checkPw`,data)
         .then(data => {
-            console.log("i'm gone..")
+            //console.log("i'm gone..")
             http.delete(`users`)
             .then(data=>{
                 
@@ -147,7 +156,7 @@ export default {
               showConfirmButton:false,
               timer:1000,
             })
-            console.log(data)
+            //console.log(data)
             setTimeout(() => {
                 this.$router.push('/app/sessions/signIn')   
             }, 1000);
