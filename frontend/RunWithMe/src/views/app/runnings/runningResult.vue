@@ -151,7 +151,9 @@ export default {
     this.result['parseTimeS'] = this.result.startTime.split('T')
 
     this.avgSpeed = (this.result.accDistance*1000)/parseInt(this.result.accTime)
-    this.getTempRuns()
+    setTimeout(() => {
+      this.getTempRuns()
+    }, 100);
   },
   computed: {
     ...mapGetters(["myRunning"]),
@@ -159,21 +161,27 @@ export default {
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
     getTempRuns(){
-      this.records=this.result.records
+      // this.records=this.result.records
       // console.log("this.records")
       // console.log(this.records)
-      if(this.records.length!=0){
-        for(var i=0; i<this.records.length; i++){
-            if(i!=this.records.length-1)  {
-                this.records[i].accDistance= Math.floor(this.records[i].accDistance)
-            }else{
-                this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(2)
-            }
-            this.records[i].accDistance+=" km"
-            this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
-            this.echart4.xAxis.data.push(this.records[i].accDistance)
-        }
+      for(var i=0; i<this.result.records.length; i++){
+          if(i!=this.result.records.length-1 && this.result.records[i].accDistance<0.1) continue;
+          this.records.push(this.result.records[i])
       }
+
+
+      // if(this.records.length!=0){
+      //   for(var i=0; i<this.records.length; i++){
+      //       if(i!=this.records.length-1)  {
+      //           this.records[i].accDistance= Math.floor(this.records[i].accDistance)
+      //       }else{
+      //           this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(2)
+      //       }
+      //       this.records[i].accDistance+=" km"
+      //       this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+      //       this.echart4.xAxis.data.push(this.records[i].accDistance)
+      //   }
+      // }
     },
 
     initMap(){
