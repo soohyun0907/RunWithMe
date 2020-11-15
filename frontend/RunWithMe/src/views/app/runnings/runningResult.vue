@@ -150,16 +150,7 @@ export default {
     this.result['parseTimeE'] = this.result.endTime.split('T')
     this.result['parseTimeS'] = this.result.startTime.split('T')
 
-    if(this.result.accDistance!=0.00
-    &&this.result.accTime!=0.00 
-    &&this.result.accDistance!=0 
-    && this.result.accTime!=0){
-        this.avgspeed = this.result.accDistance*1000/this.result.accTime
-    }else {
-        this.avgSpeed=0;
-    }
-    // console.log("this.result")
-    // console.log(this.result)
+    this.avgSpeed = (this.result.accDistance*1000)/parseInt(this.result.accTime)
     this.getTempRuns()
   },
   computed: {
