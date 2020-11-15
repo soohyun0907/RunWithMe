@@ -197,7 +197,7 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 return;
             });
             swalWithBootstrapButtons.fire(
@@ -220,11 +220,11 @@ export default {
       })
     },
     getFriendList(){
-      console.log(this.userInfo.userId)
+      //console.log(this.userInfo.userId)
       // http.get(`friends/contacts/${this.userInfo.userId}`)
       http.get(`friends/contacts`)
       .then((res) => {
-        console.log(res.data.data);
+        //console.log(res.data.data);
         this.rows = res.data.data
     });
     }

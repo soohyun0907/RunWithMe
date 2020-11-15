@@ -489,13 +489,13 @@ export default {
 
     
       this.tempRecords.push(tempRecord)
-      console.log("this.tempRecords")
-      console.log(this.tempRecords)
+      // console.log("this.tempRecords")
+      // console.log(this.tempRecords)
       this.echart4.series[0].data.push((tempRecord.accTime/60).toFixed(2))
       this.echart4.xAxis.data.push(tempRecord.accDistance)
                 
-      console.log("savePosition - tempRecords")
-      console.log(this.tempRecords)
+      // console.log("savePosition - tempRecords")
+      // console.log(this.tempRecords)
       
       let stringTempRecord = {
         accDistance:(this.checkOneKm+0.01).toString(),
@@ -503,9 +503,8 @@ export default {
         speed: speed.toString(),
       };
       this.stringTempRecords.push(stringTempRecord)
-      console.log("savePosition - stringtempRecords")
-     
-      console.log(this.stringTempRecords)
+      // console.log("savePosition - stringtempRecords")
+      // console.log(this.stringTempRecords)
 
     },
 
@@ -549,8 +548,8 @@ export default {
         thumbnail:this.thumbnail,
         records:this.tempRecords,
       };
-      console.log("myRunningData")
-      console.log(myRunningData)
+      // console.log("myRunningData")
+      // console.log(myRunningData)
 
       this.accumulated_distance=0
       this.accumulated_time=0
@@ -563,8 +562,8 @@ export default {
           },
       })
       .then(data => {
-        console.log("런닝 기록 저장 완료.")
-        console.log(runningData)
+        // console.log("런닝 기록 저장 완료.")
+        // console.log(runningData)
         this.$store.commit('mutateMyRunning',myRunningData)
         this.$router.push('/app/runnings/runningResult')
       }).catch(err => {
@@ -611,8 +610,8 @@ export default {
       //     new google.maps.LatLng(this.linePath[i].lat,this.linePath[i].lng)
       //   );
       // }
-      console.log("drawLines - this.linePath")
-      console.log(this.linePath)
+      // console.log("drawLines - this.linePath")
+      // console.log(this.linePath)
       this.poly = new google.maps.Polyline({
         // path: runningPathCoordinates,
         path: this.linePath,
@@ -622,16 +621,16 @@ export default {
         strokeWeight: 2,
         map:this.map
       });
-      console.log("drawLines - this.poly")
-      console.log(this.poly)
+      // console.log("drawLines - this.poly")
+      // console.log(this.poly)
       this.encode_polyline(this.poly)
     },
     // encode_polyline(latLng, poly) {
     encode_polyline(poly) {
       var path = poly.getPath();
       this.encoded_polyline = google.maps.geometry.encoding.encodePath(path);
-      console.log("this.encoded_polyline")
-      console.log(this.encoded_polyline)
+      // console.log("this.encoded_polyline")
+      // console.log(this.encoded_polyline)
     },
     
     computeDistance(startCoords, destCoords) {

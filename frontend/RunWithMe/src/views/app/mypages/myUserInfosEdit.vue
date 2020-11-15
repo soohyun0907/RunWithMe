@@ -51,6 +51,7 @@
                   label="Name"
                   v-model.trim="$v.fName.$model"
                 >
+                {{userInfo.username}}
                 </b-form-input>
 
                 <b-alert
@@ -134,9 +135,9 @@ export default {
   mounted: function () {
     this.$store.commit('closeSidebar')
     http.get(`areas`).then((res) => {
-    console.log(JSON.stringify(res.data.data));
+    //console.log(JSON.stringify(res.data.data));
     this.sidos = res.data.data;
-    console.log(this.sidos[0].sidoName);
+    //console.log(this.sidos[0].sidoName);
     });
      var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
      sidoDropBtn.style.backgroundColor="#663399"
@@ -144,18 +145,18 @@ export default {
      
   },
   computed: {
-    ...mapGetters(["loggedInUser", "loading", "error","getSideBarToggleProperties", "userInfo","defaultProfile"]),
+    ...mapGetters(["loggedInUser","userInfo", "loading", "error","getSideBarToggleProperties", "userInfo","defaultProfile"]),
   },
    methods: {
     ...mapActions(["signOut"]),
     ...mapMutations(["closeSidebar","mutateUserInfo","mutateUserTotal"]),
     //   validate form
     sidoSelected(sido) {
-      console.log(sido.sidoId)
+      //console.log(sido.sidoId)
       this.selectedSido = sido.sidoname
       http.get(`areas/`+sido.sidoId).then((res) =>{
         this.guguns= res.data.data
-        console.log(this.guguns)
+        //console.log(this.guguns)
       })
       var sidoDrop = document.getElementById('dropdown-1')
       var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
@@ -171,7 +172,7 @@ export default {
     },
     gugunSelected(gugun){
       this.selectedgugun = gugun.gugunId
-      console.log(this.selectedgugun)
+      //console.log(this.selectedgugun)
       var gugunDrop = document.getElementById('dropdown-2')
       var gugunDropBtn = document.getElementById('dropdown-2__BV_toggle_')
       gugunDropBtn.innerText = gugun.gugunName
@@ -180,7 +181,7 @@ export default {
 
     },
     submit() {
-      console.log("회원정보 수정 데이터 전송중..");
+      //console.log("회원정보 수정 데이터 전송중..");
 
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -195,19 +196,19 @@ export default {
           userName: this.fName,
           gugunId: jsonGugunId,
         };
-        console.log(data);
+        //console.log(data);
         http.put(`users/`, data)
         .then(data=>{
-          console.log("회원정보 수정!")
-          console.log(data)
+          //console.log("회원정보 수정!")
+          //console.log(data)
           http.get(`users/`)
           .then(data => {
-            console.log("회원정보 갱신!")
+            //console.log("회원정보 갱신!")
             this.$store.commit('mutateUserInfo',data.data.data.userId)
             this.$store.commit('mutateUserTotal',data.data.data)
           })
         }).catch(err =>{
-          console.log("회원정보 수정 에러")
+          //console.log("회원정보 수정 에러")
         })
 
         this.submitStatus = "PENDING";
