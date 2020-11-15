@@ -58,7 +58,7 @@
                   <h5 style="padding-left:10vw;" class="m-0">{{record.accDistance}} km</h5>
                 </div>
                 <div class="flex-grow-1">
-                  <h5 style="padding-left:10vw;" class="m-0">{{convertToTime(record.accTime.toFixed(2))}}</h5>
+                  <h5 style="padding-left:10vw;" class="m-0">{{convertToTime(record.accTime)}}</h5>
                 </div>
             </div>
           </div>
@@ -167,7 +167,9 @@ export default {
         .get(`/runnings/records/${this.$route.query.runningId}`)
         .then((data) => {
             this.result = data.data.data.running
-            for(var i=1; i<data.data.data.records.length; i++){
+            console.log(data.data.data.records)
+            for(var i=0; i<data.data.data.records.length; i++){
+                if(i!=data.data.data.records.length-1 && data.data.data.records[i].accDistance<0.1) continue;
                 this.records.push(data.data.data.records[i])
             }
             this.timeSplitS = this.result.startTime.split('T')
@@ -189,10 +191,10 @@ export default {
             }else {
               this.avgSpeed = this.result.accDistance*1000/this.result.accTime
             }
-      //  console.log("friendsRun - result")
-      //  console.log(this.result);
-      //  console.log("friendsRun - records")
-      //  console.log(this.records);
+       console.log("friendsRun - result")
+       console.log(this.result);
+       console.log("friendsRun - records")
+       console.log(this.records);
         });
     },
  
