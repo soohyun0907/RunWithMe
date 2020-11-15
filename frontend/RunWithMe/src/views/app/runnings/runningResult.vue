@@ -170,18 +170,18 @@ export default {
       }
 
 
-      // if(this.records.length!=0){
-      //   for(var i=0; i<this.records.length; i++){
-      //       if(i!=this.records.length-1)  {
-      //           this.records[i].accDistance= Math.floor(this.records[i].accDistance)
-      //       }else{
-      //           this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(2)
-      //       }
-      //       this.records[i].accDistance+=" km"
-      //       this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
-      //       this.echart4.xAxis.data.push(this.records[i].accDistance)
-      //   }
-      // }
+      if(this.records.length!=0){
+        for(var i=0; i<this.records.length; i++){
+            if(i!=this.records.length-1)  {
+                this.records[i].accDistance= Math.floor(this.records[i].accDistance)
+            }else{
+                this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(2)
+            }
+            this.records[i].accDistance+=" km"
+            this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
+            this.echart4.xAxis.data.push(this.records[i].accDistance)
+        }
+      }
     },
 
     initMap(){
