@@ -217,11 +217,6 @@ export default {
   },
   mounted() {
     this.$store.commit('closeSidebar')
-    if(localStorage.getItem("newdaeyong@naver.com")){
-      // console.log(localStorage.getItem("newdaeyong@naver.com"))
-    }else{
-      // console.log("업써요")
-    }
     
     if (window.google && window.google.maps) {
       this.initMap();
@@ -487,12 +482,22 @@ export default {
         speed: speed,
       };
 
-    
       this.tempRecords.push(tempRecord)
+      if(this.tempRecords.length!=0){
+        for(var i=0; i<this.tempRecords.length; i++){
+          if(i!=this.tempRecords.length-1)  {
+            this.tempRecords[i].accDistance= Math.floor(this.tempRecords[i].accDistance)
+            }else{
+              this.tempRecords[i].accDistance= parseFloat(this.tempRecords[i].accDistance).toFixed(2)
+            }
+            this.tempRecords[i].accDistance+=" km"
+            this.echart4.series[0].data.push((this.tempRecords[i].accTime/60).toFixed(2))
+            this.echart4.xAxis.data.push(this.tempRecords[i].accDistance)
+        }
+      }
       // console.log("this.tempRecords")
       // console.log(this.tempRecords)
-      this.echart4.series[0].data.push((tempRecord.accTime/60).toFixed(2))
-      this.echart4.xAxis.data.push(tempRecord.accDistance)
+
                 
       // console.log("savePosition - tempRecords")
       // console.log(this.tempRecords)
