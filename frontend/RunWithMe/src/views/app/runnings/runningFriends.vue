@@ -25,7 +25,7 @@
                 </div>
                 <div class="col">
                     총 런닝 시간
-                    <h3>{{convertToTime(result.accTime.toFixed(2))}}</h3>
+                    <h3>{{convertToTime(result.accTime)}}</h3>
                 </div>
             </div> 
             <div class="row">
