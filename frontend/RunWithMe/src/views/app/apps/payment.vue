@@ -52,6 +52,7 @@ export default {
   },
   mounted() {
     this.$store.commit("closeSidebar");
+    // console.log(this.userInfo);
   },
   created: function () {
     var filter = "win16|win32|win64|mac|macintel";
@@ -88,12 +89,12 @@ export default {
             pg: "kakaopay",
             pay_method: "card",
             merchant_uid: "merchant_" + new Date().getTime(),
-            name: "주문명 : 주문명 설정",
+            name: "RWM",
             amount: money,
-            buyer_email: "iamport@siot.do",
-            buyer_name: "구매자이름",
+            buyer_email: this.userInfo.userEmail,
+            buyer_name: this.userInfo.username,
             buyer_tel: "010-1234-5678",
-            buyer_addr: "인천광역시 부평구",
+            buyer_addr: this.userInfo.gugunId.sidoId.sodoName + this.userInfo.gugunId.gugunName,
             buyer_postcode: "123-456",
           },
           function (rsp) {
@@ -115,6 +116,13 @@ export default {
                     showConfirmButton: false,
                     timer: 1500
                   })
+                  http
+                    .get('users/')
+                    .then(res => {
+                      this.$store.commit('mutateUserInfo',res.data.data.userId)
+                      this.$store.commit('mutateUserTotal',res.data.data)
+                      localStorage.setItem("userInfo",JSON.stringify(res.data.data))
+                    })
                   setTimeout(() => {
                     document.location.href = "/app/apps/paymentDone"; //챌린지 참여 목록으로 이동?
                   }, 1500);
