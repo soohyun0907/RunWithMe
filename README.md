@@ -53,7 +53,7 @@
 
 ## 📌 목차
 
-[Run With Me ? 🏃️]https://lab.ssafy.com/s03-final/s03p31a303/tree/master#-run-with-me-%EF%B8%8F-) 
+[Run With Me ? 🏃](https://lab.ssafy.com/s03-final/s03p31a303/tree/master#-run-with-me-%EF%B8%8F-) 
 
 * [시작하기](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0) 
 
@@ -148,7 +148,8 @@
 
 해당 서비스는 `AWS EC2`를 이용하여 배포하였습니다. 사전에 [여기]()를 참고해서 `AWS EC2`계정을 생성하세요.
 
-배포를 하기위해서는 다음과 같은 방법으로 실행합니다: Putty 를 통해 접속 -> Ubuntu 환경에 Git Clone -> Nginx 환경 설정 -> Ubuntu 환경에서 빌드 및 실행 -> Nginx 실행 -> 접속
+배포를 하기위해서는 다음과 같은 방법으로 실행합니다:)
+- Putty 를 통해 접속 -> Ubuntu 환경에 Git Clone -> Nginx 환경 설정 -> Ubuntu 환경에서 빌드 및 실행 -> Nginx 실행 -> 접속
 
 
 
