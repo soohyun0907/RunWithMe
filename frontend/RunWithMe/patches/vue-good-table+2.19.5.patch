@@ -1,0 +1,17 @@
+diff --git a/node_modules/vue-good-table/src/components/Table.vue b/node_modules/vue-good-table/src/components/Table.vue
+index b7de533..91de19f 100644
+--- a/node_modules/vue-good-table/src/components/Table.vue
++++ b/node_modules/vue-good-table/src/components/Table.vue
+@@ -406,9 +406,9 @@ export default {
+     tableLoading: false,
+ 
+     // text options
+-    nextText: 'Next',
+-    prevText: 'Prev',
+-    rowsPerPageText: 'Rows per page',
++    nextText: '다음',
++    prevText: '이전',
++    rowsPerPageText: '한페이지에',
+     ofText: 'of',
+     allText: 'All',
+     pageText: 'page',

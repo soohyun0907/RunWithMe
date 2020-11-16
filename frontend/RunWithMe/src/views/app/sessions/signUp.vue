@@ -59,7 +59,7 @@
                   <b-col md="8" class=" mb-30">
                    <b-card title="주 활동지역 선택">
 
-                    <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
+                    <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2 signup">
                       <div v-for="(sido, index) in sidos" v-bind:key="index">
                         <b-dropdown-item @click="sidoSelected(sido)">{{
                           sido.sidoName
@@ -67,7 +67,7 @@
                       </div>
                     </b-dropdown>
 
-                    <b-dropdown variant="primary" id="dropdown-2" text="구군 선택" class="mb-2">
+                    <b-dropdown variant="primary" :disabled="selectedSido" id="dropdown-2" text="구군 선택" class="mb-2 signup">
                       <div v-for="(gugun, index) in guguns" v-bind:key="index">
                         <b-dropdown-item @click="gugunSelected(gugun)">{{
                           gugun.gugunName
@@ -84,7 +84,7 @@
                     <input
                       type="radio"
                       name="orderStatus"
-                      value=1
+                      value=2
                       v-model="gender"
                     />
                     <span>여자</span>
@@ -95,7 +95,7 @@
                     <input
                       type="radio"
                       name="orderStatus"
-                      value=2
+                      value=1
                       v-model="gender"
                     />
                     <span>남자</span>
@@ -171,11 +171,15 @@
 import { required, sameAs, minLength } from "vuelidate/lib/validators";
 import { mapGetters, mapActions } from "vuex";
 import http from "@/utils/http-common";
-import dropdown from "vue-dropdowns";
+// import dropdown from "vue-dropdowns";
+//sweet alert
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+import 'sweetalert2/src/sweetalert2.scss'
+
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignUp",
+    title: "회원가입",
   },
 
   data() {
@@ -192,11 +196,13 @@ export default {
       sidos: [],
       guguns:[],
       selectedgugun:"",
+      selectedSido:"",
       gender:0,
+      
     };
   },
   components: {
-    dropdown: dropdown,
+    // dropdown: dropdown,
   },
 
   validations: {
@@ -234,10 +240,14 @@ export default {
   },
   mounted: function () {
     http.get(`areas`).then((res) => {
-      console.log(JSON.stringify(res.data.data));
+      //console.log(JSON.stringify(res.data.data));
       this.sidos = res.data.data;
-      console.log(this.sidos[0].sidoName);
+      //console.log(this.sidos[0].sidoName);
     });
+     var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
+     sidoDropBtn.style.backgroundColor="#663399"
+      sidoDropBtn.style.color="#FFFFFF"
+     
   },
 
   computed: {
@@ -248,20 +258,36 @@ export default {
     ...mapActions(["signUserUp"]),
     //   validate form
     sidoSelected(sido) {
-      console.log(sido.sidoId)
+      //console.log(sido.sidoId)
+      this.selectedSido = sido.sidoname
       http.get(`areas/`+sido.sidoId).then((res) =>{
         this.guguns= res.data.data
-        console.log(this.guguns)
+        //console.log(this.guguns)
       })
-      document.getElementById('dropdown-1').innerText=sido.sidoName
+      var sidoDrop = document.getElementById('dropdown-1')
+      var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
+      var gugunDrop = document.getElementById('dropdown-2')
+      var gugunDropBtn = document.getElementById('dropdown-2__BV_toggle_')
+      sidoDropBtn.innerText = sido.sidoName
+      gugunDropBtn.innerText = "구군 선택"
+      sidoDropBtn.style.backgroundColor="#663399"
+      sidoDropBtn.style.color="#FFFFFF"
+      gugunDropBtn.style.backgroundColor="#663399"
+      gugunDropBtn.style.color="#FFFFFF"
+
     },
     gugunSelected(gugun){
       this.selectedgugun = gugun.gugunId
-      console.log(this.selectedgugun)
-      document.getElementById('dropdown-2').innerText=gugun.gugunName
+      //console.log(this.selectedgugun)
+      var gugunDrop = document.getElementById('dropdown-2')
+      var gugunDropBtn = document.getElementById('dropdown-2__BV_toggle_')
+      gugunDropBtn.innerText = gugun.gugunName
+      gugunDropBtn.style.backgroundColor="#663399"
+      gugunDropBtn.style.color="#FFFFFF"
+
     },
     submit() {
-      console.log("회원가입 데이터 전송중..");
+      //console.log("회원가입 데이터 전송중..");
 
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -278,12 +304,18 @@ export default {
           gugunId: jsonGugunId,
           gender:this.gender,
         };
-        console.log(data);
+        //console.log(data);
         this.signUserUp({ data });
         this.submitStatus = "PENDING";
+        Swal.fire({
+            icon:'success',
+            text:'회원가입 성공!',
+            showConfirmButton:false,
+            timer:1000,
+          })
         setTimeout(() => {
           this.submitStatus = "OK";
-        }, 500);
+        }, 1000);
         this.$router.push('/app/sessions/signIn')
       }
     },
@@ -291,20 +323,34 @@ export default {
       http
         .get(`/users/check/${this.email}`)
         .then((res) => {
-          console.log("이메일 인증 시도 성공");
           if (res.data.data == true) {
-            console.log("회원 가입 가능한 이메일입니다!");
             this.emailAuth = true;
+
+            Swal.fire({
+              icon:'success',
+              text:'사용할 수 있는 이메일입니다!',
+              showConfirmButton:false,
+              timer:1200,
+            })
           } else {
-            console.log("중복된 이메일입니다.");
-            console.log(res);
+            Swal.fire({
+              icon:'error',
+              text:'이메일 형식이 잘못되었습니다!',
+              showConfirmButton:false,
+              timer:1200,
+            })
           }
         })
         .catch((error) => {
-          console.log("이메일 인증 실패");
-          console.log(error);
           this.emailAuth = false;
-        });
+          //console.log("이메일 인증 실패");
+            Swal.fire({
+              icon:'error',
+              text:'이미 가입된 이메일입니다!',
+              showConfirmButton:false,
+              timer:1200,
+            })
+          });
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
@@ -322,15 +368,20 @@ export default {
     },
 
     inputSubmit() {
-      console.log("submitted");
+      //console.log("submitted");
     },
   },
 };
 </script>
-<style>
+
+<style scoped>
 .spinner.sm {
   height: 2em;
   width: 2em;
+}
+.dropdown-menu.show {
+    height: 30vh;
+    overflow-y: scroll;
 }
 </style>
 

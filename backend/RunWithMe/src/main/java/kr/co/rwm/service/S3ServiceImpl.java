@@ -1,6 +1,5 @@
 package kr.co.rwm.service;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.rwm.util.FileUpload;
 import kr.co.rwm.util.S3Util;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class S3ServiceImpl implements S3Service {
 
@@ -28,7 +29,7 @@ public class S3ServiceImpl implements S3Service {
 			S3Util s3 = new S3Util(accessKey, secretKey);
 			String img_path = FileUpload.uploadFile(uploadpath, file.getOriginalFilename(), file.getBytes(), bucketName, accessKey, secretKey);
 			String img_url = img_path;
-			String url = s3.getFileURL(bucketName, uploadpath+img_url);
+			String url = s3.getFileURL(uploadpath+img_url);
 			return url;
 			
 		}catch(RuntimeException e) {
@@ -48,34 +49,34 @@ public class S3ServiceImpl implements S3Service {
 			S3Util s3 = new S3Util(accessKey, secretKey);
 			String img_path = FileUpload.uploadFile(uploadpath, file.getOriginalFilename(), profile.toByteArray(), bucketName, accessKey, secretKey);
 			String img_url = img_path;
-			String url = s3.getFileURL(bucketName, uploadpath+img_url);
+			String url = s3.getFileURL(uploadpath+img_url);
 			return url;
 			
 		}catch(RuntimeException e) {
-			System.out.println(e);
+			log.error(e.toString());
 			return null;
 		}catch(Exception e) {
-			System.out.println(e);
+			log.error(e.toString());
 			return null;
 		}
 	}
 	
 	@Override
-	public String challengeImgUpload(MultipartFile file) {
+	public String challengeImgUpload(MultipartFile file, String fileName) {
 		try {
 			
-			String uploadpath = "challenges";
+			String uploadpath = fileName;	//"challenges";
 			S3Util s3 = new S3Util(accessKey, secretKey);
 			String img_path = FileUpload.uploadFile(uploadpath, file.getOriginalFilename(), file.getBytes(), bucketName, accessKey, secretKey);
 			String img_url = img_path;
-			String url = s3.getFileURL(bucketName, uploadpath+img_url);
+			String url = s3.getFileURL(uploadpath+img_url);
 			return url;
 			
 		}catch(RuntimeException e) {
-			System.out.println(e);
+			log.error(e.toString());
 			return null;
 		}catch(Exception e) {
-			System.out.println(e);
+			log.error(e.toString());
 			return null;
 		}
 	}

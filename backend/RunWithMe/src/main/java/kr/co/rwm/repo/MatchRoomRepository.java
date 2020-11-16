@@ -13,8 +13,11 @@ import org.springframework.stereotype.Service;
 
 import kr.co.rwm.entity.Matching;
 import kr.co.rwm.model.ChatRoom;
+import kr.co.rwm.pubsub.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MatchRoomRepository {
@@ -23,8 +26,11 @@ public class MatchRoomRepository {
     public static final String USER_COUNT = "USER_COUNT"; // 채팅룸에 입장한 클라이언트수 저장
     public static final String ENTER_INFO = "ENTER_INFO"; // 채팅룸에 입장한 클라이언트의 sessionId와 채팅룸 id를 맵핑한 정보 저장
 
+
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, ChatRoom> hashOpsChatRoom;
+    @Resource(name = "redisTemplate")
+    private HashOperations<String, String, ChatRoom> hashOpsMatchRoom;
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, String> hashOpsEnterInfo;
     @Resource(name = "redisTemplate")
@@ -35,42 +41,38 @@ public class MatchRoomRepository {
     @Autowired
     MatchRepository matchRepository;
     
+    private final String GUEST_ID = "guestId";
     // 모든 채팅방 조회
     public List<ChatRoom> findAllRoom() {
-        return hashOpsChatRoom.values(CHAT_ROOMS);
+        return hashOpsMatchRoom.values(CHAT_ROOMS);
     }
 
     // 특정 채팅방 조회
     public ChatRoom findRoomById(String id) {
-        return hashOpsChatRoom.get(CHAT_ROOMS, id);
+        return hashOpsMatchRoom.get(CHAT_ROOMS, id);
     }
 
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
     public ChatRoom createAndSelectChatroom( int uid, Map<String, Integer> idInfo) {
     	
-    	System.out.println("uid: " + uid);
-    	Optional<Matching> matching = matchRepository.findByMasterIdAndGuestId(uid, idInfo.get("guestId"));
+    	log.info("uid: " + uid);
+    	log.info("guestId: " + idInfo.get(GUEST_ID));
+    	Optional<Matching> matching = matchRepository.findByMasterIdAndGuestId(uid, idInfo.get(GUEST_ID));
     	
     	if(matching.isPresent()) // 이미 방이 존재하다면,
     	{
-    		System.out.println("있음");
-    		ChatRoom result =  hashOpsChatRoom.get(CHAT_ROOMS, matching.get().getRoomId());
-    		System.out.println(matching.get().getRoomId());
-    		System.out.println(matching.get().getMasterId());
-    		 
+    		ChatRoom result =  hashOpsMatchRoom.get(matching.get().getRoomId(), CHAT_ROOMS);
     		return result;
     	} 
     	else 
     	{
-    		String friendName = userRepository.findByUserId(idInfo.get("guestId")).getUsername();
+    		String friendName = userRepository.findByUserId(idInfo.get(GUEST_ID)).getUsername();
         	ChatRoom chatRoom = ChatRoom.create(friendName); 
-        	hashOpsChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
-        	
-        	Matching match = Matching.builder().masterId(uid).guestId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
+        	hashOpsMatchRoom.put(chatRoom.getRoomId(), CHAT_ROOMS, chatRoom);
+        	Matching match = Matching.builder().masterId(uid).guestId(idInfo.get(GUEST_ID)).roomId(chatRoom.getRoomId()).build();
         	matchRepository.save(match);
-        	match = Matching.builder().guestId(uid).masterId(idInfo.get("guestId")).roomId(chatRoom.getRoomId()).build();
+        	match = Matching.builder().guestId(uid).masterId(idInfo.get(GUEST_ID)).roomId(chatRoom.getRoomId()).build();
         	matchRepository.save(match);        	
-        	System.out.println("chat :"+ chatRoom.getName());
         	return chatRoom;
     	}
     }
