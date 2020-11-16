@@ -44,6 +44,7 @@ const routes = [
           },
           {
             path: "payChallenge",
+            name: "payChallenge",
             component: () => import("./views/app/apps/payChallenge")
           },
           {
@@ -60,16 +61,16 @@ const routes = [
       {
         path: "/app/runnings",
         component: () => import("./views/app/runnings"),
-        redirect: "/app/runnings/kakaomaptest",
+        redirect: "/app/runnings/running",
         children: [
           {
             path: "runningResult",
             name: "runningResult",
-	    component: () => import("./views/app/runnings/runningResult")
+	          component: () => import("./views/app/runnings/runningResult")
           },
           {
             path: "running",
-	    component: () => import("./views/app/runnings/running")
+            component: () => import("./views/app/runnings/running")
           },
           {
             path: "neighborhoodList",
@@ -77,9 +78,19 @@ const routes = [
           },
           {
             path: "friendsDetail",
-	    name: "friendsDetail",
+	          name: "friendsDetail",
             component: () => import("./views/app/runnings/friendsDetail")
           },
+          {
+            path: "runningFriends",
+	          name: "runningFriends",
+            component: () => import("./views/app/runnings/runningFriends")
+          },
+          {
+            path: "apexRadarChart",
+            component: () => import("./views/app/runnings/apexRadarChart")
+          },
+
         ]
       },
       // mypages
@@ -126,7 +137,17 @@ const routes = [
             component: () => import("./views/app/board/challengeBoard")
           },
           {
+            path: "challengeBoardWrite",
+            component: () => import("./views/app/board/challengeBoardWrite")
+          },
+          {
+            path: "challengeBoardEdit",
+            name: "challengeBoardEdit",
+            component: () => import("./views/app/board/challengeBoardEdit")
+          },
+          {
             path : 'challengeBoardDetail',
+            name : 'challengeBoardDetail',
             component :()=> import("./views/app/board/challengeBoardDetail") ,
             props: true
           },
@@ -137,6 +158,20 @@ const routes = [
           {
             path: "createChallenge",
             component: () => import("./views/app/board/createChallenge")
+          },
+          {
+            path: "editChallenge",
+            name: "editChallenge",
+            component: () => import("./views/app/board/editChallenge")
+          },
+          {
+            path: "challengesAdmin",
+            component: () => import("./views/app/board/challengesAdmin")
+          },
+          {
+            path: "challengeDetail",
+            name: "challengeDetail",
+            component: () => import("./views/app/board/challengeDetail")
           },
         ]
       },

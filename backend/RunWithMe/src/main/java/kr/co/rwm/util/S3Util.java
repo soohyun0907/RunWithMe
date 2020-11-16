@@ -59,14 +59,12 @@ public class S3Util {
 	// 파일 삭제
 	public void fileDelete(String bucketName, String fileName) {
 		conn.deleteObject(bucketName, fileName);
-		System.out.println("삭제성공");
 	}
 
 	// 파일 URL
-	public String getFileURL(String bucketName, String fileName) {
+	public String getFileURL(String fileName) {
 		String imgName = "https://soonirwm.s3.ap-northeast-2.amazonaws.com/"
 				+ fileName.replace(File.separatorChar, '/');
-		System.out.println(imgName);
 		return imgName;
 	}
 

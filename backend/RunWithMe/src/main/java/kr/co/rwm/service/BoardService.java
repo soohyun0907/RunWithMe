@@ -9,12 +9,14 @@ public interface BoardService {
 
 	List<Board> allBoardList();
 
-	Board save(Map<String, String> boardInfo);
+	Board save(Map<String, String> boardInfo, String writerName, String writerProfile);
 
 	Board update(Map<String, String> boardInfo);
 
 	Long delete(int board_id);
 
 	Board detail(int board_id, int uid);
+	
+	Board saveImage(int board_id, String url);
 
 }

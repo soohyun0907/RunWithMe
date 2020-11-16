@@ -39,7 +39,7 @@ export default {
             http
                 .get('/users')
                 .then(({data}) => {
-                    this.mileage = data.data.mileage;
+                    this.mileage = data.data.userId.mileage;
                 })
                 .catch((error) => {
                     console.log(error);

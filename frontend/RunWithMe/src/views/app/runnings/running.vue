@@ -4,64 +4,115 @@
       <breadcumb :page="'Record Running'" :folder="'Runnings'" />
       <h4 style="margin-top:5px;">Run With Me?</h4>
     </section>
-    <div style="text-align:center; margin-top:40px;">
-      <div style="float:left;"  >
-          <div id="run_desc distance">누적 거리</div>
-          <span id="acc_dis" > {{ show_distance }}km     </span>
-      </div>
-      <div style="margin-left:50px; float:left;">
-          <div id="run_desc speed">현재 속도</div>
-          <span id="acc_time">{{ speed }}m/s</span>
-      </div>
-      <div style=" margin-left:50px; float:left;">
-            <div id="run_desc time">누적 시간</div>
-            <span id="time">{{ clock }}</span>
-      </div>
-    </div>
-    <section ref="map" class="map"></section>
 
-    <div class="btn_container">
-      <div v-if="!running">
-        <section class="bottom-bar">
-          <div v-if="!isPause">
-            <button type="button" @click="startLocationUpdates" class="btn round btn btn-success btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
-            </button>
+  <splide
+      :options="options"
+      >
+        <splide-slide>
+        <div style="text-align:center; margin-top:40px;">
+          <div class="myRecord"  >
+              <div id="run_desc distance">누적 거리</div>
+            <span id="acc_dis" > {{ accumulated_distance.toFixed(2) }}km </span>
           </div>
-          <div v-if="isPause">
-             <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em; margin-left: 10px;" class="i-Start-2"></i></span>
-            </button>
-
+          <div class="myRecord" >
+              <div id="run_desc speed">현재 속도</div>
+              <span id="acc_time">{{ speed.toFixed(2) }}m/s</span>
           </div>
-        </section>
-      </div>
-      <div v-if="running">
-        <section class="bottom-bar">
+          <div class="myRecord">
+                <div id="run_desc time">누적 시간</div>
+                <span id="time">{{ clock }}</span>
+          </div>
+        </div>
+        <div style="text-align:center">
+          <section style="display:inline-block" ref="map" class="map"></section>
+        </div>
+        <div class="btn_container">
+          <div v-if="!running">
+            <section class="bottom-bar">
+              <div v-if="!isPause">
+                <button type="button" @click="startLocationUpdates" class="btn round btn btn-success btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:2em; margin-left: 10px;" class="i-Start-2"></i></span>
+                </button>
+              </div>
+              <div v-if="isPause">
+                <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:2em; margin-left: 10px;" class="i-Start-2"></i></span>
+                </button>
+                  <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Stop-2"></i></span>
+              </button>
 
-          <button type="button" @click="stopLocationUpdates" class="btn round btn btn-danger btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Pause"></i></span>
-          </button>
+              </div>
+            </section>
+          </div>
+          <div v-if="running">
+            <section class="bottom-bar">
 
-          <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
-             <span class="ul-btn__icon"> <i style="font-size:3em;" class="i-Stop-2"></i></span>
-          </button>
+              <button type="button" @click="stopLocationUpdates" class="btn round btn btn-danger btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Pause"></i></span>
+              </button>
 
-        </section>
-      </div>
-    </div>
+              <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
+                <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Stop-2"></i></span>
+              </button>
+
+            </section>
+          </div>
+        </div>
     
-    <textarea id="encoded-polyline"></textarea>
+        </splide-slide>
+        <splide-slide>
+          <div class="card mb-30">
+          <div class="card-body p-0">
+            <div class="card-title  d-flex align-items-center mb-2 pb-0 p-3">
+              <span>구간별 기록</span>
+            </div>
+            <div class="d-flex border-bottom justify-content-between  p-3 ">
+              <div class="flex-grow-1">
+                <h5 class="m-0">구간</h5>
+              </div>
+              <div class="flex-grow-1">
+                <h5 class="m-0">도달 시간</h5>
+              </div>
+            </div>
+            <div v-if="tempRecords.length==0">
+              <h4>임시저장된 기록이 없네요.</h4>
+            </div>
+              <div v-for="(record,index) in tempRecords" :key="index" class="d-flex border-bottom justify-content-between p-3">
+                <div class="flex-grow-1">
+                  <h5 class="m-0">{{record.accDistance}} km</h5>
+                </div>
+                <div class="flex-grow-1">
+                  <h5 class="m-0">{{convertToTime(record.accTime)}}</h5>
+                </div>
+            </div>
+          </div>
+        </div>
+         <b-card class="h-100">
+          <h4 class="card-title m-0">시간대별 속도</h4>
+          <div class="chart-wrapper" style="height: 300px ; width:100%">
+            <v-chart :options="echart4" :autoresize="true"></v-chart>
+          </div>
+        </b-card>
+        </splide-slide>
+     </splide>
   </div>
 </template>
+<script src="path-to-the-file/splide.min.js"></script>
 <script>
 import http from "@/utils/http-common";
 import { mapGetters,mapMutations } from "vuex";
+import { Splide, SplideSlide } from '@splidejs/vue-splide';
+import '@splidejs/splide/dist/css/themes/splide-default.min.css';
 
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
     title: "Running",
+  },
+  components:{
+    Splide,
+    SplideSlide,
   },
   data() {
     return {
@@ -69,23 +120,24 @@ export default {
       previous: { lat: 0, lng: 0 },
       watchPositionId: null,
       map: null,
-      accumulated_distance: 0,
-      accumulated_time: 0,
-      show_distance:0,
-      show_speed:0,
-      checkOneKm: 0,
-      checkSecond: 0,
+      accumulated_distance: 0, // 총 누적거리
+      accumulated_time: 0, // 총 누적 시간
+      speed: 0, // 현재 속력
+      show_speed:0, // 현재 속력 - 보여주기
+      checkOneKm: 0, //1 km마다 초기화
+      checkSecond: 0, // 1 km마다 초기화
+      avgSpeed:0, //전체 평균 속력
       linePath: [],
       poly: null,
       encoded_polyline: "",
       cur_marker: null,
       startTime: "",
       endTime: "",
-      speed: 0,
-      avgSpeed:0,
-      gugun: ["광명시"],
+      gugun: [],
       currentCity: "",
       thumbnail:"",
+      tempRecords:[],
+      stringTempRecords:[],
       //스톱워치 변수
       clock: "00:00:00",
       timeBegan: null,
@@ -94,26 +146,107 @@ export default {
       started: null,
       running: false,
       isPause: false,
+      //splide options
+      options: {
+        rewind : true,
+        perPage:1,
+        width  : 400,
+        gap    : '1rem',
+      },
+
+      //chart
+     echart4 : {
+        tooltip: {
+          show: true,
+          // trigger: 'axis',
+          axisPointer: {
+            type: "line",
+            animation: true
+          }
+        },
+        grid: {
+          top: "10%",
+          left: "0",
+          right: "0",
+          bottom: "0"
+        },
+        xAxis: {
+          type: "category",
+          data: [],
+          axisLine: {
+            show: true
+          },
+          axisLabel: {
+            show: true
+          },
+          axisTick: {
+            show: true
+          }
+        },
+        yAxis: {
+          type: "value",
+          axisLine: {
+            show: false
+          },
+          axisLabel: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          splitLine: {
+            show: true
+          }
+        },
+        label: {show: true, color: "#212121"},
+        series: [
+          {
+            data: [],
+            type: "line",
+            showSymbol: true,
+            smooth: true,
+            color: "#639",
+            lineStyle: {
+              opacity: 1,
+              width: 2
+            }
+          }
+        ]
+     }
     };
   },
   mounted() {
+    this.$store.commit('closeSidebar')
+    
     if (window.google && window.google.maps) {
       this.initMap();
     } else {
       const script = document.createElement("script");
       script.onload = () => google.maps.load(this.initMap);
     }
+    this.resetLocations()
+    this.accumulated_distance=0
+    this.accumulated_time=0
+    this.checkSecond=0
+    this.checkOneKm=0
+
   },
   computed: {
-    ...mapGetters(["userInfo"]),
+    ...mapGetters(["userInfo","defaultProfile"]),
   },
   methods: {
-    ...mapMutations(["mutateMyRunning"]),
+    ...mapMutations(["mutateMyRunning","closeSidebar"]),
+    
+     convertToTime(origin){
+        var time = "";
+        time += parseInt(origin/60) + "\'";
+        time += origin%60 + "\"";
+        return time;
+    },
     initMap() {
       navigator.geolocation.getCurrentPosition((position) => {
         this.current.lat = position.coords.latitude;
         this.current.lng = position.coords.longitude;
-        this.show_distance = Math.round(this.accumulated_distance * 100) /100
 
         var startLoc = new google.maps.LatLng(
           this.current.lat,
@@ -160,7 +293,6 @@ export default {
     },
 
     resetLocations() {
-      
       this.endTime = "";
       this.clock = "00:00:00";
       this.timeBegan = null;
@@ -169,7 +301,6 @@ export default {
       this.started = null;
       this.checkSecond = 0;
       this.checkOneKm = 0;
-      this.speed = 0;
       this.current.lat = 0;
       this.current.lng = 0;
       this.previous.lat = 0;
@@ -222,7 +353,7 @@ export default {
                 var cityDuplicate = false
                 for (var i = 0; i < gugun.length; i++) {
                   if (gugun[i] == currentCity) {
-                    console.log("이미 존재해요");
+                    // console.log("이미 존재해요");
                     cityDuplicate = true
                   }
                 }
@@ -238,58 +369,54 @@ export default {
 
           map.setCenter(now);
           marker.setPosition(now);
-
-          
           if (this.previous.lat == 0) {
-            //이제 런닝 시작이면
+            
             this.previous.lat = this.current.lat;
             this.previous.lng = this.current.lng;
-
-            this.poly = new google.maps.Polyline({
-              strokeColor: "#000000",
-              strokeOpacity: 1,
-              strokeWeight: 3,
-              map: this.map,
-            });
-
+            
+            //이제 런닝 시작이면
             var currentLatLng = new google.maps.LatLng(
               this.current.lat,
               this.current.lng
             );
             this.linePath.push(currentLatLng);
-            
-            this.encode_polyline(currentLatLng, this.poly);
+
+            //라인 그리기 테스트용
+            //  this.linePath.push(new google.maps.LatLng(
+            //   this.current.lat+0.001,
+            //   this.current.lng+0.001
+            // ));
+
           } else {
             var distance = this.computeDistance(this.previous, this.current);
-            console.log("watchposition 이동거리" + distance);
-            console.log("watchposition 걸린시간" + this.accumulated_time);
-            var threshold = 0.01;
+            
+            // console.log("watchposition 이동거리" + distance);
+            // console.log("watchposition 걸린시간" + this.checkSecond);
+            var threshold = 0.001;
+            this.previous.lat = this.current.lat;
+            this.previous.lng = this.current.lng;
+            
             if (distance > threshold) {
               // 일정속도 이상으로 뛸때만 기록.
-              this.previous.lat = this.current.lat;
-              this.previous.lng = this.current.lng;
               this.accumulated_distance += distance;
-              this.show_distance = Math.round(this.accumulated_distance * 100) /100
-              this.checkOneKm = this.accumulated_distance;
-              this.checkSecond = this.accumulated_time;
-
+              this.checkOneKm += distance;
 
               var currentLatLng = new google.maps.LatLng(
                 this.current.lat,
                 this.current.lng
               );
               this.linePath.push(currentLatLng);
-              this.encode_polyline(currentLatLng, this.poly);
+              this.speed = (this.checkOneKm * 1000) / this.checkSecond;
             }
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
-              this.speed = (this.checkOneKm * 1000) / this.checkSecond;
-              this.show_speed = this.speed
-              this.checkSecond = 0;
-              this.checkOneKm -= 1;
-
+              // console.log("최근 1km당 스피드 = " + this.speed);
               this.savePosition();
-              console.log("최근 1km당 스피드 = " + this.speed);
+              setTimeout(() => {
+                this.checkOneKm -= 1;
+                this.checkSecond = 0;
+              }, 100);
+
             }
           }
         },
@@ -299,30 +426,38 @@ export default {
         {
           timeout: 5000,
           maximumAge: 0,
-          // enableHighAccuracy:true,
-          // distanceFilter:40,          
+          enableHighAccuracy:true,
+          distanceFilter:40,          
         }
       );
       this.map = map;
       this.cur_marker = marker;
     },
     getScreenShot() {
-      console.log(this.linePath)
-
       //google static map url
       var staticM_URL = "https://maps.googleapis.com/maps/api/staticmap?";
-      staticM_URL += "&size=520x650"; //Set the Google Map Size.
-      staticM_URL += "&zoom=16"; //Set the Google Map Zoom.
+      staticM_URL += "size=520x650&zoom=16&maptype=roadmap&";
       staticM_URL +=
-        "&maptype=roadmap&key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
-      staticM_URL +="path=color:0xff0000ff|weight:3"
+        "key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
       
-      for(var i=0; i<this.linePath.length; i++){
-        staticM_URL +="|"+this.linePath[i].lat()+","+this.linePath[i].lng()
+      // console.log("getScreenShot")
+      // console.log(this.encoded_polyline)
+      // console.log(this.encoded_polyline.length)
+      if(this.encoded_polyline.length>4){
+        staticM_URL +="path=color:red|weight:3|enc:"
+        staticM_URL += this.encoded_polyline
+      }else{
+        staticM_URL += "center="+this.current.lat+","+this.current.lng
       }
 
-	 this.thumbnail = staticM_URL
-      //window.open(staticM_URL);
+
+      // staticM_URL +="path=color:orange|weight:3"
+      // for(var i=0; i<this.linePath.length; i++){
+      //   staticM_URL +="|"+this.linePath[i].lat()+","+this.linePath[i].lng()
+      // }
+
+      this.thumbnail = staticM_URL
+      // window.open(this.thumbnail)
     },
     stopLocationUpdates() {
       this.isPause = true;
@@ -335,33 +470,55 @@ export default {
 
     },
     savePosition(position) {
-      let data = {
-        userId: this.userInfo.userId,
-        accDistance: this.accumulated_distance+0.0001,
+      if(this.checkOneKm==0 || this.checkSecond==0){
+        var speed = 0.01
+      }else{
+        var speed = this.speed+0.01
+      }
+
+      let tempRecord = {
+        accDistance:this.checkOneKm+0.01,
         accTime: this.accumulated_time,
-        speed: this.speed,
+        speed: speed,
       };
-      http
-        .post(`runnings/temp`, JSON.stringify(data), {
-          headers: {
-            "Content-type": "application/json",
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          console.log(
-            "1키로당 기록 전송" + data.accDistance + " " + data.accTime
-          );
-        })
-        .catch((err) => {
-          console.log("savePosition Error")
-          console.log(err);
-        });
+
+      this.tempRecords.push(tempRecord)
+      if(this.tempRecords.length!=0){
+        for(var i=0; i<this.tempRecords.length; i++){
+          if(i!=this.tempRecords.length-1)  {
+            this.tempRecords[i].accDistance= Math.floor(this.tempRecords[i].accDistance)
+            }else{
+              this.tempRecords[i].accDistance= parseFloat(this.tempRecords[i].accDistance).toFixed(2)
+            }
+            this.tempRecords[i].accDistance+=" km"
+            this.echart4.series[0].data.push((this.tempRecords[i].accTime/60).toFixed(2))
+            this.echart4.xAxis.data.push(this.tempRecords[i].accDistance)
+        }
+      }
+      // console.log("this.tempRecords")
+      // console.log(this.tempRecords)
+
+                
+      // console.log("savePosition - tempRecords")
+      // console.log(this.tempRecords)
+      
+      let stringTempRecord = {
+        accDistance:(this.checkOneKm+0.01).toString(),
+        accTime: this.accumulated_time.toString(),
+        speed: speed.toString(),
+      };
+      this.stringTempRecords.push(stringTempRecord)
+      // console.log("savePosition - stringtempRecords")
+      // console.log(this.stringTempRecords)
+
     },
 
     endLocationUpdates() {
-     this.stopLocationUpdates();
+      this.stopLocationUpdates();
       this.getScreenShot();
+      this.speed = (this.accumulated_distance * 1000) / this.accumulated_time;
+           
+      this.savePosition();
       this.isPause=false;
       this.running = false;
       this.stoppedDuration = 0;
@@ -373,23 +530,50 @@ export default {
       this.endTime = new Date();
       this.endTime = this.$moment(this.endTime).format("YYYY-MM-DDTHH:mm:ss");
 
-      console.log(this.endTime);
+      ////////////////////////// 
+
+      this.gugun.length.length==0 ? this.gugun : this.gugun.push("강남구")
       let runningData = {
-        userId: this.userInfo.userId,
-        polyline: this.encode_polyline,
+        polyline: this.encoded_polyline.toString(),
         startTime: this.startTime,
         endTime: this.endTime,
-        accDistance: this.accumulated_distance+0.0001,
+        accDistance: (this.accumulated_distance+0.01).toString(),
+        accTime: this.accumulated_time.toString(),
+        gugun:this.gugun,
+        thumbnail:this.thumbnail,
+        records:this.stringTempRecords,
+      };
+        let myRunningData = {
+        polyline: this.encoded_polyline,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        accDistance: (this.accumulated_distance+0.01),
         accTime: this.accumulated_time,
         gugun:this.gugun,
-	      thumbnail:this.thumbnail,
+        thumbnail:this.thumbnail,
+        records:this.tempRecords,
       };
-      http.post(`runnings/`, runningData)
+      // console.log("myRunningData")
+      // console.log(myRunningData)
+
+      this.accumulated_distance=0
+      this.accumulated_time=0
+      this.checkSecond=0
+      this.checkOneKm=0
+
+      http.post(`runnings/`, JSON.stringify(runningData), {
+          headers: {
+            "Content-type": "application/json",
+          },
+      })
       .then(data => {
-        console.log("런닝 기록 저장 완료.")
-        console.log(runningData)
-        this.$store.commit('mutateMyRunning',runningData)
+        // console.log("런닝 기록 저장 완료.")
+        // console.log(runningData)
+        this.$store.commit('mutateMyRunning',myRunningData)
         this.$router.push('/app/runnings/runningResult')
+      }).catch(err => {
+        console.log("runnings/ 저장 오류")
+        console.log(err)
       })
     },
     clockRunning() {
@@ -397,19 +581,27 @@ export default {
       var timeElapsed = new Date(
         currentTime - this.timeBegan - this.stoppedDuration
       );
+
       var hour = timeElapsed.getUTCHours();
       var min = timeElapsed.getUTCMinutes();
       var sec = timeElapsed.getUTCSeconds();
-      this.accumulated_time += 1;
-
+      
       this.clock =
         this.zeroPrefix(hour, 2) +
         ":" +
         this.zeroPrefix(min, 2) +
         ":" +
         this.zeroPrefix(sec, 2);
+        
+      var realTime = ((currentTime- this.timeBegan-this.stoppedDuration)/1000).toFixed(0)
+      
+      // this.accumulated_time += 1;
+      // this.checkSecond += 1;
+      this.accumulated_time = realTime;
+      this.checkSecond = realTime;
     },
     zeroPrefix(num, digit) {
+      
       var zero = "";
       for (var i = 0; i < digit; i++) {
         zero += "0";
@@ -417,13 +609,14 @@ export default {
       return (zero + num).slice(-digit);
     },
     drawLines() {
-      var runningPathCoordinates = [];
-
-      for (var i = 0; i < this.linePath.length; i++) {
-        runningPathCoordinates.push(
-          new google.maps.LatLng(this.linePath[i].lat,this.linePath[i].lng)
-        );
-      }
+      // var runningPathCoordinates = [];
+      // for (var i = 0; i < this.linePath.length; i++) {
+      //   runningPathCoordinates.push(
+      //     new google.maps.LatLng(this.linePath[i].lat,this.linePath[i].lng)
+      //   );
+      // }
+      // console.log("drawLines - this.linePath")
+      // console.log(this.linePath)
       this.poly = new google.maps.Polyline({
         // path: runningPathCoordinates,
         path: this.linePath,
@@ -433,17 +626,16 @@ export default {
         strokeWeight: 2,
         map:this.map
       });
-      console.log(this.poly)
+      // console.log("drawLines - this.poly")
+      // console.log(this.poly)
+      this.encode_polyline(this.poly)
     },
-    encode_polyline(latLng, poly) {
-       var path = poly.getPath();
-       path.push(latLng)
-      this.encode_polyline = google.maps.geometry.encoding.encodePath(path);
-      console.log("here!!!")
-      console.log(path)
-      console.log(this.encode_polyline)
-      document.getElementById("encoded-polyline").value = this.encode_polyline;
- 
+    // encode_polyline(latLng, poly) {
+    encode_polyline(poly) {
+      var path = poly.getPath();
+      this.encoded_polyline = google.maps.geometry.encoding.encodePath(path);
+      // console.log("this.encoded_polyline")
+      // console.log(this.encoded_polyline)
     },
     
     computeDistance(startCoords, destCoords) {
@@ -472,7 +664,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.flex-grow-1{
+  width:30vw;
+  text-align:center;
+}
 .driver-view {
   display: flex;
   flex-direction: column;
@@ -485,8 +681,8 @@ export default {
 }
 .map {
   flex-grow: 1;
-  width: 100%;
-  height: 400px;
+  width: 95%;
+  height: 47vh;
 }
 .bottom-bar {
   height: 100px;
@@ -507,6 +703,14 @@ export default {
 .btn-container {
   display: flex;
   margin-top: 15px;
+}
+.myRecord {
+  width:30vw; 
+  float:left;
+}
+.btn-icon{
+  width:60px !important;
+  height:60px !important;
 }
 .running button {
   text-align: center;

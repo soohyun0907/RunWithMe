@@ -26,15 +26,18 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public Board save(Map<String, String> boardInfo) {
+	public Board save(Map<String, String> boardInfo, String writerName, String writerProfile) {
 		
 		Board entity = Board.builder()
 				.writerId(Integer.parseInt(boardInfo.get("writerId")))
+				.writerName(writerName)
+				.writerProfile(writerProfile)
 				.boardTitle(boardInfo.get("boardTitle"))
 				.boardContent(boardInfo.get("boardContent"))
 				.boardRegdate(new Date())
 				.boardEditdate(new Date())
 				.readCount(0)
+				.replyCount(0)
 				.build();
 		
 		Board ret = boardRepository.save(entity);
@@ -70,14 +73,26 @@ public class BoardServiceImpl implements BoardService{
 	public Board detail(int board_id, int uid) {
 		
 		Optional<Board> board = boardRepository.findByBoardId(board_id);
-		if(uid != board.get().getWriterId())
-			board.get().setReadCount(board.get().getReadCount()+1);
-		System.out.println(uid);
-		System.out.println(board.get().getWriterId());
-		return board.get();
+		if(board.isPresent()) {
+			if(uid != board.get().getWriterId())
+				board.get().setReadCount(board.get().getReadCount()+1);
+			return board.get();
+		}
+		return null;
 	}
-	
-	
+
+	@Override
+	public Board saveImage(int board_id, String url) {
+		
+		Optional<Board> board = boardRepository.findByBoardId(board_id);
+		if(!board.isPresent()) {
+			return null;
+		}
+		
+		board.get().setBoardImage(url);
+		return boardRepository.save(board.get());
+
+	}
 	
 
 }

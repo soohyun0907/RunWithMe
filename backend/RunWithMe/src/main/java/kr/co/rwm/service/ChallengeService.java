@@ -3,13 +3,19 @@ package kr.co.rwm.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import kr.co.rwm.dto.ChallengeDto;
 import kr.co.rwm.entity.Challenge;
 import kr.co.rwm.entity.ChallengeUser;
 import kr.co.rwm.entity.User;
 
 public interface ChallengeService {
 
-	public Challenge saveChallenge(Challenge challenge);
+	/**
+	 * challenge를 저장
+	 * @param challengeDto
+	 * @return Challenge
+	 */
+	public Challenge saveChallenge(ChallengeDto challengeDto);
 	
 	public List<Challenge> findAllChallenge();
 	
@@ -26,8 +32,9 @@ public interface ChallengeService {
 	/**
 	 * challengeId로 챌린지 삭제
 	 * @param challengeId
+	 * @return boolean (true: 참여자 없음, false: 참여자있음)
 	 */
-	public void deleteChallenge(int challengeId);
+	public int deleteChallenge(int challengeId);
 	
 	/**
 	 * challengeId를 이용해서 user가 뛴만큼 user 및 challenge의 distance update
@@ -118,6 +125,7 @@ public interface ChallengeService {
 	 * @return
 	 */
 	public List<ChallengeUser> findAllChallengeUserByUserIdIng(int userId);
+	public List<ChallengeUser> findAllNonChallengeUserByUserIdIng(int userId);
 	
 	/**
 	 * 유저의 참가 예정 챌린지 목록
@@ -125,6 +133,7 @@ public interface ChallengeService {
 	 * @return
 	 */
 	public List<ChallengeUser> findAllChallengeUserByUserIdComingSoon(int userId);
+	public List<ChallengeUser> findAllNonChallengeUserByUserIdComingSoon(int userId);
 	
 	/**
 	 * 유저의 종료 챌린지 목록
@@ -132,5 +141,15 @@ public interface ChallengeService {
 	 * @return
 	 */
 	public List<ChallengeUser> findAllChallengeUserByUserIdEnd(int userId);
+	public List<ChallengeUser> findAllNonChallengeUserByUserIdEnd(int userId);
+	
+	/**
+	 * 유저가 탈퇴 시 
+	 * 현재 거리(진행중 챌린지)
+	 * 참가자 수(진행중, 진행예정 챌린지)
+	 * 줄이기
+	 * @param userEmail
+	 */
+	public void deleteAllChallengeUserByUserEmail(String userEmail);
 
 }

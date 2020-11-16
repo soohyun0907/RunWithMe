@@ -2,13 +2,14 @@ import {user, contacts, chatCollection, chatroom} from "../../data/groupchat";
 import http from "@/utils/http-common";
 import Stomp from 'webstomp-client';
 import SockJS from 'sockjs-client';
+import store from "@/store/modules/groupchat.js";
 
 const state = {
-  currentUser: user,
+  currentUser: [],
   contactList: [],
   recentUsers: [],
   selectedUser: "",
-  chats: chatCollection,
+  chats: [],
   roomInfo : {
     roomId : "~id",
     roomName : "~name"
@@ -19,7 +20,7 @@ const state = {
   token : "",
   sock : "",
   ws: "",
-  chatrooms : chatroom,
+  chatrooms : [],
 };
 
 
@@ -41,7 +42,6 @@ const actions = {
     commit("createAndSelectChatroom", uid);
   },
   sendMessages({commit}, payload){
-    console.log("msg: " + payload.msg)
     commit("sendMessage", payload);
   },
   selectUserList({commit}){
@@ -52,34 +52,23 @@ const actions = {
 
 const mutations = {
   updateSelectedUser: (state, id) => {
-    // const sUser = state.contactList.filter(user => user.id == id);
-    // state.selectedUser = username;
-    // console.log(state.selectedUser);
   },
   selectUserLists:(state) => {
     http
-      .get("/friends/contacts")
+      .get("/friends/contacts/online",{
+        AUTH: localStorage.getItem('auth'),
+      })
       .then((data)=>{
-        // console.log("localstorage_auth");
-        // console.log(localStorage.getItem('auth'));
-        // console.log("before");
-        // console.log(data.data.data);
-        
         state.contactList = data.data.data;
-        // console.log("?")
-        // console.log(state.contactList)
-        
       })
   },
   createAndSelectChatroom : (state, uid, sock, ws) => {
-    console.log("uid:" + uid)
     http
       .post("/match/room", 
       {
           guestId : uid
       })
       .then((data) =>{
-        console.log(data);
         state.roomInfo = data.data.data;
         state.selectedUser = state.roomInfo.name;
         state.roomId = state.roomInfo.roomId;
@@ -89,17 +78,6 @@ const mutations = {
 
       })
     },
-    // sendMessage : (state, payload) => {
-    //   // var ws = Stomp.over(state.sock)
-    //   console.log(payload.msg)
-    //   console.log("======")
-    //   console.log(state.ws)
-    //   var header = {"token":state.token};
-    //   var body = JSON.stringify({type:payload.type, roomId:state.roomId, message:payload.msg});
-    //   state.ws.send("/pub/chat/message", body, header );
-    //   //this.message = '';
-    // }
-
 };
 
 export default {
