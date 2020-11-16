@@ -53,27 +53,28 @@
 
 ## 📌 목차
 
-[Run With Me ? 🏃️](-Run-With-Me-?-) 
+[Run With Me ? 🏃️]https://lab.ssafy.com/s03-final/s03p31a303/tree/master#-run-with-me-%EF%B8%8F-) 
 
-* [시작하기](#시작하기) 
+* [시작하기](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0) 
 
-  * [시작하기에 앞서](#시작하기에-앞서)
-  * [설치하기](#설치하기)
-  * [실행하기](#실행하기)
-  * [배포하기](#배포하기)
-  * [데모](#데모)
+  * [시작하기에 앞서](https://lab.ssafy.com/s03-final/s03p31a303#%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0%EC%97%90-%EC%95%9E%EC%84%9C)
+  * [설치하기](https://lab.ssafy.com/s03-final/s03p31a303#%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0)
+  * [실행하기](https://lab.ssafy.com/s03-final/s03p31a303#%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0)
+  * [배포하기](https://lab.ssafy.com/s03-final/s03p31a303#%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0)
 
-* [지원하는 브라우저](#지원하는-브라우저)
+* [지원하는 브라우저](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%A7%80%EC%9B%90%ED%95%98%EB%8A%94-%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80)
 
-* [사용된 도구](#사용된-도구)
+* [사용된 도구](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%82%AC%EC%9A%A9%EB%90%9C-%EB%8F%84%EA%B5%AC)
 
-* [사용된 기술](#사용된-기술)
+* [사용된 기술](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%82%AC%EC%9A%A9%EB%90%9C-%EA%B8%B0%EC%88%A0)
+ 
+* [Application Architecture](https://lab.ssafy.com/s03-final/s03p31a303/edit/master/README.md#-application-architecture)
 
-* [서비스 소개](#서비스-소개)
+* [서비스 소개](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%86%8C%EA%B0%9C)
 
-* [저자](#저자)
+* [저자](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%A0%80%EC%9E%90)
 
-* [라이센스](#라이센스)
+* [라이센스](https://lab.ssafy.com/s03-final/s03p31a303#-%EB%9D%BC%EC%9D%B4%EC%84%BC%EC%8A%A4)
 
   
 
@@ -147,11 +148,8 @@
 
 해당 서비스는 `AWS EC2`를 이용하여 배포하였습니다. 사전에 [여기]()를 참고해서 `AWS EC2`계정을 생성하세요.
 
-배포를 하기위해서는 다음과 같은 방법으로 실행합니다: **TBU**
+배포를 하기위해서는 다음과 같은 방법으로 실행합니다: Putty 를 통해 접속 -> Ubuntu 환경에 Git Clone -> Nginx 환경 설정 -> Ubuntu 환경에서 빌드 및 실행 -> Nginx 실행 -> 접속
 
-### 데모
-
-[여기](http://honeycombo.onle)를 클릭하세요. : **TBU**
 
 
 
@@ -176,8 +174,8 @@
 * SonarQube
 
 
-
 ## :desktop_computer: 사용된 기술
+![image](/uploads/099419baab0b261b3d5299e46cf78127/image.png)
 
 **[ BACK END ]**
 
@@ -240,6 +238,9 @@
 - **Google Drive** : 협업을 위한 공용 문서 및 산출물들을 공유할 수 있도록 활용.
   - 동시 문서 작성 (Google Docs).
   - 대용량 파일 첨부
+
+## :desktop_computer: Application Architecture
+![image](/uploads/13f326ec8abc6068b712c24e0384e775/image.png)
 
 
 ## 🎞 서비스 소개
