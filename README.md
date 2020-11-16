@@ -69,6 +69,8 @@
 
 * [사용된 기술](#사용된-기술)
 
+* [서비스 소개](#서비스-소개)
+
 * [저자](#저자)
 
 * [라이센스](#라이센스)
@@ -238,6 +240,88 @@
 - **Google Drive** : 협업을 위한 공용 문서 및 산출물들을 공유할 수 있도록 활용.
   - 동시 문서 작성 (Google Docs).
   - 대용량 파일 첨부
+
+
+## 🎞 서비스 소개
+
+### 1. 로그인 화면
+
+<img src="/uploads/740ce5f34a260a48d1d6cbe85ba092d1/1._로그인창.jpg" width="30%" >
+
+### 2. 메인 화면
+<img src="/uploads/52fef267461ea9fcc6e35ac17ddcbfab/2._메인화면.jpg" width="30%" >
+<img src="/uploads/ea91fba11be4299e24b5eaa1e687e0cb/2._메인하면_하단.jpg" width="30%" >
+
+#### 2-1. 메인 화면에서 랭커 클릭
+<img src="/uploads/a715b0b91bb7ab59bafd43c1791eff58/3._메인에서_랭커_클릭.jpg" width="30%" >
+<img src="/uploads/093b2a3ab0a6e40c9481a81aaabd84b0/3_.메인_랭커_기록_보기.jpg" width="30%" >
+
+#### 2-2. 메인 화면에서 친구 피드 클릭
+<img src="/uploads/75dc2ddc87b2a42cf2dd75b1698aa60a/3._메인에서_친구_피드클릭.jpg" width="30%" >
+
+### 3. 런닝 페이지  
+<img src="/uploads/32e36cf655e596a67303b90fd85d66a9/4._런닝_시작.jpg" width="30%" >
+<img src="/uploads/14e676d7ffa86ec44c10f768652115e1/5._런닝_분석1.jpg" width="30%" >
+<img src="/uploads/6fa16ca2f5d972ed5f3e8399c8bd6100/5._런닝_분석2..jpg" width="30%" >
+
+### 4. 주변 러너 추천
+<img src="/uploads/e16a7769651b80c364fa82492b157702/6._주변러너추천.jpg" width="30%" >
+<img src="/uploads/d557c69b3a4b54205b7578083cbc7705/6._주변러너추천__2_.jpg" width="30%" >
+
+### 5. 채팅 및 매칭
+<img src="/uploads/525440ff61a1b1b3e16e0bf0cd60d7a4/7._채팅___매칭.jpg" width="30%" >
+<img src="/uploads/ed7be05aea9cc3e3806f7971dfccc7c2/7.실제_채팅.jpg" width="30%" >
+<img src="/uploads/f1fd199acbe8e15a78eb8cde4e743ed9/7._매칭.jpg" width="30%" >
+
+
+### 6. 지역 채팅
+<img src="/uploads/ba16b27eb2c96b9ecf84456cecd43046/8._지역채팅.jpg" width="30%" >
+<img src="/uploads/7e5d509b2553e71bf69f51079808ac76/8.지역_실제채팅.jpg" width="30%" >
+
+
+### 7. 챌린지 페이지
+<img src="/uploads/c441a423aee5dcce59cd9f73810993a0/9._챌린지_클릭.jpg" width="30%" >
+<img src="/uploads/d9602223f8c9e9c4be45263402609401/9._챌린지_페이지.jpg" width="30%" >
+<img src="/uploads/7cfcd355efbaf5e99c12b541d37e1cbe/10._챌린지_신청.jpg" width="30%" >
+
+
+#### 7-1. 챌린지 상세
+<img src="/uploads/fd7c0f86c617a665d27a7d54feccbb5c/10._챌린지_디테일.jpg" width="30%" >
+
+
+### 8. 챌린지 결제
+<img src="/uploads/d41c52eb88314d1a61920d27c222b8e1/11._챌린지_결제.jpg" width="30%" >
+<img src="/uploads/cc08c2ee441170ac053f799d93741193/11._챌린지_결제_확인.jpg" width="30%" >
+
+#### 8-1. 챌린지 제안
+<img src="/uploads/fcd2abaaed9f7ea5a1088f350b6a3f09/12._챌린지_제안.jpg" width="30%" >
+<img src="/uploads/628de795bf0e7becdc3f6f810d04014c/12._챌린지_제안_상세.jpg" width="30%" >
+<img src="/uploads/13b77b4438ad13b0f1dd2537a32fefb7/12._챌린지_상세_댓글.jpg" width="30%" >
+
+#### 8-2. 챌린지 관리페이지
+<img src="/uploads/92112d15ae026b13b5bb5b8386c281c5/13._챌린지_생성_및_관리.jpg" width="30%" >
+
+### 9. 런닝 기록 조회
+<img src="/uploads/52fef924c5c3e007976c90fcb44fe042/15._내_런닝.jpg" width="30%" >
+<img src="/uploads/ef5be5ee1cbdaf0f2050c734d470c67c/15._내_런닝_클릭.jpg" width="30%" >
+<img src="/uploads/16b87880924881eae3b76fadf7b77faf/15._내_런닝_클릭2.jpg" width="30%" >
+
+#### 9-1. 런닝 상세
+<img src="/uploads/66bc6b6f01dd83b1af4e4eceeebd4b36/16._내_런닝_상세.jpg" width="30%" >
+<img src="/uploads/0275376e046200eeeafe5fe50e0e3f75/16._내_런닝_상세_2.jpg" width="30%" >
+
+### 10. 친구 목록
+<img src="/uploads/36e159c16ef22689b375390dc04bca02/17._친구_목록.jpg" width="30%" >
+
+### 11. 마일리지 충전
+<img src="/uploads/3535f4239241a52417504badcddbc8db/18._마일리지_충전.jpg" width="30%" >
+<img src="/uploads/808ba62310c67e6d7bef8be9d7738493/18._마일리지_충전_가_.jpg" width="30%" >
+<img src="/uploads/3c87041886827e9e91251a7bd36f543b/18._마일리지_충전완.jpg" width="30%" >
+
+### 12. 회원정보 수정
+<img src="/uploads/ca913d3815b36b613a79998e08f69986/14._회원정보_수정.jpg" width="30%" >
+<img src="/uploads/f5aa90a5c3cbbd48353dfa83c8a41e78/14._회원정보_수정전.jpg" width="30%" >
+<img src="/uploads/b0ce339d70317e6a7e3eba1971a174b1/14._회원정보_수정후.jpg" width="30%" >
 
 
 
