@@ -186,14 +186,12 @@ export default {
               this.echart4.xAxis.data.push(this.records[i].accDistance)
               check.push(this.records[i].accDistance)
             }
-            console.log(check)
             for(var i=0; i<check.length; i++){
               if(i>0 && check[i]==check[i-1]){
                 this.records.splice(i,1)
                 this.echart4.xAxis.data.splice(i,1)
               }
             }
-            console.log(this.records)
   
             if(this.result.accDistance==0.00 ||this.result.accTime==0.00 ||this.result.accDistance==0 || this.result.accTime==0){
               this.avgSpeed=0;
