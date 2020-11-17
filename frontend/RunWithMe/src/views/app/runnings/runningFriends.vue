@@ -21,11 +21,11 @@
             <div class="row">
                 <div class="col">
                     총 런닝 거리
-                    <h3>{{result.accDistance.toFixed(2)}} km</h3>
+                    <h3>{{result.accDistance? result.accDistance.toFixed(2): 0}} km</h3>
                 </div>
                 <div class="col">
                     총 런닝 시간
-                    <h3>{{convertToTime(result.accTime.toFixed(2))}}</h3>
+                    <h3>{{convertToTime(result.accTime)}}</h3>
                 </div>
             </div> 
             <div class="row">

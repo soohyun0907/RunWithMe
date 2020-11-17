@@ -11,18 +11,18 @@
         <img :src="challenge.challengeImg" />
         <br>
         <br>
-        <p> 기간: {{ challenge.startTime | moment('YYYY.MM.DD') }} ~ {{ challenge.endTime | moment('YYYY.MM.DD') }} <br>
+        <p> 기간: {{ challenge.startTime }} ~ {{ challenge.endTime }} <br>
             설명: {{ challenge.content }} <br>
             현재 참여 인원: {{ challenge.participant }} <br>
             개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM <br>
-        <h6>모인 금액 {{ challenge.donateCurrent }} / {{ challenge.donateGoal }} 원</h6>
+        <h6>모인 금액 {{ challenge.donateCurrent | makeComma }} / {{ challenge.donateGoal |makeComma}} 원</h6>
         <b-progress class="mb-3"
             variant="success"
             :max="challenge.donateGoal"
             :value="challenge.donateCurrent"
             animated show-progress>
         </b-progress>
-        <h6>전체 달성률 {{ challenge.distanceCurrent.toFixed(2) }} / {{ challenge.distanceGoal }} KM</h6>
+        <h6>전체 달성률 {{ challenge.distanceCurrent }} / {{ challenge.distanceGoal }} KM</h6>
         <b-progress class="mb-3"
             variant="warning"
             :max="challenge.distanceGoal"
@@ -52,7 +52,20 @@ export default {
     },
     data() {
         return {
-            challenge: {},
+            challenge: {
+                challengeId: 0,
+                title: "",
+                content: "",
+                challengeImg: "",
+                startTime: "",
+                endTime: "",
+                distanceGoal: 0,
+                distanceCurrent: 0,
+                donateGoal: 0,
+                donateCurrent: 0,
+                personalDistanceGoal: 0,
+                participant: 0
+            },
         }
     },
     computed: {
@@ -69,9 +82,21 @@ export default {
             http
             .get("challenges/"+this.$route.query.challengeId)
             .then(({data}) => {
+                // console.log(data.data);
                 if(data.status == 200){
-                    // //console.log(data.data);
-                    this.challenge = data.data.challengeId;
+                    this.challenge.challengeId = data.data.challengeId.challengeId;
+                    this.challenge.title = data.data.challengeId.title;
+                    this.challenge.content = data.data.challengeId.content;
+                    this.challenge.challengeImg = data.data.challengeId.challengeImg;
+                    this.challenge.startTime = this.$moment(data.data.challengeId.startTime).format('YYYY.MM.DD');
+                    this.challenge.endTime = this.$moment(data.data.challengeId.endTime).format('YYYY.MM.DD');
+                    this.challenge.distanceGoal = data.data.challengeId.distanceGoal;
+                    this.challenge.distanceCurrent = (data.data.challengeId.distanceCurrent).toFixed(2);
+                    this.challenge.donateGoal = data.data.challengeId.donateGoal;
+                    this.challenge.donateCurrent = data.data.challengeId.donateCurrent;
+                    this.challenge.personalDistanceGoal = data.data.challengeId.personalDistanceGoal;
+                    this.challenge.participant = data.data.challengeId.participant;
+                    // console.log(this.challenge)
                 }
             })
             .catch((error) => {
