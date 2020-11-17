@@ -224,7 +224,7 @@ export default {
       // http.get(`friends/contacts/${this.userInfo.userId}`)
       http.get(`friends/contacts`)
       .then((res) => {
-        //console.log(res.data.data);
+        // console.log(res.data.data);
         this.rows = res.data.data
     });
     }

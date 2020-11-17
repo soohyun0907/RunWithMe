@@ -185,6 +185,7 @@ export default {
               this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
               this.echart4.xAxis.data.push(this.records[i].accDistance)
             }
+            console.log(this.records)
   
             if(this.result.accDistance==0.00 ||this.result.accTime==0.00 ||this.result.accDistance==0 || this.result.accTime==0){
               this.avgSpeed=0;
