@@ -123,8 +123,7 @@
                 <img
                   :src="message.img"
                   alt=""
-                  class="avatar-sm rounded-circle ml-3"
-                />
+                  class="avatar-sm rounded-circle ml-3"/>
               </div>
               <!-- END 나의 채팅 메시지 -->
               <!-- START 상대방의 메시지 -->
@@ -322,7 +321,7 @@ export default {
     },
     recvMessage: function (recv) {
       if (recv.imgUrl == null) {
-        recv.imgUrl = require("@/assets/images/faces/profile.jpg");
+        recv.imgUrl = this.defaultProfile;
       }
       var today = new Date();
       var time = today.getHours() + " : " + today.getMinutes();
@@ -384,6 +383,7 @@ export default {
       "getSelectedChatroom",
       "userInfo",
       "auth",
+      "defaultProfile"
     ]),
   },
 
