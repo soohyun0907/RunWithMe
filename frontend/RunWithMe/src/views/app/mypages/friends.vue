@@ -66,7 +66,7 @@
             {{props.row.userId.gugunId.sidoId.sidoName}} {{props.row.userId.gugunId.gugunName}}
           </span>
           <span v-else-if="props.column.field == 'username'">
-            <a href="">
+            <router-link :to="{name:'friendsDetail', query:{friendId: props.row.userId.userId}}">
               <div class="ul-widget-app__profile-pic" style="text-align:center">
                 <div v-if="props.row.userId.profile!=null">
                   <img
@@ -82,7 +82,7 @@
                     {{ props.row.userId.username }}
                   </div>
               </div>
-            </a>
+            </router-link>
           </span>
         </template>
       </vue-good-table>
