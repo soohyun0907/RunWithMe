@@ -15,7 +15,7 @@
             설명: {{ challenge.content }} <br>
             현재 참여 인원: {{ challenge.participant }} <br>
             개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM <br>
-        <h6>모인 금액 {{ challenge.donateCurrent }} / {{ challenge.donateGoal }} 원</h6>
+        <h6>모인 금액 {{ challenge.donateCurrent | makeComma }} / {{ challenge.donateGoal |makeComma}} 원</h6>
         <b-progress class="mb-3"
             variant="success"
             :max="challenge.donateGoal"
@@ -96,6 +96,7 @@ export default {
                     this.challenge.donateCurrent = data.data.challengeId.donateCurrent;
                     this.challenge.personalDistanceGoal = data.data.challengeId.personalDistanceGoal;
                     this.challenge.participant = data.data.challengeId.participant;
+                    // console.log(this.challenge)
                 }
             })
             .catch((error) => {
