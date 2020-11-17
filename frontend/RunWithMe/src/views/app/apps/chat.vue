@@ -118,7 +118,6 @@
                   alt=""
                   class="avatar-sm rounded-circle mr-3"/>
                 </div>
-
                 
                 <h6 @click="choice(contact.userId)" class="">
                   {{ contact.username }}
