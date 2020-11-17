@@ -1,7 +1,7 @@
 <template>
   <div class="main-content">
-    <div class="user-profile-img">
-      <div v-if="friendInfo && friendInfo.userId.profile!= null">
+    <div class="user-profile-img" v-if="friendInfo.userId">
+      <div v-if="friendInfo.userId.profile!= null">
         <img
           class="profile-picture mb-2"
           :src="friendInfo.userId.profile"
@@ -16,6 +16,7 @@
         />
       </div>
     </div>
+
     <div>
       <p class="m-0 text-24" style="text-align: center">
         {{ friendInfo.userId.username }}
