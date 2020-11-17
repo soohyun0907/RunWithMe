@@ -412,11 +412,8 @@ export default {
               //1km 도달시 마다
               // console.log("최근 1km당 스피드 = " + this.speed);
               this.savePosition();
-              setTimeout(() => {
-                this.checkOneKm -= 1;
-                this.checkSecond = 0;
-              }, 100);
-
+              this.checkOneKm -= 1;
+              this.checkSecond = 0;
             }
           }
         },
@@ -470,14 +467,14 @@ export default {
 
     },
     savePosition(position) {
-      if(this.checkOneKm==0 || this.checkSecond==0){
-        var speed = 0.01
+      if(this.checkOneKm<=0 || this.checkSecond<=0){
+        var speed = 0.001
       }else{
-        var speed = this.speed+0.01
+        var speed = this.speed+0.001
       }
 
       let tempRecord = {
-        accDistance:this.accumulated_distance+0.01,
+        accDistance:this.accumulated_distance+0.001,
         accTime: this.accumulated_time,
         speed: speed,
       };
@@ -502,13 +499,15 @@ export default {
       // console.log(this.tempRecords)
       
       let stringTempRecord = {
-        accDistance:(this.accumulated_distance+0.01).toString(),
+        accDistance:(this.accumulated_distance+0.001).toString(),
         accTime: this.accumulated_time.toString(),
         speed: speed.toString(),
       };
       this.stringTempRecords.push(stringTempRecord)
       // console.log("savePosition - stringtempRecords")
       // console.log(this.stringTempRecords)
+
+      this.drawLines();
 
     },
 
