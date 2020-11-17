@@ -1,7 +1,7 @@
 <template>
   <div class="main-content">
-    <div class="user-profile-img" v-if="friendInfo.userId">
-      <div v-if="friendInfo.userId.profile!= null">
+    <div class="user-profile-img">
+      <div v-if="friendInfo.userId && friendInfo.userId.profile!= null">
         <img
           class="profile-picture mb-2"
           :src="friendInfo.userId.profile"
@@ -16,8 +16,8 @@
         />
       </div>
     </div>
-
-    <div>
+    
+    <div v-if ="friendInfo.userId">
       <p class="m-0 text-24" style="text-align: center">
         {{ friendInfo.userId.username }}
       </p>
@@ -105,10 +105,6 @@ export default {
     };
   },
   mounted() {
-    // //console.log("this.userInfo")
-    // //console.log(this.userInfo)
-    // //console.log("this.userTotal")
-    // //console.log(this.userTotal)
     http
       .post(`ranks/search`, {
         userId: this.$route.query.friendId,

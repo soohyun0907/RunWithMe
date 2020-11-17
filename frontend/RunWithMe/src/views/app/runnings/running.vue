@@ -467,7 +467,7 @@ export default {
 
     },
     savePosition(position) {
-      if(this.checkOneKm==0 || this.checkSecond==0){
+      if(this.checkOneKm<=0 || this.checkSecond<=0){
         var speed = 0.001
       }else{
         var speed = this.speed+0.001
