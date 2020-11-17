@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col">
                     런닝 시작 시간
-                    <h3>{{result.parseTimeE ?  result.parseTimeE[1] : 0}}</h3>
+                    <h3>{{result.parseTimeS ?  result.parseTimeS[1] : 0}}</h3>
                 </div>
                 <div class="col">
                     런닝 종료 시간
