@@ -3,7 +3,7 @@
         <breadcumb :page="'Challenges'" :folder="'Apps'" />
         <b-card class="mileage o-hidden card-icon-bg card-icon-bg-primary o-hidden text-center">
             <div>
-                <p class="mt-2 mb-0 text-primary">{{userInfo.username}}님의 보유 마일리지:{{userInfo.mileage}}</p>
+                <p class="mt-2 mb-0 text-primary">{{userInfo.username}}님의 보유 마일리지:{{userInfo.mileage | makeComma}}</p>
             </div>
         </b-card>
         <b-tabs>
@@ -34,7 +34,7 @@
                                 <p> 설명: {{ challenge.content }} </p>
                                 <p> 현재 참여 인원: {{ challenge.participant }} </p>
                                 <p> 개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM </p>
-                                <h6>모인 금액 {{ challenge.donateCurrent }} / {{ challenge.donateGoal }} 원</h6>
+                                <h6>모인 금액 {{ challenge.donateCurrent | makeComma }} / {{ challenge.donateGoal |makeComma}} 원</h6>
                                 <b-progress class="mb-3"
                                     variant="success"
                                     :max="challenge.donateGoal"
@@ -279,7 +279,7 @@ export default {
                 .then(({data}) => {
                     if(data.status==200){
                         let obj;
-                        console.log(data.data);
+                        // console.log(data.data);
                         data.data.forEach(element => {
                             obj = new Object();
                             obj.challengeId = element.challengeId;
