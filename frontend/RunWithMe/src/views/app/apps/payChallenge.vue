@@ -4,27 +4,31 @@
     <b-row>
       <b-col lg="6" class="mb-3">
         <b-card title="챌린지 정보">
+          <div v-if="challengeInfo!=null">
+            <img :src = "challengeInfo.challengeImg"/>
+          </div>
           <div>
             <b-form @submit="onSubmit" @reset="onReset" >
               <b-form-group
-                :label="'챌린지 이름: '+challengeInfo.title"
+                class=" mb-20" />
+              
+                <div style="text-align:center; font-weight:900; font-size:1.4em">{{challengeInfo.title}}</div>
+              <b-form-group
                 class=" mb-30" />
               <b-form-group
                 :label="'목표 거리: '+challengeInfo.distanceGoal + 'KM'"
                 class=" mb-30" />
-              <b-form-group
-                :label="'목표 금액: '+challengeInfo.donateGoal + '원'"
-                class=" mb-30" />
+                <label class="mb-30">목표 금액 : {{challengeInfo.donateGoal | makeComma}} 원<br></label>
               <b-form-group
                 :label="'개인 목표 거리: '+challengeInfo.personalDistanceGoal + 'KM'"
-                class=" mb-30" />
+                 class=" mb-30"/>
               <div class="custom-separator"></div>
 
               <div class="card-title">후원 금액을 설정해주세요.</div>
 
+                <label class="text-primary" style="font-weight:900"> 사용 가능한 금액: {{mileage |makeComma}} 원 </label> 
               <b-form-group
                 class="col-md-6 mb-3"
-                :label="'사용 가능한 금액:  ' + mileage + ' 원'"
                 label-for="input-1"
               >
               <b-form-input
