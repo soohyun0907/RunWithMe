@@ -1,6 +1,7 @@
 import http from "@/utils/http-common";
 import router from "@/router.js"
 import axios from "axios";
+import { setTimeout } from "core-js";
 
 
 export default {
@@ -10,15 +11,27 @@ export default {
     isLogin:false,
     auth:"",
     userInfo:{},
+    userTotal:{},
+    myRunning:{},
+    defaultProfile:require('@/assets/images/faces/defaultProfile.png')
   },
   getters: {
     loading: state => state.loading,
     error: state => state.error,
     userInfo: state => state.userInfo,
+    userTotal:state=>state.userTotal,
     auth: state => state.auth,
     isLogin:state =>state.isLogin,
+    myRunning:state=>state.myRunning,
+    defaultProfile:state=>state.defaultProfile,
   },
   mutations: {
+    mutateMyRunning(state,myRunning){
+      state.myRunning = myRunning
+    },
+    mutateUserTotal(state,userTotal){
+      state.userTotal = userTotal
+    },
     mutateProfile(state, profile){
       state.userInfo.profile = profile
     },
@@ -36,6 +49,7 @@ export default {
     },
     setLogout(state) {
       state.userInfo = {};
+      state.userTotal = {};
       state.loading = false;
       state.error = null;
       state.auth=""
@@ -60,7 +74,7 @@ export default {
     }
   },
   actions: {
-   
+ 
     login(context, { userEmail, userPw }) {
       context.commit("clearError");
       context.commit("setLoading", true);
@@ -69,7 +83,8 @@ export default {
         userEmail:userEmail,
         userPw:userPw        
       }).then(res => {
-          context.commit('mutateUserInfo', res.data.data)
+          context.commit('mutateUserInfo', res.data.data.userId)
+          context.commit('mutateUserTotal', res.data.data)
           context.commit('mutateAuth',res.headers.auth)
           localStorage.setItem("auth",res.headers.auth)
           localStorage.setItem("userInfo",JSON.stringify(res.data.data))

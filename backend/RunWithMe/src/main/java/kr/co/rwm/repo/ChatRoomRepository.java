@@ -1,7 +1,6 @@
 package kr.co.rwm.repo;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Resource;
@@ -11,10 +10,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
-import kr.co.rwm.entity.User;
 import kr.co.rwm.model.ChatRoom;
-import kr.co.rwm.service.JwtTokenProvider;
-import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -35,7 +31,7 @@ public class ChatRoomRepository {
     @Autowired
     // 모든 채팅방 조회
     public List<ChatRoom> findAllRoom() {
-        return hashOpsChatRoom.values(CHAT_ROOMS);
+    	return hashOpsChatRoom.values(CHAT_ROOMS);
     }
 
     // 특정 채팅방 조회

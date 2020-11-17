@@ -3,15 +3,12 @@ import http from "@/utils/http-common";
 import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
 
-var sock = new SockJS("http://localhost:8080/ws-stomp");
-var ws = Stomp.over(sock);
-
 const state = {
-  currentUser: user,
-  contactList: contacts,
+  currentUser: [],
+  contactList: [],
   recentUsers: [],
-  selectedUser: contacts[0],
-  chats: chatCollection,
+  selectedUser: {},
+  chats: [],
   chatrooms: [],
   selectedChatroom:[],
 
@@ -19,11 +16,6 @@ const state = {
 };
 
 const getters = {
-  // getContactLists: state => state.contactList,
-  // getCurrentUser: state => state.currentUser,
-  // getRecentUser: state => state.recentUsers,
-  // getSelectedUser: state => state.selectedUser,
-  // getUserLists: state => state.getUserLists,
   getChatRoom: state => state.chatrooms,
   getSelectedChatroom: state => state.selectedChatroom
 };
@@ -37,27 +29,14 @@ const actions = {
     http.get("/chat/room/"+roomId)
     .then((data) => {
       commit("setOneGroupChat",data.data)
-      // console.log(data.data.name)
     })
   },
-  // changeGroupChat({commit}){
-  //   commit("selectAllGroupChat");
-  // },
-
-  // selectAllGroupChat: (state ) =>{
-  //   http.get("/chat/room")
-  //   .then((data)=>{
-  //     console.log(data);
-  //     state.chatrooms = data.data;
-  //   })
-  // }
 };
 
 const mutations = {
   updateSelectedUser: (state, id) => {
     const sUser = state.contactList.filter(user => user.id == id);
     state.selectedUser = sUser[0];
-    // console.log(state.selectedUser);
   },
 
   selectAllGroupChat: (state,chatrooms) => {
@@ -71,27 +50,6 @@ const mutations = {
   groupChat:(state) =>{
     
   }
-
-  // createChatRoom: (state) => {
-  //   const chatRoom = state.chatrooms;
-  //   state.
-  // }
-
-  // selectUserLists:(state) => {
-  //   http
-  //     .get("/friends/contacts/"+1)
-  //     .then((data)=>{
-  //       console.log(data);
-  //       state.contactList = data.data;
-  //     })
-  // },
-  // createAndSelectChatroom : (state) => {
-  //   http
-  //     .post("/chat/room")
-  //     .then((data) =>{
-  //       console.log(data);
-  //     })
-  // }
 };
 
 export default {

@@ -65,7 +65,7 @@ import { mapGetters, mapActions,mapMutations } from "vuex";
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignIn",
+    title: "로그인",
   },
   data() {
     return {
@@ -82,12 +82,14 @@ export default {
      this.setLogout();
      this.$store.subscribe((mutation,state) =>{
       if(mutation.type =="mutateAuth"){
-        console.log("바껴써용")
+        //console.log("바껴써용")
         setTimeout(() => {
           this.$router.go(0)
-        }, 100);
+        },400);
       }
      })
+
+     this.makeVariantToast('info')
   },
   computed: {
     validation() {
@@ -99,36 +101,37 @@ export default {
   methods: {
     ...mapActions(["login","signOut"]),
     ...mapMutations(["setLoading","setLogout"]),
+     //   toast-target
+     makeVariantToast(variant = null) {
+      this.$bvToast.toast("모바일로 이용하시는 것을 권장합니다", {
+        title: `RWM`,
+        variant: variant,
+        solid: true,
+        // appendToast:'b-toaster-top-center'
+      });
+    },
     formSubmit() {
       this.login({ userEmail: this.userEmail, userPw: this.userPw });
     },
     makeToast(variant = null, msg) {
       this.$bvToast.toast(msg, {
-        title: ` ${variant || "default"}`,
+        title: ` ${"로그인 실패!" || "default"}`,
         variant: variant,
         solid: true,
       });
     },
   },
   watch: {
-    checkUserInfo(val) {
-      console.log("checking,,,")
-      if (this.auth != {}) {
-        this.makeToast("success", "Successfully Logged In");
-      } else {
-        this.makeToast("Success", "Successfully Logged out");
-      }
-    },
     error(val) {
       if (val != null) {
-        this.makeToast("warning", val.message);
+        this.makeToast("danger", "이메일과 비밀번호가 일치하지 않습니다.");
       }
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .spinner.sm {
   height: 2em;
   width: 2em;

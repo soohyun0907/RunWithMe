@@ -1,8 +1,11 @@
 <template>
   <div class="main-content">
-    <breadcumb :page="'Group Chat'" :folder="'apps'" />
+    <breadcumb :page="'지역별 채팅'" :folder="'Chatting'" />
 
-    <div class="card chat-sidebar-container sidebar-container">
+    <div
+      class="card chat-sidebar-container sidebar-container"
+      style="height: 400px"
+    >
       <div class="chat-sidebar-wrap sidebar" :class="{ 'ml-0': isMobile }">
         <div class="border-right">
           <div
@@ -19,7 +22,7 @@
                 class="form-control form-control-rounded"
                 id="search"
                 v-model="search"
-                placeholder="서비스 준비중"
+                placeholder="채팅방 이름을 입력하세요"
               />
             </div>
           </div>
@@ -28,68 +31,31 @@
           <vue-perfect-scrollbar
             :settings="{ suppressScrollX: true, wheelPropagation: false }"
             class="contacts-scrollable perfect-scrollbar rtl-ps-none ps scroll"
+            style="height:50vh;"
           >
             <div>
               <div
                 class="mt-4 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
               >
-                그룹 채팅 목록
+                지역별 채팅 목록
               </div>
-              <div
-                
-                v-for="chatroom in this.getChatRoom"
-                :key="chatroom.roomId"
-              >
-                <div class="p-3 d-flex border-bottom align-items-center" v-if="chatroom.name.includes(search)">
+              <div v-for="chatroom in this.getChatRoom" :key="chatroom.roomId">
+                <div
+                  class="p-3 d-flex border-bottom align-items-center"
+                  v-if="chatroom.name.includes(search)"
+                >
                   <h6 @click="choice(chatroom.roomId)" class="">
                     {{ chatroom.name }}
                   </h6>
                 </div>
               </div>
-              <!-- <div
-                class="p-3 d-flex border-bottom align-items-center contact"
-                v-for="contact in getRecentUser"
-                :key="contact.name"
-                :class="contact.status"
-              > -->
-
-              <!-- <img
-                  :src="contact.avatar"
-                  alt=""
-                  class="avatar-sm rounded-circle mr-3"
-                />
-                <h6 class="">{{ contact.name }}</h6> -->
-              <!-- </div> -->
-
-              <div
-                class="mt-3 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
-              >
-                서비스 준비중입니다.....
-              </div>
-
-              <!-- <div
-                class="p-3 d-flex border-bottom align-items-center contact"
-                v-for="chatroom2 in this.getChatRoom"
-                :key="chatroom2.roomID"
-              >
-                <h6>{{ chatroom2.name }}</h6>
-              </div> -->
-              <!-- :class="contact.status"
-              > -->
-              <!-- @click="changeSelectedUser(contact.id)"
-              > -->
-              <!-- <img
-                  :src="contact.avatar"
-                  alt=""
-                  class="avatar-sm rounded-circle mr-3"
-                /> -->
             </div>
           </vue-perfect-scrollbar>
         </div>
       </div>
 
       <!-- 채팅사이드 바 -->
-      <div class="chat-content-wrap sidebar-content">
+      <div class="chat-content-wrap sidebar-content" >
         <div
           class="d-flex pl-3 pr-3 pt-2 pb-2 o-hidden box-shadow-1 chat-topbar"
         >
@@ -121,9 +87,11 @@
           :settings="{ suppressScrollX: true, wheelPropagation: false }"
           class="chat-content perfect-scrollbar rtl-ps-none ps scroll"
           id="chatContainer"
+          style="height: 40vh"
         >
           <div>
-            <div onscroll="chat_on_scroll()"
+            <div
+              onscroll="chat_on_scroll()"
               class="list-group-item"
               v-for="(message, index) in messages"
               :key="index"
@@ -133,15 +101,24 @@
               </div>
 
               <!-- START 나의 채팅 메시지 -->
-              <div class="d-flex mb-20" v-if="testUserId === message.sender">
-                <div class="message flex-grow-1" style="width: 70%">
+              <div class="d-flex mb-10" v-if="testUserId === message.sender">
+                <div class="message flex-grow-1">
                   <div class="d-flex">
-                    <p class="mb-1 text-title text-16 flex-grow-1">
+                    <p
+                      class="mb-1 text-title text-16 flex-grow-1"
+                      style="float: left"
+                    >
                       {{ message.sender }}
+                      <span
+                        class="text-small text-muted"
+                        style="padding-left: 3px"
+                        >{{ message.time }}</span
+                      >
                     </p>
-                    <!-- <span class="text-small text-muted">25 min ago</span> -->
                   </div>
-                  <p class="m-0" >{{ message.message }}</p>
+                  <p class="m-0" style="padding-left: 5px; float: left">
+                    {{ message.message }}
+                  </p>
                 </div>
                 <img
                   :src="message.img"
@@ -152,7 +129,7 @@
               <!-- END 나의 채팅 메시지 -->
               <!-- START 상대방의 메시지 -->
               <div
-                class="d-flex mb-30 user"
+                class="d-flex mb-10 user"
                 v-if="testUserId != message.sender && back != message.sender"
               >
                 <img
@@ -160,12 +137,23 @@
                   alt=""
                   class="avatar-sm rounded-circle mr-3"
                 />
-                <div class="message flex-grow-1" style="width: 70%">
+                <div class="message flex-grow-1">
                   <div class="d-flex">
-                    <p class="mb-1 text-title text-16 flex-grow-1">{{message.sender}}</p>
-                    <!-- <span class="text-small text-muted">24 min ago</span> -->
+                    <p
+                      class="mb-1 text-title text-16 flex-grow-1"
+                      style="float: left"
+                    >
+                      {{ message.sender }}
+                      <span
+                        class="text-small text-muted"
+                        style="padding-left: 3px"
+                        >{{ message.time }}</span
+                      >
+                    </p>
                   </div>
-                  <p class="m-0">{{ message.message }}</p>
+                  <p class="m-0" style="padding-left: 5px; float: left">
+                    {{ message.message }}
+                  </p>
                 </div>
               </div>
               <!-- END 상대방의 메시지 -->
@@ -176,21 +164,9 @@
         <!-- START 메시지 보내기 -->
         <div class="pl-3 pr-3 pt-3 pb-3 box-shadow-1 chat-input-area">
           <form class="inputForm" onsubmit="return false">
-            <!-- <div class="form-group">
+            <div class="form-group" style="height: 5vh; width: 100vh">
               <input
-                type="text"
-                class="form-control form-control-rounded"
-                placeholder="Type your message"
-                name="message"
-                id="message"
-                cols="30"
-                rows="3"
-                spellcheck="false"
-                v-model="message"
-              />
-            </div> -->
-            <div class="form-group">
-              <input
+                style="float: left; width: 38vh"
                 type="text"
                 class="form-control form-control-rounded"
                 placeholder="메세지를 입력하세요"
@@ -199,15 +175,20 @@
                 v-model="message"
                 v-on:keypress.enter="sendMessage('TALK')"
               />
-            </div>
-            <div class="d-flex">
-              <div class="flex-grow-1"></div>
-              <button
-                class="btn btn-icon btn-rounded btn-primary mr-2"
-                type="button"
-                @click="sendMessage('TALK')"
+
+              <div
+                class="d-flex"
+                style="padding-left: 5px; float: left; width: 0vh"
               >
-              </button>
+                <div class="flex-grow-1"></div>
+                <button
+                  class="btn btn-icon btn-rounded btn-primary mr-2"
+                  type="button"
+                  @click="sendMessage('TALK')"
+                >
+                  <i class="i-Paper-Plane"></i>
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -225,6 +206,8 @@ import { isMobile } from "mobile-device-detect";
 import http from "@/utils/http-common";
 import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
 
 // var sock = new SockJS("http://localhost:8080/ws-stomp");
 // var ws = Stomp.over(sock);
@@ -238,7 +221,7 @@ export default {
     return {
       recentContacts: [],
       search: "",
-      isMobile: false,
+      isMobile: true,
       currentChatroom: {},
       chatrooms: [],
       isMe: false /* 내가 보낸 메세지: true | 상대방이 보낸 메시지: false */,
@@ -267,34 +250,60 @@ export default {
       http.get("/chat/room").then((data) => {
         // this.chatrooms = data.data.data;
         this.$store.commit("selectAllGroupChat", data.data.data);
-        console.log(store.state.chatrooms);
       });
     },
     chatScroll() {
-      console.log("chatScroll");
       var objDiv = document.getElementById("chatList");
       if (this.flag) {
         objDiv.scrollTop = objDiv.scrollHeight;
       }
     },
     choice(roomId) {
-      this.flag = false;
-      if (this.ws) this.ws.disconnect();
-      this.selectOneGroupChat(roomId);
-      this.isMobile = false;
-      this.messages = [];
-      setTimeout(() => {
-        this.chat();
-      }, 500);
+      if (!this.flag) {
+        Swal.fire({
+          title: "채팅방 Exit",
+          text: "이전 대화 기록이 사라집니다. 나가시겠습니까?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.flag = false;
+            if (this.ws) this.ws.disconnect();
+            this.selectOneGroupChat(roomId);
+            this.isMobile = false;
+            this.messages = [];
+            setTimeout(() => {
+              this.chat();
+            }, 500);
+          }
+        });
+      } else {
+        this.flag = false;
+        if (this.ws) this.ws.disconnect();
+        this.selectOneGroupChat(roomId);
+        this.isMobile = false;
+        this.messages = [];
+        setTimeout(() => {
+          this.chat();
+        }, 500);
+      }
     },
-    chat_on_scroll(){
-      var obj = document.getElementById("chatList")
-      obj.scrollTop = obj.scroolHeight
-      console.log("hihi")
+    chat_on_scroll() {
+      var obj = document.getElementById("chatList");
+      obj.scrollTop = obj.scroolHeight;
     },
     sendMessage: function (type) {
       if (this.flag) {
-        alert("채팅방을 선택해주세요");
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "채팅방을 선택해주세요",
+          footer: "- RunWithMe -",
+        });
       } else {
         var data = {
           type: type,
@@ -312,24 +321,25 @@ export default {
       }
     },
     recvMessage: function (recv) {
-      console.log("*****************************");
-      console.log(recv);
-      console.log("*****************************");
-      if(recv.imgUrl == null){
-        recv.imgUrl = require("@/assets/images/faces/profile.jpg")
+      if (recv.imgUrl == null) {
+        recv.imgUrl = require("@/assets/images/faces/profile.jpg");
       }
+      var today = new Date();
+      var time = today.getHours() + " : " + today.getMinutes();
       this.userCount = recv.userCount;
       this.messages.push({
         type: recv.type,
         sender: recv.sender,
         message: recv.message,
         img: recv.imgUrl,
+        time: time,
       });
     },
 
     chat() {
       http.get("/chat/user").then((response) => {
-        this.sock = new SockJS("http://k3a303.p.ssafy.io:8080/ws-stomp");
+        this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
+        // this.sock = new SockJS("http://localhost:8080/ws-stomp");
         var _ws = Stomp.over(this.sock);
 
         var _this = this;
@@ -341,18 +351,22 @@ export default {
             _ws.subscribe(
               "/sub/chat/room/" + _this.getSelectedChatroom.roomId,
               function (message) {
-                console.log("!!!!! ")
                 var recv = JSON.parse(message.body);
                 recv.get;
-                console.log("RECV Sender");
-                console.log(recv);
                 _this.recvMessage(recv);
               }
             );
-            console.log("??????")
           },
           function (error) {
-            alert("서버 연결에 실패 하였습니다. 다시 접속해 주십시요.");
+            Swal.fire({
+              text: "서버 연결에 실패 하였습니다. 다시 접속해 주십시요.",
+              showClass: {
+                popup: "animate__animated animate__fadeInDown",
+              },
+              hideClass: {
+                popup: "animate__animated animate__fadeOutUp",
+              },
+            });
           }
         );
         this.ws = _ws;
@@ -374,6 +388,7 @@ export default {
   },
 
   mounted: function () {
+    // localStorage.clear();
     this.token = this.auth;
     setTimeout(() => {
       this.selectAllGroupChat();

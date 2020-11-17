@@ -26,6 +26,9 @@ const actions = {
 };
 
 const mutations = {
+  closeSidebar(state){
+    state.sidebarToggleProperties.isSideNavOpen = false
+  },
   toggleSidebarProperties: state =>
     (state.sidebarToggleProperties.isSideNavOpen = !state
       .sidebarToggleProperties.isSideNavOpen),

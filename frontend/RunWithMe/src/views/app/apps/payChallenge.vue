@@ -49,6 +49,7 @@
 </template>
 <script>
 import http from "@/utils/http-common";
+import { mapGetters,mapMutations } from "vuex";
 
 export default {
   metaInfo: {
@@ -64,12 +65,21 @@ export default {
         movePayment: "",
     };
   },
+  computed: {
+    ...mapGetters(["userInfo"])
+  },
   created() {
     this.challengeId = this.$route.query.no;
     this.getChallengeInfo();
-    this.getUserInfo();
+    this.mileage = this.userInfo.mileage;
+    if(this.mileage == 0)
+      this.showMovepaymentModal();
+  },
+  mounted() {
+    this.$store.commit('closeSidebar')
   },
   methods: {
+    ...mapMutations(["mutateMyRunning","closeSidebar","mutateUserInfo","mutateUserTotal"]),
     getChallengeInfo(){
         http
         .get("challenges/"+this.challengeId)
@@ -77,23 +87,10 @@ export default {
             if(data.status==200){
                 this.challengeInfo = data.data.challengeId;
             }
-            // console.log(this.challengeInfo);
+            // //console.log(this.challengeInfo);
         })
         .catch((error) => {
-            console.log(error);
-            return;
-        })
-    },
-    getUserInfo() {
-        http
-        .get('/users')
-        .then(({data}) => {
-            this.mileage = data.data.mileage;
-            if(this.mileage == 0)
-              this.showMovepaymentModal();
-        })
-        .catch((error) => {
-            console.log(error);
+            //console.log(error);
             return;
         })
     },
@@ -108,9 +105,18 @@ export default {
           if(data.status == 200){
             this.makePayment();
           } else {
-            alert("챌린지 참여 중 오류가 발생하였습니다.");
-            return;
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '챌린지 참여 중 오류가 발생하였습니다.'
+            });
           }
+        }).catch( err =>{
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '챌린지 참여 중 오류가 발생하였습니다.'
+          });
         })
     },
     onReset(evt) {
@@ -122,29 +128,58 @@ export default {
       http
         .get("payment/"+this.donateAmount)
         .then(({data}) => {
-          alert("결제완료");
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: "참여 성공",
+            showConfirmButton: false,
+            timer: 1500
+          })
+          //유저 정보 갱신
+            http.get('users/').
+            then(res => {
+              //console.log(res)
+              this.$store.commit('mutateUserInfo',res.data.data.userId)
+              this.$store.commit('mutateUserTotal',res.data.data)
+              localStorage.setItem("userInfo",JSON.stringify(res.data.data))
+            })
+            this.$router.push("/app/board/challenges");
         })
         .catch((error) => {
-          this.cancelChallenge();
-          console.log(error);
+          // this.cancelChallenge();
+          Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '마일리지가 부족합니다'
+            });
+          //console.log(error);
           return;
         })
     },
     cancelChallenge() {
-      console.log(this.challengeId+" "+this.donateAmount);
+      //console.log(this.challengeId+" "+this.donateAmount);
       http
         .delete("/challenges/runners/"+this.challengeId+"/"+this.donateAmount)
         .then(({data}) => {
           if(data.status == 200){
-            alert("챌린지 참여 중 오류가 발생하였습니다.");
+            // alert("챌린지 참여 중 오류가 발생하였습니다.")
+            Swal.fire({
+              icon: 'success',
+              title: '챌린지 취소 성공',
+              text: '챌린지 참여를 취소하였습니다.'
+            });
           } else {
-            alert("챌린지 참여 중 오류가 발생하였습니다.");
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '챌린지 참여 중 오류가 발생하였습니다.'
+            });
             return;
           }
         })
         .catch((error) => {
           // this.cancelChallenge();
-          console.log(error);
+          //console.log(error);
           return;
         })
     },
@@ -169,7 +204,7 @@ export default {
           })
         .catch(err => {
           // An error occurred
-          console.log(error);
+          //console.log(error);
         });
     },
   }

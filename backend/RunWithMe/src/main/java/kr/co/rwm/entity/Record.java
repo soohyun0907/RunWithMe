@@ -30,7 +30,7 @@ public class Record implements Serializable {
    /**
     * Redis에 올리려면 Serializable 필요
     */
-   private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 17L;
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,20 +38,20 @@ public class Record implements Serializable {
    private Integer recordId;
 
    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+   @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "running_id")
    private Running runningId;
 
    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-   @JoinColumn(name = "user_id", nullable = false)
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "user_id", nullable = true)
    private User userId;
    
    @Column(name = "accumulated_distance", nullable = false)
    private double accDistance;
    
    @Column(name = "accumulated_time", nullable = false)
-   private double accTime;
+   private Long accTime;
    
    @Column(name = "speed")
    private double speed;

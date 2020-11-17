@@ -6,13 +6,20 @@
     <div class="auth-content">
       <div class="card o-hidden">
         <div class="row">
-          <div class="col-md-6" >
+          <div
+            class="col-md-6 text-center"
+            style="background-size: cover"
+            :style="{ backgroundImage: 'url(' + logo + ')' }"
+          >
+            <div class="pl-3 auth-right">
+              <div class="flex-grow-1"></div>
+              <div class="w-100 mb-30"></div>
+              <div class="flex-grow-1"></div>
+            </div>
+          </div>
+
+          <b-col md="6">
             <div class="p-4">
-              <div class="auth-logo text-center mb-30">
-                <img :src="logo" style="height:auto"/>
-              </div>
-              <h1 style="text-align:center" class="mb-3 text-18"><code class="mb-3 text-18">R</code>un <code class="mb-3 text-18">W</code>ith <code class="mb-3 text-18">M</code>e</h1>
-             
               <h1 class="mb-3 text-18">회원가입</h1>
               <b-form @submit.prevent="submit">
                 <b-form-group label="Email">
@@ -48,12 +55,11 @@
                     입력해주세요.</b-alert
                   >
                 </b-form-group>
-
                 <b-row>
                   <b-col md="8" class=" mb-30">
-                   <b-card class="h-100" title="주 활동지역 선택">
+                   <b-card title="주 활동지역 선택">
 
-                    <b-dropdown size="sm" variant="primary" id="dropdown-1" text="시도 선택" class="mb-2">
+                    <b-dropdown variant="primary" id="dropdown-1" text="시도 선택" class="mb-2 signup">
                       <div v-for="(sido, index) in sidos" v-bind:key="index">
                         <b-dropdown-item @click="sidoSelected(sido)">{{
                           sido.sidoName
@@ -61,7 +67,7 @@
                       </div>
                     </b-dropdown>
 
-                    <b-dropdown size="sm" variant="primary" id="dropdown-2" text="구군 선택" class="mb-2">
+                    <b-dropdown variant="primary" :disabled="selectedSido" id="dropdown-2" text="구군 선택" class="mb-2 signup">
                       <div v-for="(gugun, index) in guguns" v-bind:key="index">
                         <b-dropdown-item @click="gugunSelected(gugun)">{{
                           gugun.gugunName
@@ -155,7 +161,7 @@
                 </div>
               </b-form>
             </div>
-          </div>
+          </b-col>
         </div>
       </div>
     </div>
@@ -165,11 +171,15 @@
 import { required, sameAs, minLength } from "vuelidate/lib/validators";
 import { mapGetters, mapActions } from "vuex";
 import http from "@/utils/http-common";
-import dropdown from "vue-dropdowns";
+// import dropdown from "vue-dropdowns";
+//sweet alert
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+import 'sweetalert2/src/sweetalert2.scss'
+
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignUp",
+    title: "회원가입",
   },
 
   data() {
@@ -180,17 +190,19 @@ export default {
       repeatPassword: "",
       emailAuth: false,
       bgImage: require("@/assets/images/signin/loginpage1.png"),
-      logo: require("@/assets/images/runnings/loading.gif"),
+      logo: require("@/assets/images/logo.png"),
       signInImage: require("@/assets/images/photo-long-3.jpg"),
       submitStatus: null,
       sidos: [],
       guguns:[],
       selectedgugun:"",
+      selectedSido:"",
       gender:0,
+      
     };
   },
   components: {
-    dropdown: dropdown,
+    // dropdown: dropdown,
   },
 
   validations: {
@@ -228,10 +240,14 @@ export default {
   },
   mounted: function () {
     http.get(`areas`).then((res) => {
-      console.log(JSON.stringify(res.data.data));
+      //console.log(JSON.stringify(res.data.data));
       this.sidos = res.data.data;
-      console.log(this.sidos[0].sidoName);
+      //console.log(this.sidos[0].sidoName);
     });
+     var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
+     sidoDropBtn.style.backgroundColor="#663399"
+      sidoDropBtn.style.color="#FFFFFF"
+     
   },
 
   computed: {
@@ -242,20 +258,36 @@ export default {
     ...mapActions(["signUserUp"]),
     //   validate form
     sidoSelected(sido) {
-      console.log(sido.sidoId)
+      //console.log(sido.sidoId)
+      this.selectedSido = sido.sidoname
       http.get(`areas/`+sido.sidoId).then((res) =>{
         this.guguns= res.data.data
-        console.log(this.guguns)
+        //console.log(this.guguns)
       })
-      document.getElementById('dropdown-1').innerText=sido.sidoName
+      var sidoDrop = document.getElementById('dropdown-1')
+      var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
+      var gugunDrop = document.getElementById('dropdown-2')
+      var gugunDropBtn = document.getElementById('dropdown-2__BV_toggle_')
+      sidoDropBtn.innerText = sido.sidoName
+      gugunDropBtn.innerText = "구군 선택"
+      sidoDropBtn.style.backgroundColor="#663399"
+      sidoDropBtn.style.color="#FFFFFF"
+      gugunDropBtn.style.backgroundColor="#663399"
+      gugunDropBtn.style.color="#FFFFFF"
+
     },
     gugunSelected(gugun){
       this.selectedgugun = gugun.gugunId
-      console.log(this.selectedgugun)
-      document.getElementById('dropdown-2').innerText=gugun.gugunName
+      //console.log(this.selectedgugun)
+      var gugunDrop = document.getElementById('dropdown-2')
+      var gugunDropBtn = document.getElementById('dropdown-2__BV_toggle_')
+      gugunDropBtn.innerText = gugun.gugunName
+      gugunDropBtn.style.backgroundColor="#663399"
+      gugunDropBtn.style.color="#FFFFFF"
+
     },
     submit() {
-      console.log("회원가입 데이터 전송중..");
+      //console.log("회원가입 데이터 전송중..");
 
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -272,12 +304,18 @@ export default {
           gugunId: jsonGugunId,
           gender:this.gender,
         };
-        console.log(data);
+        //console.log(data);
         this.signUserUp({ data });
         this.submitStatus = "PENDING";
+        Swal.fire({
+            icon:'success',
+            text:'회원가입 성공!',
+            showConfirmButton:false,
+            timer:1000,
+          })
         setTimeout(() => {
           this.submitStatus = "OK";
-        }, 500);
+        }, 1000);
         this.$router.push('/app/sessions/signIn')
       }
     },
@@ -285,22 +323,34 @@ export default {
       http
         .get(`/users/check/${this.email}`)
         .then((res) => {
-          console.log("이메일 인증 시도 성공");
           if (res.data.data == true) {
-            alert("회원 가입 가능한 이메일입니다!");
             this.emailAuth = true;
+
+            Swal.fire({
+              icon:'success',
+              text:'사용할 수 있는 이메일입니다!',
+              showConfirmButton:false,
+              timer:1200,
+            })
           } else {
-            this.email = "";
-            alert("서버 연결 상태를 확인해주세요.");
-            console.log(res);
+            Swal.fire({
+              icon:'error',
+              text:'이메일 형식이 잘못되었습니다!',
+              showConfirmButton:false,
+              timer:1200,
+            })
           }
         })
         .catch((error) => {
-          alert("중복된 이메일입니다. 다른 이메일을 입력해주세요.");
-          this.email = "";
-          console.log("이메일 인증 실패");
           this.emailAuth = false;
-        });
+          //console.log("이메일 인증 실패");
+            Swal.fire({
+              icon:'error',
+              text:'이미 가입된 이메일입니다!',
+              showConfirmButton:false,
+              timer:1200,
+            })
+          });
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {
@@ -318,25 +368,20 @@ export default {
     },
 
     inputSubmit() {
-      console.log("submitted");
+      //console.log("submitted");
     },
   },
 };
 </script>
-<style>
+
+<style scoped>
 .spinner.sm {
   height: 2em;
   width: 2em;
 }
-@media (min-width: 768px){
-  .col-md-6 {
-      -webkit-box-flex: 0;
-      flex: auto !important;
-      max-width: 100% !important;
-  }
-  .offset-md-6 {
-    margin-left: 0% !important;
-}
+.dropdown-menu.show {
+    height: 30vh;
+    overflow-y: scroll;
 }
 </style>
 

@@ -24,7 +24,7 @@
         @click="handleFullScreen"
       ></i> -->
       <!-- Notificaiton -->
-      <div class="dropdown">
+      <!-- <div class="dropdown">
         <b-dropdown
           id="dropdown-1"
           text="Dropdown Button"
@@ -36,31 +36,31 @@
           <template slot="button-content">
             <span class="badge badge-primary">1</span>
             <i class="i-Bell text-muted header-icon"></i>
-          </template>
+          </template> -->
           <!-- Notification dropdown -->
-          <vue-perfect-scrollbar
+          <!-- <vue-perfect-scrollbar
             :settings="{ suppressScrollX: true, wheelPropagation: false }"
             :class="{ open: getSideBarToggleProperties.isSideNavOpen }"
             ref="myData"
             class="dropdown-menu-right rtl-ps-none notification-dropdown  ps scroll"
-          >
+          > -->
             <!-- <div class="dropdown-menu-right rtl-ps-none notification-dropdown"> -->
-            <div class="dropdown-item d-flex">
+            <!-- <div class="dropdown-item d-flex">
               <div class="notification-icon">
                 <i class="i-Speach-Bubble-6 text-primary mr-1"></i>
               </div>
               <div class="notification-details flex-grow-1">
-                <p class="m-0 d-flex align-items-center">
+                <p class="m-0 d-flex align-items-center"> -->
                   <!-- <span>New message</span> -->
                   <!-- <span class="badge badge-pill badge-primary ml-1 mr-1">new</span> -->
                   <!-- <span class="flex-grow-1"></span>
                   <span class="text-small text-muted ml-auto">10 sec ago</span> -->
-                </p>
+                <!-- </p>
                 <p class="text-small text-muted m-0">
                   서비스 준비 중 입니다.
                 </p>
               </div>
-            </div>
+            </div> -->
             <!-- <div class="dropdown-item d-flex">
               <div class="notification-icon">
                 <i class="i-Receipt-3 text-success mr-1"></i>
@@ -111,15 +111,15 @@
               </div>
             </div> -->
             <!-- </div> -->
-          </vue-perfect-scrollbar>
+          <!-- </vue-perfect-scrollbar>
         </b-dropdown>
-      </div>
+      </div> -->
       <!-- Notificaiton End -->
 
       <!-- User avatar dropdown -->
       <div class="dropdown">
         <b-dropdown
-          id="dropdown-1"
+          id="dropdown-0"
           text="Dropdown Button"
           class="m-md-2 user col align-self-end"
           toggle-class="text-decoration-none"
@@ -127,13 +127,22 @@
           variant="link"
         >
           <template slot="button-content">
-            <img
-              :src="userInfo.profile"
-              id="userDropdown"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            />
+            <div v-if="userInfo.profile!=null">
+              <img
+                :src="userInfo.profile"
+                id="userDropdown"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"/>
+            </div>
+            <div v-else>
+              <img
+                  :src="defaultProfile"
+                  id="userDropdown"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"/>
+              </div>
           </template>
 
           <div class="dropdown-menu-right" aria-labelledby="userDropdown">
@@ -153,10 +162,17 @@
 
     <infinite-slide-bar duration="20s" :barStyle="{ padding: '5px 0' }">
       <div class="items">
-        <div v-for="ranker in rankList" :key="ranker.rankId" style="margin-right:50px;">
-          <img class="profile-picture rounded-circle avatar-sm" :src="ranker.userId.profile">
-          {{ranker.rankId}}. {{ranker.userId.username}}
-          {{ranker.totalExp}} p
+        <div v-for="(ranker,index) in rankList" :index="index" :key="ranker.rankId" style="margin-right:50px;">
+          <div v-if="ranker.userId.profile!=null">
+            <img class="profile-picture rounded-circle avatar-sm" :src="ranker.userId.profile">
+            {{index+1}}. {{ranker.userId.username}}
+            {{ranker.totalExp}}p
+          </div>
+          <div v-else>
+            <img class="profile-picture rounded-circle avatar-sm" :src="defaultProfile">
+            {{index+1}}. {{ranker.userId.username}}
+            {{ranker.totalExp}}p
+          </div>
         </div>
       </div>
     </infinite-slide-bar>
@@ -195,7 +211,7 @@ export default {
     this.getTopRankers();
   },
   computed: {
-    ...mapGetters(["getSideBarToggleProperties","userInfo"])
+    ...mapGetters(["getSideBarToggleProperties","userInfo","defaultProfile"])
   },
 
   methods: {
@@ -203,7 +219,7 @@ export default {
       "changeSecondarySidebarProperties",
       "changeSidebarProperties",
       "changeThemeMode",
-      "signOut"
+      "signOut",
     ]),
     handleFullScreen() {
       Util.toggleFullScreen();
