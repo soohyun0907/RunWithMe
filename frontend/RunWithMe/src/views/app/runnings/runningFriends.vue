@@ -190,6 +190,7 @@ export default {
             for(var i=0; i<check.length; i++){
               if(i>0 && check[i]==check[i-1]){
                 this.records.splice(i,1)
+                this.echart4.xAxis.data.splice(i,1)
               }
             }
             console.log(this.records)
