@@ -105,11 +105,20 @@
                 :key="contact.username"
                 :class="contact.status"
               >
-                <img
+
+              <div v-if="contact.avatar!=null">
+                 <img
                   :src="contact.avatar"
                   alt=""
-                  class="avatar-sm rounded-circle mr-3"
-                />
+                  class="avatar-sm rounded-circle mr-3"/>
+                </div>
+              <div v-else>
+                 <img
+                  :src="defaultProfile"
+                  alt=""
+                  class="avatar-sm rounded-circle mr-3"/>
+                </div>
+                
                 <h6 @click="choice(contact.userId)" class="">
                   {{ contact.username }}
                 </h6>

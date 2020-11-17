@@ -53,7 +53,7 @@
             </div>
               <div v-else v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
                 <div class="flex-grow-1">
-                  <h5 style="padding-left:5vw;" class="m-0">{{record.accDistance}}</h5>
+                  <h5 style="padding-left:5vw;" class="m-0">{{record.accDistance}} Km</h5>
                 </div>
                 <div class="flex-grow-1">
                   <h5 style="padding-left:2vw;" class="m-0">{{convertToTime(record.accTime)}}</h5>
@@ -151,7 +151,9 @@ export default {
     this.result['parseTimeS'] = this.result.startTime.split('T')
 
     this.avgSpeed = (this.result.accDistance*1000)/parseInt(this.result.accTime)
-    this.getTempRuns()
+    setTimeout(() => {
+      this.getTempRuns()
+    }, 100);
   },
   computed: {
     ...mapGetters(["myRunning"]),
@@ -159,9 +161,16 @@ export default {
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
     getTempRuns(){
-      this.records=this.result.records
+      // this.records=this.result.records
       // console.log("this.records")
       // console.log(this.records)
+      for(var i=0; i<this.result.records.length; i++){
+          if(i!=this.result.records.length-1 && this.result.records[i].accDistance<0.1)
+            continue;
+          this.records.push(this.result.records[i])
+      }
+
+
       if(this.records.length!=0){
         for(var i=0; i<this.records.length; i++){
             if(i!=this.records.length-1)  {
@@ -169,7 +178,6 @@ export default {
             }else{
                 this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(2)
             }
-            this.records[i].accDistance+=" km"
             this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
             this.echart4.xAxis.data.push(this.records[i].accDistance)
         }
