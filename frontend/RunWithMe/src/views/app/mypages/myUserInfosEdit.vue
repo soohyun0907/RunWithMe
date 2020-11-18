@@ -75,7 +75,7 @@
                     </b-dropdown>
 
                     <b-dropdown variant="primary" :disabled="selectedSido" id="dropdown-2" text="구군 선택" class="mb-2 signup">
-                      <div v-for="(gugun, index) in guguns" v-bind:key="index">
+                      <div v-for="(gugun, index) in orderGugun" v-bind:key="index">
                         <b-dropdown-item @click="gugunSelected(gugun)">{{
                           gugun.gugunName
                         }}</b-dropdown-item>
@@ -146,6 +146,11 @@ export default {
   },
   computed: {
     ...mapGetters(["loggedInUser","userInfo", "loading", "error","getSideBarToggleProperties", "userInfo","defaultProfile"]),
+    orderGugun: function() {
+      return this.guguns.sort(function(a, b){
+      	return a.gugunName > b.gugunName ? 1 : -1;
+      });
+    }
   },
    methods: {
     ...mapActions(["signOut"]),
