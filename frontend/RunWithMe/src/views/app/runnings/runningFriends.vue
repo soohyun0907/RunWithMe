@@ -21,7 +21,7 @@
             <div class="row">
                 <div class="col">
                     총 런닝 거리
-                    <h3>{{result.accDistance.toFixed(2)}} km</h3>
+                    <h3>{{result.accDistance? result.accDistance.toFixed(2): 0}} km</h3>
                 </div>
                 <div class="col">
                     총 런닝 시간
@@ -175,7 +175,7 @@ export default {
             this.timeSplitS = this.result.startTime.split('T')
             this.timeSplitE = this.result.endTime.split('T')
 
-
+            var check=[]
             for(var i=0; i<this.records.length; i++){
               if(i!=this.records.length-1)  {
                 this.records[i].accDistance= Math.floor(this.records[i].accDistance)
@@ -184,6 +184,13 @@ export default {
               }
               this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
               this.echart4.xAxis.data.push(this.records[i].accDistance)
+              check.push(this.records[i].accDistance)
+            }
+            for(var i=0; i<check.length; i++){
+              if(i>0 && check[i]==check[i-1]){
+                this.records.splice(i,1)
+                this.echart4.xAxis.data.splice(i,1)
+              }
             }
   
             if(this.result.accDistance==0.00 ||this.result.accTime==0.00 ||this.result.accDistance==0 || this.result.accTime==0){

@@ -2,24 +2,24 @@
   <div class="main-content">
      <div style="text-align:center">
       <p style="font-size:1.5em;margin-bottom:5px">
-         <h4> {{result.parseTimeE[0]}}일 런닝기록</h4>
+         <h4> {{result.parseTimeE ?  result.parseTimeE[0] : 0}}일 런닝기록</h4>
     </div>
     <div class="simpleResult">
         <div class="col">
             <div class="row">
                 <div class="col">
                     런닝 시작 시간
-                    <h3>{{result.parseTimeS[1]}}</h3>
+                    <h3>{{result.parseTimeS ?  result.parseTimeS[1] : 0}}</h3>
                 </div>
                 <div class="col">
                     런닝 종료 시간
-                    <h3>{{result.parseTimeE[1]}}</h3>
+                    <h3>{{result.parseTimeE ?  result.parseTimeE[1] : 0}}</h3>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     총 런닝 거리
-                    <h3>{{result.accDistance.toFixed(2)}} km</h3>
+                    <h3>{{result.accDistance? result.accDistance.toFixed(2): 0 }} km</h3>
                 </div>
                 <div class="col">
                     총 런닝 시간

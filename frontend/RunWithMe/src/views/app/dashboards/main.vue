@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <h3>기부/이벤트</h3>
+    <h3>기부 챌린지</h3>
 
     <b-modal id="modal-sm" size="sm" centered :title="modalInfo.title" button-size="sm">
       <img :src="modalInfo.challengeImg" style="margin-bottom:10px;" />

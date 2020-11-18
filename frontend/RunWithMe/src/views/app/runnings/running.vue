@@ -407,16 +407,15 @@ export default {
               );
               this.linePath.push(currentLatLng);
               this.speed = (this.checkOneKm * 1000) / this.checkSecond;
+              this.drawLines();
+      
             }
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
               // console.log("최근 1km당 스피드 = " + this.speed);
               this.savePosition();
-              setTimeout(() => {
-                this.checkOneKm -= 1;
-                this.checkSecond = 0;
-              }, 100);
-
+              this.checkOneKm -= 1;
+              this.checkSecond = 0;
             }
           }
         },
@@ -470,19 +469,26 @@ export default {
 
     },
     savePosition(position) {
-      if(this.checkOneKm==0 || this.checkSecond==0){
-        var speed = 0.01
+      if(this.checkOneKm<=0 || this.checkSecond<=0){
+        var speed = 0.001
       }else{
-        var speed = this.speed+0.01
+        var speed = this.speed+0.001
       }
 
       let tempRecord = {
-        accDistance:this.accumulated_distance+0.01,
+        accDistance:this.accumulated_distance+0.001,
         accTime: this.accumulated_time,
         speed: speed,
       };
 
       this.tempRecords.push(tempRecord)
+
+      let stringTempRecord = {
+        accDistance:(this.accumulated_distance+0.001).toString(),
+        accTime: this.accumulated_time.toString(),
+        speed: speed.toString(),
+      };
+      this.stringTempRecords.push(stringTempRecord)
       if(this.tempRecords.length!=0){
         for(var i=0; i<this.tempRecords.length; i++){
           if(i!=this.tempRecords.length-1)  {
@@ -492,24 +498,18 @@ export default {
             }
             this.echart4.series[0].data.push((this.tempRecords[i].accTime/60).toFixed(2))
             this.echart4.xAxis.data.push(this.tempRecords[i].accDistance)
+            
+
         }
       }
+      // console.log("savePosition - stringtempRecords")
+      // console.log(this.stringTempRecords)
       // console.log("this.tempRecords")
       // console.log(this.tempRecords)
-
-                
       // console.log("savePosition - tempRecords")
       // console.log(this.tempRecords)
       
-      let stringTempRecord = {
-        accDistance:(this.accumulated_distance+0.01).toString(),
-        accTime: this.accumulated_time.toString(),
-        speed: speed.toString(),
-      };
-      this.stringTempRecords.push(stringTempRecord)
-      // console.log("savePosition - stringtempRecords")
-      // console.log(this.stringTempRecords)
-
+      
     },
 
     endLocationUpdates() {
@@ -536,7 +536,7 @@ export default {
         polyline: this.encoded_polyline.toString(),
         startTime: this.startTime,
         endTime: this.endTime,
-        accDistance: (this.accumulated_distance+0.01).toString(),
+        accDistance: (this.accumulated_distance+0.001).toString(),
         accTime: this.accumulated_time.toString(),
         gugun:this.gugun,
         thumbnail:this.thumbnail,
@@ -546,7 +546,7 @@ export default {
         polyline: this.encoded_polyline,
         startTime: this.startTime,
         endTime: this.endTime,
-        accDistance: (this.accumulated_distance+0.01),
+        accDistance: (this.accumulated_distance+0.001),
         accTime: this.accumulated_time,
         gugun:this.gugun,
         thumbnail:this.thumbnail,
