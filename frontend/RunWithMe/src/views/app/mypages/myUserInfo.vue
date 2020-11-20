@@ -15,7 +15,7 @@
                         <b-button variant="outline-info" style="padding:0.2em" @click="goUserInfoEdit()">프로필 변경</b-button>
                         <p class="m-0 text-24">{{userInfo.username}} 님</p>
                         <p class="text-muted m-0">{{userInfo.userEmail}}</p>
-                        <p class="text-muted m-0"><code>보유 마일리지:{{userInfo.mileage}}</code></p>
+                        <p class="text-muted m-0"><code>보유 마일리지:{{userInfo.mileage |makeComma}}</code></p>
             </div>
             <div class="card-body">
                 <div>
@@ -122,22 +122,31 @@ export default {
    computed: {
     ...mapGetters(["getSideBarToggleProperties", "userInfo","defaultProfile","userTotal"]),
   },
-
   mounted() {
-      console.log(this.userInfo)
-      console.log(this.userTotal)
-       this.$store.commit('closeSidebar')
+      //console.log(this.userInfo)
+    //console.log(this.userTotal)
+    this.$store.commit('closeSidebar')
+    this.userInfoUpdated()  
+    
   },
   methods: {
     ...mapActions(["signOut"]),
     ...mapMutations(["closeSidebar"]),
+    userInfoUpdated(){
+        http.get(`users/`)
+          .then(data => {
+            //console.log("회원정보 갱신!")
+            this.$store.commit('mutateUserInfo',data.data.data.userId)
+            this.$store.commit('mutateUserTotal',data.data.data)
+          })
+    },
     memberOut(){
         var data = {
             userPw:this.inputPass
         }
         http.post(`users/checkPw`,data)
         .then(data => {
-            console.log("i'm gone..")
+            //console.log("i'm gone..")
             http.delete(`users`)
             .then(data=>{
                 
@@ -147,7 +156,7 @@ export default {
               showConfirmButton:false,
               timer:1000,
             })
-            console.log(data)
+            //console.log(data)
             setTimeout(() => {
                 this.$router.push('/app/sessions/signIn')   
             }, 1000);

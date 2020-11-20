@@ -66,7 +66,7 @@
             {{props.row.userId.gugunId.sidoId.sidoName}} {{props.row.userId.gugunId.gugunName}}
           </span>
           <span v-else-if="props.column.field == 'username'">
-            <a href="">
+            <router-link :to="{name:'friendsDetail', query:{friendId: props.row.userId.userId}}">
               <div class="ul-widget-app__profile-pic" style="text-align:center">
                 <div v-if="props.row.userId.profile!=null">
                   <img
@@ -82,7 +82,7 @@
                     {{ props.row.userId.username }}
                   </div>
               </div>
-            </a>
+            </router-link>
           </span>
         </template>
       </vue-good-table>
@@ -197,7 +197,7 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 return;
             });
             swalWithBootstrapButtons.fire(
@@ -220,11 +220,11 @@ export default {
       })
     },
     getFriendList(){
-      console.log(this.userInfo.userId)
+      //console.log(this.userInfo.userId)
       // http.get(`friends/contacts/${this.userInfo.userId}`)
       http.get(`friends/contacts`)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         this.rows = res.data.data
     });
     }

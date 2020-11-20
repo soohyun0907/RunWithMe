@@ -225,7 +225,7 @@ export default {
       .get("challenges/"+this.$route.query.challengeId)
       .then(({data}) => {
         if(data.status == 200){
-          console.log(data.data);
+          //console.log(data.data);
           this.originInfo = data.data.challengeId;
           this.challenge.title = data.data.challengeId.title;
           this.challenge.content = data.data.challengeId.content;

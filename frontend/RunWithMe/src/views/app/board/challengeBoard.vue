@@ -81,12 +81,12 @@ export default {
       http
         .get("boards")
         .then(({data}) => {
-          console.log(data.data);
+          //console.log(data.data);
           this.Boards = data.data;
           this.Boards = this.Boards.reverse();
         })
         .catch((error) => {
-          console.log(error);
+          //console.log(error);
           return;
         });
     },

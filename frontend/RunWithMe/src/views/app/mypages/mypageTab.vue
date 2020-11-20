@@ -161,14 +161,14 @@ export default {
     this.$store.commit('closeSidebar')
     this.getRunnings()
     this.getRunningsbyArea()
-    console.log(this.userInfo)
+    //console.log(this.userInfo)
     if (window.google && window.google.maps) {
       this.initMap();
     } else {
       const script = document.createElement("script");
       script.onload = () => google.maps.load(this.initMap);
     }
-    console.log(this.userInfo);
+    //console.log(this.userInfo);
   },
   methods: {
     ...mapMutations(["closeSidebar"]),
@@ -204,7 +204,7 @@ export default {
           this.allRunning[i]['start'] = this.allRunning[i].startTime.split("T")
           this.allRunning[i]['end'] = this.allRunning[i].endTime.split("T")
         }
-        console.log(this.allRunning)
+        //console.log(this.allRunning)
       })
     },
     initMap() {
@@ -238,14 +238,14 @@ export default {
         var polycenter_lng=0
 
         for(var i=0; i<polyline.length; i++){
-          // console.log(positions[i].lat);
+          // //console.log(positions[i].lat);
           runningPathCoordinates.push(new google.maps.LatLng(polyline[i].lat, polyline[i].lng));
           polycenter_lat+=polyline[i].lat 
           polycenter_lng+=polyline[i].lng
        
        }
-        console.log("runningPathCoordinates")
-        console.log(runningPathCoordinates)
+        //console.log("runningPathCoordinates")
+        //console.log(runningPathCoordinates)
 
         const runningPath = new google.maps.Polyline({
           path: runningPathCoordinates,
@@ -270,13 +270,13 @@ export default {
         var polycenter_lng=0
 
         for(var i=0; i<polyline.length; i++){
-          // console.log(positions[i].lat);
+          // //console.log(positions[i].lat);
           runningPathCoordinates.push(new google.maps.LatLng(polyline[i].lat, polyline[i].lng));
           polycenter_lat+=polyline[i].lat 
           polycenter_lng+=polyline[i].lng
         }
-        console.log("runningPathCoordinates")
-        console.log(runningPathCoordinates)
+        //console.log("runningPathCoordinates")
+        //console.log(runningPathCoordinates)
 
         const runningPath = new google.maps.Polyline({
           path: runningPathCoordinates,
