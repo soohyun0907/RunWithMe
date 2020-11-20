@@ -51,7 +51,7 @@
                     variant="danger"
                     class="error col mt-1"
                     v-if="!$v.fName.minLength"
-                    >이름을 {{ $v.fName.$params.minLength.min }}글자 이상
+                    >이름을 {{ $v.fName.$params.minLength.min }}글자 이상 {{ $v.fName.$params.maxLength.min }}글자 이하로
                     입력해주세요.</b-alert
                   >
                 </b-form-group>
@@ -168,7 +168,7 @@
   </div>
 </template>
 <script>
-import { required, sameAs, minLength } from "vuelidate/lib/validators";
+import { required, sameAs, minLength,maxLength,email } from "vuelidate/lib/validators";
 import { mapGetters, mapActions } from "vuex";
 import http from "@/utils/http-common";
 // import dropdown from "vue-dropdowns";
@@ -209,8 +209,11 @@ export default {
     fName: {
       required,
       minLength: minLength(2),
+      maxLength: maxLength(20),
     },
-
+    email: {
+      email
+    },
     password: {
       required,
       minLength: minLength(8),

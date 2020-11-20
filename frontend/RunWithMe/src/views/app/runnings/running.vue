@@ -16,7 +16,7 @@
           </div>
           <div class="myRecord" >
               <div id="run_desc speed">현재 속도</div>
-              <span id="acc_time">{{ speed.toFixed(2) }}m/s</span>
+              <span id="acc_time">{{ show_speed.toFixed(2) }}m/s</span>
           </div>
           <div class="myRecord">
                 <div id="run_desc time">누적 시간</div>
@@ -123,6 +123,7 @@ export default {
       accumulated_distance: 0, // 총 누적거리
       accumulated_time: 0, // 총 누적 시간
       speed: 0, // 현재 속력
+      speed_now:[],
       show_speed:0, // 현재 속력 - 보여주기
       checkOneKm: 0, //1 km마다 초기화
       checkSecond: 0, // 1 km마다 초기화
@@ -407,8 +408,22 @@ export default {
               );
               this.linePath.push(currentLatLng);
               this.speed = (this.checkOneKm * 1000) / this.checkSecond;
+              
+              if(this.speed_now.length>5){
+                this.speed_now.splice(0,1)
+              }
+              this.speed_now.push((distance*1000)/this.time_now)
+              this.time_now=0
+
+              this.show_speed=0
+              for(var i=0; i<this.speed_now.length;i++){
+                if(this.speed_now[i]>=0 && this.speed_now[i]<20)
+                this.show_speed+=this.speed_now[i]
+              }
+              this.show_speed/=this.speed_now.length
               this.drawLines();
-      
+              console.log(this.speed_now)
+              console.log(this.show_speed)
             }
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
@@ -593,6 +608,7 @@ export default {
         this.zeroPrefix(sec, 2);
         
       var realTime = ((currentTime- this.timeBegan-this.stoppedDuration)/1000).toFixed(0)
+      var time_now = ((currentTime- this.timeBegan-this.stoppedDuration)/1000).toFixed(0)
       
       // this.accumulated_time += 1;
       // this.checkSecond += 1;

@@ -78,7 +78,6 @@ export default {
     login(context, { userEmail, userPw }) {
       context.commit("clearError");
       context.commit("setLoading", true);
-      console.log("login on")
       http.post(`users/signin`,{
         userEmail:userEmail,
         userPw:userPw        
@@ -88,10 +87,6 @@ export default {
           context.commit('mutateAuth',res.headers.auth)
           localStorage.setItem("auth",res.headers.auth)
           localStorage.setItem("userInfo",JSON.stringify(res.data.data))
-          console.log("로그인 성공")
-          console.log(res.data)
-          console.log("토큰 받아오기" + res.headers.auth)// 토큰얻기
-          console.log(localStorage.getItem("auth"))
           router.push("/app/dashboards/main")
       })
       .catch(function(error) {
@@ -111,18 +106,13 @@ export default {
     signUserUp({commit}, data) {
       commit("setLoading", true);
       commit("clearError");
-      console.log("signUserup Data Check")
       var signUpUnit = data.data
       var jsons = JSON.stringify(signUpUnit)
-      console.log(signUpUnit)
-      console.log(jsons)
       http.post("users",jsons,{
         headers:{'Content-Type':'application/json'}
       })
         .then(res => {
           commit("setLoading", false);
-          console.log("회원가입 성공")
-          console.log(res)
          
           if(localStorage.getItem("userInfo")){
             localStorage.removeItem("userInfo")
@@ -144,20 +134,20 @@ export default {
     signOut(context) {
       http.get(`users/signout`)
       .then(res =>{
-        console.log("로그아웃 성공")
-        console.log(res)
       })
       .catch(err => {
         console.log(err)
       })
-      
-        if(localStorage.getItem("userInfo")){
-          localStorage.removeItem("userInfo")
-        }    
-        if(localStorage.getItem("auth")){
-          localStorage.removeItem("auth")
-        }
-        context.commit("setLogout");
+      if(localStorage.getItem("userInfo")){
+        localStorage.removeItem("userInfo")
+      }    
+      if(localStorage.getItem("auth")){
+        localStorage.removeItem("auth")
+      }
+      context.commit("setLogout");
+      setTimeout(() => {
+        router.go(0)
+      },200);
     },
   },
 };
