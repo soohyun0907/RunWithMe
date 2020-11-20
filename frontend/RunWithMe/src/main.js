@@ -29,7 +29,6 @@ Vue.filter("makeComma", val =>{
   return String(val).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 })
 
-
 //vueSplide
 import VueSplide from '@splidejs/vue-splide';
 Vue.use( VueSplide );
