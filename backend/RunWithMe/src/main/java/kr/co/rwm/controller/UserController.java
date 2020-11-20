@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
+import kr.co.rwm.dto.RunningUserDto;
 import kr.co.rwm.dto.UserDto;
 import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.RunningUser;
@@ -141,7 +142,7 @@ public class UserController {
 		String token = jwtTokenProvider.generateToken(member.getUserId(), member.getUserEmail(), member.getRoles());
 		response.setHeader("AUTH", token);
 		
-		RunningUser runningUser = recordService.findRunningUserByUserId(member.getUserId());
+		RunningUserDto runningUser = recordService.findRunningUserByUserId(member.getUserId());
 		
 		// 로그인된 사용자 목록
 		redis.opsForValue().set(member.getUserId().toString(), "success");
@@ -179,7 +180,7 @@ public class UserController {
 	// 회원 정보 조회 (다른 사람)
 	@GetMapping(path="/{userId}")
 	public ResponseEntity<Response<? extends Object>> userInfo(@PathVariable int userId) {
-		RunningUser member = recordService.findRunningUserByUserId(userId);
+		RunningUserDto member = recordService.findRunningUserByUserId(userId);
 		if(member == null) {
 			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.NO_CONTENT, ResponseMessage.USERINFO_SEARCH_FAIL),
 					HttpStatus.OK);
@@ -195,7 +196,7 @@ public class UserController {
 			int userId = jwtTokenProvider.getUserIdFromJwt(token);
 			
 			// 토큰 유효성 검사를 걸쳤기 때문에 무조건 정보가 존재한다.
-			RunningUser member = recordService.findRunningUserByUserId(userId);
+			RunningUserDto member = recordService.findRunningUserByUserId(userId);
 			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK,ResponseMessage.USERINFO_SEARCH_SUCCESS, member),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
