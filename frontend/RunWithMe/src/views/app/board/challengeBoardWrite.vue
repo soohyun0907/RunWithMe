@@ -35,7 +35,8 @@
             </b-col>
 
             <b-col md="12" v-if="updateBoardImg">
-                <b-button class="m-1" variant="primary" @click="submitFile()">File Submit</b-button>
+                <b-button size="sm" class="m-1" variant="primary" @click="submitFile()">이미지 등록</b-button>
+                <b-button size="sm" class="m-1" variant="danger" @click="backToList()">이미지 등록안함</b-button>
             </b-col>
         </b-form>
   </div>
