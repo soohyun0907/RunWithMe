@@ -53,6 +53,7 @@
                                         <div v-else-if="userTotal.totalDistance>5" ><span class="badge badge-warning">Runner</span></div>
                                         <div v-else-if="userTotal.totalDistance>1" ><span class="badge badge-primary">Beginner</span></div>
                                         <div v-else ><span class="badge badge-success">Newbie</span></div>
+                                        <div>Lv{{userTotal.tier==0 ? 1:usertotal.tier}}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-6">
