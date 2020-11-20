@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
+import kr.co.rwm.dto.RunningUserDto;
 import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
@@ -55,32 +56,32 @@ public class RunningController {
 
 	// 회원의 id로 모든 running을 조회: 프로필에서 약식으로 뜨는 것
 	@GetMapping("/{userId}")
-	public ResponseEntity<Response<? extends Object>> getRunnings(@PathVariable int userId) {
+	public ResponseEntity<Response<Object>> getRunnings(@PathVariable int userId) {
 		List<Running> userRunnings = recordService.findRunningByUserId(userId);
-		return new ResponseEntity<Response<? extends Object>>(new 
+		return new ResponseEntity<>(new 
 				Response<>(StatusCode.OK, ResponseMessage.RUNNING_LIST_SUCCESS, userRunnings), HttpStatus.OK);
 	}
 	
 	// swipe했을 때 redis에 있던 record를 보내준다.
 	@GetMapping("/temp")
-	public ResponseEntity<Response<? extends Object>> getTempRecord(HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> getTempRecord(HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
 			User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
 			List<Record> records = recordTempRepository.findRecordByUserId(loginUser.getUserId());	// 토큰O 추후에 이렇게 바꿀것
-			return new ResponseEntity<Response<? extends Object>>(new 
+			return new ResponseEntity<>(new 
 					Response<>(StatusCode.OK, ResponseMessage.RECORD_REDIS_LIST_SUCCESS, records), HttpStatus.OK);
 			
 		}else {
-			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+			return new ResponseEntity<>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
 					HttpStatus.FORBIDDEN);
 		}
 	}
 	
 	// stop 눌렀을 때 redis에 있던 record를 꺼내서 db에 저장한다.
 	@PostMapping
-	public ResponseEntity<Response<? extends Object>> saveStopRecord(@RequestBody Map<String, Object> runningInfo, HttpServletRequest request){
+	public ResponseEntity<Response<Object>> saveStopRecord(@RequestBody Map<String, Object> runningInfo, HttpServletRequest request){
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
 			User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -115,18 +116,18 @@ public class RunningController {
 			rankService.getRaceExp(loginUser.getUserId(), runningId);
 			challengeService.updateAccDistance(loginUser, savedRunning.getAccDistance());	// update위해서
 			
-			return new ResponseEntity<Response<? extends Object>>(new 
+			return new ResponseEntity<>(new 
 					Response<>(StatusCode.OK, ResponseMessage.RUNNING_INSERT_SUCCESS, map), HttpStatus.OK);
 			
 		}else {
-			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+			return new ResponseEntity<>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
 					HttpStatus.FORBIDDEN);
 		}
 	}
 	
 	// 해당 running에 대한 기록을 보고싶을 때 running기록과 records를 쭉 보내준다.
 	@GetMapping("/records/{runningId}")
-	public ResponseEntity<Response<? extends Object>> findRecordsByRunningId(@PathVariable int runningId) {
+	public ResponseEntity<Response<Object>> findRecordsByRunningId(@PathVariable int runningId) {
 		Running running = recordService.findRunningById(runningId);
 		List<Record> records = recordService.findAllRecordByRunningId(running);
 		List<RunningArea> runningAreas = running.getRunningArea();
@@ -140,26 +141,26 @@ public class RunningController {
 		map.put("records", records);
 		map.put("areas", areas);
 		
-		return new ResponseEntity<Response<? extends Object>>(new
+		return new ResponseEntity<>(new
 				Response<>(StatusCode.OK, ResponseMessage.RUNNING_SEARCH_SUCCESS, map), HttpStatus.OK);
 	}
 	
 	// running 썸네일 이미지 저장
 	@PostMapping("/{runningId}")
-	public ResponseEntity<Response<? extends Object>> saveRunningImage(@PathVariable int runningId, MultipartFile file) {
+	public ResponseEntity<Response<Object>> saveRunningImage(@PathVariable int runningId, MultipartFile file) {
 		
 		if(file == null) {
-			return new ResponseEntity<Response<? extends Object>>(
+			return new ResponseEntity<>(
 					new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UPDATE_THUMBNAIL_FAIL), HttpStatus.FORBIDDEN);
 		}
 		
 		String url = s3Service.thumbnailUpload(file);
 		if (url != null) {
 			recordService.updateRunningImage(runningId, url);
-			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK, ResponseMessage.UPDATE_THUMBNAIL_SUCCESS, url),
+			return new ResponseEntity<>(new Response<>(StatusCode.OK, ResponseMessage.UPDATE_THUMBNAIL_SUCCESS, url),
 					HttpStatus.OK);
 		} else {
-			return new ResponseEntity<Response<? extends Object>>(
+			return new ResponseEntity<>(
 					new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UPDATE_THUMBNAIL_FAIL), HttpStatus.FORBIDDEN);
 		}
 		
@@ -167,7 +168,7 @@ public class RunningController {
 	
 	// 친구의 피드를 최신 런닝을 하나만 보내준다.
 	@GetMapping("/friends")
-	public ResponseEntity<Response<? extends Object>> findOneByFriendsId(HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> findOneByFriendsId(HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int userId = 0;
 		if(jwtTokenProvider.validateToken(token)) {
@@ -179,78 +180,78 @@ public class RunningController {
 			map.put("friends", friends);
 			map.put("runnings", runnings);
 			
-			return new ResponseEntity<Response<? extends Object>>(
+			return new ResponseEntity<>(
 					new Response<>(StatusCode.OK, ResponseMessage.RUNNING_FRIENDS_RECORD, map), HttpStatus.OK);
 
 		}else {
-			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+			return new ResponseEntity<>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
 					HttpStatus.FORBIDDEN);
 		}
 	}
 	
 	// running을 삭제한다.
 	@DeleteMapping("/{runningId}")
-	public ResponseEntity<Response<? extends Object>> deleteRunningByUserId(@PathVariable int runningId, HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> deleteRunningByUserId(@PathVariable int runningId, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int userId = 0;
 		if(jwtTokenProvider.validateToken(token)) {
 			userId = jwtTokenProvider.getUserIdFromJwt(token);
 			Long ret = recordService.deleteRunningByUserId(userId, runningId);
 			
-			return new ResponseEntity<Response<? extends Object>>(
+			return new ResponseEntity<>(
 					new Response<>(StatusCode.OK, ResponseMessage.RUNNING_DELETE_RECORD, ret), HttpStatus.FORBIDDEN);
 		
 		}else {
-			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+			return new ResponseEntity<>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
 					HttpStatus.FORBIDDEN);
 		}
 	}
 	
 	@ApiOperation(value = "유저가 활동 지역으로 설정한 곳에서의 런닝 기록 조회", response = ResponseEntity.class)
 	@GetMapping("/areas")
-	public ResponseEntity<Response<? extends Object>> findAllRunningByArea(HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> findAllRunningByArea(HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int userId = 0;
 		if(jwtTokenProvider.validateToken(token)) {
 			userId = jwtTokenProvider.getUserIdFromJwt(token);
 			List<Running> runnings = recordService.findAllRunningByActivityArea(userId);
 			
-			return new ResponseEntity<Response<? extends Object>>(new 
+			return new ResponseEntity<>(new 
 					Response<>(StatusCode.OK, ResponseMessage.AREA_RUNNINGS_SUCCESS, runnings), HttpStatus.OK);
 		}else {
-			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+			return new ResponseEntity<>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
 					HttpStatus.FORBIDDEN);
 		}
 	}
 	
 	@ApiOperation(value = "유저의 총 뛴 거리, 횟수 등의 요약 정보", response = ResponseEntity.class)
 	@GetMapping("/summary")
-	public ResponseEntity<Response<? extends Object>> findAllRunningUser(HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> findAllRunningUser(HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int userId = 0;
 		if(jwtTokenProvider.validateToken(token)) {
 			userId = jwtTokenProvider.getUserIdFromJwt(token);
-			RunningUser runningUser = recordService.findRunningUserByUserId(userId);
+			RunningUserDto runningUser = recordService.findRunningUserByUserId(userId);
 			
-			return new ResponseEntity<Response<? extends Object>>(new 
+			return new ResponseEntity<>(new 
 					Response<>(StatusCode.OK, ResponseMessage.USER_SUMMARY_RUNNING_SUCCESS, runningUser), HttpStatus.OK);
 		}else {
-			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
+			return new ResponseEntity<>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
 					HttpStatus.FORBIDDEN);
 		}
 	}
 	
 	@ApiOperation(value = "유저의 총 뛴 거리, 횟수 등의 요약 정보", response = ResponseEntity.class)
 	@GetMapping("/summary/region")
-	public ResponseEntity<Response<? extends Object>> findAllRunningUserByUserId(HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> findAllRunningUserByUserId(HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
 			int userId = jwtTokenProvider.getUserIdFromJwt(token);
-			List<RunningUser> runningUsers = recordService.findRunningUserByUserIdAndUserId(userId);
-			return new ResponseEntity<Response<? extends Object>>(new 
+			List<RunningUserDto> runningUsers = recordService.findRunningUserByUserIdAndUserId(userId);
+			return new ResponseEntity<>(new 
 					Response<>(StatusCode.OK, ResponseMessage.REGION_SUMMARY_RUNNING_SUCCESS, runningUsers), HttpStatus.OK);
 		}else {
-			return new ResponseEntity<Response<? extends Object>>(new 
+			return new ResponseEntity<>(new 
 					Response<>(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN), HttpStatus.FORBIDDEN);
 		}
 		

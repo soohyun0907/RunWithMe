@@ -1,9 +1,9 @@
 package kr.co.rwm.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kr.co.rwm.dto.RunningUserDto;
 import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
@@ -38,7 +38,7 @@ public interface RecordService {
 	
 	public void join(User user);
 	
-	public RunningUser findRunningUserByUserId(int userId);
+	public RunningUserDto findRunningUserByUserId(int userId);
 	
 	public List<RunningUser> findAllRunningUserByUserId(List<User> users);
 	
@@ -46,7 +46,7 @@ public interface RecordService {
 
 	public List<Running> findAllRunningByActivityArea(int userId);
 
-	public List<RunningUser> findRunningUserByUserIdAndUserId(int userId);
+	public List<RunningUserDto> findRunningUserByUserIdAndUserId(int userId);
 
 	public List<Record> convertRecords(Map<String, Object> runningInfo, User loginUser);
 

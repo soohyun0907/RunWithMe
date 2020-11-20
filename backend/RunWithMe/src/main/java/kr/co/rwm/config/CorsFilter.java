@@ -20,15 +20,14 @@ public class CorsFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
        
-        res.setHeader("Access-Control-Allow-Origin", "*");
-//        res.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
-        res.setHeader("Access-Control-Allow-Origin", "https://k3a303.p.ssafy.io");
+//        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
+//        res.setHeader("Access-Control-Allow-Origin", "https://k3a303.p.ssafy.io");
         res.setHeader("Access-Control-Allow-Credentials", "true");
         res.setHeader("Access-Control-Allow-Methods","*");
         res.setHeader("Access-Control-Max-Age", "3600");
         res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, auth, code");
         res.setHeader("Access-Control-Expose-Headers", "AUTH");
-//        res.setHeader("Access-Control-Expose-Headers", "code");
         res.setHeader("Access-Control-Request-Headers", "*");
  
         if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {

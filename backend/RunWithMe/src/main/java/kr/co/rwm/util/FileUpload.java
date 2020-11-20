@@ -49,7 +49,7 @@ public class FileUpload {
 
 		String yearPath = File.separator + cal.get(Calendar.YEAR);
 
-		String monthPath = yearPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.MONTH) + 1);
+		String monthPath = yearPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.MONTH) + 1L);
 
 		String datePath = monthPath + File.separator + new DecimalFormat("00").format(cal.get(Calendar.DATE));
 

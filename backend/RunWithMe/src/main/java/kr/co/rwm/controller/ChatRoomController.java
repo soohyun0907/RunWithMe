@@ -35,11 +35,11 @@ public class ChatRoomController {
     // 전체 그룹 채팅 목록 조회
     @GetMapping("/room")
     @ResponseBody
-    public ResponseEntity<Response<? extends Object>> room() {
+    public ResponseEntity<Response<Object>> room() {
         List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
         chatRooms.stream().forEach(room -> room.setUserCount(chatRoomRepository.getUserCount(room.getRoomId())));
         
-        return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK, ResponseMessage.GROUP_LIST_SUCCESS, chatRooms),
+        return new ResponseEntity<>(new Response<>(StatusCode.OK, ResponseMessage.GROUP_LIST_SUCCESS, chatRooms),
 				HttpStatus.OK);
     }
 
