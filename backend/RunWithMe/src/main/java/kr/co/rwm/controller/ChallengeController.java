@@ -319,10 +319,10 @@ public class ChallengeController {
 	 * 매일 자정마다 챌린지 끝내면서 유저의 정보 업데이트
 	 * @param request
 	 */
-	@Scheduled(cron = "1 0 00 * * ?")
+	@Scheduled(cron = "0 0 0 * * *")
 	@ApiOperation(value = "챌린지 끝내기")
 	@GetMapping("/finish")
-	public void finishChallenge(HttpServletRequest request) {
+	public void finishChallenge() {
 		List<User> successUsers = challengeService.findAllChallengeEqualDate();
 		ranksService.getDonateExp(successUsers);
 	}
