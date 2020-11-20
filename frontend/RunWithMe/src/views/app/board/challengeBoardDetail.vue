@@ -28,7 +28,7 @@
       <hr style="margin-bottom:1px;">
       <div class="main-content">
         <img :src="board.boardImage" />
-        <p>
+        <p style="white-space:pre;">
           {{ board.boardContent }}
         </p>
       </div>
@@ -57,7 +57,7 @@
               <!-- </div> -->
             <div class="col">
               <b-collapse visible :id="'collapse-'+reply.replyId">
-                <h5>{{ reply.content}}</h5>
+                <h6>{{ reply.content}}</h6>
               </b-collapse>
               <b-collapse :id="'collapse-'+reply.replyId">
                 <b-textarea v-model="reply.content"></b-textarea>
