@@ -179,10 +179,10 @@ export default {
          ...mapGetters(["userInfo","defaultProfile","userTotal"]),
      },
     mounted() {
-      this.$store.commit('closeSidebar')
+        this.$store.commit('closeSidebar')
     },
     methods: {
-    ...mapMutations(["mutateMyRunning","closeSidebar"]),
+        ...mapMutations(["mutateMyRunning","closeSidebar"]),
         showConfirmModal(challengeId, challengeTitle, personalDistanceGoal){
             this.confirmModal = "";
             this.$bvModal
