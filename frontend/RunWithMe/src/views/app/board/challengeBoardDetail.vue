@@ -19,8 +19,7 @@
                 <img v-if="board.writerProfile == null" class="profile-picture rounded-circle" :src="defaultProfile" style="width:35px; height:35px" />
                 <img v-else class="profile-picture rounded-circle" :src="board.writerProfile" style="width:35px; height:35px" />
                 {{ board.writerName }}
-                {{ board.boardRegdate.substring(0,10) }}
-                {{ board.boardRegdate.substring(11,16) }}
+                {{ board.boardRegdate | moment('YYYY.MM.DD HH:mm') }}
               </p>
             </div>
           </div>
@@ -57,10 +56,21 @@
             </div>
               <!-- </div> -->
             <div class="col">
-              <h5>{{ reply.content}}</h5>
-              <div class="float-right">
-                  {{ reply.regdate.substring(0,10) }}
-                  {{ reply.regdate.substring(11,16) }}
+              <b-collapse visible :id="'collapse-'+reply.replyId">
+                <h5>{{ reply.content}}</h5>
+              </b-collapse>
+              <b-collapse :id="'collapse-'+reply.replyId">
+                <b-textarea v-model="reply.content"></b-textarea>
+                <b-button-group size="sm" class="mr-1">
+                  <b-button @click="updateReply(reply.replyId, reply.content)">수정</b-button>
+                  <b-button v-b-toggle="'collapse-'+reply.replyId">취소</b-button>
+                </b-button-group>
+                <!-- <b-button size="sm" variant="dark m-1">수정</b-button> -->
+              </b-collapse>
+              {{ reply.regdate | moment('YYYY.MM.DD HH:mm') }}
+              <div v-if="userInfo.userId == reply.replyWriterId" class="float-right">
+                  <a href @click="deleteReply(reply.replyId)" style="margin-right:15px;">삭제</a> &nbsp;
+                  <a v-b-toggle="'collapse-'+reply.replyId">수정</a>
               </div>
             </div>
             </b-list-group-item>
@@ -70,7 +80,7 @@
           <b-input-group class="mt-3" style="margin-bottom: 20px;">
             <b-form-input v-model="replyInfo.content"></b-form-input>
             <b-input-group-append>
-              <b-button variant="info" @click="postReply()">Button</b-button>
+              <b-button variant="info" @click="postReply()">댓글 등록</b-button>
             </b-input-group-append>
           </b-input-group>
         </div>
@@ -102,14 +112,14 @@ export default {
       },
       allReply: [],
       isWriter: false,
-      deleteModal: "",
+      deleteModal: ""
     }
   },
   computed: {
     ...mapGetters(["defaultProfile", "userInfo"])
   },
   mounted() {
-    this.$store.commit('closeSidebar')
+    this.$store.commit('closeSidebar');
     this.getBoardInfo();
     this.getReplyInfo();
     this.getBoards();
@@ -125,9 +135,13 @@ export default {
         .post("replies/reply", this.replyInfo)
         .then(({data}) => {
           if(data.status == 200) {
-            alert("댓글 등록 성공!");
+            Swal.fire({
+              icon: 'success',
+              text: '댓글이 등록되었습니다.'
+            });
+            // alert("댓글 등록 성공!");
             this.replyInfo.content = "";
-            console.log(data.data);
+            // //console.log(data.data);
             var obj = new Object();
             obj.replyId = data.data.replyId;
             obj.content = data.data.content;
@@ -135,8 +149,12 @@ export default {
             obj.replyWriter = data.data.user.username;
             obj.replyWriterProfile = data.data.user.profile;
             this.allReply.push(obj);
+            this.board.replyCount += 1;
           } else {
-            alert("댓글 등록 실패");
+            Swal.fire({
+              icon: 'error',
+              text: '댓글 등록에 실패하였습니다.'
+            });
             return;
           }
         })
@@ -152,7 +170,7 @@ export default {
         }
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         return;
       })
     },
@@ -162,7 +180,7 @@ export default {
       .then(({data}) => {
         if(data.status == 200){
           // this.allReply = data.data;
-          console.log(data.data);
+          // //console.log(data.data);
           var obj;
           data.data.forEach(element => {
             obj = new Object();
@@ -175,11 +193,11 @@ export default {
             this.allReply.push(obj);
           });
           // this.allReply = this.allReply.reverse();
-          // console.log(this.allReply);
+          // //console.log(this.allReply);
         }
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         return;
       })
     },
@@ -187,7 +205,7 @@ export default {
       http
         .get("boards")
         .then(({data}) => {
-          // console.log(data.data[0].boardId);
+          // //console.log(data.data[0].boardId);
           for(var i=0;i<data.data.length; i++){
             if(data.data[i].boardId == this.$route.query.boardId){
               if(i == 0) this.havePrev = false;
@@ -216,21 +234,25 @@ export default {
     goPrevChallengeBoard() {
       if(this.havePrev) {
         this.$router.push("/app/board/challengeBoardDetail?boardId="+this.prevBoardId);
-        setTimeout(() => {
-          this.$router.go(0)
-        },0);
+        this.$router.go(0)
       } else {
-        alert("이전글이 존재하지 않습니다.");
+        Swal.fire({
+          title: 'Oops...',
+          text: '이전글이 존재하지 않습니다.'
+        });
+        // alert("이전글이 존재하지 않습니다.");
       }
     },
     goNextChallengeBoard() {
       if(this.haveNext) {
         this.$router.push("/app/board/challengeBoardDetail?boardId="+this.nextBoardId);
-        setTimeout(() => {
-          this.$router.go(0)
-        },0);
+        this.$router.go(0)
       } else {
-        alert("다음글이 존재하지 않습니다.");
+        Swal.fire({
+          title: 'Oops...',
+          text: '다음글이 존재하지 않습니다.'
+        });
+        // alert("다음글이 존재하지 않습니다.");
       }
     },
     deleteBoard() {
@@ -276,6 +298,50 @@ export default {
           // An error occurred
           console.log(error);
         });
+    },
+    deleteReply(replyId) {
+      http
+      .delete("replies/reply/" + replyId)
+      .then(({data}) => {
+        if(data.status == 200) {
+          Swal.fire({
+            icon: 'success',
+            text: '댓글이 삭제되었습니다.'
+          });
+          // console.log("댓글삭제 완료!");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return;
+      })
+    },
+    updateReply(replyId, content) {
+      http
+        .put("replies/reply", {
+          replyId: replyId,
+          boardId: this.board.boardId,
+          content: content,
+          replyDepth: 0,
+          parentId: 0,
+          replyOrder: 0
+        })
+        .then(({data}) => {
+          if(data.status == 200) {
+            Swal.fire({
+              icon: 'success',
+              text: '댓글이 수정되었습니다.'
+            });
+            // alert("댓글 수정 성공!");
+            this.$router.go(0)
+          } else {
+            Swal.fire({
+              icon: 'error',
+              text: '댓글 수정 중 오류가 발생하였습니다.'
+            });
+            return;
+          }
+        })
     }
   }
 };

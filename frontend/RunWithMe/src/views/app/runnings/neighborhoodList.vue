@@ -29,9 +29,10 @@
             <div class="card">
               <div class="card-body">
                 <div class="ul-contact-page__profile">
+                  
                   <div class="user-profile-img">
-                    <img v-if="contact.imgUrl == null" class="profile-picture mb-2" :src="defaultProfile">
-                    <img class="profile-picture mb-2" :src="contact.imgUrl" />
+                    <img v-if="contact.imgUrl == null" class="profile-picture mb-2" :src="defaultProfile" height="120vw">
+                    <img v-else class="profile-picture mb-2" :src="contact.imgUrl" height="120vw" />
                   </div>
                   <p class="m-0 text-24">{{ contact.nickname }}</p>
                   <div class="col">
@@ -105,7 +106,7 @@ export default {
             let obj;
             var contactlist = this.contactlist;
             data.data.forEach((element) => {
-              console.log(element);
+              // console.log(element);
               obj = new Object();
               obj.friendId = element.userId.userId;
               obj.nickname = element.userId.username;
@@ -128,7 +129,7 @@ export default {
               contactlist.push(obj);
             });
           }
-          console.log(this.contactlist);
+          // console.log(this.contactlist);
           if (this.contactlist.length == 0) {
               this.haveRunners = false;
           }

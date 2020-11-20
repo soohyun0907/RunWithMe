@@ -175,13 +175,13 @@ export default {
             http
                 .get('/runnings/'+this.uid)
                 .then(response => {
-                    console.log(response.data);
+                    //console.log(response.data);
                     var totalTime = 0;
                     var totalDis = 0;
                     var length = response.data.data.length;
                     var maxTime = 0;
                     for (const [key, value] of Object.entries(response.data.data)) {
-                        console.log(`${key}: ${value}`);
+                        //console.log(`${key}: ${value}`);
                         totalTime += value.accTime;
                         if(maxTime < value.accTime)
                             maxTime = value.accTime;
@@ -220,9 +220,9 @@ export default {
                     http
                         .get("/friends/analysis/"+gender)
                         .then((data) =>{
-                            console.log(data);
+                            //console.log(data);
                             var length =  data.data.data.length;
-                            console.log("size:" + length)
+                            //console.log("size:" + length)
 
                             var totalTime = 0;
                             var totalDis = 0;
@@ -235,12 +235,12 @@ export default {
                                http
                                 .get('/runnings/'+ uid)
                                     .then(response => {
-                                        console.log("상대 데이터")
-                                        console.log(response.data);
+                                        //console.log("상대 데이터")
+                                        //console.log(response.data);
                                         size += response.data.data.length;
 
                                         for (const [key, value] of Object.entries(response.data.data)) {
-                                            console.log(`${key}: ${value}`);
+                                            //console.log(`${key}: ${value}`);
                                             totalTime += value.accTime;
                                             if(maxTime < value.accTime)
                                                 maxTime = value.accTime;
@@ -258,12 +258,12 @@ export default {
             });
         },
         seriesUpdate: function(totalDis, totalTime, size, maxTime){
-            console.log("비교")
-            console.log("totalDis")
-            console.log(totalDis)
+            //console.log("비교")
+            //console.log("totalDis")
+            //console.log(totalDis)
             
-            console.log("totalTime")
-            console.log(totalTime)
+            //console.log("totalTime")
+            //console.log(totalTime)
             // 비교 유저 기록 
             this.series[2].data[0] = totalDis / (totalTime/(60*60));
 
@@ -275,7 +275,7 @@ export default {
 
             this.series[2].data[4] = 0
                 
-            console.log(this.series)
+            //console.log(this.series)
             this.$refs.realtimeChart.updateOptions([{
             }], false, true)
             localStorage.setItem("series", JSON.stringify(this.series));
@@ -301,31 +301,31 @@ export default {
             http
                 .get('/runnings/'+this.uid)
                 .then(response => {
-                    console.log(typeof(response.data.data));
-                    console.log(response.data.data);
+                    //console.log(typeof(response.data.data));
+                    //console.log(response.data.data);
                     var totalTime = 0;
                     var totalDis = 0;
                     var length = response.data.data.length;
                     var maxTime = 0;
-                    console.log("totalDis")
-                    console.log(totalDis)
+                    //console.log("totalDis")
+                    //console.log(totalDis)
                     for (const [key, value] of Object.entries(response.data.data)) {
-                        // console.log(`${key}: ${value}`);
+                        // //console.log(`${key}: ${value}`);
                         totalTime += value.accTime;
                         if(maxTime < value.accTime)
                             maxTime = value.accTime;
                         totalDis += value.accDistance;
                     }
 
-                    console.log("totalDis")
-                    console.log(totalDis)
+                    //console.log("totalDis")
+                    //console.log(totalDis)
                     
-                    console.log("totalTime")
-                    console.log(totalTime)
+                    //console.log("totalTime")
+                    //console.log(totalTime)
 
                     if(!localStorage.getItem("series")) // 기록이 하나도 없다면,
                     {
-                        console.log("여기들어오니?")
+                        //console.log("여기들어오니?")
                         // 현시점 전 기록 (1,2)
                         this.series[0].data[0] = totalDis / (totalTime/(60*60));
                         this.series[1].data[0] = totalDis / (totalTime/(60*60));
@@ -343,7 +343,7 @@ export default {
 
                         this.series[1].data[4] = 0
 
-                        console.log(this.series)
+                        //console.log(this.series)
                         localStorage.setItem("series", JSON.stringify(this.series));
                     }    
                     else // 기록측정을 한적이 있다면,

@@ -27,7 +27,7 @@
                       <span>Author:</span>
                       <span class="text-primary"> {{ board.writerName}} </span> <br>
                       <span>Released:</span>
-                      <span class="text-primary">{{ board.boardEditdate.substring(0,10) }}</span>
+                      <span class="text-primary">{{ board.boardEditdate | moment('YYYY.MM.DD HH:mm') }}</span>
                     </div>
                   </div>
                 </div>
@@ -81,12 +81,12 @@ export default {
       http
         .get("boards")
         .then(({data}) => {
-          console.log(data.data);
+          //console.log(data.data);
           this.Boards = data.data;
           this.Boards = this.Boards.reverse();
         })
         .catch((error) => {
-          console.log(error);
+          //console.log(error);
           return;
         });
     },

@@ -44,6 +44,7 @@ const routes = [
           },
           {
             path: "payChallenge",
+            name: "payChallenge",
             component: () => import("./views/app/apps/payChallenge")
           },
           {
@@ -157,6 +158,20 @@ const routes = [
           {
             path: "createChallenge",
             component: () => import("./views/app/board/createChallenge")
+          },
+          {
+            path: "editChallenge",
+            name: "editChallenge",
+            component: () => import("./views/app/board/editChallenge")
+          },
+          {
+            path: "challengesAdmin",
+            component: () => import("./views/app/board/challengesAdmin")
+          },
+          {
+            path: "challengeDetail",
+            name: "challengeDetail",
+            component: () => import("./views/app/board/challengeDetail")
           },
         ]
       },

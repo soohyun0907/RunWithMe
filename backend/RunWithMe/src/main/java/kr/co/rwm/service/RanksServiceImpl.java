@@ -10,10 +10,12 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import kr.co.rwm.dto.RanksDto;
 import kr.co.rwm.dto.UserDto;
 import kr.co.rwm.entity.Ranks;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
+import kr.co.rwm.entity.RunningUser;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.repo.RanksRepository;
 import kr.co.rwm.repo.RecordRepository;
@@ -120,8 +122,28 @@ public class RanksServiceImpl implements RanksService{
 	}
 
 	@Override
-	public List<Ranks> raceTop() {
-		return rankRepository.findTop10ByOrderByRaceExpDesc();
+	public List<RanksDto> raceTop() {
+		// running 정보를 같이 추가해서 전송 - RunningUser
+		List<Ranks> ranks = rankRepository.findTop10ByOrderByRaceExpDesc();
+		List<RanksDto> result = new ArrayList<RanksDto>();
+		RanksDto temp = null;
+		
+		for(Ranks rank : ranks) {
+			RunningUser runningUser = runningUserRepository.findByUserId(rank.getUserId());
+			temp = RanksDto.builder()
+							.rankId(rank.getRankId())
+							.userId(rank.getUserId())
+							.raceExp(rank.getRaceExp())
+							.donateExp(rank.getDonateExp())
+							.totalExp(rank.getTotalExp())
+							.tier(rank.getTier())
+							.running(runningUser)
+							.build();
+			result.add(temp);
+		}
+		
+		return result;
+		
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package kr.co.rwm.service;
 
 import java.util.List;
 
+import kr.co.rwm.dto.RanksDto;
 import kr.co.rwm.dto.UserDto;
 import kr.co.rwm.entity.Ranks;
 import kr.co.rwm.entity.User;
@@ -17,7 +18,7 @@ public interface RanksService {
 	void getDonateExp(List<User> user);
 	
 	// 경험치 top 10 (기록) - 사용자 이름, 점수, 
-	List<Ranks> raceTop();
+	List<RanksDto> raceTop();
 	
 	// 경험치 top 10 (기부)
 	List<Ranks> donateTop();

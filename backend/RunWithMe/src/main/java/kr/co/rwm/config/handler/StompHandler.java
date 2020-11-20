@@ -36,9 +36,7 @@ public class StompHandler implements ChannelInterceptor {
         if (StompCommand.CONNECT == accessor.getCommand()) { // websocket 연결요청
         	System.out.println(message);
             String jwtToken = accessor.getFirstNativeHeader("AUTH");
-            System.out.println("****************************");
             System.out.println(jwtToken);
-            System.out.println("****************************");
             log.info("CONNECT {}", jwtToken);
             // Header의 jwt token 검증
             jwtTokenProvider.validateToken(jwtToken);
@@ -48,11 +46,6 @@ public class StompHandler implements ChannelInterceptor {
             // 채팅방에 들어온 클라이언트 sessionId를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
             String sessionId = (String) message.getHeaders().get("simpSessionId");
             String jwtToken = accessor.getFirstNativeHeader("AUTH");
-            System.out.println("****************************");
-            System.out.println(jwtToken);
-            System.out.println("****************************");
-            System.out.println(message);
-            System.out.println("****************************");
             chatRoomRepository.setUserEnterInfo(sessionId, roomId);
             // 채팅방의 인원수를 +1한다.
             chatRoomRepository.plusUserCount(roomId);
@@ -61,7 +54,7 @@ public class StompHandler implements ChannelInterceptor {
             String email = jwtTokenProvider.getUserPk(jwtToken);
             
             Optional<User> userName = userService.findByUserEmail(email);
-            String name = "익명의 사용자 ";
+            String name = "사용자";
             if(userName.isPresent()) {
             	name = userName.get().getUsername();
             }
@@ -75,7 +68,7 @@ public class StompHandler implements ChannelInterceptor {
             // 채팅방의 인원수를 -1한다.
             chatRoomRepository.minusUserCount(roomId);
             // 클라이언트 퇴장 메시지를 채팅방에 발송한다.(redis publish)
-            String name = Optional.ofNullable((Principal) message.getHeaders().get("AUTH")).map(Principal::getName).orElse("익명의 사용자");
+            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("사용자");
             chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.QUIT).roomId(roomId).sender(name).build());
             // 퇴장한 클라이언트의 roomId 맵핑 정보를 삭제한다.
             chatRoomRepository.removeUserEnterInfo(sessionId);
