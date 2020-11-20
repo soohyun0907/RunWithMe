@@ -41,15 +41,14 @@
                         <b-card no-body class="ul-card__border-radius">
                           <!-- 접혀있을때 보이는 부분 -->
                           <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
-                            <b-button @click="decodePolyline(running.polyline)" class="card-title mb-0" block href="#" v-b-toggle="'accordion-'+i" variant="transparent" style="font-size:1em">
-                              <span>
-                                <img class="rounded mb-2" :src="running.thumbnail" @error="defaultImage" alt="썸넬" width=30px height=30px style="margin-left:-10px;"/>
-                              </span>
-                              {{running.end[0]}}일 런닝
-                              
+                            <b-button @click="decodePolyline(running.polyline)" class="card-title mb-0" block href="#" v-b-toggle="'accordion-'+i" variant="transparent" style="text-align:center; font-size:1.1em">
+                                <img class="rounded mb-2" :src="running.thumbnail" @error="defaultImage" alt="썸넬" width=40px height=40px style="margin-left:-12px;"/>
+                                {{running.end[0]}}일 런닝
+                            </b-button>
+                            <b-button @click="deleteRunning(running)" style="right:0px padding:0 !important" class="card-title mb-0"  block href="#"  variant="transparent">
+                              <i class ="i-Close"/>
                             </b-button>
                           </b-card-header>
-                          
                           <b-collapse v-bind:id="'accordion-'+i" accordion="my-accordion" role="tabpanel">
                             <router-link :to="{name:'runningFriends', query:{friendName:userInfo.username, runningId:running.runningId}}">
                               <b-card-body>
@@ -88,11 +87,14 @@
                         <b-card no-body class="ul-card__border-radius">
                           <!-- 접혀있을때 보이는 부분 -->
                           <b-card-header header-tag="header" class="p-1 header-elements-inline" role="tab">
-                            <b-button @click="decodePolyline2(running.polyline)" class="card-title mb-0" block href="#" v-b-toggle="'accordion-'+i" variant="transparent" style="font-size:1em">
+                            <b-button @click="decodePolyline2(running.polyline)" class="card-title mb-0" block href="#" v-b-toggle="'accordion-'+i" variant="transparent" style="font-size:1em; font-size:1.1em">
                               <span>
-                                <img class="rounded mb-2" :src="running.thumbnail" @emaprror="defaultImage" alt="썸넬" width=30px height=30px style="margin-left:-10px;"/>
+                                <img class="rounded mb-2" :src="running.thumbnail" @error="defaultImage" alt="썸넬" width=40px height=40px style="margin-left:-10px;"/>
                               </span>
                               {{running.end[0]}}일 런닝
+                            </b-button>
+                            <b-button @click="deleteRunning(running)" style="right:0px padding:0 !important" class="card-title mb-0"  block href="#"  variant="transparent">
+                              <i class ="i-Close"/>
                             </b-button>
                           </b-card-header>
                           
@@ -131,6 +133,9 @@
 <script>
 import http from "@/utils/http-common";
 import { mapGetters,mapMutations } from "vuex";
+//sweet alert
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+import 'sweetalert2/src/sweetalert2.scss'
 
 export default {
   metaInfo: {
@@ -170,6 +175,19 @@ export default {
   methods: {
     ...mapMutations(["closeSidebar"]),
     deleteRunning(deleteRun) {
+      console.log(deleteRun)
+      http.delete(`/runnings/${deleteRun.runningId}`)
+      .then(data =>{
+        console.log(data)
+        Swal.fire({
+          icon:'success',
+          text:'런닝이 삭제되었습니다.',
+          showConfirmButton:false,
+          timer:500,
+        })
+        this.getRunningsbyArea()
+        this.getRunnings()
+      })
 
     },
     getRunningsbyArea(){
@@ -178,7 +196,7 @@ export default {
         this.areaRunning=data.data.data
         for(var i=0;i<this.areaRunning.length;i++){
         if(this.areaRunning[i].accTime>=60){
-          this.areaRunning[i]['minute']= this.areaRunning[i].accTime/60
+          this.areaRunning[i]['minute']= parseInt(this.areaRunning[i].accTime/60)
         }else{
           this.areaRunning[i]['minute']=0
         }
@@ -300,6 +318,10 @@ export default {
   height: 200px;
 }
 .card-body{
-  padding:0.5em !important;
+  padding:1em !important;
+}
+.card-title{
+  text-align:center;
+  margin-bottom:0.5;
 }
 </style>
