@@ -4,27 +4,31 @@
     <b-row>
       <b-col lg="6" class="mb-3">
         <b-card title="챌린지 정보">
+          <div v-if="challengeInfo!=null">
+            <img :src = "challengeInfo.challengeImg"/>
+          </div>
           <div>
             <b-form @submit="onSubmit" @reset="onReset" >
               <b-form-group
-                :label="'챌린지 이름: '+challengeInfo.title"
+                class=" mb-20" />
+              
+                <div style="text-align:center; font-weight:900; font-size:1.4em">{{challengeInfo.title}}</div>
+              <b-form-group
                 class=" mb-30" />
               <b-form-group
                 :label="'목표 거리: '+challengeInfo.distanceGoal + 'KM'"
                 class=" mb-30" />
-              <b-form-group
-                :label="'목표 금액: '+challengeInfo.donateGoal + '원'"
-                class=" mb-30" />
+                <label class="mb-30">목표 금액 : {{challengeInfo.donateGoal | makeComma}} 원<br></label>
               <b-form-group
                 :label="'개인 목표 거리: '+challengeInfo.personalDistanceGoal + 'KM'"
-                class=" mb-30" />
+                 class=" mb-30"/>
               <div class="custom-separator"></div>
 
               <div class="card-title">후원 금액을 설정해주세요.</div>
 
+                <label class="text-primary" style="font-weight:900"> 사용 가능한 금액: {{mileage |makeComma}} 원 </label> 
               <b-form-group
                 class="col-md-6 mb-3"
-                :label="'사용 가능한 금액:  ' + mileage + ' 원'"
                 label-for="input-1"
               >
               <b-form-input
@@ -79,7 +83,7 @@ export default {
     this.$store.commit('closeSidebar')
   },
   methods: {
-    ...mapMutations(["mutateMyRunning","closeSidebar"]),
+    ...mapMutations(["mutateMyRunning","closeSidebar","mutateUserInfo","mutateUserTotal"]),
     getChallengeInfo(){
         http
         .get("challenges/"+this.challengeId)
@@ -87,10 +91,10 @@ export default {
             if(data.status==200){
                 this.challengeInfo = data.data.challengeId;
             }
-            // console.log(this.challengeInfo);
+            // //console.log(this.challengeInfo);
         })
         .catch((error) => {
-            console.log(error);
+            //console.log(error);
             return;
         })
     },
@@ -110,8 +114,13 @@ export default {
               title: 'Oops...',
               text: '챌린지 참여 중 오류가 발생하였습니다.'
             });
-            return;
           }
+        }).catch( err =>{
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '챌린지 참여 중 오류가 발생하였습니다.'
+          });
         })
     },
     onReset(evt) {
@@ -123,17 +132,36 @@ export default {
       http
         .get("payment/"+this.donateAmount)
         .then(({data}) => {
-          alert("결제완료");
-          this.$router.push("/app/board/challenges");
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: "참여 성공",
+            showConfirmButton: false,
+            timer: 1500
+          })
+          //유저 정보 갱신
+            http.get('users/').
+            then(res => {
+              //console.log(res)
+              this.$store.commit('mutateUserInfo',res.data.data.userId)
+              this.$store.commit('mutateUserTotal',res.data.data)
+              localStorage.setItem("userInfo",JSON.stringify(res.data.data))
+            })
+            this.$router.push("/app/board/challenges");
         })
         .catch((error) => {
-          this.cancelChallenge();
-          console.log(error);
+          // this.cancelChallenge();
+          Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: '마일리지가 부족합니다'
+            });
+          //console.log(error);
           return;
         })
     },
     cancelChallenge() {
-      console.log(this.challengeId+" "+this.donateAmount);
+      //console.log(this.challengeId+" "+this.donateAmount);
       http
         .delete("/challenges/runners/"+this.challengeId+"/"+this.donateAmount)
         .then(({data}) => {
@@ -155,7 +183,7 @@ export default {
         })
         .catch((error) => {
           // this.cancelChallenge();
-          console.log(error);
+          //console.log(error);
           return;
         })
     },
@@ -180,7 +208,7 @@ export default {
           })
         .catch(err => {
           // An error occurred
-          console.log(error);
+          //console.log(error);
         });
     },
   }

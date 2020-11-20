@@ -80,10 +80,10 @@
             </div>
               <div v-for="(record,index) in tempRecords" :key="index" class="d-flex border-bottom justify-content-between p-3">
                 <div class="flex-grow-1">
-                  <h5 class="m-0">{{record.accDistance}} km</h5>
+                  <h5 class="m-0">{{record.accDistance}} Km</h5>
                 </div>
                 <div class="flex-grow-1">
-                  <h5 class="m-0">{{convertToTime(record.accTime.toFixed(2))}}</h5>
+                  <h5 class="m-0">{{convertToTime(record.accTime)}}</h5>
                 </div>
             </div>
           </div>
@@ -217,11 +217,6 @@ export default {
   },
   mounted() {
     this.$store.commit('closeSidebar')
-    if(localStorage.getItem("newdaeyong@naver.com")){
-      console.log(localStorage.getItem("newdaeyong@naver.com"))
-    }else{
-      console.log("업써요")
-    }
     
     if (window.google && window.google.maps) {
       this.initMap();
@@ -358,7 +353,7 @@ export default {
                 var cityDuplicate = false
                 for (var i = 0; i < gugun.length; i++) {
                   if (gugun[i] == currentCity) {
-                    console.log("이미 존재해요");
+                    // console.log("이미 존재해요");
                     cityDuplicate = true
                   }
                 }
@@ -395,8 +390,8 @@ export default {
           } else {
             var distance = this.computeDistance(this.previous, this.current);
             
-            console.log("watchposition 이동거리" + distance);
-            console.log("watchposition 걸린시간" + this.checkSecond);
+            // console.log("watchposition 이동거리" + distance);
+            // console.log("watchposition 걸린시간" + this.checkSecond);
             var threshold = 0.001;
             this.previous.lat = this.current.lat;
             this.previous.lng = this.current.lng;
@@ -412,16 +407,15 @@ export default {
               );
               this.linePath.push(currentLatLng);
               this.speed = (this.checkOneKm * 1000) / this.checkSecond;
+              this.drawLines();
+      
             }
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
-              console.log("최근 1km당 스피드 = " + this.speed);
+              // console.log("최근 1km당 스피드 = " + this.speed);
               this.savePosition();
-              setTimeout(() => {
-                this.checkOneKm -= 1;
-                this.checkSecond = 0;
-              }, 100);
-
+              this.checkOneKm -= 1;
+              this.checkSecond = 0;
             }
           }
         },
@@ -445,9 +439,9 @@ export default {
       staticM_URL +=
         "key=AIzaSyAUd76NMwTSUKUHpuocMhah5P8cocpFgKI&format=png&"; //Set the Google Map Type.
       
-      console.log("getScreenShot")
-      console.log(this.encoded_polyline)
-      console.log(this.encoded_polyline.length)
+      // console.log("getScreenShot")
+      // console.log(this.encoded_polyline)
+      // console.log(this.encoded_polyline.length)
       if(this.encoded_polyline.length>4){
         staticM_URL +="path=color:red|weight:3|enc:"
         staticM_URL += this.encoded_polyline
@@ -475,52 +469,47 @@ export default {
 
     },
     savePosition(position) {
-      if(this.checkOneKm==0 || this.checkSecond==0){
-        var speed = 0.01
+      if(this.checkOneKm<=0 || this.checkSecond<=0){
+        var speed = 0.001
       }else{
-        var speed = this.speed+0.01
+        var speed = this.speed+0.001
       }
 
       let tempRecord = {
-        accDistance:this.checkOneKm+0.01,
+        accDistance:this.accumulated_distance+0.001,
         accTime: this.accumulated_time,
         speed: speed,
       };
+
       this.tempRecords.push(tempRecord)
-      this.echart4.series[0].data.push((tempRecord.accTime/60).toFixed(2))
-      this.echart4.xAxis.data.push(tempRecord.accDistance)
-                
-      console.log("savePosition - tempRecords")
-      console.log(this.tempRecords)
-      
+
       let stringTempRecord = {
-        accDistance:(this.checkOneKm+0.01).toString(),
+        accDistance:(this.accumulated_distance+0.001).toString(),
         accTime: this.accumulated_time.toString(),
         speed: speed.toString(),
       };
       this.stringTempRecords.push(stringTempRecord)
-       console.log("savePosition - stringtempRecords")
-     
-      console.log(this.stringTempRecords)
-      
+      if(this.tempRecords.length!=0){
+        for(var i=0; i<this.tempRecords.length; i++){
+          if(i!=this.tempRecords.length-1)  {
+            this.tempRecords[i].accDistance= Math.floor(this.tempRecords[i].accDistance)
+            }else{
+              this.tempRecords[i].accDistance= parseFloat(this.tempRecords[i].accDistance).toFixed(2)
+            }
+            this.echart4.series[0].data.push((this.tempRecords[i].accTime/60).toFixed(2))
+            this.echart4.xAxis.data.push(this.tempRecords[i].accDistance)
+            
 
-      // //래디스에 저장
-      // http
-      //   .post(`runnings/temp`, JSON.stringify(data), {
-      //     headers: {
-      //       "Content-type": "application/json",
-      //     },
-      //   })
-      //   .then((res) => {
-      //     console.log(res.data);
-      //     console.log(
-      //       "1키로당 기록 전송" + data.accDistance + " " + data.accTime
-      //     );
-      //   })
-      //   .catch((err) => {
-      //     console.log("savePosition Error")
-      //     console.log(err)
-      //   });
+        }
+      }
+      // console.log("savePosition - stringtempRecords")
+      // console.log(this.stringTempRecords)
+      // console.log("this.tempRecords")
+      // console.log(this.tempRecords)
+      // console.log("savePosition - tempRecords")
+      // console.log(this.tempRecords)
+      
+      
     },
 
     endLocationUpdates() {
@@ -540,14 +529,14 @@ export default {
       this.endTime = new Date();
       this.endTime = this.$moment(this.endTime).format("YYYY-MM-DDTHH:mm:ss");
 
-      //////////////////////////  
+      ////////////////////////// 
 
-
+      this.gugun.length.length==0 ? this.gugun : this.gugun.push("강남구")
       let runningData = {
         polyline: this.encoded_polyline.toString(),
         startTime: this.startTime,
         endTime: this.endTime,
-        accDistance: (this.accumulated_distance+0.01).toString(),
+        accDistance: (this.accumulated_distance+0.001).toString(),
         accTime: this.accumulated_time.toString(),
         gugun:this.gugun,
         thumbnail:this.thumbnail,
@@ -557,14 +546,14 @@ export default {
         polyline: this.encoded_polyline,
         startTime: this.startTime,
         endTime: this.endTime,
-        accDistance: (this.accumulated_distance+0.01),
+        accDistance: (this.accumulated_distance+0.001),
         accTime: this.accumulated_time,
         gugun:this.gugun,
         thumbnail:this.thumbnail,
         records:this.tempRecords,
       };
-      console.log("myRunningData")
-      console.log(myRunningData)
+      // console.log("myRunningData")
+      // console.log(myRunningData)
 
       this.accumulated_distance=0
       this.accumulated_time=0
@@ -577,8 +566,8 @@ export default {
           },
       })
       .then(data => {
-        console.log("런닝 기록 저장 완료.")
-        console.log(runningData)
+        // console.log("런닝 기록 저장 완료.")
+        // console.log(runningData)
         this.$store.commit('mutateMyRunning',myRunningData)
         this.$router.push('/app/runnings/runningResult')
       }).catch(err => {
@@ -595,18 +584,23 @@ export default {
       var hour = timeElapsed.getUTCHours();
       var min = timeElapsed.getUTCMinutes();
       var sec = timeElapsed.getUTCSeconds();
-      this.accumulated_time += 1;
-      this.checkSecond += 1;
-      console.log("총 런닝 시간 체크 : " +this.accumulated_time)
-      console.log(hour + "" + min + "" +sec)
+      
       this.clock =
         this.zeroPrefix(hour, 2) +
         ":" +
         this.zeroPrefix(min, 2) +
         ":" +
         this.zeroPrefix(sec, 2);
+        
+      var realTime = ((currentTime- this.timeBegan-this.stoppedDuration)/1000).toFixed(0)
+      
+      // this.accumulated_time += 1;
+      // this.checkSecond += 1;
+      this.accumulated_time = realTime;
+      this.checkSecond = realTime;
     },
     zeroPrefix(num, digit) {
+      
       var zero = "";
       for (var i = 0; i < digit; i++) {
         zero += "0";
@@ -620,8 +614,8 @@ export default {
       //     new google.maps.LatLng(this.linePath[i].lat,this.linePath[i].lng)
       //   );
       // }
-      console.log("drawLines - this.linePath")
-      console.log(this.linePath)
+      // console.log("drawLines - this.linePath")
+      // console.log(this.linePath)
       this.poly = new google.maps.Polyline({
         // path: runningPathCoordinates,
         path: this.linePath,
@@ -631,16 +625,16 @@ export default {
         strokeWeight: 2,
         map:this.map
       });
-      console.log("drawLines - this.poly")
-      console.log(this.poly)
+      // console.log("drawLines - this.poly")
+      // console.log(this.poly)
       this.encode_polyline(this.poly)
     },
     // encode_polyline(latLng, poly) {
     encode_polyline(poly) {
       var path = poly.getPath();
       this.encoded_polyline = google.maps.geometry.encoding.encodePath(path);
-      console.log("this.encoded_polyline")
-      console.log(this.encoded_polyline)
+      // console.log("this.encoded_polyline")
+      // console.log(this.encoded_polyline)
     },
     
     computeDistance(startCoords, destCoords) {
@@ -669,7 +663,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .flex-grow-1{
   width:30vw;
   text-align:center;

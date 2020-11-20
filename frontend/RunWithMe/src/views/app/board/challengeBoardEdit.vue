@@ -72,7 +72,7 @@ export default {
         ...mapMutations(["closeSidebar"]),
         onSubmit(el) {
             let x = el.preventDefault();
-            console.log(this.userInfo);
+            ////console.log(this.userInfo);
             this.board.writerId = this.userInfo.userId;
             http
                 .put('/boards/board', 
@@ -81,10 +81,18 @@ export default {
                 .then(({ data }) => {
                     if(data.status == 200){
                         // this.$router.push("/app/board/challengeBoardDetail?boardId="+this.board.boardId);
-                        alert("게시글 수정 완료 이미지를 수정하려면 등록해주세요.");
+                        // alert("게시글 수정 완료 이미지를 수정하려면 등록해주세요.");
+                        Swal.fire({
+                            icon: 'success',
+                            text: '게시글 수정이 완료되었습니다. 이미지를 수정하려면 등록해주세요.'
+                        });
                         this.updateBoardImg = true;
                     } else {
-                        alert("오류가 발생하였습니다.");
+                        Swal.fire({
+                            icon: 'error',
+                            text: '게시글 수정 중 오류가 발생하였습니다.'
+                        });
+                        // alert("오류가 발생하였습니다.");
                         return;
                     }
             })
@@ -108,17 +116,25 @@ export default {
                 })
                 .then(({ data }) => {
                     if(data.status == 200){
-                        alert("이미지 업로드 완료!~");
+                        Swal.fire({
+                            icon: 'success',
+                            text: '이미지 업로드가 완료되었습니다.'
+                        });
+                        // alert("이미지 업로드 완료!~");
                         this.$router.push("/app/board/challengeBoardDetail?boardId="+this.board.boardId);
                     } else {
-                        alert("오류가 발생하였습니다.");
+                        Swal.fire({
+                            icon: 'error',
+                            text: '이미지 업로드 중 오류가 발생하였습니다.'
+                        });
+                        // alert("오류가 발생하였습니다.");
                         return;
                     }
                 })
         },
         handleFileUpload() {
             this.file = this.$refs.files.files;
-            // console.log(this.file);
+            // //console.log(this.file);
         },
         getBoardInfo(){
             http
@@ -130,7 +146,7 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 return;
             })
         },

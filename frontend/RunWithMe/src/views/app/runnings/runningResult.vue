@@ -2,28 +2,28 @@
   <div class="main-content">
      <div style="text-align:center">
       <p style="font-size:1.5em;margin-bottom:5px">
-         <h4> {{result.parseTimeE[0]}}일 런닝기록</h4>
+         <h4> {{result.parseTimeE ?  result.parseTimeE[0] : 0}}일 런닝기록</h4>
     </div>
     <div class="simpleResult">
         <div class="col">
             <div class="row">
                 <div class="col">
                     런닝 시작 시간
-                    <h3>{{result.parseTimeS[1]}}</h3>
+                    <h3>{{result.parseTimeS ?  result.parseTimeS[1] : 0}}</h3>
                 </div>
                 <div class="col">
                     런닝 종료 시간
-                    <h3>{{result.parseTimeE[1]}}</h3>
+                    <h3>{{result.parseTimeE ?  result.parseTimeE[1] : 0}}</h3>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     총 런닝 거리
-                    <h3>{{result.accDistance.toFixed(2)}} km</h3>
+                    <h3>{{result.accDistance? result.accDistance.toFixed(2): 0 }} km</h3>
                 </div>
                 <div class="col">
                     총 런닝 시간
-                    <h3>{{convertToTime(result.accTime.toFixed(2))}}</h3>
+                    <h3>{{convertToTime(result.accTime)}}</h3>
                 </div>
             </div> 
             <div class="row">
@@ -53,10 +53,10 @@
             </div>
               <div v-else v-for="(record,index) in records" :key="index" class="d-flex border-bottom justify-content-between p-3">
                 <div class="flex-grow-1">
-                  <h5 style="padding-left:5vw;" class="m-0">{{record.accDistance}}</h5>
+                  <h5 style="padding-left:5vw;" class="m-0">{{record.accDistance}} Km</h5>
                 </div>
                 <div class="flex-grow-1">
-                  <h5 style="padding-left:2vw;" class="m-0">{{convertToTime(record.accTime.toFixed(2))}}</h5>
+                  <h5 style="padding-left:2vw;" class="m-0">{{convertToTime(record.accTime)}}</h5>
                 </div>
             </div>
           </div>
@@ -150,17 +150,10 @@ export default {
     this.result['parseTimeE'] = this.result.endTime.split('T')
     this.result['parseTimeS'] = this.result.startTime.split('T')
 
-    if(this.result.accDistance!=0.00
-    &&this.result.accTime!=0.00 
-    &&this.result.accDistance!=0 
-    && this.result.accTime!=0){
-        this.avgspeed = this.result.accDistance*1000/this.result.accTime
-    }else {
-        this.avgSpeed=0;
-    }
-    console.log("this.result")
-    console.log(this.result)
-    this.getTempRuns()
+    this.avgSpeed = (this.result.accDistance*1000)/parseInt(this.result.accTime)
+    setTimeout(() => {
+      this.getTempRuns()
+    }, 100);
   },
   computed: {
     ...mapGetters(["myRunning"]),
@@ -168,9 +161,16 @@ export default {
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
     getTempRuns(){
-      this.records=this.result.records
-      console.log("this.records")
-      console.log(this.records)
+      // this.records=this.result.records
+      // console.log("this.records")
+      // console.log(this.records)
+      for(var i=0; i<this.result.records.length; i++){
+          if(i!=this.result.records.length-1 && this.result.records[i].accDistance<0.1)
+            continue;
+          this.records.push(this.result.records[i])
+      }
+
+
       if(this.records.length!=0){
         for(var i=0; i<this.records.length; i++){
             if(i!=this.records.length-1)  {
@@ -178,7 +178,6 @@ export default {
             }else{
                 this.records[i].accDistance= parseFloat(this.records[i].accDistance).toFixed(2)
             }
-            this.records[i].accDistance+=" km"
             this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
             this.echart4.xAxis.data.push(this.records[i].accDistance)
         }

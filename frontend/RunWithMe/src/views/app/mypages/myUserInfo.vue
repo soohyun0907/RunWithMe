@@ -15,6 +15,7 @@
                         <b-button variant="outline-info" style="padding:0.2em" @click="goUserInfoEdit()">프로필 변경</b-button>
                         <p class="m-0 text-24">{{userInfo.username}} 님</p>
                         <p class="text-muted m-0">{{userInfo.userEmail}}</p>
+                        <p class="text-muted m-0"><code>보유 마일리지:{{userInfo.mileage |makeComma}}</code></p>
             </div>
             <div class="card-body">
                 <div>
@@ -59,11 +60,11 @@
                                         <span>{{userTotal.totalDistance.toFixed(2)}} Km</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
-                                        <p class="text-primary mb-1"><i class="i-Cloud-Weather text-16 mr-1"></i> 누적 런닝</p>
+                                        <p class="text-primary mb-1"><i class="i-Cloud-Weather text-16 mr-1"></i> 누적 시간</p>
                                         <span>{{userTotal.totalTime}} 초</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
-                                        <p class="text-primary mb-1"><i class="i-Face-Style-4 text-16 mr-1"></i>누적 시간</p>
+                                        <p class="text-primary mb-1"><i class="i-Face-Style-4 text-16 mr-1"></i>누적 런닝</p>
                                         <span>{{userTotal.totalCount}} 회</span>
                                     </div>
                                 </div>
@@ -72,7 +73,7 @@
                                     
                                 </div>
                             </div>
-                             <b-button variant="outline-info" style="padding:0.2em" @click="goUserInfosEdit()">회원 정보 수정</b-button>
+                             <b-button @click="goUserInfosEdit()" variant="outline-info" style="padding:0.2em" >회원 정보 수정</b-button>
                        
 
                         </b-tab>
@@ -105,6 +106,8 @@
 <script>
 import http from "@/utils/http-common";
 import { mapGetters,mapActions, mapMutations } from "vuex";
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+import 'sweetalert2/src/sweetalert2.scss'
 
 export default {
      metaInfo: {
@@ -119,27 +122,44 @@ export default {
    computed: {
     ...mapGetters(["getSideBarToggleProperties", "userInfo","defaultProfile","userTotal"]),
   },
-
   mounted() {
-      console.log(this.userInfo)
-      console.log(this.userTotal)
-       this.$store.commit('closeSidebar')
+      //console.log(this.userInfo)
+    //console.log(this.userTotal)
+    this.$store.commit('closeSidebar')
+    this.userInfoUpdated()  
+    
   },
   methods: {
     ...mapActions(["signOut"]),
     ...mapMutations(["closeSidebar"]),
+    userInfoUpdated(){
+        http.get(`users/`)
+          .then(data => {
+            //console.log("회원정보 갱신!")
+            this.$store.commit('mutateUserInfo',data.data.data.userId)
+            this.$store.commit('mutateUserTotal',data.data.data)
+          })
+    },
     memberOut(){
         var data = {
             userPw:this.inputPass
         }
         http.post(`users/checkPw`,data)
         .then(data => {
-            console.log("i'm gone..")
+            //console.log("i'm gone..")
             http.delete(`users`)
             .then(data=>{
-                console.log(data)
-                // this.signOut();
+                
+            Swal.fire({
+              icon:'success',
+              text:'회원 탈퇴 성공! 메인으로 이동합니다',
+              showConfirmButton:false,
+              timer:1000,
+            })
+            //console.log(data)
+            setTimeout(() => {
                 this.$router.push('/app/sessions/signIn')   
+            }, 1000);
             })
         })
     },

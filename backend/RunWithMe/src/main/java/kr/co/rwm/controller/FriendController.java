@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import kr.co.rwm.entity.Friend;
+import kr.co.rwm.entity.Ranks;
 import kr.co.rwm.entity.User;
 import kr.co.rwm.model.Response;
 import kr.co.rwm.model.ResponseMessage;
@@ -44,7 +45,7 @@ public class FriendController {
 		int uid = 0; 
 		if(jwtTokenProvider.validateToken(token)) {
 			uid = jwtTokenProvider.getUserIdFromJwt(token);
-			List<User> list = friendService.list(uid);
+			List<Ranks> list = friendService.contactList(uid);
 			return new ResponseEntity<Response<? extends Object>> (new Response<>(StatusCode.OK, ResponseMessage.READ_FRIENDLIST_SUCCESS, list), HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response<? extends Object>> (new Response<>(StatusCode.FORBIDDEN,ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);

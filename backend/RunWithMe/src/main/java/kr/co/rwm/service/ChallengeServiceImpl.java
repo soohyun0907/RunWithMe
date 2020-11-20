@@ -147,6 +147,10 @@ public class ChallengeServiceImpl implements ChallengeService {
 		if (users.isPresent()) {
 			User user = users.get();
 			Optional<Challenge> challenges = challengeRepository.findByChallengeId(challengeId);
+			if(user.getMileage() < donation) {
+				return null;
+			}
+			
 			if (challenges.isPresent()) {
 				Challenge challenge = challenges.get();
 				challenge.setParticipant(challenge.getParticipant() + 1);
@@ -237,7 +241,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 		List<User> successUsers = new ArrayList<User>();
 
 		LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
-		yesterday = yesterday.withHour(23).withMinute(59).withSecond(59).withNano(0);
+		yesterday = yesterday.withHour(03).withMinute(00).withSecond(00).withNano(0);
 
 		List<Challenge> challenges = challengeRepository.findAllByEndTime(yesterday);
 

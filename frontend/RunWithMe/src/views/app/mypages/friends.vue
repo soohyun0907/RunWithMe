@@ -45,47 +45,44 @@
 
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'">
-            <a @click="chatFriend(props.row.username);">
+            <a @click="chatFriend(props.row.userId.username);">
               <i class="i-Speach-Bubble-8 text-25 text-success mr-2"></i>
               {{ props.row.button }}</a
             >
-            <a @click="deleteFriend(props.row.userId);">
+            <a @click="deleteFriend(props.row.userId.userId);">
               <i class="i-Close-Window text-25 text-danger"></i>
               {{ props.row.button }}</a
             >
           </span>
           <span v-else-if="props.column.field == 'gender'">
-            <div v-if="props.row.gender=='1'">
+            <div v-if="props.row.userId.gender=='1'">
               남자
             </div>
             <div v-else>
               여자
             </div>
           </span>
-          <span v-else-if="props.column.field == 'gugunId.gugunName'">
-            {{props.row.gugunId.sidoId.sidoName}} {{props.row.gugunId.gugunName}}
+          <span class="friendList" v-else-if="props.column.field == 'gugunId.gugunName'">
+            {{props.row.userId.gugunId.sidoId.sidoName}} {{props.row.userId.gugunId.gugunName}}
           </span>
           <span v-else-if="props.column.field == 'username'">
-            <a href="">
+            <router-link :to="{name:'friendsDetail', query:{friendId: props.row.userId.userId}}">
               <div class="ul-widget-app__profile-pic" style="text-align:center">
-                <div v-if="props.row.profile!=null">
+                <div v-if="props.row.userId.profile!=null">
                   <img
                     class="profile-picture avatar-sm mb-2 rounded-circle img-fluid"
-                    :src="props.row.profile" alt=""/>
+                    :src="props.row.userId.profile" alt=""/>
                 </div>
                 <div v-else>
                   <img
                     class="profile-picture avatar-sm mb-2 rounded-circle img-fluid"
                     :src="defaultProfile" alt=""/>
                 </div>
-                <div v-if="props.row.gender==1">
-                  <i class ="i-Business-Man"/> {{ props.row.username }}
-                </div>
-                <div v-if="props.row.gender==2">
-                  <i class ="i-Girl"/> {{ props.row.username }}
-                </div>
+                  <div class="friendList">
+                    {{ props.row.userId.username }}
+                  </div>
               </div>
-            </a>
+            </router-link>
           </span>
         </template>
       </vue-good-table>
@@ -200,7 +197,7 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 return;
             });
             swalWithBootstrapButtons.fire(
@@ -223,16 +220,21 @@ export default {
       })
     },
     getFriendList(){
-      console.log(this.userInfo.userId)
+      //console.log(this.userInfo.userId)
       // http.get(`friends/contacts/${this.userInfo.userId}`)
       http.get(`friends/contacts`)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         this.rows = res.data.data
     });
     }
   }
 };
 </script>
-<style >
+<style scoped>
+.friendList {
+    overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
 </style>

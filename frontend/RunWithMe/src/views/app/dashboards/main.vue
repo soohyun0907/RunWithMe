@@ -1,67 +1,157 @@
 <template>
   <div class="main-content">
-    <h3>기부/이벤트</h3>
+    <h3>기부 챌린지</h3>
+
+    <b-modal id="modal-sm" size="sm" centered :title="modalInfo.title" button-size="sm">
+      <img :src="modalInfo.challengeImg" style="margin-bottom:10px;" />
+      <h5> {{ modalInfo.content }} </h5>
+      <h6> {{ modalInfo.startTime }} ~ {{ modalInfo.endTime }} </h6>
+      <template #modal-footer="{ cancel }">
+        <!-- Emulate built in modal footer ok and cancel button actions -->
+        <b-button size="sm" variant="success" @click="goDetail(modalInfo.id)">
+          상세보기
+        </b-button>
+        <b-button size="sm" variant="danger" @click="cancel()">
+          Cancel
+        </b-button>
+      </template>
+    </b-modal>
 
     <div v-if="slides.length==0">
         <h3 class="mt-5" style="text-align: center;">현재 진행중인 이벤트가 없어요!</h3>
     </div>
 
-  <div v-else> 
-    <!-- <carousel-3d :width="180" :height="250"> -->
-    <carousel-3d :width="150" :height="150"
-     :controls-visible="true" >
-      <!-- <slide v-for="(slide,index) in slides" :key="index" style="border: 0px;"> -->
-      <slide v-for="(slide,i) in slides" :index="i" :key="slide.id" style="border: 0px;">
-        <div @click="toggleOverlay">
-          <b-overlay 
-          :show="slidesOverlayShow" 
-          :variant="variant"
-          :opacity="opacity"
-          :blur="blur"
-          rounded="sm">
-            <img :src="slide.challengeImg" />
-            <template #overlay>
-              <div class="text-center">
-                <h5 style="overflow:hidden;">{{slide.title}}</h5>
-                <h6>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h6>
-              </div>
-            </template>
-          </b-overlay>
-        </div>
-      </slide>
-    </carousel-3d>
-  </div>
-    <!-- <vueper-slides
-      class="no-shadow"
-      :visible-slides="1.7"
-      :arrows="false"
-      :slide-ratio="1 / 4"
-      :gap="3"
-      :dragging-distance="70"
-      fixedHeight="250px"
-      prevent-y-scroll>
-      <vueper-slide v-for="(slide, i) in slides" :index="i" :key="i"
-        :image="slide.challengeImg" >
-        <div @click="toggleOverlay">
-          <b-overlay 
-          :show="slidesOverlayShow" 
-          :variant="variant"
-          :opacity="opacity"
-          :blur="blur"
-          rounded="sm">
-            <template #overlay>
-              <div class="text-center">
-                <h3>{{slide.title}}</h3>
-                <h5>{{slide.startTime.substring(0,10)}} ~ {{slide.endTime.substring(0,10)}}</h5>
-              </div>
-            </template>
-          </b-overlay>
-        </div>
-      </vueper-slide>
-    </vueper-slides> -->
+    <div v-else> 
+      <carousel-3d :width="150" :height="150"
+      :controls-visible="true" >
+        <slide v-for="(slide,i) in slides" :index="i" :key="slide.id" style="border: 0px;">
+          <div @click="showInfoModal(slide)" v-b-modal.modal-sm>
+            <!-- <b-overlay 
+            :show="slidesOverlayShow" 
+            :variant="variant"
+            :opacity="opacity"
+            :blur="blur"
+            rounded="sm"> -->
+              <img :src="slide.challengeImg" />
+              <!-- <template #overlay>
+                <div class="text-center">
+                  <b-button pill variant="info m-1">Info</b-button> -->
+                  <!-- <h5 style="overflow:hidden;">{{slide.title}}</h5>
+                  <h6>{{ slide.startTime | moment('YYYY.MM.DD') }} ~ {{ slide.endTime | moment('YYYY.MM.DD') }}</h6> -->
+                <!-- </div>
+              </template>
+            </b-overlay> -->
+          </div>
+        </slide>
+      </carousel-3d>
+    </div>
+  
     <hr>
     <b-card style="margin-bottom:15px;">
-      <div class="d-flex justify-content-between">
+      <b-tabs  
+        active-nav-item-class="nav nav-tabs"
+        content-class="mt-3">
+
+        <b-tab title="전체 랭킹" active>
+          <div class="ul-widget__item ul-widget4__users" v-for="(ranker,index) in rankList" :index="index" :key="ranker.rankerId">
+            <div>
+            <h5 style="width:5vh;">{{ index+1 }} </h5>
+            </div>
+              <div v-if="ranker.userId.profile!=null" class="ul-widget4__img">
+                <img
+                  :src="ranker.userId.profile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  height="40px"
+                />
+              </div>
+               <div v-else class="ul-widget4__img">
+                <img
+                  :src="defaultProfile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+              </div>
+              <div class="ul-widget2__info ul-widget4__users-info">
+                 <router-link :to="{name:'friendsDetail', query:{friendId:ranker.userId.userId}}">
+                  {{ranker.userId.username}}
+                </router-link>
+              </div>
+              <span style="text-align:right; width:30vw" class="ul-widget4__number t-font-boldest text-success">
+                {{ranker.totalExp}} P
+              </span>
+          </div>
+        </b-tab>
+
+        <b-tab title="기부 랭킹">
+          <div class="ul-widget__item ul-widget4__users" v-for="(ranker,index) in rankListDonate" :index="index" :key="ranker.rankerId">
+            <div>
+            <h5 style="width:5vh;">{{ index+1 }} </h5>
+            </div>
+              <div v-if="ranker.userId.profile!=null" class="ul-widget4__img">
+                <img
+                  :src="ranker.userId.profile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  height="40px"
+                />
+              </div>
+               <div v-else class="ul-widget4__img">
+                <img
+                  :src="defaultProfile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+              </div>
+              <div class="ul-widget2__info ul-widget4__users-info">
+                 <router-link :to="{name:'friendsDetail', query:{friendId:ranker.userId.userId}}">
+                  {{ranker.userId.username}}
+                </router-link>
+              </div>
+              <span style="text-align:right; width:30vw" class="ul-widget4__number t-font-boldest text-success">
+                {{ranker.donateExp}} P
+              </span>
+          </div>
+        </b-tab>
+
+        <b-tab title="기록 랭킹" >
+          <div class="ul-widget__item ul-widget4__users" v-for="(ranker,index) in rankListRace" :index="index" :key="ranker.rankerId">
+            <div>
+            <h5 style="width:5vh;">{{ index+1 }} </h5>
+            </div>
+              <div v-if="ranker.userId.profile!=null" class="ul-widget4__img">
+                <img
+                  :src="ranker.userId.profile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  height="40px"
+                />
+              </div>
+               <div v-else class="ul-widget4__img">
+                <img
+                  :src="defaultProfile"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+              </div>
+              <div class="ul-widget2__info ul-widget4__users-info">
+                 <router-link :to="{name:'friendsDetail', query:{friendId:ranker.userId.userId}}">
+                  {{ranker.userId.username}}
+                </router-link>
+              </div>
+              <span style="text-align:right; width:30vw" class="ul-widget4__number t-font-boldest text-success">
+                {{ranker.raceExp}} P
+              </span>
+          </div>
+        </b-tab>
+      </b-tabs>
+      <!-- <div class="d-flex justify-content-between">
         <h3 class="ul-widget__head-title">
           TOP RANK
         </h3>
@@ -99,7 +189,7 @@
               </span>
           </div>
         </div>
-      </div>
+      </div> -->
     </b-card>
     <hr>
     <h3>친구 피드 시작</h3>
@@ -194,8 +284,18 @@ export default {
       tmp1: [],
       tmp2 : [],
       rankList : [],
+      rankListRace : [],
+      rankListDonate : [],
       friendsFeed: [],
       haveFriends: true,
+      modalInfo: {
+        id: 0,
+        title: "",
+        challengeImg: "",
+        content: "",
+        startTime: "",
+        endTime: ""
+      }
     };
   },
   computed: {
@@ -203,13 +303,13 @@ export default {
   },
   created() {
     this.getChallenges();
-    this.getTopRankers();
+    this.getTopRankersTotal();
+    this.getTopRankersDonate();
+    this.getTopRankersRace();
     this.getFriendsRunning();
   },
   mounted() {
     this.$store.commit('closeSidebar')
-    console.log("this.friendsFeed")
-    console.log(this.friendsFeed)
   },
   methods: {
     ...mapMutations(["mutateMyRunning","closeSidebar"]),
@@ -231,21 +331,45 @@ export default {
         .then(({data}) => {
           if(data.status==200){
             this.slides = data.data;
-            console.log(this.slides);
           }
         })
         .catch((error) => {
           console.log(error);
           return;
         });
-      
     },
-    getTopRankers() {
+    getTopRankersTotal() {
       http
         .get(`ranks/top/total`)
         .then(({data}) => {
           if(data.status == 200){
             this.rankList = data.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        })
+    },
+    getTopRankersDonate() {
+      http
+        .get(`ranks/top/donate`)
+        .then(({data}) => {
+          if(data.status == 200){
+            this.rankListDonate = data.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        })
+    },
+    getTopRankersRace() {
+      http
+        .get(`ranks/top/race`)
+        .then(({data}) => {
+          if(data.status == 200){
+            this.rankListRace = data.data;
           }
         })
         .catch((error) => {
@@ -259,7 +383,6 @@ export default {
         .then(({data}) => {
           if(data.status == 200){
             let obj;
-            // console.log(data.data);
             for(var i=0; i<data.data.friends.length; i++) {
               obj = new Object();
               if(data.data.runnings[i] == null) {
@@ -285,14 +408,23 @@ export default {
             }
             if(this.friendsFeed.length == 0)
               this.haveFriends = false;
-            
-            // console.log(this.friendsFeed);
           }
         })
         .catch((error) => {
           console.log(error);
           return;
         })
+    },
+    showInfoModal(slide) {
+      this.modalInfo.id = slide.challengeId;
+      this.modalInfo.title = slide.title;
+      this.modalInfo.challengeImg = slide.challengeImg;
+      this.modalInfo.content = slide.content;
+      this.modalInfo.startTime = this.$moment(slide.startTime).format('YYYY.MM.DD');
+      this.modalInfo.endTime = this.$moment(slide.endTime).format('YYYY.MM.DD');
+    },
+    goDetail(challengeId) {
+      this.$router.push("/app/board/challengeDetail?challengeId="+challengeId);
     }
   }
 };
