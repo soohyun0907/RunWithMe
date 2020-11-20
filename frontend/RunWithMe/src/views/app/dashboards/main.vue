@@ -75,9 +75,30 @@
                 />
               </div>
               <div class="ul-widget2__info ul-widget4__users-info">
-                {{ranker.badge}}
                  <router-link :to="{name:'friendsDetail', query:{friendId:ranker.userId.userId}}">
-                  <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ranker.userId.username}}</div>
+                  <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis">
+                  <!-- <div class="level-badge"  v-if="ranker.tier>=10">
+                    <b-badge variant="badge badge-round-dark sm m-1">{{ranker.tier}}</b-badge>
+                  </div> 
+                  <div class="level-badge" v-else-if="ranker.tier>=7">
+                      <b-badge variant="badge badge-round-danger sm m-1">{{ranker.tier}}</b-badge>
+                  </div>
+                  <div class="level-badge" v-else-if="ranker.tier>=5">
+                    <b-badge variant="badge badge-round-warning sm m-1">{{ranker.tier}}</b-badge>
+                  </div>
+                  <div class="level-badge" v-else-if="ranker.tier>=2">
+                      <b-badge variant="badge badge-round-success sm m-1">{{ranker.tier}}</b-badge>
+                  </div>
+                  <div class="level-badge" v-else-if="ranker.tier>=1">
+                      <b-badge variant="badge badge-round-primary sm m-1">{{ranker.tier}}</b-badge>
+                  </div>
+                  <div class="level-badge" v-else>
+                      <b-badge variant="badge badge-round-primary sm m-1">1</b-badge>
+                  </div>
+                     -->
+                    <!-- [Lv.{{ranker.tier}}]  -->
+                    {{ranker.userId.username}}
+                  </div>
                 </router-link>
               </div>
               <span style="text-align:right; width:30vw" class="ul-widget4__number t-font-boldest text-success">
@@ -110,7 +131,7 @@
               </div>
               <div class="ul-widget2__info ul-widget4__users-info">
                  <router-link :to="{name:'friendsDetail', query:{friendId:ranker.userId.userId}}">
-                  {{ranker.userId.username}}
+                {{ranker.userId.username}}
                 </router-link>
               </div>
               <span style="text-align:right; width:30vw" class="ul-widget4__number t-font-boldest text-success">
@@ -300,7 +321,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["defaultProfile"])
+    ...mapGetters(["defaultProfile"]),
   },
   created() {
     this.getChallenges();
@@ -345,11 +366,6 @@ export default {
         .then(({data}) => {
           if(data.status == 200){
             this.rankList = data.data;
-            for(var i=0; i<this.rankList.length; i++)
-            {
-              console.log(this.rankList[i].tier)
-
-            }
           }
         })
         .catch((error) => {
@@ -436,5 +452,4 @@ export default {
 };
 </script>
 <style  scoped>
-
 </style>
