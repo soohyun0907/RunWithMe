@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
+import kr.co.rwm.dto.RunningUserDto;
 import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
@@ -230,7 +231,7 @@ public class RunningController {
 		int userId = 0;
 		if(jwtTokenProvider.validateToken(token)) {
 			userId = jwtTokenProvider.getUserIdFromJwt(token);
-			RunningUser runningUser = recordService.findRunningUserByUserId(userId);
+			RunningUserDto runningUser = recordService.findRunningUserByUserId(userId);
 			
 			return new ResponseEntity<Response<? extends Object>>(new 
 					Response<>(StatusCode.OK, ResponseMessage.USER_SUMMARY_RUNNING_SUCCESS, runningUser), HttpStatus.OK);
@@ -246,7 +247,7 @@ public class RunningController {
 		String token = request.getHeader("AUTH");
 		if(jwtTokenProvider.validateToken(token)) {
 			int userId = jwtTokenProvider.getUserIdFromJwt(token);
-			List<RunningUser> runningUsers = recordService.findRunningUserByUserIdAndUserId(userId);
+			List<RunningUserDto> runningUsers = recordService.findRunningUserByUserIdAndUserId(userId);
 			return new ResponseEntity<Response<? extends Object>>(new 
 					Response<>(StatusCode.OK, ResponseMessage.REGION_SUMMARY_RUNNING_SUCCESS, runningUsers), HttpStatus.OK);
 		}else {
