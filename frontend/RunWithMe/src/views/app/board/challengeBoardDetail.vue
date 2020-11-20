@@ -135,10 +135,10 @@ export default {
         .post("replies/reply", this.replyInfo)
         .then(({data}) => {
           if(data.status == 200) {
-            Swal.fire({
-              icon: 'success',
-              text: '댓글이 등록되었습니다.'
-            });
+            // Swal.fire({
+            //   icon: 'success',
+            //   text: '댓글이 등록되었습니다.'
+            // });
             // alert("댓글 등록 성공!");
             this.replyInfo.content = "";
             // //console.log(data.data);
@@ -328,10 +328,10 @@ export default {
         })
         .then(({data}) => {
           if(data.status == 200) {
-            Swal.fire({
-              icon: 'success',
-              text: '댓글이 수정되었습니다.'
-            });
+            // Swal.fire({
+            //   icon: 'success',
+            //   text: '댓글이 수정되었습니다.'
+            // });
             // alert("댓글 수정 성공!");
             this.$router.go(0)
           } else {
