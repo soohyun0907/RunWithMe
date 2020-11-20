@@ -348,7 +348,7 @@ export default {
           { AUTH: this.token },
           function (frame) {
             _ws.subscribe(
-              "/sub/chat/room/" + _this.getSelectedChatroom.roomId,
+              "/sub/chat/room/" + _this.getSelectedChatroom.roomId,"",{AUTH:_this.token},
               function (message) {
                 var recv = JSON.parse(message.body);
                 recv.get;

@@ -16,7 +16,7 @@
           </div>
           <div class="myRecord" >
               <div id="run_desc speed">현재 속도</div>
-              <span id="acc_time">{{ speed.toFixed(2) }}m/s</span>
+              <span id="acc_time">{{ show_speed.toFixed(2) }}m/s</span>
           </div>
           <div class="myRecord">
                 <div id="run_desc time">누적 시간</div>
@@ -30,15 +30,15 @@
           <div v-if="!running">
             <section class="bottom-bar">
               <div v-if="!isPause">
-                <button type="button" @click="startLocationUpdates" class="btn round btn btn-success btn-icon rounded-circle m-1">
+                <button type="button" @click="startLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
                 <span class="ul-btn__icon"> <i style="font-size:2em; margin-left: 10px;" class="i-Start-2"></i></span>
                 </button>
               </div>
               <div v-if="isPause">
-                <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
+                <button type="button" @click="watchLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
                 <span class="ul-btn__icon"> <i style="font-size:2em; margin-left: 10px;" class="i-Start-2"></i></span>
                 </button>
-                  <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
+                  <button type="button" @click="endLocationUpdates" class="btn round btn btn-secondary btn-icon rounded-circle m-1">
                 <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Stop-2"></i></span>
               </button>
 
@@ -48,11 +48,11 @@
           <div v-if="running">
             <section class="bottom-bar">
 
-              <button type="button" @click="stopLocationUpdates" class="btn round btn btn-danger btn-icon rounded-circle m-1">
+              <button type="button" @click="stopLocationUpdates" class="btn round btn btn-info btn-icon rounded-circle m-1">
                 <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Pause"></i></span>
               </button>
 
-              <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
+              <button type="button" @click="endLocationUpdates" class="btn round btn btn-secondary btn-icon rounded-circle m-1">
                 <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Stop-2"></i></span>
               </button>
 
@@ -123,6 +123,7 @@ export default {
       accumulated_distance: 0, // 총 누적거리
       accumulated_time: 0, // 총 누적 시간
       speed: 0, // 현재 속력
+      speed_now:[],
       show_speed:0, // 현재 속력 - 보여주기
       checkOneKm: 0, //1 km마다 초기화
       checkSecond: 0, // 1 km마다 초기화
@@ -259,8 +260,8 @@ export default {
         });
 
         //Map 현재위치 마커
-        var runningMarkerSrc = require("../../../assets/images/running_marker.png");
-        var runningMarkerSize = new google.maps.Size(35, 50);
+        var runningMarkerSrc = require("../../../assets/images/running_dino.png");
+        var runningMarkerSize = new google.maps.Size(20, 30);
         var runningMarker = new google.maps.MarkerImage(
           runningMarkerSrc,
           null,
@@ -398,17 +399,40 @@ export default {
             
             if (distance > threshold) {
               // 일정속도 이상으로 뛸때만 기록.
-              this.accumulated_distance += distance;
-              this.checkOneKm += distance;
-
+            
               var currentLatLng = new google.maps.LatLng(
                 this.current.lat,
                 this.current.lng
               );
               this.linePath.push(currentLatLng);
               this.speed = (this.checkOneKm * 1000) / this.checkSecond;
+              
+          
+              //제일 최근의 런닝 속도
+              var recent_speed = (distance*1000)/this.time_now
+
+              if(recent_speed>=1 && recent_speed<20){
+                this.accumulated_distance += distance;
+                this.checkOneKm += distance;
+               
+               if(this.speed_now.length>5){
+                this.speed_now.splice(0,1)
+              }
+                
+                this.speed_now.push(recent_speed)
+              }
+
+              this.time_now=0
+              this.show_speed=0
+              
+              for(var i=0; i<this.speed_now.length;i++){
+                this.show_speed+=this.speed_now[i]
+              }
+              this.show_speed/=this.speed_now.length
+              
+              console.log(this.speed_now)
+              console.log(this.show_speed)
               this.drawLines();
-      
             }
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
@@ -593,6 +617,7 @@ export default {
         this.zeroPrefix(sec, 2);
         
       var realTime = ((currentTime- this.timeBegan-this.stoppedDuration)/1000).toFixed(0)
+      var time_now = ((currentTime- this.timeBegan-this.stoppedDuration)/1000).toFixed(0)
       
       // this.accumulated_time += 1;
       // this.checkSecond += 1;

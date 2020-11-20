@@ -91,17 +91,17 @@ export default {
                         //    type: 'datetime',
                         },
                         title: {
-                            text: "running plant"
+                            text: "running plant (Km)"
                         },
                         labels : ["Sun", "Mon","Tue","Wed","Thu","Fri","Sat"]
                     },
                     series: [{
                         name: '5th',
-                        data: [0,0,10,0,0,0,0]
+                        data: [0,0,1.5,0,0,0,0]
                         },
                         {
                         name: '4th',
-                        data: [0,0,0,3,0,0,0]
+                        data: [0,0,0,1.2,0,0,0]
                         },
                         {
                         name: '3rd',
@@ -305,6 +305,8 @@ export default {
                             var result = parseInt((parseInt(curDate) + parseInt(startDay)) / 7);
                             //console.log(curDay + "/" + result);
                             this.heatmap.series[4-result].data[curDay] += distance;
+                            // console.log(this.heatmap.series[4-result].data[curDay])
+                            this.heatmap.series[4-result].data[curDay] =(this.heatmap.series[4-result].data[curDay]).toFixed(2);
                         }
                     }
 

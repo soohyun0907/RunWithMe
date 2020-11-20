@@ -14,7 +14,9 @@ import kr.co.rwm.service.ChatService;
 import kr.co.rwm.service.JwtTokenProvider;
 import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @CrossOrigin(origins="*")
 @Controller
@@ -38,6 +40,7 @@ public class ChatController {
         	String nickname = user.getUsername();
         	// 로그인 회원 정보로 대화명 설정
         	message.setSender(nickname); 
+        	log.info("[TEST] "+message.getSender());
         	// 채팅방 인원수 세팅 
         	message.setUserCount(chatRoomRepository.getUserCount(message.getRoomId()));
         	String imgUrl = user.getProfile();
