@@ -399,9 +399,7 @@ export default {
             
             if (distance > threshold) {
               // 일정속도 이상으로 뛸때만 기록.
-              this.accumulated_distance += distance;
-              this.checkOneKm += distance;
-
+            
               var currentLatLng = new google.maps.LatLng(
                 this.current.lat,
                 this.current.lng
@@ -409,21 +407,32 @@ export default {
               this.linePath.push(currentLatLng);
               this.speed = (this.checkOneKm * 1000) / this.checkSecond;
               
-              if(this.speed_now.length>5){
+          
+              //제일 최근의 런닝 속도
+              var recent_speed = (distance*1000)/this.time_now
+
+              if(recent_speed>=1 && recent_speed<20){
+                this.accumulated_distance += distance;
+                this.checkOneKm += distance;
+               
+               if(this.speed_now.length>5){
                 this.speed_now.splice(0,1)
               }
-              this.speed_now.push((distance*1000)/this.time_now)
-              this.time_now=0
+                
+                this.speed_now.push(recent_speed)
+              }
 
+              this.time_now=0
               this.show_speed=0
+              
               for(var i=0; i<this.speed_now.length;i++){
-                if(this.speed_now[i]>=0 && this.speed_now[i]<20)
                 this.show_speed+=this.speed_now[i]
               }
               this.show_speed/=this.speed_now.length
-              this.drawLines();
+              
               console.log(this.speed_now)
               console.log(this.show_speed)
+              this.drawLines();
             }
             if (this.checkOneKm >= 1) {
               //1km 도달시 마다
