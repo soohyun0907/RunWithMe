@@ -114,6 +114,7 @@ export default {
               obj.totalDistance = element.totalDistance.toFixed(2);
               obj.running_cnt = element.totalCount;
               obj.avg_pace = element.totalTime;
+              obj.tier = element.tier;
 
               if (element.totalTime == 0) {
                 obj.avg_pace = 0;
