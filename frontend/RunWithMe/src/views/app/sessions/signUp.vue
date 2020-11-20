@@ -327,8 +327,20 @@ export default {
         this.$router.push('/app/sessions/signIn')
       }
     },
+    validEmail: function(email) {
+      var valid = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return valid.test(email);
+    },
     emailDuplicate() {
-      http
+      if(!this.validEmail(this.email)){
+        Swal.fire({
+          icon:'error',
+          text:'이메일 형식을 확인해주세요!',
+          showConfirmButton:false,
+          timer:1200,
+        })
+      }else{
+        http
         .get(`/users/check/${this.email}`)
         .then((res) => {
           if (res.data.data == true) {
@@ -343,7 +355,7 @@ export default {
           } else {
             Swal.fire({
               icon:'error',
-              text:'이메일 형식이 잘못되었습니다!',
+              text:'이미 존재하는 이메일입니다!',
               showConfirmButton:false,
               timer:1200,
             })
@@ -359,6 +371,7 @@ export default {
               timer:1200,
             })
           });
+      }
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {

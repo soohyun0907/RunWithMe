@@ -175,10 +175,8 @@ export default {
   methods: {
     ...mapMutations(["closeSidebar"]),
     deleteRunning(deleteRun) {
-      console.log(deleteRun)
       http.delete(`/runnings/${deleteRun.runningId}`)
       .then(data =>{
-        console.log(data)
         Swal.fire({
           icon:'success',
           text:'런닝이 삭제되었습니다.',
