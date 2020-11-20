@@ -73,11 +73,27 @@
               </div>
 
               <div
-                class="mt-4 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom"
+                class="mt-4 pb-2 pl-3 pr-3 font-weight-bold text-muted border-bottom" style="margin-left : 35px;"
               >
-                Matching
+              <!-- <button type="button" class="btn btn-warning m-1" >
+                <span class="ul-btn__icon"><i class="text-20 i-MaleFemale"></i></span>
+
+                <span class="ul-btn__text ml-2">Matching</span>
+              </button> -->
+                <button type="button" class="btn btn-warning m-1" @click="handleClickButton" >
+                  <span class="ul-btn__icon"><i class="text-20 i-MaleFemale"></i></span>
+                  <span class="ul-btn__text ml-2">Matching</span>
+                </button>
+                  <!-- <button @click="handleClickButton">Toggle Modal</button> -->
+                  <app-my-modal
+                    title="This is modal"
+                    :visible="visible">
+                    <div>
+                      This is modal body
+                    </div>
+                  </app-my-modal>
               </div>
-              <div style="margin: 0 80px">
+              <!-- <div style="margin: 0 80px">
                 <button
                   type="button"
                   class="btn round btn-dribble btn-icon rounded-circle m-1"
@@ -98,7 +114,7 @@
                     ><i class="text-20 i-Cool-Guy"></i
                   ></span>
                 </button>
-              </div>
+              </div> -->
               <div
                 class="p-3 d-flex border-bottom align-items-center contact"
                 v-for="contact in matchUsers"
@@ -179,7 +195,7 @@
                       {{ message.sender }}
                       <span
                         class="text-small text-muted"
-                        style="padding-left: 3px"
+                        style="padding-left: 3px; font-size:4px;"
                         >{{ message.time }}</span
                       >
                     </p>
@@ -264,6 +280,8 @@
       </div>
     </div>
   </div>
+
+  
 </template>
 
 
@@ -275,6 +293,8 @@ import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
+import myModal from './my-modal'
+
 //import authData from '@/store/modules/authData';
 
 export default {
@@ -300,7 +320,11 @@ export default {
       ws: "",
       matchUsers: [],
       flag: true,
+      visible: false
     };
+  },
+  components: {
+    appMyModal: myModal
   },
   methods: {
     ...mapActions(["changeSelectedUser", "createAndSelectChatroomAction","sendMessages", ]),
@@ -312,7 +336,9 @@ export default {
         this.matchUsers = data.data.data;
       });
     },
-
+    handleClickButton(){
+      this.visible = !this.visible
+    },
     choice: function (uid) {
       // this.createAndSelectChatroomAction(uid);
       if (!this.flag) {
@@ -382,8 +408,8 @@ export default {
       http.get("/match/user").then((response) => {
         this.testUserId = response.data;
 
-        // _this.sock = new SockJS("http://localhost:8080/ws-stomp");
-        _this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
+        _this.sock = new SockJS("http://localhost:8080/ws-stomp");
+        // _this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
         _this.ws = Stomp.over(_this.sock);
         _this.token = this.auth;
 
@@ -436,7 +462,7 @@ export default {
         recv.imgUrl = this.defaultProfile
       }
       var today = new Date();
-      var time = today.getHours() + " : " + today.getMinutes();
+      var time = today.getHours() + "시 " + today.getMinutes() + "분";
       this.userCount = recv.userCount;
       this.messages.push({
         type: recv.type,
