@@ -4,7 +4,8 @@ import axios from "axios";
 export default axios.create({
 	// baseURL: "https://k3a303.p.ssafy.io:8443/",
   baseURL: "http://localhost:8080/",
-  // baseURL: "https://4d651b8be698.ngrok.io",
+  
+  // baseURL: "https://878b31284fc1.ngrok.io",
     headers: {
       AUTH:localStorage.getItem("auth")
     },

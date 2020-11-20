@@ -3,12 +3,8 @@
     <breadcumb :page="'User Profile'" :folder="'Pages'" />
 
     <div class="card user-profile o-hidden mb-30">
-      <div
-        class="header-cover"
-        style="
-          background-image: url(http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-5.jpeg;;
-        "
-      ></div>
+    <div class="header-cover" :style="{ backgroundImage: 'url(' + bgImage + ')' }">
+    </div>
       <div class="user-info">
         <div v-if="userInfo.profile!=null">
           <img
@@ -149,7 +145,8 @@ export default {
       map2:null,
       areaRunning:[],
       allRunning:[],
-      defaultImage:require('@/assets/images/runnings/runningEx1.png')
+      defaultImage:require('@/assets/images/runnings/runningEx1.png'),
+      bgImage: require("@/assets/images/signin/loginpage4.jpg"),
     };
   },
 
@@ -172,6 +169,9 @@ export default {
   },
   methods: {
     ...mapMutations(["closeSidebar"]),
+    deleteRunning(deleteRun) {
+
+    },
     getRunningsbyArea(){
       http.get(`runnings/areas`)
       .then(data => {
@@ -298,5 +298,8 @@ export default {
   flex-grow: 1;
   width: 100%;
   height: 200px;
+}
+.card-body{
+  padding:0.5em !important;
 }
 </style>

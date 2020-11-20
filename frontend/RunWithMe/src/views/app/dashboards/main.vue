@@ -75,8 +75,9 @@
                 />
               </div>
               <div class="ul-widget2__info ul-widget4__users-info">
+                {{ranker.badge}}
                  <router-link :to="{name:'friendsDetail', query:{friendId:ranker.userId.userId}}">
-                  {{ranker.userId.username}}
+                  <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ranker.userId.username}}</div>
                 </router-link>
               </div>
               <span style="text-align:right; width:30vw" class="ul-widget4__number t-font-boldest text-success">
@@ -303,10 +304,10 @@ export default {
   },
   created() {
     this.getChallenges();
-    this.getTopRankersTotal();
     this.getTopRankersDonate();
     this.getTopRankersRace();
     this.getFriendsRunning();
+    this.getTopRankersTotal();
   },
   mounted() {
     this.$store.commit('closeSidebar')
@@ -344,6 +345,11 @@ export default {
         .then(({data}) => {
           if(data.status == 200){
             this.rankList = data.data;
+            for(var i=0; i<this.rankList.length; i++)
+            {
+              console.log(this.rankList[i].tier)
+
+            }
           }
         })
         .catch((error) => {

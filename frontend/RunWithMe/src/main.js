@@ -29,6 +29,20 @@ Vue.filter("makeComma", val =>{
   return String(val).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 })
 
+Vue.filter("makeBadge", val =>{
+  if(val=0) val=1
+  if(val>=10){
+    return <b-badge variant="primary badge-round  badge-round-opacity-dark  m-1">val</b-badge>
+  }else if(val>=7){
+    return <b-badge variant="primary badge-round  badge-round-opacity-danger  m-1">val</b-badge>
+  }else if(val>=5){
+    return <b-badge variant="primary badge-round  badge-round-opacity-warning  m-1">val</b-badge>
+  }else if(val>=3){
+    return <b-badge variant="primary badge-round  badge-round-opacity-success  m-1">val</b-badge>
+  } else{
+    return <b-badge variant="primary badge-round  badge-round-opacity-primary  m-1">val</b-badge>
+  }
+})
 
 //vueSplide
 import VueSplide from '@splidejs/vue-splide';
