@@ -68,7 +68,7 @@
                     </b-dropdown>
 
                     <b-dropdown variant="primary" :disabled="selectedSido" id="dropdown-2" text="구군 선택" class="mb-2 signup">
-                      <div v-for="(gugun, index) in guguns" v-bind:key="index">
+                      <div v-for="(gugun, index) in orderGugun" v-bind:key="index">
                         <b-dropdown-item @click="gugunSelected(gugun)">{{
                           gugun.gugunName
                         }}</b-dropdown-item>
@@ -240,9 +240,9 @@ export default {
   },
   mounted: function () {
     http.get(`areas`).then((res) => {
-      console.log(JSON.stringify(res.data.data));
+      //console.log(JSON.stringify(res.data.data));
       this.sidos = res.data.data;
-      console.log(this.sidos[0].sidoName);
+      //console.log(this.sidos[0].sidoName);
     });
      var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
      sidoDropBtn.style.backgroundColor="#663399"
@@ -252,17 +252,22 @@ export default {
 
   computed: {
     ...mapGetters(["loggedInUser", "loading", "error"]),
+    orderGugun: function() {
+      return this.guguns.sort(function(a, b){
+      	return a.gugunName > b.gugunName ? 1 : -1;
+      });
+    }
   },
 
   methods: {
     ...mapActions(["signUserUp"]),
     //   validate form
     sidoSelected(sido) {
-      console.log(sido.sidoId)
+      //console.log(sido.sidoId)
       this.selectedSido = sido.sidoname
       http.get(`areas/`+sido.sidoId).then((res) =>{
         this.guguns= res.data.data
-        console.log(this.guguns)
+        //console.log(this.guguns)
       })
       var sidoDrop = document.getElementById('dropdown-1')
       var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
@@ -278,7 +283,7 @@ export default {
     },
     gugunSelected(gugun){
       this.selectedgugun = gugun.gugunId
-      console.log(this.selectedgugun)
+      //console.log(this.selectedgugun)
       var gugunDrop = document.getElementById('dropdown-2')
       var gugunDropBtn = document.getElementById('dropdown-2__BV_toggle_')
       gugunDropBtn.innerText = gugun.gugunName
@@ -287,7 +292,7 @@ export default {
 
     },
     submit() {
-      console.log("회원가입 데이터 전송중..");
+      //console.log("회원가입 데이터 전송중..");
 
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -304,12 +309,18 @@ export default {
           gugunId: jsonGugunId,
           gender:this.gender,
         };
-        console.log(data);
+        //console.log(data);
         this.signUserUp({ data });
         this.submitStatus = "PENDING";
+        Swal.fire({
+            icon:'success',
+            text:'회원가입 성공!',
+            showConfirmButton:false,
+            timer:1000,
+          })
         setTimeout(() => {
           this.submitStatus = "OK";
-        }, 500);
+        }, 1000);
         this.$router.push('/app/sessions/signIn')
       }
     },
@@ -337,7 +348,7 @@ export default {
         })
         .catch((error) => {
           this.emailAuth = false;
-          console.log("이메일 인증 실패");
+          //console.log("이메일 인증 실패");
             Swal.fire({
               icon:'error',
               text:'이미 가입된 이메일입니다!',
@@ -362,7 +373,7 @@ export default {
     },
 
     inputSubmit() {
-      console.log("submitted");
+      //console.log("submitted");
     },
   },
 };

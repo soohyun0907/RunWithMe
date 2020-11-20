@@ -1,7 +1,7 @@
 <template>
   <div class="main-content">
     <div class="user-profile-img">
-      <div v-if="friendInfo && friendInfo.userId.profile!= null">
+      <div v-if="friendInfo.userId && friendInfo.userId.profile!= null">
         <img
           class="profile-picture mb-2"
           :src="friendInfo.userId.profile"
@@ -16,7 +16,8 @@
         />
       </div>
     </div>
-    <div>
+    
+    <div v-if ="friendInfo.userId">
       <p class="m-0 text-24" style="text-align: center">
         {{ friendInfo.userId.username }}
       </p>
@@ -104,21 +105,17 @@ export default {
     };
   },
   mounted() {
-    console.log("this.userInfo")
-    console.log(this.userInfo)
-    console.log("this.userTotal")
-    console.log(this.userTotal)
     http
       .post(`ranks/search`, {
         userId: this.$route.query.friendId,
       })
       .then((data) => {
         this.friendInfo = data.data.data[0];
-        console.log(this.friendInfo);
+        // //console.log(this.friendInfo);
         this.getRunning();
         this.isFollower();
       });
-    console.log(this.$route.query.friendId);
+    // //console.log(this.$route.query.friendId);
     this.$store.commit("closeSidebar");
   },
   computed: {
@@ -139,11 +136,11 @@ export default {
       return time;
     },
     isFollower() {
-      console.log(this.friendInfo.userId);
+      // //console.log(this.friendInfo.userId);
       http
         .get(`friends/friend/` + this.friendInfo.userId.userId)
         .then(({ data }) => {
-            console.log(data);
+            //console.log(data);
           if (data.data == true) {
             this.isFriend = true;
           } else {
@@ -151,7 +148,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error);
+          //console.log(error);
           return;
         });
     },
@@ -184,13 +181,13 @@ export default {
               this.items.push(obj);
             });
           }
-          console.log(this.items);
+          // //console.log(this.items);
           if (this.items.length == 0) {
             this.isRunning = false;
           }
         })
         .catch((error) => {
-          console.log(error);
+          //console.log(error);
           return;
         });
     },
@@ -211,7 +208,7 @@ export default {
             }
         })
         .catch((error) => {
-            console.log(error);
+            //console.log(error);
             return;
         });
     },
@@ -244,7 +241,7 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    //console.log(error);
                     return;
                 });
                 swalWithBootstrapButtons.fire(

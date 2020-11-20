@@ -131,7 +131,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error);
+          //console.log(error);
           return;
         });
     },
@@ -176,13 +176,13 @@ export default {
                 title: 'Oops...',
                 text: '삭제 중 오류가 발생하였습니다'
               });
-              console.log(error);
+              //console.log(error);
               return;
             })
           }
         })
         .catch(err => {
-          console.log(error);
+          // console.log(error);
         });
     },
   }

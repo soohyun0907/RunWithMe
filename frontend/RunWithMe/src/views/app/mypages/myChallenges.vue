@@ -32,7 +32,7 @@
                                 <p> 설명: {{ challenge.content }} </p>
                                 <p> 현재 참여 인원: {{ challenge.participant }} </p>
                                 <p> 개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM </p>
-                                <h6>모인 금액 {{ challenge.donateCurrent }} / {{ challenge.donateGoal }} 원</h6>
+                                <h6>모인 금액 {{ challenge.donateCurrent |makeComma}} / {{ challenge.donateGoal |makeComma}} 원</h6>
                                 <b-progress class="mb-3"
                                     variant="success"
                                     :max="challenge.donateGoal"
@@ -46,7 +46,13 @@
                                     :value="challenge.distanceCurrent"
                                     animated show-progress>
                                 </b-progress>
-                                <!-- <b-button variant="info ripple m-1" @click="showConfirmModal(challenge.challengeId, challenge.title, challenge.personalDistanceGoal)">신청하기</b-button> -->
+                                <h6>개인 달성률 {{ challenge.personalDistance }} / {{ challenge.personalDistanceGoal }} KM</h6>
+                                <b-progress class="mb-3"
+                                    variant="warning"
+                                    :max="challenge.personalDistanceGoal"
+                                    :value="challenge.personalDistance"
+                                    animated show-progress>
+                                </b-progress>
                             </b-collapse>
                         </b-card>
                     </b-col>
@@ -82,7 +88,7 @@
                                 <p> 설명: {{ challenge.content }} </p>
                                 <p> 현재 참여 인원: {{ challenge.participant }} </p>
                                 <p> 개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM </p>
-                                <h6>모인 금액 {{ challenge.donateCurrent }} / {{ challenge.donateGoal }} 원</h6>
+                                <h6>모인 금액 {{ challenge.donateCurrent |makeComma}} / {{ challenge.donateGoal|makeComma }} 원</h6>
                                 <b-progress class="mb-3"
                                     variant="success"
                                     :max="challenge.donateGoal"
@@ -96,7 +102,13 @@
                                     :value="challenge.distanceCurrent"
                                     animated show-progress>
                                 </b-progress>
-                                <!-- <b-button variant="info ripple m-1" @click="showConfirmModal(challenge.challengeId, challenge.title, challenge.personalDistanceGoal)">신청하기</b-button> -->
+                                <h6>개인 달성률 {{ challenge.personalDistance }} / {{ challenge.personalDistanceGoal }} KM</h6>
+                                <b-progress class="mb-3"
+                                    variant="warning"
+                                    :max="challenge.personalDistanceGoal"
+                                    :value="challenge.personalDistance"
+                                    animated show-progress>
+                                </b-progress>
                             </b-collapse>
                         </b-card>
                     </b-col>
@@ -132,7 +144,7 @@
                                 <p> 설명: {{ challenge.content }} </p>
                                 <p> 참여 인원: {{ challenge.participant }} </p>
                                 <p> 개인당 목표 거리: {{ challenge.personalDistanceGoal }} KM </p>
-                                <h6>모인 금액 {{ challenge.donateCurrent }} / {{ challenge.donateGoal }} 원</h6>
+                                <h6>모인 금액 {{ challenge.donateCurrent|makeComma }} / {{ challenge.donateGoal|makeComma }} 원</h6>
                                 <b-progress class="mb-3"
                                     variant="success"
                                     :max="challenge.donateGoal"
@@ -144,6 +156,13 @@
                                     variant="warning"
                                     :max="challenge.distanceGoal"
                                     :value="challenge.distanceCurrent"
+                                    animated show-progress>
+                                </b-progress>
+                                <h6>개인 달성률 {{ challenge.personalDistance }} / {{ challenge.personalDistanceGoal }} KM</h6>
+                                <b-progress class="mb-3"
+                                    variant="warning"
+                                    :max="challenge.personalDistanceGoal"
+                                    :value="challenge.personalDistance"
                                     animated show-progress>
                                 </b-progress>
                             </b-collapse>
@@ -200,6 +219,7 @@ export default {
                         obj.donateGoal = element.challengeId.donateGoal;
                         obj.donateCurrent = element.challengeId.donateCurrent;
                         obj.personalDistanceGoal = element.challengeId.personalDistanceGoal;
+                        obj.personalDistance = element.accDistance.toFixed(2);
                         obj.participant = element.challengeId.participant;
                         this.challengesIng.push(obj);
                     });
@@ -208,7 +228,7 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 return;
             });
     },
@@ -232,6 +252,7 @@ export default {
                         obj.donateCurrent = element.challengeId.donateCurrent;
                         obj.personalDistanceGoal = element.challengeId.personalDistanceGoal;
                         obj.participant = element.challengeId.participant;
+                        obj.personalDistance = element.accDistance.toFixed(2);
                         this.challengesSoon.push(obj);
                     });
                     if(this.challengesSoon.length == 0)
@@ -239,7 +260,7 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 return;
             });
     },
@@ -263,6 +284,7 @@ export default {
                         obj.donateCurrent = element.challengeId.donateCurrent;
                         obj.personalDistanceGoal = element.challengeId.personalDistanceGoal;
                         obj.participant = element.challengeId.participant;
+                        obj.personalDistance = element.accDistance.toFixed(2);
                         this.challengesDone.push(obj);
                     });
                     if(this.challengesDone.length == 0)
@@ -270,7 +292,7 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 return;
             });
         },

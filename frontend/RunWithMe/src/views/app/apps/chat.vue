@@ -1,13 +1,14 @@
 <template>
   <div class="main-content">
     <breadcumb :page="'매칭 & 채팅'" :folder="'Chatting'" />
-
+    
     <div class="card chat-sidebar-container sidebar-container">
       <div class="chat-sidebar-wrap sidebar" :class="{ 'ml-0': isMobile }">
         <div class="border-right">
           <div
             class="pt-2 pb-2 pl-3 pr-3 d-flex align-items-center o-hidden box-shadow-1 chat-topbar"
           >
+          
             <a class="link-icon d-md-none" @click="isMobile = !isMobile">
               <i class="text-20 i-Letter-Close"></i>
             </a>
@@ -104,11 +105,20 @@
                 :key="contact.username"
                 :class="contact.status"
               >
-                <img
+
+              <div v-if="contact.avatar!=null">
+                 <img
                   :src="contact.avatar"
                   alt=""
-                  class="avatar-sm rounded-circle mr-3"
-                />
+                  class="avatar-sm rounded-circle mr-3"/>
+                </div>
+              <div v-else>
+                 <img
+                  :src="defaultProfile"
+                  alt=""
+                  class="avatar-sm rounded-circle mr-3"/>
+                </div>
+                
                 <h6 @click="choice(contact.userId)" class="">
                   {{ contact.username }}
                 </h6>
@@ -372,8 +382,8 @@ export default {
       http.get("/match/user").then((response) => {
         this.testUserId = response.data;
 
-        _this.sock = new SockJS("http://localhost:8080/ws-stomp");
-        // _this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
+        // _this.sock = new SockJS("http://localhost:8080/ws-stomp");
+        _this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
         _this.ws = Stomp.over(_this.sock);
         _this.token = this.auth;
 
@@ -423,7 +433,7 @@ export default {
     },
     recvMessage: function (recv) {
       if (recv.imgUrl == null) {
-        recv.imgUrl = require("@/assets/images/faces/profile.jpg");
+        recv.imgUrl = this.defaultProfile
       }
       var today = new Date();
       var time = today.getHours() + " : " + today.getMinutes();
@@ -447,6 +457,7 @@ export default {
       "getRoomInfo",
       "getMessages",
       "auth",
+      "defaultProfile"
     ]),
 
     filterContacts() {

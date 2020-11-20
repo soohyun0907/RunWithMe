@@ -10,10 +10,12 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
+import kr.co.rwm.entity.User;
 import kr.co.rwm.model.ChatMessage;
 import kr.co.rwm.repo.ChatRoomRepository;
 import kr.co.rwm.service.ChatService;
 import kr.co.rwm.service.JwtTokenProvider;
+import kr.co.rwm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,13 +27,16 @@ public class StompHandler implements ChannelInterceptor {
     private final JwtTokenProvider jwtTokenProvider;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatService chatService;
+    private final UserService userService;
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if (StompCommand.CONNECT == accessor.getCommand()) { // websocket 연결요청
+        	System.out.println(message);
             String jwtToken = accessor.getFirstNativeHeader("AUTH");
+            System.out.println(jwtToken);
             log.info("CONNECT {}", jwtToken);
             // Header의 jwt token 검증
             jwtTokenProvider.validateToken(jwtToken);
@@ -40,11 +45,19 @@ public class StompHandler implements ChannelInterceptor {
             String roomId = chatService.getRoomId(Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
             // 채팅방에 들어온 클라이언트 sessionId를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
             String sessionId = (String) message.getHeaders().get("simpSessionId");
+            String jwtToken = accessor.getFirstNativeHeader("AUTH");
             chatRoomRepository.setUserEnterInfo(sessionId, roomId);
             // 채팅방의 인원수를 +1한다.
             chatRoomRepository.plusUserCount(roomId);
             // 클라이언트 입장 메시지를 채팅방에 발송한다.(redis publish)
-            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("사용자");
+//            String name = Optional.ofNullable((Principal) message.getHeaders().get("AUTH")).map(Principal::getName).orElse("새로운 방문자 ");
+            String email = jwtTokenProvider.getUserPk(jwtToken);
+            
+            Optional<User> userName = userService.findByUserEmail(email);
+            String name = "사용자";
+            if(userName.isPresent()) {
+            	name = userName.get().getUsername();
+            }
             chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
             
             log.info("SUBSCRIBED {}, {}", name, roomId);

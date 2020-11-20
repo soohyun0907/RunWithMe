@@ -123,8 +123,7 @@
                 <img
                   :src="message.img"
                   alt=""
-                  class="avatar-sm rounded-circle ml-3"
-                />
+                  class="avatar-sm rounded-circle ml-3"/>
               </div>
               <!-- END 나의 채팅 메시지 -->
               <!-- START 상대방의 메시지 -->
@@ -322,7 +321,7 @@ export default {
     },
     recvMessage: function (recv) {
       if (recv.imgUrl == null) {
-        recv.imgUrl = require("@/assets/images/faces/profile.jpg");
+        recv.imgUrl = this.defaultProfile;
       }
       var today = new Date();
       var time = today.getHours() + " : " + today.getMinutes();
@@ -338,8 +337,8 @@ export default {
 
     chat() {
       http.get("/chat/user").then((response) => {
-        // this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
-        this.sock = new SockJS("http://localhost:8080/ws-stomp");
+        this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
+        // this.sock = new SockJS("http://localhost:8080/ws-stomp");
         var _ws = Stomp.over(this.sock);
 
         var _this = this;
@@ -349,7 +348,7 @@ export default {
           { AUTH: this.token },
           function (frame) {
             _ws.subscribe(
-              "/sub/chat/room/" + _this.getSelectedChatroom.roomId,
+              "/sub/chat/room/" + _this.getSelectedChatroom.roomId,"",{AUTH:_this.token},
               function (message) {
                 var recv = JSON.parse(message.body);
                 recv.get;
@@ -384,6 +383,7 @@ export default {
       "getSelectedChatroom",
       "userInfo",
       "auth",
+      "defaultProfile"
     ]),
   },
 

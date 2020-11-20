@@ -21,11 +21,11 @@
             <div class="row">
                 <div class="col">
                     총 런닝 거리
-                    <h3>{{result.accDistance.toFixed(2)}} km</h3>
+                    <h3>{{result.accDistance? result.accDistance.toFixed(2): 0}} km</h3>
                 </div>
                 <div class="col">
                     총 런닝 시간
-                    <h3>{{convertToTime(result.accTime.toFixed(2))}}</h3>
+                    <h3>{{convertToTime(result.accTime)}}</h3>
                 </div>
             </div> 
             <div class="row">
@@ -58,7 +58,7 @@
                   <h5 style="padding-left:10vw;" class="m-0">{{record.accDistance}} km</h5>
                 </div>
                 <div class="flex-grow-1">
-                  <h5 style="padding-left:10vw;" class="m-0">{{convertToTime(record.accTime.toFixed(2))}}</h5>
+                  <h5 style="padding-left:10vw;" class="m-0">{{convertToTime(record.accTime)}}</h5>
                 </div>
             </div>
           </div>
@@ -167,13 +167,15 @@ export default {
         .get(`/runnings/records/${this.$route.query.runningId}`)
         .then((data) => {
             this.result = data.data.data.running
-            for(var i=1; i<data.data.data.records.length; i++){
+            // console.log(data.data.data.records)
+            for(var i=0; i<data.data.data.records.length; i++){
+                if(i!=data.data.data.records.length-1 && data.data.data.records[i].accDistance<0.1) continue;
                 this.records.push(data.data.data.records[i])
             }
             this.timeSplitS = this.result.startTime.split('T')
             this.timeSplitE = this.result.endTime.split('T')
 
-
+            var check=[]
             for(var i=0; i<this.records.length; i++){
               if(i!=this.records.length-1)  {
                 this.records[i].accDistance= Math.floor(this.records[i].accDistance)
@@ -182,6 +184,13 @@ export default {
               }
               this.echart4.series[0].data.push((this.records[i].accTime/60).toFixed(2))
               this.echart4.xAxis.data.push(this.records[i].accDistance)
+              check.push(this.records[i].accDistance)
+            }
+            for(var i=0; i<check.length; i++){
+              if(check[i]==0 || (i>0 && check[i]==check[i-1])){
+                this.records.splice(i,1)
+                this.echart4.xAxis.data.splice(i,1)
+              }
             }
   
             if(this.result.accDistance==0.00 ||this.result.accTime==0.00 ||this.result.accDistance==0 || this.result.accTime==0){
@@ -189,10 +198,10 @@ export default {
             }else {
               this.avgSpeed = this.result.accDistance*1000/this.result.accTime
             }
-       console.log("friendsRun - result")
-       console.log(this.result);
-       console.log("friendsRun - records")
-       console.log(this.records);
+      //  console.log("friendsRun - result")
+      //  console.log(this.result);
+      //  console.log("friendsRun - records")
+      //  console.log(this.records);
         });
     },
  
