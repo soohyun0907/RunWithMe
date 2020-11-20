@@ -11,12 +11,12 @@
         <slot name="header">
           <div class="col">
             <h6>[챌린지 제안]</h6>
-            <h1>{{ board.boardTitle }}</h1>
+            <h3>{{ board.boardTitle }}</h3>
           </div>
           <div class="col">
             <div class="writer_img">
               <p>
-                <img v-if="board.writerProfile == null" class="profile-picture rounded-circle" :src="defaultProfile" style="width:35px; height:35px" />
+                <img v-if="board.writerProfile == null" class="profile-picture rounded-circle" :src="defaultProfile" style="width:25px; height:25px" />
                 <img v-else class="profile-picture rounded-circle" :src="board.writerProfile" style="width:35px; height:35px" />
                 {{ board.writerName }}
                 {{ board.boardRegdate | moment('YYYY.MM.DD HH:mm') }}
@@ -28,7 +28,7 @@
       <hr style="margin-bottom:1px;">
       <div class="main-content">
         <img :src="board.boardImage" />
-        <p>
+        <p style="white-space:pre;">
           {{ board.boardContent }}
         </p>
       </div>
@@ -57,7 +57,7 @@
               <!-- </div> -->
             <div class="col">
               <b-collapse visible :id="'collapse-'+reply.replyId">
-                <h5>{{ reply.content}}</h5>
+                <h6>{{ reply.content}}</h6>
               </b-collapse>
               <b-collapse :id="'collapse-'+reply.replyId">
                 <b-textarea v-model="reply.content"></b-textarea>
@@ -135,10 +135,10 @@ export default {
         .post("replies/reply", this.replyInfo)
         .then(({data}) => {
           if(data.status == 200) {
-            Swal.fire({
-              icon: 'success',
-              text: '댓글이 등록되었습니다.'
-            });
+            // Swal.fire({
+            //   icon: 'success',
+            //   text: '댓글이 등록되었습니다.'
+            // });
             // alert("댓글 등록 성공!");
             this.replyInfo.content = "";
             // //console.log(data.data);
@@ -328,10 +328,10 @@ export default {
         })
         .then(({data}) => {
           if(data.status == 200) {
-            Swal.fire({
-              icon: 'success',
-              text: '댓글이 수정되었습니다.'
-            });
+            // Swal.fire({
+            //   icon: 'success',
+            //   text: '댓글이 수정되었습니다.'
+            // });
             // alert("댓글 수정 성공!");
             this.$router.go(0)
           } else {

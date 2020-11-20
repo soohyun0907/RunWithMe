@@ -70,35 +70,35 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "챌린지 생성", response = ResponseEntity.class)
 	@PostMapping
-	public ResponseEntity<Response<? extends Object>> saveChallenge(@RequestBody ChallengeDto challenge) {
+	public ResponseEntity<Response<Object>> saveChallenge(@RequestBody ChallengeDto challenge) {
 		User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Challenge newChallenge;
 		if (loginUser.getRoles().stream().anyMatch(x -> x.equals("admin"))) {
 			newChallenge = challengeService.saveChallenge(challenge);
 		} else {
-			return new ResponseEntity<Response<? extends Object>>(
+			return new ResponseEntity<>(
 					new Response<>(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_ACCESS_FORBIDDEN, null),
 					HttpStatus.FORBIDDEN);
 		}
 
-		return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_INSERT_SUCCESS, newChallenge),
+		return new ResponseEntity<>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_INSERT_SUCCESS, newChallenge),
 				HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "챌린지 이미지 저장", response = ResponseEntity.class)
 	@PostMapping("/images/{challengeId}")
-	public ResponseEntity<Response<? extends Object>> saveChallengeImage(@PathVariable int challengeId, @RequestParam("files") MultipartFile files, HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> saveChallengeImage(@PathVariable int challengeId, @RequestParam("files") MultipartFile files, HttpServletRequest request) {
 		User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (loginUser.getRoles().stream().anyMatch(x -> x.equals("admin"))) {
 			String url = s3Service.challengeImgUpload(files, "challenges");
 			Challenge challenge = challengeService.findChallengeByChallengeId(challengeId);
 			challenge.setChallengeImg(url);
-			challengeService.updateChallenge(challengeId, challenge);
+			challengeService.updateChallengeImage(challengeId, challenge);
 
-			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_IMG_INSERT_SUCCESS, challenge),
+			return new ResponseEntity<>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_IMG_INSERT_SUCCESS, challenge),
 					HttpStatus.OK);
 		} else {
-			return new ResponseEntity<Response<? extends Object>>(
+			return new ResponseEntity<>(
 					new Response<>(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_ACCESS_FORBIDDEN, null),
 					HttpStatus.FORBIDDEN);
 		}
@@ -111,13 +111,13 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "챌린지 전체 목록 조회", response = ResponseEntity.class)
 	@GetMapping
-	public ResponseEntity<Response<? extends Object>> findAllChallenge() {
+	public ResponseEntity<Response<Object>> findAllChallenge() {
 		LocalDateTime today = LocalDateTime.now();
 		List<Challenge> challenges = challengeService.findAllChallengeGraterThanEndTime(today); // 진행 첼린지
 		List<Challenge> coingSoonChallenges = challengeService.findAllChallengeGraterThanStartTime(today); // 예정 첼린지
 		challenges.addAll(coingSoonChallenges);
 		
-		return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_LIST_SUCCESS, challenges),
+		return new ResponseEntity<>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_LIST_SUCCESS, challenges),
 				HttpStatus.OK);
 	}
 	
@@ -128,7 +128,7 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "챌린지 전체 목록 및 참여 조회", response = ResponseEntity.class)
 	@GetMapping("/participation")
-	public ResponseEntity<Response<? extends Object>> findAllMyChallenge(HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> findAllMyChallenge(HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		if (jwtTokenProvider.validateToken(token)) {
 			int userId = jwtTokenProvider.getUserIdFromJwt(token);
@@ -140,10 +140,10 @@ public class ChallengeController {
 			map.put("beforeP", challengeService.findAllChallengeUserByUserIdComingSoon(userId));
 			map.put("afterP", challengeService.findAllChallengeUserByUserIdEnd(userId));
 
-			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_LIST_SUCCESS, map),
+			return new ResponseEntity<>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_LIST_SUCCESS, map),
 					HttpStatus.OK);
 		}else {
-			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_LIST_FAIL),HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_LIST_FAIL),HttpStatus.FORBIDDEN);
 		}
 	}
 	
@@ -154,11 +154,11 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "진행중 챌린지 목록 조회", response = ResponseEntity.class)
 	@GetMapping("/ing")
-	public ResponseEntity<Response<? extends Object>> findIngChallenge() {
+	public ResponseEntity<Response<Object>> findIngChallenge() {
 		LocalDateTime today = LocalDateTime.now();
 		List<Challenge> ingChallenges = challengeService.findAllChallengeGraterThanEndTime(today); // 진행 첼린지
 		
-		return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_ING_SUCCESS, ingChallenges),
+		return new ResponseEntity<>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_ING_SUCCESS, ingChallenges),
 				HttpStatus.OK);
 	}
 	
@@ -169,11 +169,11 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "예정 챌린지 목록 조회", response = ResponseEntity.class)
 	@GetMapping("/comingsoon")
-	public ResponseEntity<Response<? extends Object>> findComingSoonChallenge() {
+	public ResponseEntity<Response<Object>> findComingSoonChallenge() {
 		LocalDateTime today = LocalDateTime.now();
 		List<Challenge> coingSoonChallenges = challengeService.findAllChallengeGraterThanStartTime(today); // 예정 첼린지
 
-		return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_COMINGSOON_SUCCESS, coingSoonChallenges),
+		return new ResponseEntity<>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_COMINGSOON_SUCCESS, coingSoonChallenges),
 				HttpStatus.OK);
 	}
 	
@@ -184,11 +184,11 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "종료 챌린지 목록 조회", response = ResponseEntity.class)
 	@GetMapping("/end")
-	public ResponseEntity<Response<? extends Object>> findEndChallenge() {
+	public ResponseEntity<Response<Object>> findEndChallenge() {
 		LocalDateTime today = LocalDateTime.now();
 		List<Challenge> endChallenges = challengeService.findAllChallengeLessThanEndTime(today); // 끝난 챌린지
 
-		return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_END_SUCCESS, endChallenges),
+		return new ResponseEntity<>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_END_SUCCESS, endChallenges),
 				HttpStatus.OK);
 	}
 
@@ -200,7 +200,7 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "챌린지 상세 조회", response = ResponseEntity.class)
 	@GetMapping("/{challengeId}")
-	public ResponseEntity<Response<? extends Object>> findChallengeByChallengeId(@PathVariable int challengeId, HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> findChallengeByChallengeId(@PathVariable int challengeId, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int userId = 0;
 		if (jwtTokenProvider.validateToken(token)) {
@@ -212,13 +212,13 @@ public class ChallengeController {
 		ChallengeUser challengeUser = challengeService.findChallengeUserByUserIdAndChallengeId(userId, challenge);
 		if (challengeUser != null) {
 			// 참여하고 있으면 challenge에 user정보까지 담아서 보내줌
-			return new ResponseEntity<Response<? extends Object>>(
+			return new ResponseEntity<>(
 					new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_SEARCH_SUCCESS_T, challengeUser),
 					HttpStatus.OK);
 		} else {
 			// 참여안하고 있으면 user는 빈껍데기로 감
 			challengeUser = ChallengeUser.builder().challengeId(challenge).build();
-			return new ResponseEntity<Response<? extends Object>>(
+			return new ResponseEntity<>(
 					new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_SEARCH_SUCCESS_F, challengeUser),
 					HttpStatus.OK);
 		}
@@ -233,10 +233,10 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "챌린지 수정", response = ResponseEntity.class)
 	@PutMapping("/{challengeId}")
-	public ResponseEntity<Response<? extends Object>> updateChallenge(@PathVariable int challengeId, @RequestBody Challenge challenge) {
+	public ResponseEntity<Response<Object>> updateChallenge(@PathVariable int challengeId, @RequestBody ChallengeDto challenge) {
 		Challenge updateChallenge = challengeService.updateChallenge(challengeId, challenge);
 
-		return new ResponseEntity<Response<? extends Object>>(
+		return new ResponseEntity<>(
 				new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_UPDATE_SUCCESS, updateChallenge), HttpStatus.OK);
 	}
 
@@ -248,17 +248,17 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "챌린지 삭제", response = ResponseEntity.class)
 	@DeleteMapping("/{challengeId}")
-	public ResponseEntity<Response<? extends Object>> deleteChallenge(@PathVariable int challengeId) {
+	public ResponseEntity<Response<Object>> deleteChallenge(@PathVariable int challengeId) {
 		int ret = challengeService.deleteChallenge(challengeId);
 		if(ret == -1) {
-			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.NOT_FOUND, ResponseMessage.CHALLENGE_NOT_FOUND, null),
+			return new ResponseEntity<>(new Response<>(StatusCode.NOT_FOUND, ResponseMessage.CHALLENGE_NOT_FOUND, null),
 					HttpStatus.NOT_FOUND);
 		}else if(ret == 0) {
-			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_DELETE_FAIL, null),
+			return new ResponseEntity<>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_DELETE_FAIL, null),
 					HttpStatus.OK);
 		}
 
-		return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_DELETE_SUCCESS, null),
+		return new ResponseEntity<>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_DELETE_SUCCESS, null),
 				HttpStatus.OK);
 	}
 
@@ -271,7 +271,7 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "챌린지 참여", response = ResponseEntity.class)
 	@PostMapping("/runners")
-	public ResponseEntity<Response<? extends Object>> participateChallenge(@RequestBody HashMap<String, Integer> map, HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> participateChallenge(@RequestBody HashMap<String, Integer> map, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int userId = 0;
 		if (jwtTokenProvider.validateToken(token)) {
@@ -282,12 +282,12 @@ public class ChallengeController {
 		ChallengeUser challengeUser = challengeService.participateChallenge(challengeId, donation, userId);
 		
 		if(challengeUser == null) {
-			return new ResponseEntity<Response<? extends Object>>(
+			return new ResponseEntity<>(
 					new Response<>(StatusCode.FORBIDDEN, ResponseMessage.CHALLENGE_PARTICIPATE_FAIL, null),
 					HttpStatus.FORBIDDEN);
 		}
 		
-		return new ResponseEntity<Response<? extends Object>>(
+		return new ResponseEntity<>(
 				new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_PARTICIPATE_SUCCESS, challengeUser),
 				HttpStatus.OK);
 	}
@@ -301,7 +301,7 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "챌린지 참여 취소", response = ResponseEntity.class)
 	@DeleteMapping("/runners/{challengeId}/{donation}")
-	public ResponseEntity<Response<? extends Object>> cancelChallenge(@PathVariable int challengeId, @PathVariable int donation, HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> cancelChallenge(@PathVariable int challengeId, @PathVariable int donation, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int userId = 0;
 		if (jwtTokenProvider.validateToken(token)) {
@@ -310,7 +310,7 @@ public class ChallengeController {
 		
 		Challenge challenge = challengeService.cancelChallenge(challengeId, donation, userId);
 
-		return new ResponseEntity<Response<? extends Object>>(
+		return new ResponseEntity<>(
 				new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_PARTICIPATE_CANCEL_SUCCESS, challenge),
 				HttpStatus.OK);
 	}
@@ -319,10 +319,10 @@ public class ChallengeController {
 	 * 매일 자정마다 챌린지 끝내면서 유저의 정보 업데이트
 	 * @param request
 	 */
-	@Scheduled(cron = "1 0 00 * * ?")
+	@Scheduled(cron = "0 0 0 * * *")
 	@ApiOperation(value = "챌린지 끝내기")
 	@GetMapping("/finish")
-	public void finishChallenge(HttpServletRequest request) {
+	public void finishChallenge() {
 		List<User> successUsers = challengeService.findAllChallengeEqualDate();
 		ranksService.getDonateExp(successUsers);
 	}
@@ -334,7 +334,7 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "유저가 참여중인 챌린지 조회", response = ResponseEntity.class)
 	@GetMapping("/user/ing")
-	public ResponseEntity<Response<? extends Object>> findChallengeUserByUserIdIng(HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> findChallengeUserByUserIdIng(HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int userId = 0;
 		if (jwtTokenProvider.validateToken(token)) {
@@ -342,7 +342,7 @@ public class ChallengeController {
 		}
 		List<ChallengeUser> challengeUsers = challengeService.findAllChallengeUserByUserIdIng(userId);
 
-		return new ResponseEntity<Response<? extends Object>>(
+		return new ResponseEntity<>(
 				new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_USER_SEARCH_ING, challengeUsers),
 				HttpStatus.OK);
 	}
@@ -354,7 +354,7 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "유저가 참여 예정 챌린지 조회", response = ResponseEntity.class)
 	@GetMapping("/user/comingsoon")
-	public ResponseEntity<Response<? extends Object>> findChallengeUserByUserIdComingSoon(HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> findChallengeUserByUserIdComingSoon(HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int userId = 0;
 		if (jwtTokenProvider.validateToken(token)) {
@@ -362,7 +362,7 @@ public class ChallengeController {
 		}
 		List<ChallengeUser> challengeUsers = challengeService.findAllChallengeUserByUserIdComingSoon(userId);
 
-		return new ResponseEntity<Response<? extends Object>>(
+		return new ResponseEntity<>(
 				new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_USER_SEARCH_COMINGSOON, challengeUsers),
 				HttpStatus.OK);
 	}
@@ -374,7 +374,7 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "유저가 참여 종료한 챌린지 조회", response = ResponseEntity.class)
 	@GetMapping("/user/end")
-	public ResponseEntity<Response<? extends Object>> findChallengeUserByUserIdEnd(HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> findChallengeUserByUserIdEnd(HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int userId = 0;
 		if (jwtTokenProvider.validateToken(token)) {
@@ -382,7 +382,7 @@ public class ChallengeController {
 		}
 		List<ChallengeUser> challengeUsers = challengeService.findAllChallengeUserByUserIdEnd(userId);
 
-		return new ResponseEntity<Response<? extends Object>>(
+		return new ResponseEntity<>(
 				new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_USER_SEARCH_END, challengeUsers),
 				HttpStatus.OK);
 	}

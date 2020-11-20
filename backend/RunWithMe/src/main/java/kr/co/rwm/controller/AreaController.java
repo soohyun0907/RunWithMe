@@ -40,34 +40,34 @@ public class AreaController {
 	
 	@ApiOperation(value = "시도 전체 조회", response = ResponseEntity.class)
 	@GetMapping
-	public ResponseEntity<Response<? extends Object>> findAllSido() {
+	public ResponseEntity<Response<Object>> findAllSido() {
 		List<Sido> sidos = areaService.findAllSido();
 		
-		return new ResponseEntity<Response<? extends Object>>(new 
+		return new ResponseEntity<>(new 
 				Response<>(StatusCode.OK, ResponseMessage.SIDO_LIST_SUCCESS, sidos), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "시도 아이디를 이용해 구군 조회", response = ResponseEntity.class)
 	@GetMapping("/{sidoId}")
-	public ResponseEntity<Response<? extends Object>> findAllBySidoId(@PathVariable int sidoId) {
+	public ResponseEntity<Response<Object>> findAllBySidoId(@PathVariable int sidoId) {
 		Sido sido = areaService.findSidoBySidoId(sidoId);
 		if(sido == null) {
-			return new ResponseEntity<Response<? extends Object>>(new 
+			return new ResponseEntity<>(new 
 				Response<>(StatusCode.NOT_FOUND, ResponseMessage.SIDO_SEARCH_FAIL, null), HttpStatus.NOT_FOUND);
 		}
 		List<Gugun> guguns = areaService.findAllGugunBySidoId(sido);
 		
-		return new ResponseEntity<Response<? extends Object>>(new 
+		return new ResponseEntity<>(new 
 				Response<>(StatusCode.OK, ResponseMessage.GUGUN_LIST_SUCCESS, guguns), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "유저의 활동 지역 설정", response = ResponseEntity.class)
 	@PostMapping
-	public ResponseEntity<Response<? extends Object>> saveUserArea(@RequestBody GugunDto gugun) {
+	public ResponseEntity<Response<Object>> saveUserArea(@RequestBody GugunDto gugun) {
 		// Gugun 확인
 		Gugun saveGugun = areaService.findGugunByGugunId(gugun.getGugunId());
 		if(saveGugun == null) {
-			return new ResponseEntity<Response<? extends Object>>(new 
+			return new ResponseEntity<>(new 
 				Response<>(StatusCode.NOT_FOUND, ResponseMessage.GUGUN_SEARCH_FAIL, null), HttpStatus.NOT_FOUND);
 		}
 		
@@ -76,16 +76,16 @@ public class AreaController {
 		loginUser.setGugunId(saveGugun);
 		userService.profileUpdate(opLoginUser, loginUser);
 		
-		return new ResponseEntity<Response<? extends Object>>(new 
+		return new ResponseEntity<>(new 
 				Response<>(StatusCode.OK, ResponseMessage.ACTAREA_INSERT_SUCCESS, null), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "지역에 따른 유저의 달린 경로 보기", response = ResponseEntity.class)
 	@GetMapping("/{gugunId}/{userId}")
-	public ResponseEntity<Response<? extends Object>> findAllRunningByUserIdAndGugunId(@PathVariable int gugunId, @PathVariable int userId) {
+	public ResponseEntity<Response<Object>> findAllRunningByUserIdAndGugunId(@PathVariable int gugunId, @PathVariable int userId) {
 		List<Running> runnings = recordService.findAllRunningByGugunIdAndUserId(gugunId, userId);
 		
-		return new ResponseEntity<Response<? extends Object>>(new 
+		return new ResponseEntity<>(new 
 				Response<>(StatusCode.OK, ResponseMessage.AREA_RUNNINGS_SUCCESS, runnings), HttpStatus.OK);
 	}
 	

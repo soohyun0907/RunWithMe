@@ -51,39 +51,39 @@ public class ReplyController {
 	ReplyService replyService;
 	
 	@GetMapping("")
-	public ResponseEntity<Response<? extends Object>> replyList() {
+	public ResponseEntity<Response<Object>> replyList() {
 		List<Reply> list = replyService.allReplyList();
-		return new ResponseEntity<Response<? extends Object>> (new Response<>(StatusCode.OK, ResponseMessage.READ_REPLY_SUCCESS, list), HttpStatus.OK);
+		return new ResponseEntity<> (new Response<>(StatusCode.OK, ResponseMessage.READ_REPLY_SUCCESS, list), HttpStatus.OK);
 	}
 	
 	@GetMapping("/reply/{boardId}")
-	public ResponseEntity<Response<? extends Object>> replyListByBoardId(@PathVariable int boardId) {
+	public ResponseEntity<Response<Object>> replyListByBoardId(@PathVariable int boardId) {
 		List<Reply> list = replyService.findReplyByBoardId(boardId);
-		return new ResponseEntity<Response<? extends Object>> (new Response<>(StatusCode.OK, ResponseMessage.READ_REPLY_SUCCESS, list), HttpStatus.OK);
+		return new ResponseEntity<> (new Response<>(StatusCode.OK, ResponseMessage.READ_REPLY_SUCCESS, list), HttpStatus.OK);
 	}
 	
 	@PostMapping("/reply")
-	public ResponseEntity<Response<? extends Object>> insert(@RequestBody Map<String, String> replyInfo, HttpServletRequest request) {
+	public ResponseEntity<Response<Object>> insert(@RequestBody Map<String, String> replyInfo, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int uid = 0;
 		if(jwtTokenProvider.validateToken(token)) {
 			uid = jwtTokenProvider.getUserIdFromJwt(token);
 		}
 		Reply ret = replyService.save(uid, replyInfo);
-		return new ResponseEntity<Response<? extends Object>> (new Response<>(StatusCode.OK, ResponseMessage.INSERT_REPLY_SUCCESS, ret), HttpStatus.OK);
+		return new ResponseEntity<> (new Response<>(StatusCode.OK, ResponseMessage.INSERT_REPLY_SUCCESS, ret), HttpStatus.OK);
 
 	}
 	
 	@PutMapping("/reply")
-	public ResponseEntity<Response<? extends Object>> update(@RequestBody Map<String, String> replyInfo) {
+	public ResponseEntity<Response<Object>> update(@RequestBody Map<String, String> replyInfo) {
 		Reply ret = replyService.update(replyInfo);
-		return new ResponseEntity<Response<? extends Object>> (new Response<>(StatusCode.OK, ResponseMessage.UPDATE_REPLY_SUCCESS, ret), HttpStatus.OK);
+		return new ResponseEntity<> (new Response<>(StatusCode.OK, ResponseMessage.UPDATE_REPLY_SUCCESS, ret), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/reply/{reply_id}")
-	public ResponseEntity<Response<? extends Object>> delete(@PathVariable int reply_id) {
+	public ResponseEntity<Response<Object>> delete(@PathVariable int reply_id) {
 		Long ret = replyService.delete(reply_id);
-		return new ResponseEntity<Response<? extends Object>> (new Response<>(StatusCode.OK, ResponseMessage.DELETE_REPLY_SUCCESS, ret), HttpStatus.OK);
+		return new ResponseEntity<> (new Response<>(StatusCode.OK, ResponseMessage.DELETE_REPLY_SUCCESS, ret), HttpStatus.OK);
 	}
 	
 

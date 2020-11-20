@@ -27,7 +27,14 @@ public interface ChallengeService {
 	 * @param challenge
 	 * @return
 	 */
-	public Challenge updateChallenge(int challengeId, Challenge challenge);
+	public Challenge updateChallenge(int challengeId, ChallengeDto challenge);
+	/**
+	 * challenge의 이름, 시작날짜, 종료날짜만 update - 이미지
+	 * @param challengeId
+	 * @param challenge
+	 * @return
+	 */
+	public Challenge updateChallengeImage(int challengeId, Challenge challenge);
 	
 	/**
 	 * challengeId로 챌린지 삭제

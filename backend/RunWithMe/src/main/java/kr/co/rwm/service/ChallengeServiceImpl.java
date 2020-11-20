@@ -50,7 +50,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 	}
 
 	@Override
-	public Challenge updateChallenge(int challengeId, Challenge challenge) {
+	public Challenge updateChallenge(int challengeId, ChallengeDto challenge) {
 		Challenge updateChallenge = challengeRepository.findByChallengeId(challengeId)
 				.orElseThrow(() -> new IllegalArgumentException(NO_CHALLENGE));
 		updateChallenge.setTitle(challenge.getTitle());
@@ -61,6 +61,20 @@ public class ChallengeServiceImpl implements ChallengeService {
 		updateChallenge.setEndTime(challenge.getEndTime());
 		challengeRepository.save(updateChallenge);
 
+		return updateChallenge;
+	}
+	@Override
+	public Challenge updateChallengeImage(int challengeId, Challenge challenge) {
+		Challenge updateChallenge = challengeRepository.findByChallengeId(challengeId)
+				.orElseThrow(() -> new IllegalArgumentException(NO_CHALLENGE));
+		updateChallenge.setTitle(challenge.getTitle());
+		updateChallenge.setContent(challenge.getContent());
+		updateChallenge.setDistanceGoal(challenge.getDistanceGoal());
+		updateChallenge.setDonateGoal(challenge.getDonateGoal());
+		updateChallenge.setStartTime(challenge.getStartTime());
+		updateChallenge.setEndTime(challenge.getEndTime());
+		challengeRepository.save(updateChallenge);
+		
 		return updateChallenge;
 	}
 
@@ -413,13 +427,16 @@ public class ChallengeServiceImpl implements ChallengeService {
 			LocalDateTime today = LocalDateTime.now();
 			today = today.withHour(23).withMinute(59).withSecond(59).withNano(0);
 			for (ChallengeUser cu : challengeUserList) {
-				Challenge challenge = challengeRepository.findByChallengeId(cu.getChallengeId().getChallengeId()).get();
-				if (challenge.getEndTime().isBefore(today))
-					continue;
-
-				challenge.setParticipant(challenge.getParticipant() - 1);
-				challenge.setDistanceCurrent(challenge.getDistanceCurrent() - cu.getAccDistance());
-				challengeRepository.save(challenge);
+				Optional<Challenge> challenges = challengeRepository.findByChallengeId(cu.getChallengeId().getChallengeId());
+				if(challenges.isPresent()) {
+					Challenge challenge = challenges.get();
+					if (challenge.getEndTime().isBefore(today))
+						continue;
+					
+					challenge.setParticipant(challenge.getParticipant() - 1);
+					challenge.setDistanceCurrent(challenge.getDistanceCurrent() - cu.getAccDistance());
+					challengeRepository.save(challenge);
+				}
 			}
 		}
 	}
