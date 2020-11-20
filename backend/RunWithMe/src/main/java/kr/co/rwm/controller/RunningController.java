@@ -199,7 +199,7 @@ public class RunningController {
 			Long ret = recordService.deleteRunningByUserId(userId, runningId);
 			
 			return new ResponseEntity<>(
-					new Response<>(StatusCode.OK, ResponseMessage.RUNNING_DELETE_RECORD, ret), HttpStatus.FORBIDDEN);
+					new Response<>(StatusCode.OK, ResponseMessage.RUNNING_DELETE_RECORD, ret), HttpStatus.OK);
 		
 		}else {
 			return new ResponseEntity<>(new Response<>(StatusCode.FORBIDDEN, ResponseMessage.UNAUTHORIZED),
