@@ -169,10 +169,9 @@ public class RanksServiceImpl implements RanksService{
 	public List<Ranks> findByUserId(UserDto userId) {
 		User user;
 		List<Ranks> list = new ArrayList<Ranks>();
-		Optional<Ranks> rank = null;
 		if(userId.getUserId()!=null) {
 			user = userRepository.findByUserId(userId.getUserId());
-			rank = rankRepository.findByUserId(user);
+			Optional<Ranks> rank = rankRepository.findByUserId(user);
 			if(rank.isPresent()) {
 				list.add(rank.get());
 			}
@@ -180,7 +179,7 @@ public class RanksServiceImpl implements RanksService{
 			Optional<User> users = userRepository.findByUserEmail(userId.getUserEmail());
 			if(users.isPresent()) {
 				user = users.get();
-				rank = rankRepository.findByUserId(user);
+				Optional<Ranks> rank = rankRepository.findByUserId(user);
 				if(rank.isPresent()) {
 					list.add(rank.get());
 				}
@@ -188,7 +187,7 @@ public class RanksServiceImpl implements RanksService{
 		}else if(userId.getUsername() != null) {
 			List<User> users = userRepository.findByUserName(userId.getUsername());
 			for(int i=0;i<users.size();i++) {
-				rank = rankRepository.findByUserId(users.get(i));
+				Optional<Ranks> rank = rankRepository.findByUserId(users.get(i));
 				if(rank.isPresent()) {
 					list.add(rank.get());
 				}
