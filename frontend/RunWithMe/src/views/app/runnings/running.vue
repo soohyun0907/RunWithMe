@@ -30,15 +30,15 @@
           <div v-if="!running">
             <section class="bottom-bar">
               <div v-if="!isPause">
-                <button type="button" @click="startLocationUpdates" class="btn round btn btn-success btn-icon rounded-circle m-1">
+                <button type="button" @click="startLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
                 <span class="ul-btn__icon"> <i style="font-size:2em; margin-left: 10px;" class="i-Start-2"></i></span>
                 </button>
               </div>
               <div v-if="isPause">
-                <button type="button" @click="watchLocationUpdates" class="btn round btn btn-warning btn-icon rounded-circle m-1">
+                <button type="button" @click="watchLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
                 <span class="ul-btn__icon"> <i style="font-size:2em; margin-left: 10px;" class="i-Start-2"></i></span>
                 </button>
-                  <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
+                  <button type="button" @click="endLocationUpdates" class="btn round btn btn-secondary btn-icon rounded-circle m-1">
                 <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Stop-2"></i></span>
               </button>
 
@@ -48,11 +48,11 @@
           <div v-if="running">
             <section class="bottom-bar">
 
-              <button type="button" @click="stopLocationUpdates" class="btn round btn btn-danger btn-icon rounded-circle m-1">
+              <button type="button" @click="stopLocationUpdates" class="btn round btn btn-info btn-icon rounded-circle m-1">
                 <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Pause"></i></span>
               </button>
 
-              <button type="button" @click="endLocationUpdates" class="btn round btn btn-dark btn-icon rounded-circle m-1">
+              <button type="button" @click="endLocationUpdates" class="btn round btn btn-secondary btn-icon rounded-circle m-1">
                 <span class="ul-btn__icon"> <i style="font-size:2em;" class="i-Stop-2"></i></span>
               </button>
 
@@ -259,8 +259,8 @@ export default {
         });
 
         //Map 현재위치 마커
-        var runningMarkerSrc = require("../../../assets/images/running_marker.png");
-        var runningMarkerSize = new google.maps.Size(35, 50);
+        var runningMarkerSrc = require("../../../assets/images/running_dino.png");
+        var runningMarkerSize = new google.maps.Size(20, 30);
         var runningMarker = new google.maps.MarkerImage(
           runningMarkerSrc,
           null,

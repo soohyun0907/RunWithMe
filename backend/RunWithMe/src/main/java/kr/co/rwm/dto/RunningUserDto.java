@@ -24,4 +24,6 @@ public class RunningUserDto{
 	
 	private Integer totalCount; 
 	
+	private int tier;
+	
 }
