@@ -85,7 +85,7 @@ public class RecordServiceImpl implements RecordService {
 								.startTime(LocalDateTime.parse((CharSequence) runningInfo.get("startTime"), formatter))
 								.endTime(LocalDateTime.parse((CharSequence) runningInfo.get("endTime"), formatter))
 								.build();
-								
+
 		return runningRepository.save(running);
 	}
 
