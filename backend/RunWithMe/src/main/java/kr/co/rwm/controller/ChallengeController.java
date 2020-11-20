@@ -93,7 +93,7 @@ public class ChallengeController {
 			String url = s3Service.challengeImgUpload(files, "challenges");
 			Challenge challenge = challengeService.findChallengeByChallengeId(challengeId);
 			challenge.setChallengeImg(url);
-			challengeService.updateChallenge(challengeId, challenge);
+			challengeService.updateChallengeImage(challengeId, challenge);
 
 			return new ResponseEntity<Response<? extends Object>>(new Response<>(StatusCode.OK, ResponseMessage.CHALLENGE_IMG_INSERT_SUCCESS, challenge),
 					HttpStatus.OK);
@@ -233,7 +233,7 @@ public class ChallengeController {
 	 */
 	@ApiOperation(value = "챌린지 수정", response = ResponseEntity.class)
 	@PutMapping("/{challengeId}")
-	public ResponseEntity<Response<? extends Object>> updateChallenge(@PathVariable int challengeId, @RequestBody Challenge challenge) {
+	public ResponseEntity<Response<? extends Object>> updateChallenge(@PathVariable int challengeId, @RequestBody ChallengeDto challenge) {
 		Challenge updateChallenge = challengeService.updateChallenge(challengeId, challenge);
 
 		return new ResponseEntity<Response<? extends Object>>(

@@ -85,13 +85,18 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	@Transactional
 	public Long delete(int reply_id) {
-		int boardId = replyRepository.findByReplyId(reply_id).get().getBoardId();
-		Optional<Board> board = boardRepository.findByBoardId(boardId);
-		if(board.isPresent()) {
-			board.get().setReplyCount(board.get().getReplyCount()-1);
-			Long ret = replyRepository.deleteByReplyId(reply_id);
-			return ret;
-			
+		Optional<Reply> comment = replyRepository.findByReplyId(reply_id);
+		if(comment.isPresent()) {
+			int boardId = comment.get().getBoardId();
+			Optional<Board> board = boardRepository.findByBoardId(boardId);
+			if(board.isPresent()) {
+				board.get().setReplyCount(board.get().getReplyCount()-1);
+				Long ret = replyRepository.deleteByReplyId(reply_id);
+				return ret;
+				
+			}else {
+				return null;
+			}
 		}else {
 			return null;
 		}
