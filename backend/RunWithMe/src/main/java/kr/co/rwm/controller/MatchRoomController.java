@@ -40,7 +40,7 @@ public class MatchRoomController {
 
     @PostMapping("/room")
     @ResponseBody 
-    public ResponseEntity<Response<? extends Object>> createAndSelectChatroom(@RequestBody Map<String, Integer> idInfo, HttpServletRequest request) {
+    public ResponseEntity<Response<Object>> createAndSelectChatroom(@RequestBody Map<String, Integer> idInfo, HttpServletRequest request) {
 		String token = request.getHeader("AUTH");
 		int uid = 0;
 		if(jwtTokenProvider.validateToken(token)) {
@@ -48,7 +48,7 @@ public class MatchRoomController {
 		}
     	ChatRoom result =  matchRoomRepository.createAndSelectChatroom(uid, idInfo);
     	
-		return new ResponseEntity<Response<? extends Object>>(new 
+		return new ResponseEntity<>(new 
 				Response<>(StatusCode.OK, ResponseMessage.CREATE_CHATROOM_SUCCESS, result), HttpStatus.OK);
     }
 
