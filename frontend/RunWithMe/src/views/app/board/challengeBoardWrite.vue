@@ -31,6 +31,7 @@
             <b-col md="12" v-if="!updateBoardImg">
                 <b-button class="m-1" type="submit" variant="primary">Submit</b-button>
                 <b-button type="reset" variant="danger">Reset</b-button>
+                <b-button size="sm" class="float-right m-1" variant="secondary" @click="backToList()">작성 취소</b-button>
             </b-col>
 
             <b-col md="12" v-if="updateBoardImg">
@@ -130,6 +131,9 @@ export default {
         handleFileUpload() {
             this.file = this.$refs.files.files;
             // console.log(this.file);
+        },
+        backToList() {
+            this.$router.push("/app/board/challengeBoard");
         }
     }
 }
