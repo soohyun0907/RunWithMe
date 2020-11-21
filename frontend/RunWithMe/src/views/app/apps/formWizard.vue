@@ -5,9 +5,9 @@
         <b-card title="Matching">
           <form-wizard @on-complete="onComplete" title = "" subtitle = "성별, 티어, 지역 기반 매칭 방식">
             <tab-content title="성별 고르기" icon="i-Administrator">
-              <p><strong></strong></p>
+              <code><strong>매칭할 성별을 골라주세요</strong></code>
               
-              <div class="custom-control custom-radio">
+              <div style="padding-top:15px;" class="custom-control custom-radio">
                 <input type="radio" name="jb-radio" id="jb-radio-1" class="custom-control-input" @click="matching('male')">
                 <label class="custom-control-label" for="jb-radio-1">남성</label>
               </div>
@@ -46,7 +46,7 @@
                         class="profile-picture avatar-sm mb-2 rounded-circle img-fluid"
                         :src="defaultProfile" alt=""/>
                     </div>
-                      <div class="friendList">
+                      <div class="friendList_modal">
                         {{ props.row.username }}
                       </div>
                     </div>
@@ -64,6 +64,15 @@
             <tab-content title="유저 팔로우" icon="i-Thumbs-Up-Smiley">
               <br>
               해당 유저를 팔로우 하시겠습니까?
+              <br>
+              <div v-if="selectedUser.profile==null">
+               <img :src="defaultProfile" style="width:40vw;"> 
+                 </div>
+              <div v-else>
+                <img :src="selectedUser.profile" style="width:40vw;">
+                 </div>
+
+               <div style="font-size:20px"> {{selectedUser.username}}</div>
             </tab-content>
           </form-wizard>
         </b-card>
@@ -79,6 +88,8 @@ import { mapGetters,mapMutations } from "vuex";
 export default {
   data(){
     return {
+      selectGender:false,
+      selectRunner:false,
       selectedUser:[],
       matchUsers : [],
       profiles: [],
@@ -109,9 +120,9 @@ export default {
     ...mapGetters(["userInfo","defaultProfile"]),
   },
   methods: {
+     ...mapMutations(["mutateVisibleModal"]),
     selectUser(user){
       this.selectedUser = user
-      console.log(this.selectedUser)
     },
     onComplete: function() {
       http.post(`/friends/friend/${this.selectedUser.userId}`)
@@ -122,12 +133,14 @@ export default {
         position: "center",
         type: "success",
         title: "팔로우 성공!",
+        text:"해당 유저와 채팅을 할 수 있습니다!",
         icon:"success",
         showConfirmButton: false,
         timer: 1000
       });
       setTimeout(() => {
-        this.$router.push('../mypages/friends')
+        this.$store.commit('mutateVisibleModal',false)
+        this.$router.go(0)
       }, 1000);
 
     },
@@ -172,13 +185,13 @@ export default {
 </script>
 
 <style>
-.friendList {
-    overflow:hidden;
+.friendList_modal {
+  overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
 }
 .card-body{
-    padding:1em;
+  padding:1em;
 }
 .wizard-tab-content{
   padding:5px !important;

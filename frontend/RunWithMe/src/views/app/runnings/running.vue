@@ -16,7 +16,7 @@
           </div>
           <div class="myRecord" >
               <div id="run_desc speed">현재 속도</div>
-              <span id="acc_time">{{ show_speed.toFixed(2) }}m/s</span>
+              <span id="acc_time">{{ speed.toFixed(2) }}m/s</span>
           </div>
           <div class="myRecord">
                 <div id="run_desc time">누적 시간</div>
@@ -123,8 +123,8 @@ export default {
       accumulated_distance: 0, // 총 누적거리
       accumulated_time: 0, // 총 누적 시간
       speed: 0, // 현재 속력
-      speed_now:[],
-      show_speed:0, // 현재 속력 - 보여주기
+      // speed_now:[],
+      // show_speed:0, // 현재 속력 - 보여주기
       checkOneKm: 0, //1 km마다 초기화
       checkSecond: 0, // 1 km마다 초기화
       avgSpeed:0, //전체 평균 속력
@@ -399,6 +399,8 @@ export default {
             
             if (distance > threshold) {
               // 일정속도 이상으로 뛸때만 기록.
+              this.accumulated_distance += distance;
+              this.checkOneKm += distance;
             
               var currentLatLng = new google.maps.LatLng(
                 this.current.lat,
@@ -409,29 +411,27 @@ export default {
               
           
               //제일 최근의 런닝 속도
-              var recent_speed = (distance*1000)/this.time_now
+              // var recent_speed = (distance*1000)/this.time_now
 
-              if(recent_speed>=1 && recent_speed<20){
-                this.accumulated_distance += distance;
-                this.checkOneKm += distance;
+              // if(recent_speed>=1 && recent_speed<20){
                
-               if(this.speed_now.length>5){
-                this.speed_now.splice(0,1)
-              }
+              //  if(this.speed_now.length>5){
+              //   this.speed_now.splice(0,1)
+              // }
                 
-                this.speed_now.push(recent_speed)
-              }
+              //   this.speed_now.push(recent_speed)
+              // }
 
-              this.time_now=0
-              this.show_speed=0
+              // this.time_now=0
+              // this.show_speed=0
               
-              for(var i=0; i<this.speed_now.length;i++){
-                this.show_speed+=this.speed_now[i]
-              }
-              this.show_speed/=this.speed_now.length
+              // for(var i=0; i<this.speed_now.length;i++){
+              //   this.show_speed+=this.speed_now[i]
+              // }
+              // this.show_speed/=this.speed_now.length
               
-              console.log(this.speed_now)
-              console.log(this.show_speed)
+              // console.log(this.speed_now)
+              // console.log(this.show_speed)
               this.drawLines();
             }
             if (this.checkOneKm >= 1) {
@@ -617,7 +617,7 @@ export default {
         this.zeroPrefix(sec, 2);
         
       var realTime = ((currentTime- this.timeBegan-this.stoppedDuration)/1000).toFixed(0)
-      var time_now = ((currentTime- this.timeBegan-this.stoppedDuration)/1000).toFixed(0)
+      // var time_now = ((currentTime- this.timeBegan-this.stoppedDuration)/1000).toFixed(0)
       
       // this.accumulated_time += 1;
       // this.checkSecond += 1;
