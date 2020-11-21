@@ -186,9 +186,10 @@ export default {
 
 <style>
 .friendList_modal {
-  overflow:hidden;
-  text-overflow:ellipsis;
+  overflow:scroll;
   white-space:nowrap;
+  display:block; 
+  width:50px;
 }
 .card-body{
   padding:1em;
