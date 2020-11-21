@@ -51,7 +51,7 @@
                     variant="danger"
                     class="error col mt-1"
                     v-if="!$v.fName.minLength"
-                    >이름을 {{ $v.fName.$params.minLength.min }}글자 이상
+                    >이름을 {{ $v.fName.$params.minLength.min }}글자 이상 {{ $v.fName.$params.maxLength.min }}글자 이하로
                     입력해주세요.</b-alert
                   >
                 </b-form-group>
@@ -68,7 +68,7 @@
                     </b-dropdown>
 
                     <b-dropdown variant="primary" :disabled="selectedSido" id="dropdown-2" text="구군 선택" class="mb-2 signup">
-                      <div v-for="(gugun, index) in guguns" v-bind:key="index">
+                      <div v-for="(gugun, index) in orderGugun" v-bind:key="index">
                         <b-dropdown-item @click="gugunSelected(gugun)">{{
                           gugun.gugunName
                         }}</b-dropdown-item>
@@ -168,7 +168,7 @@
   </div>
 </template>
 <script>
-import { required, sameAs, minLength } from "vuelidate/lib/validators";
+import { required, sameAs, minLength,maxLength,email } from "vuelidate/lib/validators";
 import { mapGetters, mapActions } from "vuex";
 import http from "@/utils/http-common";
 // import dropdown from "vue-dropdowns";
@@ -209,8 +209,11 @@ export default {
     fName: {
       required,
       minLength: minLength(2),
+      maxLength: maxLength(20),
     },
-
+    email: {
+      email
+    },
     password: {
       required,
       minLength: minLength(8),
@@ -252,6 +255,11 @@ export default {
 
   computed: {
     ...mapGetters(["loggedInUser", "loading", "error"]),
+    orderGugun: function() {
+      return this.guguns.sort(function(a, b){
+      	return a.gugunName > b.gugunName ? 1 : -1;
+      });
+    }
   },
 
   methods: {
@@ -319,8 +327,20 @@ export default {
         this.$router.push('/app/sessions/signIn')
       }
     },
+    validEmail: function(email) {
+      var valid = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return valid.test(email);
+    },
     emailDuplicate() {
-      http
+      if(!this.validEmail(this.email)){
+        Swal.fire({
+          icon:'error',
+          text:'이메일 형식을 확인해주세요!',
+          showConfirmButton:false,
+          timer:1200,
+        })
+      }else{
+        http
         .get(`/users/check/${this.email}`)
         .then((res) => {
           if (res.data.data == true) {
@@ -335,7 +355,7 @@ export default {
           } else {
             Swal.fire({
               icon:'error',
-              text:'이메일 형식이 잘못되었습니다!',
+              text:'이미 존재하는 이메일입니다!',
               showConfirmButton:false,
               timer:1200,
             })
@@ -351,6 +371,7 @@ export default {
               timer:1200,
             })
           });
+      }
     },
     makeToast(variant = null) {
       this.$bvToast.toast("Please fill the form correctly.", {

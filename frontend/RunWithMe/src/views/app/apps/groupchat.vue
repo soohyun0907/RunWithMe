@@ -31,7 +31,7 @@
           <vue-perfect-scrollbar
             :settings="{ suppressScrollX: true, wheelPropagation: false }"
             class="contacts-scrollable perfect-scrollbar rtl-ps-none ps scroll"
-            style="height:50vh;"
+            style="height: 50vh"
           >
             <div>
               <div
@@ -55,7 +55,7 @@
       </div>
 
       <!-- 채팅사이드 바 -->
-      <div class="chat-content-wrap sidebar-content" >
+      <div class="chat-content-wrap sidebar-content">
         <div
           class="d-flex pl-3 pr-3 pt-2 pb-2 o-hidden box-shadow-1 chat-topbar"
         >
@@ -209,12 +209,8 @@ import SockJS from "sockjs-client";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
 
-// var sock = new SockJS("http://localhost:8080/ws-stomp");
-// var ws = Stomp.over(sock);
-
 export default {
   metaInfo: {
-    // if no subcomponents specify a metaInfo.title, this title will be used
     title: "GroupChat",
   },
   data() {
@@ -248,7 +244,6 @@ export default {
 
     selectAllGroupChat() {
       http.get("/chat/room").then((data) => {
-        // this.chatrooms = data.data.data;
         this.$store.commit("selectAllGroupChat", data.data.data);
       });
     },
@@ -322,7 +317,7 @@ export default {
     },
     recvMessage: function (recv) {
       if (recv.imgUrl == null) {
-        recv.imgUrl = require("@/assets/images/faces/profile.jpg");
+        recv.imgUrl = this.defaultProfile;
       }
       var today = new Date();
       var time = today.getHours() + " : " + today.getMinutes();
@@ -350,6 +345,7 @@ export default {
           function (frame) {
             _ws.subscribe(
               "/sub/chat/room/" + _this.getSelectedChatroom.roomId,
+            
               function (message) {
                 var recv = JSON.parse(message.body);
                 recv.get;
@@ -384,6 +380,7 @@ export default {
       "getSelectedChatroom",
       "userInfo",
       "auth",
+      "defaultProfile",
     ]),
   },
 

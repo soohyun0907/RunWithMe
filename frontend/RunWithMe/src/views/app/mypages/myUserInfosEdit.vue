@@ -47,6 +47,7 @@
 
               <b-form-group label="이름">
                 <b-form-input
+                  id="inputName"
                   class="form-control form-control-rounded"
                   label="Name"
                   v-model.trim="$v.fName.$model"
@@ -75,7 +76,7 @@
                     </b-dropdown>
 
                     <b-dropdown variant="primary" :disabled="selectedSido" id="dropdown-2" text="구군 선택" class="mb-2 signup">
-                      <div v-for="(gugun, index) in guguns" v-bind:key="index">
+                      <div v-for="(gugun, index) in orderGugun" v-bind:key="index">
                         <b-dropdown-item @click="gugunSelected(gugun)">{{
                           gugun.gugunName
                         }}</b-dropdown-item>
@@ -139,13 +140,19 @@ export default {
     this.sidos = res.data.data;
     //console.log(this.sidos[0].sidoName);
     });
-     var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
-     sidoDropBtn.style.backgroundColor="#663399"
-      sidoDropBtn.style.color="#FFFFFF"
-     
+    var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
+    sidoDropBtn.style.backgroundColor="#663399"
+    sidoDropBtn.style.color="#FFFFFF"
+    // var a = document.getElementById("inputName")
+    // document.getElementById("inputName").textContent=this.userInfo.username
   },
   computed: {
     ...mapGetters(["loggedInUser","userInfo", "loading", "error","getSideBarToggleProperties", "userInfo","defaultProfile"]),
+    orderGugun: function() {
+      return this.guguns.sort(function(a, b){
+      	return a.gugunName > b.gugunName ? 1 : -1;
+      });
+    }
   },
    methods: {
     ...mapActions(["signOut"]),

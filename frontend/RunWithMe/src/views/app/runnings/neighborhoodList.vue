@@ -32,7 +32,7 @@
                   
                   <div class="user-profile-img">
                     <img v-if="contact.imgUrl == null" class="profile-picture mb-2" :src="defaultProfile" height="120vw">
-                    <img class="profile-picture mb-2" :src="contact.imgUrl" height="120vw" />
+                    <img v-else class="profile-picture mb-2" :src="contact.imgUrl" height="120vw" />
                   </div>
                   <p class="m-0 text-24">{{ contact.nickname }}</p>
                   <div class="col">
@@ -114,6 +114,7 @@ export default {
               obj.totalDistance = element.totalDistance.toFixed(2);
               obj.running_cnt = element.totalCount;
               obj.avg_pace = element.totalTime;
+              obj.tier = element.tier;
 
               if (element.totalTime == 0) {
                 obj.avg_pace = 0;

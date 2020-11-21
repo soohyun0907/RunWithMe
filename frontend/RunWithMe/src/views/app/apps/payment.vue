@@ -7,7 +7,7 @@
       align="left"
     />
 
-    <h5>현재 마일리지 : {{ userInfo.mileage }} 원</h5>
+    <h5>현재 마일리지 : {{ userInfo.mileage | makeComma}} 원</h5>
     <div align="left">
       <input
         style="width: 28vh; float: left"

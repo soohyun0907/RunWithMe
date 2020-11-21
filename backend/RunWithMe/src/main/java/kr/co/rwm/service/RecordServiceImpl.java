@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.rwm.dto.RunningUserDto;
 import kr.co.rwm.entity.Gugun;
 import kr.co.rwm.entity.Record;
 import kr.co.rwm.entity.Running;
@@ -39,7 +40,7 @@ public class RecordServiceImpl implements RecordService {
 	private final GugunRepository gugunRepository;
 	private final RunningAreaRepository runningAreaRepository;
 	private final RunningUserRepository runningUserRepository;
-	
+
 	@Autowired
 	RanksRepository rankRepository;
 
@@ -47,12 +48,12 @@ public class RecordServiceImpl implements RecordService {
 	public void saveRecord(Record record) {
 		recordRepository.save(record);
 	}
-	
+
 	@Override
 	public void saveAllRecord(int runningId, List<Record> records) {
 		Running running = runningRepository.findByRunningId(runningId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 런닝이 없습니다."));
-		
+
 		ArrayList<Record> recordList = new ArrayList<Record>();
 		recordList.addAll(records);
 		Collections.sort(recordList, new Comparator<Record>() {
@@ -61,13 +62,13 @@ public class RecordServiceImpl implements RecordService {
 				return (int) (o1.getAccDistance() - o2.getAccDistance());
 			}
 		});
-		
-		for(Record record: recordList) {
+
+		for (Record record : recordList) {
 			record.setRunningId(running);
 			recordRepository.save(record);
 		}
 	}
-	
+
 	@Override
 	public List<Record> findAllRecordByUserId(int userId) {
 		return recordRepository.findAllByUserId(userId);
@@ -76,15 +77,12 @@ public class RecordServiceImpl implements RecordService {
 	@Override
 	public Running saveRunning(Map<String, Object> runningInfo, int userId) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-		Running running = Running.builder()
-								.userId(userId)
-								.polyline(String.valueOf(runningInfo.get("polyline")))
-								.thumbnail(String.valueOf(runningInfo.get("thumbnail")))
-								.accDistance(Double.parseDouble(String.valueOf(runningInfo.get("accDistance"))))
-								.accTime(Long.parseLong(String.valueOf(runningInfo.get("accTime"))))
-								.startTime(LocalDateTime.parse((CharSequence) runningInfo.get("startTime"), formatter))
-								.endTime(LocalDateTime.parse((CharSequence) runningInfo.get("endTime"), formatter))
-								.build();
+		Running running = Running.builder().userId(userId).polyline(String.valueOf(runningInfo.get("polyline")))
+				.thumbnail(String.valueOf(runningInfo.get("thumbnail")))
+				.accDistance(Double.parseDouble(String.valueOf(runningInfo.get("accDistance"))))
+				.accTime(Long.parseLong(String.valueOf(runningInfo.get("accTime"))))
+				.startTime(LocalDateTime.parse((CharSequence) runningInfo.get("startTime"), formatter))
+				.endTime(LocalDateTime.parse((CharSequence) runningInfo.get("endTime"), formatter)).build();
 
 		return runningRepository.save(running);
 	}
@@ -97,9 +95,9 @@ public class RecordServiceImpl implements RecordService {
 	@Override
 	public Running findRunningById(int runningId) {
 		Optional<Running> running = runningRepository.findByRunningId(runningId);
-		if(running.isPresent()) {
+		if (running.isPresent()) {
 			return running.get();
-		}else {
+		} else {
 			return null;
 		}
 	}
@@ -108,27 +106,27 @@ public class RecordServiceImpl implements RecordService {
 	public List<Record> findAllRecordByRunningId(Running runningId) {
 		return recordRepository.findAllRecordByRunningId(runningId);
 	}
-	
+
 	@Override
 	@Transactional
 	public Long deleteRunningByUserId(int userId, int runningId) {
 		Optional<User> users = userRepository.findByUserId(userId);
-		if(users.isPresent()) {
+		if (users.isPresent()) {
 			User user = users.get();
 			Optional<Running> runnings = runningRepository.findByRunningId(runningId);
-			if(runnings.isPresent()) {
+			if (runnings.isPresent()) {
 				Running running = runnings.get();
 				RunningUser runningUser = runningUserRepository.findByUserId(user);
-				runningUser.setTotalCount(runningUser.getTotalCount()-1);
-				runningUser.setTotalDistance(runningUser.getTotalDistance()-running.getAccDistance());
-				runningUser.setTotalTime(runningUser.getTotalTime()-running.getAccTime());
+				runningUser.setTotalCount(runningUser.getTotalCount() - 1);
+				runningUser.setTotalDistance(runningUser.getTotalDistance() - running.getAccDistance());
+				runningUser.setTotalTime(runningUser.getTotalTime() - running.getAccTime());
 				runningUserRepository.save(runningUser);
-				
+
 				return runningRepository.deleteByRunningId(runningId);
-			}else {
+			} else {
 				return null;
 			}
-		}else {
+		} else {
 			return null;
 		}
 	}
@@ -145,16 +143,13 @@ public class RecordServiceImpl implements RecordService {
 	@Override
 	public List<Gugun> saveAllGugun(Running savedRunning, List<String> guguns) {
 		List<Gugun> gugunList = new ArrayList<Gugun>();
-		for(String gugunName: guguns) {
+		for (String gugunName : guguns) {
 			Gugun gugun = gugunRepository.findByGugunName(gugunName);
-			RunningArea runningArea = RunningArea.builder()
-												.gugun(gugun)
-												.running(savedRunning)
-												.build();
+			RunningArea runningArea = RunningArea.builder().gugun(gugun).running(savedRunning).build();
 			runningAreaRepository.save(runningArea);
 			gugunList.add(gugun);
 		}
-		
+
 		return gugunList;
 	}
 
@@ -162,47 +157,49 @@ public class RecordServiceImpl implements RecordService {
 	public List<Running> findAllRunningByGugunIdAndUserId(int gugunId, int userId) {
 		List<Running> userRunning = runningRepository.findAllByUserIdOrderByStartTimeDesc(userId);
 		List<Running> runningList = new ArrayList<Running>();
-		for(Running running: userRunning) {
-			if(running.getRunningArea().stream().anyMatch(x -> x.getGugun().getGugunId()==gugunId))
+		for (Running running : userRunning) {
+			if (running.getRunningArea().stream().anyMatch(x -> x.getGugun().getGugunId() == gugunId))
 				runningList.add(running);
 		}
-		return runningList; 
+		return runningList;
 	}
 
 	@Override
 	public List<Running> findRunningByFriendsId(List<User> friends) {
 		List<Running> runnings = new ArrayList<Running>();
-		for(User friend: friends) {
+		for (User friend : friends) {
 			List<Running> temp = runningRepository.findAllByUserIdOrderByStartTimeDesc(friend.getUserId());
-			if(temp.isEmpty()) runnings.add(null);
-			else runnings.add(temp.get(0));
+			if (temp.isEmpty())
+				runnings.add(null);
+			else
+				runnings.add(temp.get(0));
 		}
 		return runnings;
 	}
 
 	@Override
 	public void join(User user) {
-		RunningUser runningUser = RunningUser.builder()
-											.userId(user)
-											.totalDistance(0)
-											.totalTime(0L)
-											.totalCount(0)
-											.build();
-		
+		RunningUser runningUser = RunningUser.builder().userId(user).totalDistance(0).totalTime(0L).totalCount(0)
+				.build();
+
 		runningUserRepository.save(runningUser);
 	}
 
 	@Override
-	public RunningUser findRunningUserByUserId(int userId) {
+	public RunningUserDto findRunningUserByUserId(int userId) {
 		User user = userRepository.findByUserId(userId).orElse(null);
-		if(user==null) return null;
-		return runningUserRepository.findByUserId(user);
+		if (user == null)
+			return null;
+		RunningUser result = runningUserRepository.findByUserId(user);
+		RunningUserDto resultDto = RunningUserDto.builder().runningUserId(result.getRunningUserId()).userId(result.getUserId()).totalDistance(result.getTotalDistance()).totalTime(result.getTotalTime()).totalCount(result.getTotalCount()).tier(user.getRank().getTier())
+				.build();
+		return resultDto;
 	}
 
 	@Override
 	public List<RunningUser> findAllRunningUserByUserId(List<User> users) {
 		List<RunningUser> runningUsers = new ArrayList<RunningUser>();
-		for(User user: users) {
+		for (User user : users) {
 			runningUsers.add(runningUserRepository.findByUserId(user));
 		}
 		return runningUsers;
@@ -211,52 +208,55 @@ public class RecordServiceImpl implements RecordService {
 	@Override
 	public RunningUser updateRunningUser(User user, Running running) {
 		RunningUser runningUser = runningUserRepository.findByUserId(user);
-		runningUser.setTotalCount(runningUser.getTotalCount()+1);
-		runningUser.setTotalDistance(runningUser.getTotalDistance()+running.getAccDistance());
-		runningUser.setTotalTime(runningUser.getTotalTime()+running.getAccTime());
-		
+		runningUser.setTotalCount(runningUser.getTotalCount() + 1);
+		runningUser.setTotalDistance(runningUser.getTotalDistance() + running.getAccDistance());
+		runningUser.setTotalTime(runningUser.getTotalTime() + running.getAccTime());
+
 		return runningUserRepository.save(runningUser);
 	}
 
 	@Override
 	public List<Running> findAllRunningByActivityArea(int userId) {
 		Optional<User> users = userRepository.findByUserId(userId);
-		if(users.isPresent()) {
+		if (users.isPresent()) {
 			User user = users.get();
 			int gugunId = user.getGugunId().getGugunId();
-			
+
 			List<Running> runningList = new ArrayList<Running>();
 			List<Running> userRunning = runningRepository.findAllByUserIdOrderByStartTimeDesc(userId);
-			for(Running running: userRunning) {
-				if(running.getRunningArea().stream().anyMatch(x -> x.getGugun().getGugunId()==gugunId))
+			for (Running running : userRunning) {
+				if (running.getRunningArea().stream().anyMatch(x -> x.getGugun().getGugunId() == gugunId))
 					runningList.add(running);
 			}
-			
+
 			return runningList;
-			
-		}else {
+
+		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public List<RunningUser> findRunningUserByUserIdAndUserId(int userId) {
+	public List<RunningUserDto> findRunningUserByUserIdAndUserId(int userId) {
 		Optional<User> users = userRepository.findByUserId(userId);
-		if(users.isPresent()) {
+		if (users.isPresent()) {
 			User user = users.get();
 			int gugunId = user.getGugunId().getGugunId();
-			List<RunningUser> runningUsers = new ArrayList<RunningUser>();
-			
+			List<RunningUserDto> runningUsers = new ArrayList<RunningUserDto>();
+
 			List<RunningUser> runningUserList = runningUserRepository.findAll();
-			for(RunningUser ru: runningUserList) {
-				if(ru.getUserId().getGugunId().getGugunId() == gugunId) {
-					if(ru.getUserId().getUserId() == userId) continue;
-					runningUsers.add(ru);
+			for (RunningUser ru : runningUserList) {
+				if (ru.getUserId().getGugunId().getGugunId() == gugunId) {
+					if (ru.getUserId().getUserId() == userId)
+						continue;
+					RunningUserDto resultDto = RunningUserDto.builder().runningUserId(ru.getRunningUserId()).userId(ru.getUserId()).totalDistance(ru.getTotalDistance()).totalTime(ru.getTotalTime()).totalCount(ru.getTotalCount()).tier(user.getRank().getTier())
+							.build();
+					runningUsers.add(resultDto);
 				}
 			}
 			return runningUsers;
-			
-		}else {
+
+		} else {
 			return null;
 		}
 	}
@@ -265,22 +265,16 @@ public class RecordServiceImpl implements RecordService {
 	public List<Record> convertRecords(Map<String, Object> runningInfo, User loginUser) {
 		// TODO Auto-generated method stub
 		List<Map<String, String>> recordList = (List<Map<String, String>>) runningInfo.get("records");
-		
+
 		List<Record> records = new ArrayList<Record>();
-		for(Map<String, String> map: recordList) {
-			Record record = Record.builder()
-					.userId(loginUser)
-					.accDistance(Double.parseDouble(map.get("accDistance")))
-					.accTime(Long.parseLong(map.get("accTime")))
-					.speed(Double.parseDouble(map.get("speed")))
-					.build();
-			
+		for (Map<String, String> map : recordList) {
+			Record record = Record.builder().userId(loginUser).accDistance(Double.parseDouble(map.get("accDistance")))
+					.accTime(Long.parseLong(map.get("accTime"))).speed(Double.parseDouble(map.get("speed"))).build();
+
 			records.add(record);
 		}
-		
+
 		return records;
 	}
-	
-	
-	
+
 }
