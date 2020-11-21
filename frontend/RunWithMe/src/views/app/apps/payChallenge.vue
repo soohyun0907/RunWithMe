@@ -133,6 +133,7 @@ export default {
       evt.preventDefault();
       // Reset our form values
       this.donateAmount = 0;
+      this.$router.push("/app/board/challenges");
     },
     makePayment() {
       http
