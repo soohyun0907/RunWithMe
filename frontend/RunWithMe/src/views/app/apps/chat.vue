@@ -87,7 +87,8 @@
                   <!-- <button @click="handleClickButton">Toggle Modal</button> -->
                   <app-my-modal
                     title="This is modal"
-                    :visible="visible">
+                    :visible="getVisibleModal"
+                    >
                     <div>
                       This is modal body
                     </div>
@@ -320,16 +321,18 @@ export default {
       ws: "",
       matchUsers: [],
       flag: true,
-      visible: false
+      visible:false,
     };
   },
   components: {
     appMyModal: myModal
   },
+  beforeDestroy() {
+    this.$store.commit('mutateVisibleModal',false)
+  },
   methods: {
     ...mapActions(["changeSelectedUser", "createAndSelectChatroomAction","sendMessages", ]),
-    ...mapMutations(["selectUserLists","closeSidebar"]),
-
+    ...mapMutations(["selectUserLists","closeSidebar","mutateVisibleModal"]),
     matching: function (gender) {
       var sex = gender;
       http.get("/friends/match/" + sex).then((data) => {
@@ -337,7 +340,8 @@ export default {
       });
     },
     handleClickButton(){
-      this.visible = !this.visible
+      this.visible=!this.visible
+      this.$store.commit('mutateVisibleModal',!this.getVisibleModal)
     },
     choice: function (uid) {
       // this.createAndSelectChatroomAction(uid);
@@ -483,7 +487,8 @@ export default {
       "getRoomInfo",
       "getMessages",
       "auth",
-      "defaultProfile"
+      "defaultProfile",
+      "getVisibleModal"
     ]),
 
     filterContacts() {
@@ -505,6 +510,7 @@ export default {
   },
   mounted() {
     this.$store.commit('closeSidebar')
+    this.$store.commit('mutateVisibleModal',false)
   },
   updated: function () {
     var obj = document.getElementById("chatContainer");
