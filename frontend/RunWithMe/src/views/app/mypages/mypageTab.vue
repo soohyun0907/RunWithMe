@@ -175,18 +175,29 @@ export default {
   methods: {
     ...mapMutations(["closeSidebar"]),
     deleteRunning(deleteRun) {
-      http.delete(`/runnings/${deleteRun.runningId}`)
-      .then(data =>{
-        Swal.fire({
-          icon:'success',
-          text:'런닝이 삭제되었습니다.',
-          showConfirmButton:false,
-          timer:500,
-        })
-        this.getRunningsbyArea()
-        this.getRunnings()
+      Swal.fire({
+        title: '삭제 확인',
+        text: "해당 런닝은 복구할수 없습니다",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '삭제'
+      }).then((result) => {
+        if (result.isConfirmed) {
+           http.delete(`/runnings/${deleteRun.runningId}`)
+          .then(data =>{
+            Swal.fire({
+              icon:'success',
+              text:'런닝이 삭제되었습니다.',
+              showConfirmButton:false,
+              timer:500,
+            })
+            this.getRunningsbyArea()
+            this.getRunnings()
+          })  
+        }
       })
-
     },
     getRunningsbyArea(){
       http.get(`runnings/areas`)
