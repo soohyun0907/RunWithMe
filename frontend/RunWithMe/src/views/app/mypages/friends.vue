@@ -1,7 +1,6 @@
 <template>
   <div class="main-content">
     <breadcumb :page="'친구 목록'" :folder="'MyPage'" />
-    <!-- <div class="wrapper"> -->
     <b-card>
       <vue-good-table
         :columns="columns"
@@ -18,31 +17,6 @@
         styleClass="tableOne vgt-table"
         :rows="rows"
       >
-       <!-- <div slot="table-actions" class="mb-3">
-                    <b-button variant="primary" class="btn-rounded d-none d-sm-block" v-b-modal.modal-1
-                      ><i class="i-Add-User text-white mr-2"> </i>친구 추가
-                    </b-button>
-
-                    <b-modal id="modal-1" title="Email로 친구 추가">
-                      <b-form>
-                        <b-form-group
-                          id="input-group-1"
-                          label="Email address:"
-                          label-for="input-1"
-                          description="친구의 이메일로 친구추가를 할수있어요."
-                        >
-                          <b-form-input
-                            id="input-1"
-                            type="email"
-                            required
-                            placeholder="Email을 입력하세요"
-                          ></b-form-input>
-                        </b-form-group>
-                      </b-form>
-                    </b-modal>
-                  </div> -->
-
-
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'button'">
             <a @click="chatFriend(props.row.userId.username);">
@@ -66,7 +40,7 @@
             {{props.row.userId.gugunId.sidoId.sidoName}} {{props.row.userId.gugunId.gugunName}}
           </span>
           <span v-else-if="props.column.field == 'username'">
-            <a href="">
+            <router-link :to="{name:'friendsDetail', query:{friendId: props.row.userId.userId}}">
               <div class="ul-widget-app__profile-pic" style="text-align:center">
                 <div v-if="props.row.userId.profile!=null">
                   <img
@@ -82,7 +56,7 @@
                     {{ props.row.userId.username }}
                   </div>
               </div>
-            </a>
+            </router-link>
           </span>
         </template>
       </vue-good-table>
@@ -116,20 +90,6 @@ export default {
           label: "이름",
           field: "username"
         },
-        // {
-        //   label: "Email",
-        //   field: "userEmail"
-        // },
-        // {
-        //   label: "등급",
-        //   field: "span",
-        //   html: true
-
-        // },
-        // {
-        //   label: "성별",
-        //   field: "gender"
-        // },
         {
           label: "지역",
           field: "gugunId.gugunName"
@@ -220,11 +180,8 @@ export default {
       })
     },
     getFriendList(){
-      //console.log(this.userInfo.userId)
-      // http.get(`friends/contacts/${this.userInfo.userId}`)
       http.get(`friends/contacts`)
       .then((res) => {
-        //console.log(res.data.data);
         this.rows = res.data.data
     });
     }
@@ -233,7 +190,7 @@ export default {
 </script>
 <style scoped>
 .friendList {
-    overflow:hidden;
+  overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
 }

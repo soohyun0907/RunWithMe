@@ -22,6 +22,13 @@ import "font-awesome/css/font-awesome.min.css";
 import vueMoment from 'vue-moment' 
 Vue.use(vueMoment)
 
+
+
+//vue filter
+Vue.filter("makeComma", val =>{
+  return String(val).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+})
+
 //vueSplide
 import VueSplide from '@splidejs/vue-splide';
 Vue.use( VueSplide );

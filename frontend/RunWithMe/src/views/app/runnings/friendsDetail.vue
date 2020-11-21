@@ -1,7 +1,7 @@
 <template>
   <div class="main-content">
     <div class="user-profile-img">
-      <div v-if="friendInfo && friendInfo.userId.profile!= null">
+      <div v-if="friendInfo.userId && friendInfo.userId.profile!= null">
         <img
           class="profile-picture mb-2"
           :src="friendInfo.userId.profile"
@@ -16,11 +16,44 @@
         />
       </div>
     </div>
-    <div>
-      <p class="m-0 text-24" style="text-align: center">
-        {{ friendInfo.userId.username }}
-      </p>
-      <div class="col" style="text-align: center">
+    
+    <div v-if ="friendInfo.userId">
+      <div class="m-0 text-24" style="text-align: center;">
+        <div style="height:auto; text-align:center; display:inline-block;margin-bottom:-12px">
+          <!-- <div class="level-badge"  v-if="friendInfo.tier>=10">
+              <b-badge variant="badge badge-round-dark sm m-1">{{friendInfo.tier}}</b-badge>
+          </div> 
+          <div class="level-badge" v-else-if="friendInfo.tier>=7">
+              <b-badge variant="badge badge-round-danger sm m-1">{{friendInfo.tier}}</b-badge>
+          </div>
+          <div class="level-badge" v-else-if="friendInfo.tier>=5">
+            <b-badge variant="badge badge-round-warning sm m-1">{{friendInfo.tier}}</b-badge>
+          </div>
+          <div class="level-badge" v-else-if="friendInfo.tier>=2">
+              <b-badge variant="badge badge-round-success sm m-1">{{friendInfo.tier}}</b-badge>
+          </div>
+          <div class="level-badge" v-else-if="friendInfo.tier>=1">
+              <b-badge variant="badge badge-round-primary sm m-1">{{friendInfo.tier}}</b-badge>
+          </div>
+          <div class="level-badge" v-else>
+              <b-badge variant="badge badge-round-primary sm m-1">1</b-badge>
+          </div> -->
+
+          <!-- <div class="level-badge">
+              <b-badge variant="badge badge-round-primary sm m-1">Lv.{{friendInfo.tier}}</b-badge>
+          </div>
+ -->
+
+          <!-- <div class="level-badge">
+              <b-badge variant="badge badge-round-primary sm m-1">{{friendInfo.tier}}</b-badge>
+          </div> -->
+
+
+          <div style="float:left; margin-top:1px;">[Lv.{{friendInfo.tier==0? 1:friendInfo.tier}}] {{ friendInfo.userId.username }}</div>
+          </div>
+        <br>
+      </div>
+      <div class="col" style="text-align: center;">
         {{ friendInfo.userId.gugunId.sidoId.sidoName }}
         {{ friendInfo.userId.gugunId.gugunName }}
         <h5>
@@ -104,10 +137,6 @@ export default {
     };
   },
   mounted() {
-    // //console.log("this.userInfo")
-    // //console.log(this.userInfo)
-    // //console.log("this.userTotal")
-    // //console.log(this.userTotal)
     http
       .post(`ranks/search`, {
         userId: this.$route.query.friendId,
@@ -268,4 +297,13 @@ export default {
 };
 </script>
 <style scoped>
+.level-badge{
+  float:left;
+}
+.badge{
+  padding:0.57em 0.5em;
+  display:inline-block;
+  width:17vw;
+  height:32px;
+}
 </style>
