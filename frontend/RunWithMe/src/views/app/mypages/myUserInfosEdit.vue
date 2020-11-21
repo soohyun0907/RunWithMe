@@ -47,6 +47,7 @@
 
               <b-form-group label="이름">
                 <b-form-input
+                  id="inputName"
                   class="form-control form-control-rounded"
                   label="Name"
                   v-model.trim="$v.fName.$model"
@@ -139,10 +140,11 @@ export default {
     this.sidos = res.data.data;
     //console.log(this.sidos[0].sidoName);
     });
-     var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
-     sidoDropBtn.style.backgroundColor="#663399"
-      sidoDropBtn.style.color="#FFFFFF"
-     
+    var sidoDropBtn = document.getElementById('dropdown-1__BV_toggle_')
+    sidoDropBtn.style.backgroundColor="#663399"
+    sidoDropBtn.style.color="#FFFFFF"
+    // var a = document.getElementById("inputName")
+    // document.getElementById("inputName").textContent=this.userInfo.username
   },
   computed: {
     ...mapGetters(["loggedInUser","userInfo", "loading", "error","getSideBarToggleProperties", "userInfo","defaultProfile"]),

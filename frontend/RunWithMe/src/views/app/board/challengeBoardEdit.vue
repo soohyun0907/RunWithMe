@@ -34,7 +34,8 @@
             </b-col>
 
             <b-col md="12" v-if="updateBoardImg">
-                <b-button class="m-1" variant="primary" @click="submitFile()">File Submit</b-button>
+                <b-button size="sm" class="m-1" variant="primary" @click="submitFile()">이미지 수정</b-button>
+                <b-button size="sm" class="m-1" variant="danger" @click="movePage()">이미지 수정안함</b-button>
             </b-col>
         </b-form>
   </div>
@@ -150,6 +151,9 @@ export default {
                 return;
             })
         },
+        movePage() {
+            this.$router.push("/app/board/challengeBoardDetail?boardId="+this.board.boardId);
+        }
     }
 }
 </script>

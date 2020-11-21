@@ -2,8 +2,8 @@
     <div class="main-content">
       <breadcumb :page="'Challenge Board'" :folder="'Board'" />
       <div class="btn">
-        <b-button class="float-right" variant="primary ripple btn-icon" @click="goWrite()">
-          <span class="ul-btn__icon"><i class="i-Gear-2"></i></span>
+        <b-button variant="primary ripple btn-icon" @click="goWrite()">
+          <span class="ul-btn__icon"><i class="i-Edit"></i></span>
           <span class="ul-btn__text">글쓰기</span>
         </b-button>
       </div>

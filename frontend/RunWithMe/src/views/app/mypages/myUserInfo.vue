@@ -4,7 +4,8 @@
          <breadcumb :page="'회원 정보'" :folder="'My Page'" />
 
         <div class="card user-profile o-hidden mb-30">
-            <div class="header-cover" style="background-image: url(http://gull-html-laravel.ui-lib.com/assets/images/photo-wide-5.jpeg"></div>
+            <div class="header-cover" :style="{ backgroundImage: 'url(' + bgImage + ')' }">
+            </div>
                 <div class="user-info">
                     <div v-if="userInfo.profile!=null">
                         <img class="profile-picture avatar-lg mb-2" :src="userInfo.profile">
@@ -29,11 +30,11 @@
                                 <div class="col-md-4 col-6">
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Calendar text-16 mr-1"></i>이름</p>
-                                        <span>{{userInfo.username}}</span>
+                                        <span class="oneLine">{{userInfo.username}}</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Edit-Map text-16 mr-1"></i>Email</p>
-                                        <span style="white-space:nowrap;">{{userInfo.userEmail}}</span>
+                                        <span class="oneLine">{{userInfo.userEmail}}</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i>성별</p>
@@ -47,25 +48,30 @@
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Professor text-16 mr-1"></i>등급</p>
-                                        <span><span class="badge badge-danger">Pro</span></span>
+                                        <div v-if="userTotal.totalDistance>30" ><span class="badge badge-secondary">Legendary</span></div>
+                                        <div v-else-if="userTotal.totalDistance>10" ><span class="badge badge-danger">Pro</span></div>
+                                        <div v-else-if="userTotal.totalDistance>5" ><span class="badge badge-warning">Runner</span></div>
+                                        <div v-else-if="userTotal.totalDistance>1" ><span class="badge badge-primary">Beginner</span></div>
+                                        <div v-else ><span class="badge badge-success">Newbie</span></div>
+                                        <div>Lv{{userTotal.tier==0 ? 1:usertotal.tier}}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i> 도시 </p>
-                                        <span>{{userInfo.gugunId.sidoId.sidoName}} {{userInfo.gugunId.gugunName}}</span>
+                                        <span class="oneLine">{{userInfo.gugunId.sidoId.sidoName}} {{userInfo.gugunId.gugunName}}</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-MaleFemale text-16 mr-1"></i>누적 거리</p>
-                                        <span>{{userTotal.totalDistance.toFixed(2)}} Km</span>
+                                        <span class="oneLine">{{userTotal.totalDistance.toFixed(2)}} Km</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Cloud-Weather text-16 mr-1"></i> 누적 시간</p>
-                                        <span>{{userTotal.totalTime}} 초</span>
+                                        <span class="oneLine">{{convertToTime(userTotal.totalTime)}}초</span>
                                     </div>
                                     <div style="text-align:center" class=" mb-30">
                                         <p class="text-primary mb-1"><i class="i-Face-Style-4 text-16 mr-1"></i>누적 런닝</p>
-                                        <span>{{userTotal.totalCount}} 회</span>
+                                        <span class="oneLine">{{userTotal.totalCount}} 회</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-6">
@@ -116,7 +122,8 @@ export default {
   },
   data() {
     return {
-      inputPass: "",
+        inputPass: "",
+        bgImage: require("@/assets/images/signin/loginpage3.png"),
       }
   },
    computed: {
@@ -127,6 +134,7 @@ export default {
     //console.log(this.userTotal)
     this.$store.commit('closeSidebar')
     this.userInfoUpdated()  
+    console.log(this.userTotal)
     
   },
   methods: {
@@ -139,6 +147,12 @@ export default {
             this.$store.commit('mutateUserInfo',data.data.data.userId)
             this.$store.commit('mutateUserTotal',data.data.data)
           })
+    },
+    convertToTime(origin){
+        var time = "";
+        time += parseInt(origin/60) + "분 ";
+        time += origin%60;
+        return time;
     },
     memberOut(){
         var data = {
@@ -173,5 +187,9 @@ export default {
 }
 </script>
 <style scoped>
-
+.oneLine{
+    display:block;
+    white-space:nowrap;
+    overflow:scroll;
+}
 </style>
