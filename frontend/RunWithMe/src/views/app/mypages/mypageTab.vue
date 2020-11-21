@@ -45,7 +45,7 @@
                                 <img class="rounded mb-2" :src="running.thumbnail" @error="defaultImage" alt="썸넬" width=40px height=40px style="margin-left:-12px;"/>
                                 {{running.end[0]}}일 런닝
                             </b-button>
-                            <b-button @click="deleteRunning(running)" style="right:0px padding:0 !important" class="card-title mb-0"  block href="#"  variant="transparent">
+                            <b-button @click="deleteRunning(running)" style="right:0px padding:0 !important" class="card-title mb-0 delBtn"  block href="#"  variant="transparent">
                               <i class ="i-Close"/>
                             </b-button>
                           </b-card-header>
@@ -93,7 +93,7 @@
                               </span>
                               {{running.end[0]}}일 런닝
                             </b-button>
-                            <b-button @click="deleteRunning(running)" style="right:0px padding:0 !important" class="card-title mb-0"  block href="#"  variant="transparent">
+                            <b-button @click="deleteRunning(running)"  class="card-title mb-0 delBtn"  block href="#"  variant="transparent">
                               <i class ="i-Close"/>
                             </b-button>
                           </b-card-header>
@@ -321,5 +321,11 @@ export default {
 .card-title{
   text-align:center;
   margin-bottom:0.5;
+}
+.delBtn{
+  right:10px;
+  width:40px;
+  padding-bottom:17px;
+  padding-right:30px;
 }
 </style>
