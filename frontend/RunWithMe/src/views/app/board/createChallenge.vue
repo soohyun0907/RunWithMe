@@ -139,7 +139,7 @@ export default {
     if(this.userInfo.roles.length == 1){
       this.alertModal = "";
       this.$bvModal
-        .msgBoxConfirm("관리자만 접근 가능한 페이지입니다.", {
+        .msgBoxOk("관리자만 접근 가능한 페이지입니다.", {
           size: "sm",
           buttonSize: "sm",
           okVariant: "danger",
