@@ -408,8 +408,8 @@ export default {
       http.get("/match/user").then((response) => {
         this.testUserId = response.data;
 
-        _this.sock = new SockJS("http://localhost:8080/ws-stomp");
-        // _this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
+        // _this.sock = new SockJS("http://localhost:8080/ws-stomp");
+        _this.sock = new SockJS("https://k3a303.p.ssafy.io:8443/ws-stomp");
         _this.ws = Stomp.over(_this.sock);
         _this.token = this.auth;
 
