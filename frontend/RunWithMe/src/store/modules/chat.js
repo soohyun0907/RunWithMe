@@ -5,6 +5,7 @@ import SockJS from 'sockjs-client';
 import store from "@/store/modules/groupchat.js";
 
 const state = {
+  visibleModal:false,
   currentUser: [],
   contactList: [],
   recentUsers: [],
@@ -25,6 +26,7 @@ const state = {
 
 
 const getters = {
+  getVisibleModal:state => state.visibleModal,
   getContactLists: state => state.contactList,
   getCurrentUser: state => state.currentUser,
   getRecentUser: state => state.recentUsers,
@@ -51,6 +53,9 @@ const actions = {
 };
 
 const mutations = {
+  mutateVisibleModal(state,visibleModal){
+    state.visibleModal = visibleModal
+  },
   updateSelectedUser: (state, id) => {
   },
   selectUserLists:(state) => {
