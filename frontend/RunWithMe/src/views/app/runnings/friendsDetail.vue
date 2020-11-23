@@ -162,10 +162,10 @@ export default {
       return runningTime;
     },
     convertToTime(origin) {
-      var time = "";
-      time += parseInt(origin / 60) + "'";
-      time += (origin % 60) + '"';
-      return time;
+        var time = "";
+        time += parseInt(origin/60) + "\'";
+        time += (origin%60).toFixed() + "\"";
+        return time;
     },
     isFollower() {
       // //console.log(this.friendInfo.userId);
@@ -201,7 +201,7 @@ export default {
                 obj.running_avg_pace = 0;
               } else {
                 obj.running_avg_pace = (
-                  element.accDistance / element.accTime
+                  (element.accDistance*1000) / element.accTime
                 ).toFixed(2);
               }
               obj.acc_time_min = parseInt(obj.accumulcated_time / 60);
@@ -213,7 +213,7 @@ export default {
               this.items.push(obj);
             });
           }
-          // //console.log(this.items);
+          console.log(this.items);
           if (this.items.length == 0) {
             this.isRunning = false;
           }
