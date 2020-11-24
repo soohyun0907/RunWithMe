@@ -416,7 +416,7 @@ export default {
                 obj.runningId = data.data.runnings[i].runningId;
                 obj.total_distance = data.data.runnings[i].accDistance.toFixed(2);
                 obj.accumulcated_time = data.data.runnings[i].accTime;
-                obj.running_avg_pace = data.data.runnings[i].accTime / data.data.runnings[i].accDistance;
+                obj.running_avg_pace = (data.data.runnings[i].accDistance<0.01 || data.data.runnings[i].accTime<1)? 0: (data.data.runnings[i].accDistance*1000) / data.data.runnings[i].accTime;
                 obj.mapImg = data.data.runnings[i].thumbnail;
               }
               obj.userId = data.data.friends[i].userId;
@@ -431,6 +431,7 @@ export default {
             if(this.friendsFeed.length == 0)
               this.haveFriends = false;
           }
+          this.friendsFeed.reverse();
         })
         .catch((error) => {
           console.log(error);
