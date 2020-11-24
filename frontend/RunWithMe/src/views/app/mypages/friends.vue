@@ -52,7 +52,7 @@
                     class="profile-picture avatar-sm mb-2 rounded-circle img-fluid"
                     :src="defaultProfile" alt=""/>
                 </div>
-                  <div class="friendList">
+                  <div class="oneLine friendList">
                     {{ props.row.userId.username }}
                   </div>
               </div>
@@ -190,8 +190,12 @@ export default {
 </script>
 <style scoped>
 .friendList {
-  overflow:hidden;
-  text-overflow:ellipsis;
+  overflow:scroll;
+  white-space:nowrap;
+}
+.oneLine{
+  display:block; 
+  width:50px;
   white-space:nowrap;
 }
 </style>
