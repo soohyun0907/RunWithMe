@@ -427,7 +427,7 @@
 
 #### 8.1 챌린지 제안
 
-<img src="https://user-images.githubusercontent.com/19357410/100543945-15f82800-3296-11eb-89fe-b7faf669e5e0.JPG" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543947-1690be80-3296-11eb-9e8a-89af452253e0.JPG" width="30%">
+<img src="https://user-images.githubusercontent.com/33771279/100615655-3e962580-335b-11eb-9602-2ad56ce80a93.png" width="30%">  <img src="https://user-images.githubusercontent.com/33771279/100615675-45bd3380-335b-11eb-82bb-bf5bf4dac851.png" width="30%"> <img src="https://user-images.githubusercontent.com/33771279/100615682-48b82400-335b-11eb-955a-d6632d4b4196.png" width="30%"> <img src="https://user-images.githubusercontent.com/33771279/100615691-4b1a7e00-335b-11eb-987d-781cb47211b2.png" width="30%">
 
 * **[챌린지 제안] :** 유저가 관리자에게 챌린지를 제안한다.
 
