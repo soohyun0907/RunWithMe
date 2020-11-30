@@ -1,6 +1,6 @@
 # Run With Me ? 🏃️
 
-![Github](https://img.shields.io/badge/vue-2.6.11-%234FC08D?style=plastic&logo=Vue.js)![Github](https://img.shields.io/badge/spring_boot-2.3.1-%236DB33F?style=plastic&logo=Spring)![Github](https://img.shields.io/badge/MySQL-8.0-%234479A1?style=plastic&logo=mysql)
+![Github](https://img.shields.io/badge/vue-2.6.11-%234FC08D?style=plastic&logo=Vue.js)![Github](https://img.shields.io/badge/spring_boot-2.3.1-%236DB33F?style=plastic&logo=Spring)![Github](https://img.shields.io/badge/MySQL-8.0-%234479A1?style=plastic&logo=mysql)![Github](https://img.shields.io/badge/Redis-3.0-%23DC382D?style=plastic&logo=Redis)![Github](https://img.shields.io/badge/build-passing-brightgreen?style=plastic)
 
 
 
@@ -8,6 +8,7 @@
 
 
 - ### 프로젝트 개요
+
   - 🏠 [Run With Me Homepage](https://k3a303.p.ssafy.io/)
 
   - `Run With Me`는 런닝 시 GPS 추적을 통해 사용자의 런닝 기록 저장 및 사용자의 지역, 성향에 맞춰 코스를 추천 런닝 메이트들과 함께 기부하는 시스템, 친목 도모를 위한 채팅 및 커뮤니티를 활성화하여 게임같이 런닝을 즐길 수 있는 웹 / 앱 서비스입니다.
@@ -53,28 +54,30 @@
 
 ## 📌 목차
 
-[Run With Me ? 🏃](https://lab.ssafy.com/s03-final/s03p31a303/tree/master#-run-with-me-%EF%B8%8F-) 
+[Run With Me ? 🏃](#triangular_flag_on_post-run-with-me--%EF%B8%8F) 
 
-* [시작하기](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0) 
+* [시작하기](#triangular_flag_on_post-시작하기)
 
-  * [시작하기에 앞서](https://lab.ssafy.com/s03-final/s03p31a303#%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0%EC%97%90-%EC%95%9E%EC%84%9C)
-  * [설치하기](https://lab.ssafy.com/s03-final/s03p31a303#%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0)
-  * [실행하기](https://lab.ssafy.com/s03-final/s03p31a303#%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0)
-  * [배포하기](https://lab.ssafy.com/s03-final/s03p31a303#%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0)
+  * [시작하기에 앞서](#시작하기에-앞서)
+  * [설치하기](#설치하기)
+  * [실행하기](#실행하기)
+  * [배포하기](#배포하기)
 
-* [지원하는 브라우저](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%A7%80%EC%9B%90%ED%95%98%EB%8A%94-%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80)
+* [지원하는 브라우저](#globe_with_meridians-지원하는-브라우저)
 
-* [사용된 도구](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%82%AC%EC%9A%A9%EB%90%9C-%EB%8F%84%EA%B5%AC)
+* [사용된 도구](#hammer_and_wrench-사용된-도구)
 
-* [사용된 기술](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%82%AC%EC%9A%A9%EB%90%9C-%EA%B8%B0%EC%88%A0)
- 
-* [Application Architecture](https://lab.ssafy.com/s03-final/s03p31a303/edit/master/README.md#-application-architecture)
+* [사용된 기술](#desktop_computer-사용된-기술)
 
-* [서비스 소개](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%86%8C%EA%B0%9C)
+* [시스템 아키텍쳐](#desktop_computer-시스템-아키텍쳐)
 
-* [저자](https://lab.ssafy.com/s03-final/s03p31a303#-%EC%A0%80%EC%9E%90)
+* [서비스 소개](#-서비스-소개)
 
-* [라이센스](https://lab.ssafy.com/s03-final/s03p31a303#-%EB%9D%BC%EC%9D%B4%EC%84%BC%EC%8A%A4)
+* [일정](#calendar-일정)
+
+* [저자](#-저자)
+
+* [라이센스](#page_with_curl-라이센스)
 
   
 
@@ -94,7 +97,7 @@
 1. 깃헙의 레포지토리를 클론합니다.
 
    ```
-   $ git clone https://lab.ssafy.com/s03-final/s03p31a303.git
+   $ git clone https://github.com/soo-ni/RunWithMe.git
    ```
 
 2. npm을 설치합니다.
@@ -109,7 +112,7 @@
 
 1. 데이터베이스를 설정합니다.
 
-   - [erd.sql](https://lab.ssafy.com/s03-final/s03p31a303/blob/develop/doc/ERD/erd.sql)을 참고해서 데이터베이스를 생성합니다. ([여기](https://lab.ssafy.com/s03-final/s03p31a303/blob/develop/doc/ERD/erd.png)를 눌러 erd를 확인하세요.
+   - [RunWithMe_SQL.sql](https://github.com/soo-ni/RunWithMe/blob/master/doc/ERD/RunWithMe_SQL.sql)을 참고해서 데이터베이스를 생성합니다. ([여기](https://github.com/soo-ni/RunWithMe/blob/master/doc/ERD/RunWithMe_ERD.png)를 눌러 erd를 확인하세요.)
 
    - `application.yml`에 데이터베이스 설정을 추가합니다.
 
@@ -148,19 +151,69 @@
 
 해당 서비스는 `AWS EC2`를 이용하여 배포하였습니다. 사전에 [여기]()를 참고해서 `AWS EC2`계정을 생성하세요.
 
-배포를 하기위해서는 다음과 같은 방법으로 실행합니다:)
-- Putty 를 통해 접속 -> Ubuntu 환경에 Git Clone -> Nginx 환경 설정 -> Ubuntu 환경에서 빌드 및 실행 -> Nginx 실행 -> 접속
+배포를 하기위해서는 다음과 같은 방법으로 실행합니다:
+
+1. AWS EC2 인스턴스 생성
+
+2. Ubuntu 환경에 Git Clone
+
+3. Nginx 환경 설정
+
+   ```
+   server {
+   
+           listen 80;
+           listen [::]:80;
+           server_name k3a303.p.ssafy.io;
+           return 301 https://$host$request_uri;
+           
+   }
+   
+   server {
+   
+           listen 443 ssl default_server;
+           listen [::]:443 ssl default_server;
+          
+           root /home/ubuntu/deploy/s03p31a303/frontend/RunWithMe/dist;
+   
+           # Add index.php to the list if you are using PHP
+           index index.html index.htm index.nginx-debian.html;
+   
+           server_name k3a303.p.ssafy.io;
+   
+           location / {
+                   # First attempt to serve request as file, then
+                   # as directory, then fall back to displaying a 404.
+                   try_files $uri $uri/ /index.html;
+           }
+   
+           ssl_certificate /etc/letsencrypt/live/k3a303.p.ssafy.io/fullchain.pem;
+           ssl_certificate_key /etc/letsencrypt/live/k3a303.p.ssafy.io/privkey.pem;
+   
+           access_log /var/log/nginx/proxy/access.log;
+           error_log /var/log/nginx/proxy/error.log;
+           
+   }
+   ```
+
+4. JDK 설치 (환경변수 설정)
+
+5. DB 설치 (해당 프로젝트에서 MySQL 사용)
+
+6. gradle wrapper을 위한 버전 설정 (6.0.0 이상)
+
+7. gradle clean build 실행 (war 파일 생성)
+
+8. yarn build (dist 폴더 생성)
 
 
 
 
 ## :globe_with_meridians: 지원하는 브라우저
 
-| 크롬   | 사파리 | edge   | firefox |
+| Chrome | Safari | Edge   | Firefox |
 | ------ | ------ | ------ | ------- |
 | latest | latest | latest | latest  |
-
-
 
 ## :hammer_and_wrench: 사용된 도구
 
@@ -176,7 +229,8 @@
 
 
 ## :desktop_computer: 사용된 기술
-![image](/uploads/099419baab0b261b3d5299e46cf78127/image.png)
+
+![TechStack](https://user-images.githubusercontent.com/19357410/100544132-062d1380-3297-11eb-832e-9e1dd8f8da13.png)
 
 **[ BACK END ]**
 
@@ -240,188 +294,189 @@
   - 동시 문서 작성 (Google Docs).
   - 대용량 파일 첨부
 
-## :desktop_computer: Application Architecture
-![image](/uploads/13f326ec8abc6068b712c24e0384e775/image.png)
+## :desktop_computer: 시스템 아키텍쳐
 
+![System_Architecture](https://user-images.githubusercontent.com/19357410/100544133-088f6d80-3297-11eb-8ba7-bad031aa6e46.png)
 
 ## 🎞 서비스 소개
 
 ### 1. 로그인 화면
 
-<img src="/uploads/740ce5f34a260a48d1d6cbe85ba092d1/1._로그인창.jpg" width="30%" >
+#### 1-1. 로그인 화면
+
+<img src="https://user-images.githubusercontent.com/19357410/100543558-2dceac80-3294-11eb-9d4a-51a0c0e7757b.jpg" width="30%">
 
 ---
 
 ### 2. 메인 화면
-<img src="/uploads/52fef267461ea9fcc6e35ac17ddcbfab/2._메인화면.jpg" width="30%" >
-<img src="/uploads/ea91fba11be4299e24b5eaa1e687e0cb/2._메인하면_하단.jpg" width="30%" >
 
-- **[메인 화면]** : 상단에는 현재 진행중인 챌린지와 이벤트 , 중단에는 랭킹, 하단에는 친구의 최신 피드를 보여줍니다. 
----
+#### 2-1. 메인 화면
 
-#### 2-1. 메인 화면에서 랭커 클릭
-<img src="/uploads/a715b0b91bb7ab59bafd43c1791eff58/3._메인에서_랭커_클릭.jpg" width="30%" >
-<img src="/uploads/093b2a3ab0a6e40c9481a81aaabd84b0/3_.메인_랭커_기록_보기.jpg" width="30%" >
+<img src="https://user-images.githubusercontent.com/19357410/100543566-332bf700-3294-11eb-98ee-fb4c9274adf7.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543569-3cb55f00-3294-11eb-8038-701758f0d13d.jpg" width="30%">
 
-- **[메인화면에서 랭커 클릭시]** : 선택한 유저의 간단한 프로필과 최근 런닝 기록을 보여줍니다.
-- **[랭커 프로필에서 런닝 피드 클릭시]** : 해당 유저의 해당 런닝기록을 보여줍니다. 
----
-
-#### 2-2. 메인 화면에서 친구 피드 클릭
-<img src="/uploads/75dc2ddc87b2a42cf2dd75b1698aa60a/3._메인에서_친구_피드클릭.jpg" width="30%" >
-
-- **[메인 화면에서 친구 피드 클릭시]** : 친구의 런닝 기록을 보여줍니다. 
----
-
-### 3. 런닝 페이지  
-<img src="/uploads/32e36cf655e596a67303b90fd85d66a9/4._런닝_시작.jpg" width="30%" >
-<img src="/uploads/ccf981869ee8b9a54820dce24ad4364d/0_런닝중.png" width="30%" >
-<img src="/uploads/392c5ee51113a310255970c5b4a67dbc/0_런닝_스왑.png" width="30%" >
-
-
-- **[런닝 페이지에서 시작 버튼 클릭시]** : 런닝 기록을 시작할 수 있습니다
-- **[런닝 페이지에서 정지 버튼 클릭시]** : 런닝을 끝내고 기록을 저장할 수 있습니다.
-- **[런닝 페이지에서 페이지 스왑시]** : 현재 런닝의 중간 기록을 확인할수 있습니다(1Km 단위)
-
---- 
-
-#### 3-1. 런닝 결과 및 분석
-<img src="/uploads/f70ecebf3661fddabcfd96c8739df150/0_런닝_종료.png" width="30%" >
-<img src="/uploads/14e676d7ffa86ec44c10f768652115e1/5._런닝_분석1.jpg" width="30%" >
-<img src="/uploads/6fa16ca2f5d972ed5f3e8399c8bd6100/5._런닝_분석2..jpg" width="30%" >
-
-- **[런닝 결과]** : 현재 런닝의 부분 기록 및 전체 기록을 확인할 수 있습니다.
-- **[런닝 분석]** : 개발자의 감성을 살려서 달마다 뛴 기록을 보여주며 순위화 해줍니다.
-- **[런닝 분석]** : 이전 기록, 최근 기록과 유저들의 평균 기록들을 보여줍니다.
-
+- **[메인 화면] :** 상단에는 현재 진행중인 챌린지, 중앙에는 랭킹, 하단에는 팔로우한 유저의 최신 러닝 기록을 보여준다.
 
 ---
 
+#### 2-2. 메인 화면에서 랭커 클릭
+
+<img src="https://user-images.githubusercontent.com/19357410/100543571-3de68c00-3294-11eb-8dce-13ead347632a.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543578-46d75d80-3294-11eb-9855-00c81a701ecc.jpg" width="30%">
+
+- **[메인 화면에서 랭커 클릭 시] :** 선택한 유저의 간단한 프로필, 팔로우 여부, 러닝 기록을 보여준다.
+- **[랭커 프로필에서 러닝 피드 클릭 시] :** 유저의 해당 러닝 상세 기록을 보여준다.
+
+---
+
+#### 2-3. 메인 화면에서 친구 피드 클릭
+
+<img src="https://user-images.githubusercontent.com/19357410/100543582-4b037b00-3294-11eb-9ef7-f924754da14e.jpg" width="30%">
+
+* **[메인 화면에서 팔로워 피드 클릭 시] :** 팔로우한 유저의 러닝 상세 기록을 보여준다.
+
+---
+
+### 3. 러닝 페이지
+
+#### 3-1. 러닝 페이지
+
+<img src="https://user-images.githubusercontent.com/19357410/100543583-4e970200-3294-11eb-9b69-67f6f57f2af5.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543584-4f2f9880-3294-11eb-8812-6b609c48aa0e.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543586-4fc82f00-3294-11eb-8a76-a75ae0e5fba9.png" width="30%">
+
+* **[러닝 페이지에서 시작 버튼 클릭 시] :** 러닝 기록을 시작한다.
+* **[러닝 페이지에서 정지 버튼 클릭 시] :** 러닝을 끝내고 기록을 저장한다.
+* **[러닝 페이지에서 페이지 스왑 시] :** 현재 러닝의 중간 기록을 1km 단위로 확인한다.
+
+---
+
+#### 3-2. 러닝 결과 페이지
+
+<img src="https://user-images.githubusercontent.com/19357410/100543588-50f95c00-3294-11eb-93bb-d9bd055ad608.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543589-50f95c00-3294-11eb-904b-55cd97774134.jpg" width="30%">
+
+* **[러닝 결과] :** 현재 러닝의 부분 기록 및 전체 기록을 확인한다.
+
+---
+
+#### 3-3. 러닝 분석 페이지
+
+<img src="https://user-images.githubusercontent.com/19357410/100543590-522a8900-3294-11eb-8f17-c664e27a60d0.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543592-535bb600-3294-11eb-9525-df0f8aafde69.jpg" width="30%">
+
+* **[러닝 기록] :** Github의 contributions을 표현하는 잔디 포멧을 가져와 개발자 감성을 살려 한달 단위로 하루에 뛴 거리를 보여주며, 이미지로 저장할 수 있다.
+* **[러닝 분석 그래프] :** 이전 기록, 최근 기록과 유저들의 평균 기록을 보여주며, 이미지로 저장할 수 있다.
+
+---
 
 ### 4. 주변 러너 추천
-<img src="/uploads/e16a7769651b80c364fa82492b157702/6._주변러너추천.jpg" width="30%" >
-<img src="/uploads/d557c69b3a4b54205b7578083cbc7705/6._주변러너추천__2_.jpg" width="30%" >
 
-- **[주변 러너]** : 같은 동네의 주변 러너들을 추천해주고, 클릭하면 마찬가지로 유저의 프로필과 기록을 확인할 수 있습니다. 
----
+#### 4-1. 주변 러너 추천
 
+<img src="https://user-images.githubusercontent.com/19357410/100543958-1a244580-3296-11eb-8501-d2a6ebc7ab19.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543960-1b557280-3296-11eb-97bb-f78a235a0e5d.jpg" width="30%">
 
-### 5. 채팅 및 매칭
-<img src="/uploads/525440ff61a1b1b3e16e0bf0cd60d7a4/7._채팅___매칭.jpg" width="30%" >
-<img src="/uploads/ed7be05aea9cc3e3806f7971dfccc7c2/7.실제_채팅.jpg" width="30%" >
-<img src="/uploads/f1fd199acbe8e15a78eb8cde4e743ed9/7._매칭.jpg" width="30%" >
-
-- **[1:1 채팅]** : 실시간 채팅을 적용하여 현재 온라인 상태인 유저들과 채팅할 수 있습니다.
-- **[실제 채팅 화면]** : 실시간으로 시간과 프로필, 메시지가 주고 받아집니다.
-- **[매칭 시스템]** : 매칭에서 원하는 성별을 클릭시 선택한 성별과 매칭할수 있습니다(비슷한 레벨의 러너가 없다면 매칭되지 않습니다.)
+* **[주변 러너 추천] :** 같은 동네의 주변 러너들을 추천해주고, 클릭 시 유저의 프로필과 기록을 보여준다.
 
 ---
 
+### 5. 일대일 채팅 및 매칭
+
+#### 5-1. 일대일 채팅
+
+<img src="https://user-images.githubusercontent.com/19357410/100543962-1c869f80-3296-11eb-8d9b-342b48349992.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543963-1d1f3600-3296-11eb-9a7c-782bb19479fd.jpg" width="30%">
+
+* **[일대일 채팅] :** 팔로우한 유저의 온라인 접속 상태가 보이며 온라인인 유저와 실시간으로 채팅한다.
+
+---
+
+#### 5-2. 매칭
+
+<img src="https://user-images.githubusercontent.com/19357410/100543929-0d9fed00-3296-11eb-8ca0-1e0df7388ee6.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543930-0f69b080-3296-11eb-929b-1c1e3bc5fb1b.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543932-0f69b080-3296-11eb-83d0-83adcb3e1959.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543933-10024700-3296-11eb-934f-9b131c543022.jpg" width="30%">
+
+* **[일대일 채팅 밑 매칭 클릭 시] :** 일대일 채팅의 온라인 및 오프라인 유저의 목록 하단 매칭 버튼 클릭 시 경험치에 따른 유저를 매칭해준다.
+* **[매칭 시스템] :** 성별을 선택 후 원하는 러너를 선택해 팔로우한 다음 일대일 채팅을 시작한다.
+
+---
 
 ### 6. 지역 채팅
-<img src="/uploads/ba16b27eb2c96b9ecf84456cecd43046/8._지역채팅.jpg" width="30%" >
-<img src="/uploads/7e5d509b2553e71bf69f51079808ac76/8.지역_실제채팅.jpg" width="30%" >
 
-- **[지역 채팅방]** : 다양한 지역들의 채팅방에 참여하여 여러 유저들과 실시간 채팅을 즐길 수 있습니다.
-- **[실제 채팅 화면]** : 
+#### 6-1. 지역 채팅
+
+<img src="https://user-images.githubusercontent.com/19357410/100543934-11337400-3296-11eb-93df-4bb018129209.jpg" width="30%">
+
+* **[지역 채팅] :** 원하는 지역을 선택 시 해당 지역에서 여러 유저와 실시간으로 채팅한다.
+
 ---
-
 
 ### 7. 챌린지 페이지
-<img src="/uploads/d9602223f8c9e9c4be45263402609401/9._챌린지_페이지.jpg" width="30%" >
-<img src="/uploads/c441a423aee5dcce59cd9f73810993a0/9._챌린지_클릭.jpg" width="30%" >
 
-- **[챌린지 페이지]** : 현재 진행중, 진행 예정, 종료된 챌린지들을 확인할 수 있습니다.
-- **[챌린지 클릭시]** : 챌린지 클릭시 해당 챌린지의 상세 정보를 확인할 수 있고, 신청버튼으로 챌린지에 참여할 수 있습니다.
+#### 7-1. 챌린지 페이지
 
----
+<img src="https://user-images.githubusercontent.com/19357410/100543935-1264a100-3296-11eb-95db-bd848289a472.jpg" width="30%">
 
-
-#### 7-1. 챌린지 상세
-<img src="/uploads/fd7c0f86c617a665d27a7d54feccbb5c/10._챌린지_디테일.jpg" width="30%" >
-<img src="/uploads/7cfcd355efbaf5e99c12b541d37e1cbe/10._챌린지_신청.jpg" width="30%" >
-
-
-- **[챌린지 상세페이지]** : 챌린지를 클릭시 상세 페이지로 넘어가게 됩니다.
-- **[챌린지 신청]** : 챌린지 신청버튼 클릭! 
----
-
-
-#### 7-2. 챌린지 결제
-<img src="/uploads/d41c52eb88314d1a61920d27c222b8e1/11._챌린지_결제.jpg" width="30%" >
-<img src="/uploads/cc08c2ee441170ac053f799d93741193/11._챌린지_결제_확인.jpg" width="30%" >
-
-- **[챌린지 결제]** : 해당 챌린지에서 원하는 금액만큼만 기부금액을 기재하여 참가할 수 있습니다.
+* **[챌린지 페이지] :** 상단의 보유 마일리지가 표시되고, 현재 진행중, 진행 예정, 종료된 챌린지를 확인한다.
 
 ---
 
+#### 7-2. 챌린지 상세
+
+<img src="https://user-images.githubusercontent.com/19357410/100543936-12fd3780-3296-11eb-9392-7269ed244161.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543937-12fd3780-3296-11eb-8ea9-7c279b4bfeff.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543938-1395ce00-3296-11eb-8479-a79389bf8ff3.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543939-142e6480-3296-11eb-9db2-4ed86ddb56f1.jpg" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543941-142e6480-3296-11eb-907b-b69543697523.jpg" width="30%">
+
+* **[챌린지 클릭 시] :** 챌린지 클릭 시 해당 챌린지의 상세 정보를 확인하고, 신청 버튼을 통해 챌린지에 참여한다.
+* **[챌린지 신청 버튼 클릭 시] :** 챌린지 신청 버튼 클릭 시 챌린지 참여 페이지로 넘어가며, 기부 금액을 설정해 참여한다. 이 때, 기부 금액은 0원을 설정해도 참여가 가능하며, 해당 금액은 미리 충전된 마일리지에서 차감된다.
+* **[충전하기 버튼 클릭 시] :** 충전하기 버튼을 클릭 시, [마이페이지]-[마일리지 충전] 탭으로 전환되며 카카오페이를 통해 충전이 가능하다.
+
+---
 
 ### 8. 챌린지 제안
-<img src="/uploads/fcd2abaaed9f7ea5a1088f350b6a3f09/12._챌린지_제안.jpg" width="30%" >
-<img src="/uploads/628de795bf0e7becdc3f6f810d04014c/12._챌린지_제안_상세.jpg" width="30%" >
-<img src="/uploads/13b77b4438ad13b0f1dd2537a32fefb7/12._챌린지_상세_댓글.jpg" width="30%" >
 
-- **[챌린지 제안]** : 유저들은 관리자에게 챌린지를 제안할수 있습니다.
-- **[챌린지 제안 상세]** : 챌린지 상세 페이지 입니다.
+#### 8.1 챌린지 제안
 
----
+<img src="https://user-images.githubusercontent.com/19357410/100543945-15f82800-3296-11eb-89fe-b7faf669e5e0.JPG" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543947-1690be80-3296-11eb-9e8a-89af452253e0.JPG" width="30%">
 
-
-#### 8-2. 챌린지 관리페이지
-<img src="/uploads/92112d15ae026b13b5bb5b8386c281c5/13._챌린지_생성_및_관리.jpg" width="30%" >
-
-- **[챌린지 관리 페이지]** : 챌린지 생성 및 관리 페이지는 관리자 등급만 확인할 수 있으며 생성, 삭제, 수정이 가능합니다.
+* **[챌린지 제안] :** 유저가 관리자에게 챌린지를 제안한다.
 
 ---
 
+#### 8.2 챌린지 관리 페이지
 
-### 9. 런닝 기록 조회
-<img src="/uploads/52fef924c5c3e007976c90fcb44fe042/15._내_런닝.jpg" width="30%" >
-<img src="/uploads/ef5be5ee1cbdaf0f2050c734d470c67c/15._내_런닝_클릭.jpg" width="30%" >
-<img src="/uploads/16b87880924881eae3b76fadf7b77faf/15._내_런닝_클릭2.jpg" width="30%" >
+<img src="https://user-images.githubusercontent.com/19357410/100543945-15f82800-3296-11eb-89fe-b7faf669e5e0.JPG" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543947-1690be80-3296-11eb-9e8a-89af452253e0.JPG" width="30%">
 
-- **[런닝 기록 조회]** : 내 모든 런닝 기록을 조회할 수 있습니다. 하단에서 런닝 기록을 클릭시 맵에 뛴 경로가 표시됩니다.
-- **[런닝 기록 클릭시1]** : 맵에 해당 런닝 기록을 분석하여 뛴 경로를 표시해줍니다.
-- **[런닝 기록 클릭시2]** : 해당 런닝 기록이 열리고, 런닝 기록을 클릭시 상세 페이지로 넘어갑니다.
----
-
-
-#### 9-1. 런닝 상세
-<img src="/uploads/66bc6b6f01dd83b1af4e4eceeebd4b36/16._내_런닝_상세.jpg" width="30%" >
-<img src="/uploads/0275376e046200eeeafe5fe50e0e3f75/16._내_런닝_상세_2.jpg" width="30%" >
-
-- **[내 런닝 상세]** : 해당 런닝 기록을 상세하게 볼수 있습니다. 
----
-
-
-### 10. 친구 목록
-<img src="/uploads/36e159c16ef22689b375390dc04bca02/17._친구_목록.jpg" width="30%" >
-
-- **[친구 목록]** : 친구의 간단한 정보와, 채팅을 할수 있는 버튼과 삭제 할 수 있는 버튼이 있습니다. 
----
-
-
-### 11. 마일리지 충전
-<img src="/uploads/3535f4239241a52417504badcddbc8db/18._마일리지_충전.jpg" width="30%" >
-<img src="/uploads/808ba62310c67e6d7bef8be9d7738493/18._마일리지_충전_가_.jpg" width="30%" >
-<img src="/uploads/3c87041886827e9e91251a7bd36f543b/18._마일리지_충전완.jpg" width="30%" >
-
-- **[마일리지 충전]** : 마일리지가 부족할시 마일리지 충전창으로 이동되며, 원하는 금액만큼 충전할 수 있습니다.
-- **[마일리지 충전(현재 공짜로 충전)]** : 현재는 비밀번호를 입력받지 않고 **TEST** 를 위한 충전기능입니다.
-- **[마일리지 충전완료]** : 마일리지가 충전되면 즉시 현재 보유 마일리지가 올라갑니다.
----
-
-
-### 12. 회원정보 수정
-<img src="/uploads/ca913d3815b36b613a79998e08f69986/14._회원정보_수정.jpg" width="30%" >
-<img src="/uploads/f5aa90a5c3cbbd48353dfa83c8a41e78/14._회원정보_수정전.jpg" width="30%" >
-<img src="/uploads/b0ce339d70317e6a7e3eba1971a174b1/14._회원정보_수정후.jpg" width="30%" >
-
-- **[회원정보 수정]** : 회원정보 수정 페이지입니다.
-- **[회원정보 수정전, 수정 후]** : 회원정보를 수정하거나 탈퇴할 수 있습니다.
-
+* **[챌린지 관리 페이지] :** 챌린지 관리 페이지는 관리자 등급만 확인 가능하며, 챌린지 생성, 삭제, 수정이 가능하다.
 
 ---
+
+### 9. 러닝 기록 조회
+
+#### 9-1. 러닝 기록 조회
+
+<img src="https://user-images.githubusercontent.com/19357410/100543948-17295500-3296-11eb-8d14-165996f4ae60.JPG" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543949-17295500-3296-11eb-8a84-4eb34aac749e.JPG" width="30%">
+
+* **[러닝 기록 조회] :** 본인의 모든 러닝 기록을 조회한다. 하단에서 러닝 기록을 클릭 시, 지도에 러닝 경로가 표시된다.
+* **[활동 지역 러닝 기록 조회] :** 본인이 설정한 활동 지역 러닝 기록을 조회한다. 하단에서 러닝 기록을 클릭 시, 지도에 러닝 경로가 표시된다.
+* **[러닝 기록 클릭 시] :** 러닝 상세 페이지로 이동한다.
+
+---
+
+### 10. 팔로우 목록
+
+#### 10-1. 팔로우 목록 조회
+
+<img src="https://user-images.githubusercontent.com/19357410/100543950-17c1eb80-3296-11eb-99b0-9f415388e0dd.JPG" width="30%">
+
+* **[팔로우 목록 조회] :** 팔로워의 간단한 정보와, 말풍선 아이콘을 클릭 시 일대일 채팅으로 이동하며, 엑스 아이콘을 클릭 시 팔로우를 취소한다.
+
+---
+
+### 11. 유저 정보 수정
+
+#### 11-1. 유저 정보 수정
+
+<img src="https://user-images.githubusercontent.com/19357410/100543951-185a8200-3296-11eb-9472-75905c604228.JPG" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543952-18f31880-3296-11eb-94de-1cb7ac9e91c6.JPG" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543954-198baf00-3296-11eb-8438-a602935e4f9e.JPG" width="30%">  <img src="https://user-images.githubusercontent.com/19357410/100543957-1a244580-3296-11eb-9d21-354d7693f06c.JPG" width="30%">
+
+* **[유저 정보 수정] :** 유저 정보를 수정하거나 탈퇴한다.
+* **[유저 프로필 수정] :** 유저 프로필을 수정한다.
+
+---
+
+## :calendar: 일정
+
+![일정](https://user-images.githubusercontent.com/19357410/100542772-7d5ea980-328f-11eb-806c-4bd76138aa1e.png)
 
 ## 👤 저자
 
@@ -430,8 +485,6 @@
 * 김형택 - Hyungtaik Kim - kimhyungtaik@gmail.com - @[hyungtaik](https://github.com/hyungtaik) [Back]
 * 이선수 - Sunsoo Lee - tjstn921030@gmail.com - @[LEESUNSOO](https://github.com/LEESUNSOO) [Back]
 * 전수현 - Soohyun Jeon - soohyun0907@naver.com - @[soohyun0907](https://github.com/soohyun0907) [Front]
-
-
 
 ## :page_with_curl: 라이센스
 
